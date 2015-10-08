@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{58E1C65E-241A-48D4-8711-A8418BD1E3BA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EDIS.Domain</RootNamespace>
+    <AssemblyName>EDIS.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accounts.cs" />
+    <Compile Include="Address.cs" />
+    <Compile Include="Adviser_CommissionsAndFees.cs" />
+    <Compile Include="Adviser_CV.cs" />
+    <Compile Include="Adviser_DealerGroupDetails.cs" />
+    <Compile Include="Adviser_Description.cs" />
+    <Compile Include="Adviser_Details.cs" />
+    <Compile Include="Adviser_Education.cs" />
+    <Compile Include="Adviser_ManagementDetails.cs" />
+    <Compile Include="Adviser_ProfessionalAssociations.cs" />
+    <Compile Include="Adviser_ProfessionalType.cs" />
+    <Compile Include="Adviser_ProfilePictures.cs" />
+    <Compile Include="Adviser_Ratings.cs" />
+    <Compile Include="Adviser_ServicesProviding.cs" />
+    <Compile Include="Adviser_Subscriptions.cs" />
+    <Compile Include="Adviser_TargetClients.cs" />
+    <Compile Include="Adviser_Verified_Status.cs" />
+    <Compile Include="ApproxClientNumber.cs" />
+    <Compile Include="AspNetRole.cs" />
+    <Compile Include="AspNetUser.cs" />
+    <Compile Include="AspNetUserClaim.cs" />
+    <Compile Include="AspNetUserLogin.cs" />
+    <Compile Include="AspNetUserRole.cs" />
+    <Compile Include="Asset.cs" />
+    <Compile Include="AssetType.cs" />
+    <Compile Include="Attachment.cs" />
+    <Compile Include="BalanceSheetType.cs" />
+    <Compile Include="Beneficiary.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="ClientFileAction.cs" />
+    <Compile Include="ClientFileInformation.cs" />
+    <Compile Include="ClientGroup.cs" />
+    <Compile Include="Client_Account_Ownership.cs" />
+    <Compile Include="Client_AdvisoryNeeds.cs" />
+    <Compile Include="Client_Details.cs" />
+    <Compile Include="Client_FinancialPosition.cs" />
+    <Compile Include="Client_InvestmentProfile.cs" />
+    <Compile Include="Client_Ratings.cs" />
+    <Compile Include="CommunicationRequest.cs" />
+    <Compile Include="CorporateAction.cs" />
+    <Compile Include="DailyPrice.cs" />
+    <Compile Include="DealerGroup.cs" />
+    <Compile Include="Dependant.cs" />
+    <Compile Include="DistributionList.cs" />
+    <Compile Include="DividendHistory.cs" />
+    <Compile Include="Dividends.cs" />
+    <Compile Include="EDIS.cs" />
+    <Compile Include="EducationRecord.cs" />
+    <Compile Include="Enums\AnnualIncomeLevel.cs" />
+    <Compile Include="Enums\ApproxClientNumber.cs" />
+    <Compile Include="Enums\AssetTypes.cs" />
+    <Compile Include="Enums\AttitudeToCapitalLoss.cs" />
+    <Compile Include="Enums\AttitudeToRisk.cs" />
+    <Compile Include="Enums\CommissionsAndFees.cs" />
+    <Compile Include="Enums\CommunicationMethod.cs" />
+    <Compile Include="Enums\Currencies.cs" />
+    <Compile Include="Enums\DeclineCommunicationReasons.cs" />
+    <Compile Include="Enums\EducationLevels.cs" />
+    <Compile Include="Enums\EmploymentStatus.cs" />
+    <Compile Include="Enums\InvestedProducts.cs" />
+    <Compile Include="Enums\InvestibleAssetsLevel.cs" />
+    <Compile Include="Enums\InvestmentKnowledge.cs" />
+    <Compile Include="Enums\NewsLetterServices.cs" />
+    <Compile Include="Enums\NoteTypes.cs" />
+    <Compile Include="Enums\PictureApprovalStatus.cs" />
+    <Compile Include="Enums\ProductTypes.cs" />
+    <Compile Include="Enums\ProfessionalAssociations.cs" />
+    <Compile Include="Enums\ProfessionType.cs" />
+    <Compile Include="Enums\ProfileRejectReasons.cs" />
+    <Compile Include="Enums\SubscriptionPlanTypes.cs" />
+    <Compile Include="Enums\SubscriptionStatus.cs" />
+    <Compile Include="Enums\TotalAssetLevels.cs" />
+    <Compile Include="Enums\TransactionType.cs" />
+    <Compile Include="Enums\VerifiedStatus.cs" />
+    <Compile Include="Industry.cs" />
+    <Compile Include="Migrations\201505040648001_initial.cs" />
+    <Compile Include="Migrations\201505040648001_initial.Designer.cs">
+      <DependentUpon>201505040648001_initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505260515436_modifiedClientGroup.cs" />
+    <Compile Include="Migrations\201505260515436_modifiedClientGroup.Designer.cs">
+      <DependentUpon>201505260515436_modifiedClientGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="MorningStarCategory.cs" />
+    <Compile Include="MorningStarRating.cs" />
+    <Compile Include="Note.cs" />
+    <Compile Include="NoteLink.cs" />
+    <Compile Include="Policy.cs" />
+    <Compile Include="PolicyDetail.cs" />
+    <Compile Include="Portfolio.cs" />
+    <Compile Include="ProfessionalAssociation.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Referral.cs" />
+    <Compile Include="Research.cs" />
+    <Compile Include="ResearchKey.cs" />
+    <Compile Include="ResourcesReference.cs" />
+    <Compile Include="RiskProfile.cs" />
+    <Compile Include="Sector.cs" />
+    <Compile Include="Service.cs" />
+    <Compile Include="ServiceLevel.cs" />
+    <Compile Include="ServiceLevelAction.cs" />
+    <Compile Include="Statement.cs" />
+    <Compile Include="SubService.cs" />
+    <Compile Include="Transaction.cs" />
+    <Compile Include="User_DistributionList.cs" />
+    <Compile Include="User_DistributionLists.cs" />
+    <Compile Include="User_NewsletterServices.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201505040648001_initial.resx">
+      <DependentUpon>201505040648001_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505260515436_modifiedClientGroup.resx">
+      <DependentUpon>201505260515436_modifiedClientGroup.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

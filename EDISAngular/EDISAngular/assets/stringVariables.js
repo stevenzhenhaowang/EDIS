@@ -1,0 +1,1 @@
+﻿var EDIS_IP = "http://localhost:55987/";

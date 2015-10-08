@@ -1,0 +1,442 @@
+﻿
+
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+            <li>Portfolio</li>
+            <li class="active">Cash Term Deposit</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="main-header">
+        <h2>Cash Term Deposit</h2>
+
+    </div>
+    <div class="main-content" ng-controller="clientPortfolioCTDViewController">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-tabs" ng-init="tab=1">
+                            <li ng-class="{active:tab==1}"><a ng-click="tab=1"><i class="fa fa-home"></i> Overview</a></li>
+                          <!--  <li ng-class="{active:tab==3}"><a ng-click="tab=3"><i class="fa fa-list"></i> Diversification</a></li>
+                            <li ng-class="{active:tab==4}"><a ng-click="tab=4"><i class="fa fa-list"></i> Cashflow</a></li>
+                              -->
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active in">
+                                <div ng-if="tab===1">
+                                    <div ng-controller="clientPortfolioCTDBriefInfoController">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="secondary-stat">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item1" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.cashDeposit | currency}}</span>
+                                                                    <span class="col-right"><em>Cash Deposit</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item2" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.cashAtMaturity | currency}}</span>
+                                                                    <span class="col-right"><em>Cash At Maturity</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item3" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.annualInterest | currency}}</span>
+                                                                    <span class="col-right"><em>Annual Interest</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item4" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.annualYield | number : 0}}%</span>
+                                                                    <span class="col-right"><em>Annual Yield</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item1" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.rbaRate | number : 0}}%</span>
+                                                                    <span class="col-right"><em>RBA Rate</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item2" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.consumerPriceIndex | number : 0}}</span>
+                                                                    <span class="col-right"><em>Consumer Price Index</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-8" ng-controller="clientPortfolioCTDRatingController">
+                                                        <div class="widget">
+                                                            <div class="widget-header">
+                                                                <h3><i class="fa fa-bar-chart-o"></i>Portfolio Rating</h3>
+
+                                                            </div>
+                                                            <div class="widget-content"><div k-rebind="data" kendo-chart k-options="mainOptions"></div></div>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row" ng-controller="clientPortfolioCTDPriceChartController">
+                                        <div class="col-sm-12">
+                                            <div class="widget">
+                                                <div class="widget-header">
+                                                    <h3><i class="fa fa-bar-chart-o"></i>Price Chart</h3>
+
+                                                </div>
+                                                <div class="widget-content">
+                                                    <div kendo-chart k-rebind="data"
+                                                         k-legend="{ position: 'bottom' }"
+                                                         k-series-defaults="{ type: 'area' , area : { line : { style : 'smooth' } } }"
+                                                         k-series="[
+                                 { field: 'cashYield', name: 'Cash Yield', categoryField:'month' },
+                                 { field: 'rba', name: 'RBA Rate', categoryField:'month' }
+                             ]"
+                                                         k-data-source="datasource"
+                                                         k-tooltip="{ visible: true, format : '{0}%' , template: '#= series.name #: #= value # %'}"></div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12" ng-controller="clientPortfolioCTDCashflowController">
+                                            <div class="widget">
+                                                <div class="widget-header">
+                                                    <h3><i class="fa fa-bar-chart-o"></i>Cash Flow Charts</h3>
+
+                                                </div>
+                                                <div class="widget-content">
+                                                    <div kendo-chart k-rebind="data"
+                                                         k-legend="{ position: 'bottom' }"
+                                                         k-series-defaults="{ type: 'column' }"
+                                                         k-series="[
+                                 { field: 'income', name: 'Income', categoryField : 'month' },
+                                 { field: 'expense', name: 'Expense', categoryField : 'month' }
+                             ]"
+                                                         k-tooltip="{visible: true, color: 'white', template: '${ category } - $${ value }'}" k-data-source="dataSource"></div>
+
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12" ng-controller="clientPortfolioCTDDepositProfilesController">
+                                            <div class="widget">
+                                                <div class="widget-header">
+                                                    <h3><i class="fa fa-bar-chart-o"></i>Income Details</h3>
+
+                                                </div>
+                                                <div class="widget-content">
+                                                    <div>
+                                                        <table class="table table-striped table-hover">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Type of Account</td>
+                                                                    <td>Institution</td>
+                                                                    <td>Currency</td>
+                                                                    <td>Account Name</td>
+                                                                    <td>Days to Maturity</td>
+                                                                    <td>Face Value</td>
+                                                                    <td>Interest Frequency</td>
+                                                                    <td>Accrued Interest</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="item in data.data">
+                                                                    <td>{{item.accountType}}</td>
+                                                                    <td>{{item.institution}}</td>
+                                                                    <td>{{item.currency}}</td>
+                                                                    <td>{{item.accountName}}</td>
+                                                                    <td>{{item.daysToMaturity | number : 0}}</td>
+                                                                    <td>{{item.faceValue | currency}}</td>
+                                                                    <td>{{item.interestFrequency}}</td>
+                                                                    <td>{{item.accruedInterest | currency}}</td>
+
+
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div style="overflow:auto">
+                                                        <table class="table table-striped table-hover">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Account Name</td>
+                                                                    <td>BSB</td>
+                                                                    <td>Account No.</td>
+                                                                    <td>Deposit Date</td>
+                                                                    <td>Deposit Amount</td>
+                                                                    <td>Maturity Date</td>
+                                                                    <td>Maturity Value</td>
+                                                                    <td>Term of Rates</td>
+                                                                    <td>Interest Rate</td>
+                                                                    <td>Annual Interest</td>
+                                                                    <td>Suitability to Investor Profile</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="item in data.data">
+                                                                    <td>{{item.accountName}}</td>
+                                                                    <td>{{item.bsb}}</td>
+                                                                    <td>{{item.accountNumber}}</td>
+                                                                    <td>{{item.depositDate | date}}</td>
+                                                                    <td>{{item.depositAmount | currency}}</td>
+                                                                    <td>{{item.maturityDate | date}}</td>
+                                                                    <td>{{item.maturityValue | currency}}%</td>
+                                                                    <td>{{item.termOfRates}}</td>
+                                                                    <td>{{item.interestRate | number : 0}}%</td>
+                                                                    <td>{{item.annualInterest | currency}}</td>
+                                                                    <td>{{item.suitabilityToInvestorProfile | number : 0}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div ng-if="tab===3">
+                                    <div ng-controller="clientPortfolioCTDDiversificationController">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3><i class="fa fa-bar-chart-o"></i>Diversification Table</h3>
+
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <table class="table table-striped table-hover">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Type</td>
+                                                                    <td>Value</td>
+                                                                    <td>Percentage</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="item in data.data">
+                                                                    <td>{{item.name}}</td>
+                                                                    <td>{{item.value | currency}}</td>
+                                                                    <td>{{item.percentage | number : 2}}%</td>
+                                                                </tr>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Total</td>
+                                                                    <td>{{data.total.value | currency}}</td>
+                                                                    <td>{{data.total.percentage | number : 2}}%</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3><i class="fa fa-bar-chart-o"></i>Diversification Pie Chart</h3>
+
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <kendo-chart k-title="{ text: 'Diversification Pie Chart', position: 'top' }" k-rebind="data"
+                                                                     k-series-defaults="{ type: 'donut', startAngle: 270 }"
+                                                                     k-series="[{
+                                                field: 'value',
+                                                categoryField: 'name',
+                                                padding: 0
+                                                }]"
+                                                                     k-series-colors="['#42a7ff', '#666666', '#999999', '#cccccc','#42a7ff', '#666666', '#999999', '#cccccc', '#42a7ff']"
+                                                                     k-data-source="pieSource"
+                                                                     k-legend="{ position: 'bottom' }"
+                                                                     k-tooltip="{
+                                                visible: true,
+                                                color: 'white',
+                                                template: '${ category } - $${ value }'}"></kendo-chart>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3><i class="fa fa-bar-chart-o"></i>Diversification Bar Chart</h3>
+
+                                                    </div>
+                                                    <div class="widget-content">
+
+                                                        <kendo-chart k-options="barOptions" k-rebind="data"></kendo-chart>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ng-if="tab===4">
+                                    <div ng-controller="clientPortfolioCTDCashflowDepositSpecificController" style="overflow:auto">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <tr class="summary-table-row">
+                                                    <th>
+                                                        Account Type
+                                                    </th>
+                                                    <th>Institution</th>
+                                                    <th>Currency</th>
+                                                    <th ng-repeat="item in data.dateSchema" colspan="3">{{item}}</th>
+                                                </tr>
+                                                <tr class="summary-table-row">
+                                                    <th colspan="3">
+                                                    </th>
+                                                    <th ng-repeat-start="item in data.dateSchema">Income</th>
+                                                    <th>Franking</th>
+                                                    <th ng-repeat-end>Expenses</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="company in data.data">
+                                                    <td>{{company.type}}</td>
+                                                    <td>{{company.name}}</td>
+                                                    <td>{{company.currency}}</td>
+                                                    <td ng-repeat-start="item in company.data">
+                                                        {{item.income | currency}}
+                                                    </td>
+                                                    <td>{{item.franking | currency}}</td>
+                                                    <td ng-repeat-end>{{item.expenses | currency}}</td>
+                                                </tr>
+                                                <tr class="summary-table-row">
+                                                    <td colspan="3">Total</td>
+                                                    <td ng-repeat-start="item in data.total">
+                                                        {{item.income | currency}}
+                                                    </td>
+                                                    <td>{{item.franking | currency}}</td>
+                                                    <td ng-repeat-end>{{item.expenses | currency}}</td>
+                                                </tr>
+
+
+                                            </tbody>
+                                        </table>
+
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="widget" ng-controller="clientPortfolioCTDCashflowController">
+                            <div class="widget-header">
+                                <h3><i class="fa fa-bar-chart-o"></i>Monthly Cash Flow Summary</h3>
+
+                            </div>
+                            <div class="widget-content">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr class="summary-table-row">
+                                            <td>Month</td>
+                                            <td>Income</td>
+                                            <td>Expense</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in data.data">
+                                            <td>{{item.date | date : 'MMMM'}}</td>
+                                            <td>{{item.income | currency}}</td>
+                                            <td>{{item.expense | currency}}</td>
+                                        </tr>
+                                        <tr class="summary-table-row">
+                                            <td>Total</td>
+                                            <td>{{data.totalIncome | currency}}</td>
+                                            <td>{{data.totalExpense | currency}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="widget" ng-controller="clientPortfolioCTDStatisticsController">
+                            <div class="widget-header">
+                                <h3><i class="fa fa-bar-chart-o"></i>Fixed Income Statistics</h3>
+
+                            </div>
+                            <div class="widget-content">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr class="summary-table-row">
+                                            <td>Type of Fixed Income</td>
+                                            <td>Value</td>
+                                            <td>Percentage</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in data">
+                                            <td>{{item.type}}</td>
+                                            <td>{{item.value| currency}}</td>
+                                            <td>{{item.percentage | number : 0}}%</td>
+                                        </tr>
+                                        <tr class="summary-table-row">
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

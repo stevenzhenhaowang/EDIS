@@ -1,0 +1,108 @@
+﻿<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Client</a></li>
+            <li class="active">Reminders</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <!--<div class="main-header">
+        <h2>Adviser Reminders</h2>
+
+    </div>-->
+    <div class="main-content" ng-controller="AdviserRemindersViewController">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-tabs" ng-init="tab=1">
+                            <li ng-class="{active:tab==1}"><a ng-click="tab=1"><i class="fa fa-home"></i> Weekly</a></li>
+                            <li ng-class="{active:tab==2}"><a ng-click="tab=2"><i class="fa fa-user"></i> Monthly</a></li>
+                            <li ng-class="{active:tab==3}"><a ng-click="tab=3"><i class="fa fa-list"></i> Yearly</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade" ng-class="{'active in':tab==1}">
+
+                                <div class="widget" ng-repeat="group in weekly">
+                                    <div class="widget-header">
+                                        <h3><i class="fa fa-bar-chart-o"></i>{{group.group}}</h3>
+
+                                    </div>
+                                    <div class="widget-content">
+                                        <kendo-grid options="TopLayerOptions(group.data)">
+                                            <div k-detail-template>
+                                                <kendo-tabstrip>
+                                                    <ul><li class="k-state-active">Client Information</li></ul>
+                                                    <div>
+                                                        <div kendo-grid k-options="SecondLayerOptions(dataItem.contents)">
+                                                        </div>
+                                                    </div>
+
+                                                </kendo-tabstrip>
+                                            </div>
+                                        </kendo-grid>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" ng-class="{'active in':tab==2}">
+
+                                <div class="widget" ng-repeat="group in monthly">
+                                    <div class="widget-header">
+                                        <h3><i class="fa fa-bar-chart-o"></i>{{group.group}}</h3>
+                                    </div>
+                                    <div class="widget-content">
+                                        <kendo-grid options="TopLayerOptions(group.data)">
+                                            <div k-detail-template>
+                                                <kendo-tabstrip>
+                                                    <ul>
+                                                        <li class="k-state-active">Client Information</li>
+                                                    </ul>
+                                                    <div>
+                                                        <div kendo-grid k-options="SecondLayerOptions(dataItem.contents)">
+                                                        </div>
+                                                    </div>
+                                                </kendo-tabstrip>
+                                            </div>
+                                        </kendo-grid>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="tab-pane fade" ng-class="{'active in':tab==3}">
+
+                                <div class="widget" ng-repeat="group in yearly">
+                                    <div class="widget-header">
+                                        <h3><i class="fa fa-bar-chart-o"></i>{{group.group}}</h3>
+                                    </div>
+                                    <div class="widget-content">
+                                        <kendo-grid options="TopLayerOptions(group.data)">
+                                            <div k-detail-template>
+                                                <kendo-tabstrip>
+                                                    <ul>
+                                                        <li class="k-state-active">Client Information</li>
+                                                    </ul>
+                                                    <div>
+                                                        <div kendo-grid k-options="SecondLayerOptions(dataItem.contents)">
+
+                                                        </div>
+                                                    </div>
+
+                                                </kendo-tabstrip>
+                                            </div>
+                                        </kendo-grid>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

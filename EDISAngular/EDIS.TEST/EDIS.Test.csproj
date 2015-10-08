@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{92E46FCC-914A-4F55-B05D-8A518CC70A20}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EDIS.Test</RootNamespace>
+    <AssemblyName>EDIS.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accounts.cs" />
+    <Compile Include="Address.cs" />
+    <Compile Include="Adviser_CommissionsAndFees.cs" />
+    <Compile Include="Adviser_CV.cs" />
+    <Compile Include="Adviser_DealerGroupDetails.cs" />
+    <Compile Include="Adviser_Description.cs" />
+    <Compile Include="Adviser_Details.cs" />
+    <Compile Include="Adviser_Education.cs" />
+    <Compile Include="Adviser_ManagementDetails.cs" />
+    <Compile Include="Adviser_ProfessionalAssociations.cs" />
+    <Compile Include="Adviser_ProfessionalType.cs" />
+    <Compile Include="Adviser_ProfilePictures.cs" />
+    <Compile Include="Adviser_Ratings.cs" />
+    <Compile Include="Adviser_ServicesProviding.cs" />
+    <Compile Include="Adviser_Subscriptions.cs" />
+    <Compile Include="Adviser_TargetClients.cs" />
+    <Compile Include="Adviser_Verified_Status.cs" />
+    <Compile Include="AnnualIncomeLevel.cs" />
+    <Compile Include="ApproxClientNumber.cs" />
+    <Compile Include="AspNetRole.cs" />
+    <Compile Include="AspNetUser.cs" />
+    <Compile Include="AspNetUserClaim.cs" />
+    <Compile Include="AspNetUserLogin.cs" />
+    <Compile Include="AspNetUserRole.cs" />
+    <Compile Include="Asset.cs" />
+    <Compile Include="AssetType.cs" />
+    <Compile Include="Attachment.cs" />
+    <Compile Include="BalanceSheetType.cs" />
+    <Compile Include="Beneficiary.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="ClientFileAction.cs" />
+    <Compile Include="ClientFileInformation.cs" />
+    <Compile Include="ClientGroup.cs" />
+    <Compile Include="Client_Account_Ownership.cs" />
+    <Compile Include="Client_AdvisoryNeeds.cs" />
+    <Compile Include="Client_Details.cs" />
+    <Compile Include="Client_FinancialPosition.cs" />
+    <Compile Include="Client_InvestmentProfile.cs" />
+    <Compile Include="Client_Ratings.cs" />
+    <Compile Include="CommissionsAndFee.cs" />
+    <Compile Include="CommunicationRequest.cs" />
+    <Compile Include="CorporateAction.cs" />
+    <Compile Include="C__MigrationHistory.cs" />
+    <Compile Include="DailyPrice.cs" />
+    <Compile Include="DealerGroup.cs" />
+    <Compile Include="Dependant.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DistributionList.cs" />
+    <Compile Include="DividendHistory.cs" />
+    <Compile Include="Dividends.cs" />
+    <Compile Include="EDIS.cs" />
+    <Compile Include="EducationLevel.cs" />
+    <Compile Include="EducationRecord.cs" />
+    <Compile Include="Industry.cs" />
+    <Compile Include="InvestibleAssetsLevel.cs" />
+    <Compile Include="Migrations\201505010545289_initial.cs" />
+    <Compile Include="Migrations\201505010545289_initial.Designer.cs">
+      <DependentUpon>201505010545289_initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="MorningStarCategory.cs" />
+    <Compile Include="MorningStarRating.cs" />
+    <Compile Include="NewsletterService.cs" />
+    <Compile Include="Note.cs" />
+    <Compile Include="Policy.cs" />
+    <Compile Include="PolicyDetail.cs" />
+    <Compile Include="Portfolio.cs" />
+    <Compile Include="ProfessionalAssociation.cs" />
+    <Compile Include="ProfessionType.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Referral.cs" />
+    <Compile Include="Research.cs" />
+    <Compile Include="ResearchKey.cs" />
+    <Compile Include="RiskProfile.cs" />
+    <Compile Include="Sector.cs" />
+    <Compile Include="Service.cs" />
+    <Compile Include="ServiceLevel.cs" />
+    <Compile Include="ServiceLevelAction.cs" />
+    <Compile Include="Statement.cs" />
+    <Compile Include="SubService.cs" />
+    <Compile Include="TotalAssetsLevel.cs" />
+    <Compile Include="Transaction.cs" />
+    <Compile Include="User_DistributionList.cs" />
+    <Compile Include="User_DistributionLists.cs" />
+    <Compile Include="User_NewsletterServices.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201505010545289_initial.resx">
+      <DependentUpon>201505010545289_initial.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

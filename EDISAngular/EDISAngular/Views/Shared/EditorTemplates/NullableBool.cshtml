@@ -1,0 +1,21 @@
+﻿@model bool?
+@{
+    List<SelectListItem> options = new List<SelectListItem>();
+    options.Add(new SelectListItem
+    {
+        Text = "Not Specified",
+        Value = ""
+    });
+    options.Add(new SelectListItem
+    {
+        Text = "Yes",
+        Value = "true"
+    });
+    options.Add(new SelectListItem
+    {
+        Text = "No",
+        Value = "false"
+    });    
+}
+
+@Html.DropDownListFor(model => model, options, new {@class="form-control" })

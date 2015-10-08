@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="33cb6a4b4c714b60852c63cb73713ee3" Name="Diagram1">
+        <EntityTypeShape EntityType="edisDbModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.Account" Width="1.5" PointX="7.5" PointY="34.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.Adviser" Width="1.5" PointX="0.75" PointY="26" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.AspNetRole" Width="1.5" PointX="0.75" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.AspNetUser" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.AssetPrice" Width="1.5" PointX="18.75" PointY="32.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.Attachment" Width="1.5" PointX="9.75" PointY="42.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.AustralianState" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.Bond" Width="1.5" PointX="10.5" PointY="23.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.BondTransaction" Width="1.5" PointX="9.75" PointY="35.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.BondType" Width="1.5" PointX="4.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.CashAccount" Width="1.5" PointX="13.5" PointY="23" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.CashTransaction" Width="1.5" PointX="12.75" PointY="35.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.ClientGroup" Width="1.5" PointX="3" PointY="30.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.Client" Width="1.5" PointX="5.25" PointY="41.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.ConsultancyExpens" Width="1.5" PointX="9.75" PointY="31.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.CouponPayment" Width="1.5" PointX="12.75" PointY="31.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.Dividend" Width="1.5" PointX="12.75" PointY="39.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.Equity" Width="1.5" PointX="13.5" PointY="43.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.EquityTransaction" Width="1.5" PointX="15.75" PointY="35.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.IndexedEquity" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.InsuranceTransaction" Width="1.5" PointX="9.75" PointY="52" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.Interest" Width="1.5" PointX="15.75" PointY="31.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.LiabilityRate" Width="1.5" PointX="12" PointY="60.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.LoanValueRatio" Width="1.5" PointX="12" PointY="63.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.MarginLendingTransaction" Width="1.5" PointX="9.75" PointY="60.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.MortgageHomeLoanTransaction" Width="1.5" PointX="15.75" PointY="39" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.NoteLink" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.Note" Width="1.5" PointX="7.5" PointY="41" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.Property" Width="1.5" PointX="7.5" PointY="26.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.PropertyTransaction" Width="1.5" PointX="9.75" PointY="27.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.PropertyType" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.Rental" Width="1.5" PointX="12.75" PointY="27.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.RepaymentRecord" Width="1.5" PointX="9.75" PointY="75.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.ResearchValue" Width="1.5" PointX="18.75" PointY="36.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.ResourcesReference" Width="1.5" PointX="8.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.Sector" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="edisDbModel.TransactionExpens" Width="1.5" PointX="3" PointY="36.125" IsExpanded="true" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_Accounts_dbo_ClientGroups_ClientGroup_ClientGroupId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_Accounts_dbo_Clients_Client_ClientId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_BondTransactions_dbo_Accounts_Account_AccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_CashTransactions_dbo_Accounts_Account_AccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_ConsultancyExpenses_dbo_Accounts_AccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_CouponPayments_dbo_Accounts_Account_AccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_Dividends_dbo_Accounts_Account_AccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_EquityTransactions_dbo_Accounts_Account_AccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_InsuranceTransactions_dbo_Accounts_AccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_Interests_dbo_Accounts_Account_AccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_MarginLendingTransactions_dbo_Accounts_AccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_MortgageHomeLoanTransactions_dbo_Accounts_AccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_PropertyTransactions_dbo_Accounts_Account_AccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_Rentals_dbo_Accounts_Account_AccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_RepaymentRecords_dbo_Accounts_AccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_ClientGroups_dbo_Advisers_Adviser_AdviserId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_ConsultancyExpenses_dbo_Advisers_AdviserId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_TransactionExpenses_dbo_Advisers_AdviserId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_AssetPrices_dbo_Bonds_Bond_BondId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_AssetPrices_dbo_Equities_Equity_AssetId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_AssetPrices_dbo_Properties_Property_PropertyId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_Attachments_dbo_Notes_NoteId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_BondTransactions_dbo_Bonds_BondId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_CouponPayments_dbo_Bonds_Bond_BondId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_ResearchValues_dbo_Bonds_Bond_BondId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_CashTransactions_dbo_CashAccounts_CashAccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_Interests_dbo_CashAccounts_CashAccount_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_Clients_dbo_ClientGroups_ClientGroupId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_Notes_dbo_Clients_ClientId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_Dividends_dbo_Equities_Equity_AssetId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_EquityTransactions_dbo_Equities_EquityId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_ResearchValues_dbo_Equities_Equity_AssetId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_LiabilityRates_dbo_MarginLendingTransactions_MarginLendingId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_LiabilityRates_dbo_MortgageHomeLoanTransactions_MortgageId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_LoanValueRatios_dbo_MarginLendingTransactions_MarginLendingTransaction_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_MortgageHomeLoanTransactions_dbo_Properties_PropertyId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_PropertyTransactions_dbo_Properties_PropertyAddress_PropertyId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_Rentals_dbo_Properties_PropertyAddress_PropertyId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.FK_dbo_ResearchValues_dbo_Properties_Property_PropertyId" ManuallyRouted="false" />
+        <AssociationConnector Association="edisDbModel.AspNetUserRoles" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

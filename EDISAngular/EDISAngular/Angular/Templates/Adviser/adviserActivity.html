@@ -1,0 +1,203 @@
+﻿
+
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+            <li class="active">Adviser Activity</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="main-header">
+        <h2>Adviser Activity</h2>
+
+    </div>
+    <div class="main-content" ng-controller="AdviserActivityViewController">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-tabs" ng-init="tab=1">
+                            <li ng-class="{active:tab==1}"><a ng-click="tab=1"><i class="fa fa-home"></i> Administration</a></li>
+                            <li ng-class="{active:tab==2}"><a ng-click="tab=2"><i class="fa fa-user"></i> Account</a></li>
+                            <li ng-class="{active:tab==3}"><a ng-click="tab=3"><i class="fa fa-list"></i> Portfolio</a></li>
+
+
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade" ng-class="{'active in':tab==1}">
+
+                                <div class="widget">
+                                    <div class="widget-header">
+                                        <h3><i class="fa fa-bar-chart-o"></i>No. of Notes Entry</h3>
+                                        <div class="btn-group widget-header-toolbar">
+                                            <div class="label label-info">Total: {{Administration.GetWeeklyActivityReport_Notes().total | number}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="widget-content">
+                                        <kendo-grid options="RecordOptions(Administration.GetWeeklyActivityReport_Notes().data)">
+                                        </kendo-grid>
+                                    </div>
+                                </div>
+                                <div class="widget">
+                                    <div class="widget-header">
+                                        <h3><i class="fa fa-bar-chart-o"></i>No. of Voice Recording Entry</h3>
+                                        <div class="btn-group widget-header-toolbar">
+                                            <div class="label label-info">Total: {{Administration.GetWeeklyActivityReport_Recording().total | number}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="widget-content">
+                                        <kendo-grid options="RecordOptions(Administration.GetWeeklyActivityReport_Recording().data)">
+                                        </kendo-grid>
+                                    </div>
+                                </div>
+                                <div class="widget">
+                                    <div class="widget-header">
+                                        <h3><i class="fa fa-bar-chart-o"></i>No. of Messages sent to Client</h3>
+                                        <div class="btn-group widget-header-toolbar">
+                                            <div class="label label-info">Total: {{Administration.GetWeeklyActivityReport_Email().total | number}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="widget-content">
+                                        <kendo-grid options="RecordOptions(Administration.GetWeeklyActivityReport_Email().data)">
+                                        </kendo-grid>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" ng-class="{'active in':tab==2}">
+                                <div class="widget">
+                                    <div class="widget-header">
+                                        <h3><i class="fa fa-bar-chart-o"></i>No. of Notes Entry</h3>
+                                        <div class="btn-group widget-header-toolbar">
+                                            <div class="label label-info">Total: {{Account.GetWeeklyActivityReport_Notes().total | number}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="widget-content">
+                                        <kendo-grid options="RecordOptions(Account.GetWeeklyActivityReport_Notes().data)">
+                                        </kendo-grid>
+                                    </div>
+                                </div>
+                                <div class="widget">
+                                    <div class="widget-header">
+                                        <h3><i class="fa fa-bar-chart-o"></i>No. of Voice Recording Entry</h3>
+                                        <div class="btn-group widget-header-toolbar">
+                                            <div class="label label-info">Total: {{Account.GetWeeklyActivityReport_Recording().total | number}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="widget-content">
+                                        <kendo-grid options="RecordOptions(Account.GetWeeklyActivityReport_Recording().data)">
+                                        </kendo-grid>
+                                    </div>
+                                </div>
+                                <div class="widget">
+                                    <div class="widget-header">
+                                        <h3><i class="fa fa-bar-chart-o"></i>No. of Emails sent to Client</h3>
+                                        <div class="btn-group widget-header-toolbar">
+                                            <div class="label label-info">Total: {{Account.GetWeeklyActivityReport_Email().total | number}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="widget-content">
+                                        <kendo-grid options="RecordOptions(Account.GetWeeklyActivityReport_Email().data)">
+                                        </kendo-grid>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" ng-class="{'active in':tab==3}">
+                                <div class="widget">
+                                    <div class="widget-header">
+                                        <h3><i class="fa fa-bar-chart-o"></i>No. of Notes Entry</h3>
+                                        <div class="btn-group widget-header-toolbar">
+                                            <div class="label label-info">Total: {{Portfolio.GetWeeklyActivityReport_Notes().total | number}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="widget-content">
+                                        <kendo-grid options="RecordOptions(Portfolio.GetWeeklyActivityReport_Notes().data)">
+                                        </kendo-grid>
+                                    </div>
+                                </div>
+                                <div class="widget">
+                                    <div class="widget-header">
+                                        <h3><i class="fa fa-bar-chart-o"></i>No. of Voice Recording Entry</h3>
+                                        <div class="btn-group widget-header-toolbar">
+                                            <div class="label label-info">Total: {{Portfolio.GetWeeklyActivityReport_Recording().total | number}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="widget-content">
+                                        <kendo-grid options="RecordOptions(Portfolio.GetWeeklyActivityReport_Recording().data)">
+                                        </kendo-grid>
+                                    </div>
+                                </div>
+                                <div class="widget">
+                                    <div class="widget-header">
+                                        <h3><i class="fa fa-bar-chart-o"></i>No. of Emails sent to Client</h3>
+                                        <div class="btn-group widget-header-toolbar">
+                                            <div class="label label-info">Total: {{Portfolio.GetWeeklyActivityReport_Email().total | number}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="widget-content">
+                                        <kendo-grid options="RecordOptions(Portfolio.GetWeeklyActivityReport_Email().data)">
+                                        </kendo-grid>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-tabs" ng-init="tabSide=1">
+                            <li ng-class="{active:tabSide==1}"><a ng-click="tabSide=1"><i class="fa fa-home"></i> Weekly</a></li>
+                            <li ng-class="{active:tabSide==2}"><a ng-click="tabSide=2"><i class="fa fa-user"></i> Monthly</a></li>
+                            <li ng-class="{active:tabSide==3}"><a ng-click="tabSide=3"><i class="fa fa-list"></i> Yearly</a></li>
+
+
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade" ng-class="{'active in':tabSide==1}">
+                                <div class="widget">
+                                    <div class="widget-header">
+                                        <h3><i class="fa fa-bar-chart-o"></i>Weekly Activities</h3>
+                                    </div>
+                                    <div class="widget-content">
+                                        <kendo-grid options="StatOptions(GeneralStats.Weekly())">
+                                        </kendo-grid>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" ng-class="{'active in':tabSide==2}">
+                                <div class="widget">
+                                    <div class="widget-header">
+                                        <h3><i class="fa fa-bar-chart-o"></i>Monthly Activities</h3>
+                                    </div>
+                                    <div class="widget-content">
+                                        <kendo-grid options="StatOptions(GeneralStats.Monthly())">
+                                        </kendo-grid>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" ng-class="{'active in':tabSide==3}">
+                                <div class="widget">
+                                    <div class="widget-header">
+                                        <h3><i class="fa fa-bar-chart-o"></i>Yearly Activities</h3>
+                                    </div>
+                                    <div class="widget-content">
+                                        <kendo-grid options="StatOptions(GeneralStats.Yearly())">
+                                        </kendo-grid>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

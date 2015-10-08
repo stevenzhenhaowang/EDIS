@@ -1,0 +1,622 @@
+﻿
+
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+            <li>Portfolio</li>
+            <li class="active">Portfolio Summary</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="main-header">
+        <h2><client-name></client-name>Portfolio Summary</h2>
+        <client-selector></client-selector>
+    </div>
+    <div class="main-content" ng-controller="adviserPortfolioSummaryViewController">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-tabs" ng-init="tab=1">
+                            <li ng-class="{active:tab==1}"><a ng-click="tab=1"><i class="fa fa-home"></i> Overview</a></li>
+                           <!-- <li ng-class="{active:tab==2}"><a ng-click="tab=2"><i class="fa fa-user"></i> Region</a></li>
+                            -->
+                       <!--     <li ng-class="{active:tab==3}"><a ng-click="tab=3"><i class="fa fa-list"></i>Diversification</a></li>
+                      -->
+                            <!--     <li ng-class="{active:tab==4}"><a ng-click="tab=4"><i class="fa fa-list"></i> Cashflow</a></li>
+                           -->
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active in">
+                                <div ng-if="tab===1">
+                                    <div ng-controller="adviserPortfolioBriefInfoController">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="secondary-stat">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item1" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.cost | currency}}</span>
+                                                                    <span class="col-right"><em>Cost Value</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item2" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.marketValue | currency}}</span>
+                                                                    <span class="col-right"><em>Market Value</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item3" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.pl | currency}}</span>
+                                                                    <span class="col-right"><em>Profit/Loss</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item4" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.plp | currency}}</span>
+                                                                    <span class="col-right"><em>Profit/Loss (%)</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-6" ng-controller="adviserPortfolioRatingController">
+                                                        <div class="widget">
+                                                            <div class="widget-header">
+                                                                <h3><i class="fa fa-bar-chart-o"></i>Portfolio Rating</h3>
+
+                                                            </div>
+                                                            <div class="widget-content"><div kendo-chart k-options="options" k-rebind="data"></div></div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-md-6" ng-controller="adviserPortfolioInvestmentPiechartController">
+                                                        <div class="widget">
+                                                            <div class="widget-header">
+                                                                <h3><i class="fa fa-bar-chart-o"></i>Investment Chart</h3>
+
+                                                            </div>
+
+                                                            <div class="widget-content"
+                                                                 kendo-chart
+                                                                 k-title="{ text: 'Investment Portfolio', position: 'top' }"
+                                                                 k-series-defaults="{ type: 'donut', startAngle: 270 }"
+                                                                 k-series="[{
+                                                        field: 'amount',
+                                                        categoryField: 'name',
+                                                        padding: 0
+                                                        }]"
+                                                                 k-rebind="data"
+                                                                 k-series-colors="['#42a7ff', '#666666', '#999999', '#cccccc','#42a7ff', '#666666', '#999999', '#cccccc', '#42a7ff']"
+                                                                 k-data-source="investmentPortfolioDataKendo"
+                                                                 k-legend="{ position: 'bottom' }"
+                                                                 k-tooltip="{
+                                            visible: true,
+                                            color: 'white',
+                                            template: '${ category } - ${ value }'}">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row" ng-controller="adviserPortfolioStockDataController">
+                                        <div class="col-sm-12">
+                                            <div class="widget">
+                                                <div class="widget-header">
+                                                    <h3><i class="fa fa-bar-chart-o"></i>Stock Statistics</h3>
+
+                                                </div>
+                                                <div class="widget-content">
+                                                    <div kendo-chart
+                                                         k-legend="{ position: 'bottom' }"
+                                                         k-series-defaults="{ type: 'area' , area : { line : { style : 'smooth' } } }"
+                                                         k-series="[
+                                 { field: 'AssetUnitPrice', name: 'AssetName', categoryField:'year' }                                 
+                             ]"
+                                                         k-data-source="dataSource"
+                                                         k-tooltip="{ visible: true, format : '{0}%' , template: '#= series.name #: #= value # %'}" k-rebind="data"></div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12" ng-controller="adviserPortfolioCashflowBarchartController">
+                                            <div class="widget">
+                                                <div class="widget-header">
+                                                    <h3><i class="fa fa-bar-chart-o"></i>Cash Flow Charts</h3>
+
+                                                </div>
+                                                <div class="widget-content">
+                                                    <div kendo-chart
+                                                         k-legend="{ position: 'bottom' }"
+                                                         k-series-defaults="{ type: 'column' }"
+                                                         k-series="[
+                                 { field: 'income', name: 'Income', categoryField : 'month' },
+                                 { field: 'expense', name: 'Expense', categoryField : 'month' }
+                             ]"
+                                                         k-tooltip="{visible: true, color: 'white', template: '${ category } - $${ value }'}" k-rebind="data" k-data-source="dataSource"></div>
+
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12" ng-controller="adviserPortfolioStatisticsController">
+                                            <div class="widget">
+                                                <div class="widget-header">
+                                                    <h3><i class="fa fa-bar-chart-o"></i>Portfolio Weighting &Aacute; Changes</h3>
+
+                                                </div>
+                                                <div class="widget-content">
+                                                    <div>
+                                                        <table class="table table-striped table-hover">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Asset Class</td>
+                                                                    <td>Cost Investment</td>
+                                                                    <td>Cost Weighting</td>
+                                                                    <td>Market Value</td>
+                                                                    <td>Market Weighting</td>
+                                                                    <td>Profit / Loss ($)</td>
+                                                                    <td>Profit / Loss (%)</td>
+                                                                    <td>Suitability</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="item in data.data">
+                                                                    <td>{{item.assetClass}}</td>
+                                                                    <td>{{item.costInvestment | currency}}</td>
+                                                                    <td>{{item.costWeighting}}%</td>
+                                                                    <td>{{item.marketValue | currency}}</td>
+                                                                    <td>{{item.marketWeighting}}%</td>
+                                                                    <td>{{item.pl | currency}}</td>
+                                                                    <td>{{item.plp}}%</td>
+                                                                    <td>
+                                                                        <div class="progress">
+                                                                            <div class="progress-bar" style="width:{{item.suitability}}%"></div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div style="overflow:auto">
+                                                        <table class="table table-striped table-hover">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Asset Class</td>
+                                                                    <td>1 Year Return</td>
+                                                                    <td>3 Years Return</td>
+                                                                    <td>5 Years Return</td>
+                                                                    <td>Earnings Per Share</td>
+                                                                    <td>Dividends (%)</td>
+                                                                    <td>Dividend (Yield %)</td>
+                                                                    <td>Beta</td>
+                                                                    <td>Return on Asset</td>
+                                                                    <td>Return on Equity</td>
+                                                                    <td>Price / Earnings Ratio</td>
+                                                                    <td>Price / Book</td>
+                                                                    <td>Price / Cashflow</td>
+                                                                    <td>Av Market Cap</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="item in data.data">
+                                                                    <td>{{item.assetClass}}</td>
+                                                                    <td>{{item.oneYearReturn | currency}}</td>
+                                                                    <td>{{item.threeYearReturn | currency}}</td>
+                                                                    <td>{{item.fiveYearReturn | currency}}</td>
+                                                                    <td>{{item.earningsPerShare | currency}}</td>
+                                                                    <td>{{item.dividends | currency}}</td>
+                                                                    <td>{{item.dividend}}%</td>
+                                                                    <td>{{item.beta}}</td>
+                                                                    <td>{{item.returnOnAsset | currency}}</td>
+                                                                    <td>{{item.returnOnEquity | currency}}</td>
+                                                                    <td>{{item.priceEarningsRatio}}%</td>
+                                                                    <td>{{item.priceBook}}</td>
+                                                                    <td>{{item.priceCashflow}}</td>
+                                                                    <td>{{item.avMarketCap}}</td>
+
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div ng-if="tab===2">
+                                    <div class="row">
+                                        <div class="col-sm-12" ng-controller="adviserPortfolioRegionController">
+                                            <div edis-map ng-map-plots="plots"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row" ng-controller="adivserPortfolioRegionTableController">
+                                        <div class="col-md-6">
+                                            <div class="widget">
+                                                <div class="widget-header">
+                                                    <h3><i class="fa fa-bar-chart-o"></i>Regional Exposure</h3>
+
+                                                </div>
+                                                <div class="widget-content">
+                                                    <table class="table table-striped table-hover">
+                                                        <thead>
+                                                            <tr class="summary-table-row">
+                                                                <td>Region</td>
+                                                                <td>Percentage</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-repeat="item in data.data">
+                                                                <td>
+                                                                    {{item.name}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.percentage}}%
+                                                                </td>
+                                                            </tr>
+                                                            <tr class="summary-table-row">
+                                                                <td>Total Regional Exposure</td>
+                                                                <td>{{data.total}}%</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" ng-repeat="region in data.data" ng-if="region.assets&&region.assets.length>0">
+                                            <div class="widget">
+                                                <div class="widget-header">
+                                                    <h3><i class="fa fa-bar-chart-o"></i>{{region.name}}</h3>
+
+                                                </div>
+                                                <div class="widget-content">
+                                                    <table class="table table-striped table-hover">
+                                                        <thead>
+                                                            <tr class="summary-table-row">
+                                                                <td>Country</td>
+                                                                <td>Asset Value</td>
+                                                                <td>Asset Weigthing</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-repeat="item in region.assets">
+                                                                <td>
+                                                                    {{item.country}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.assetValue | currency}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.assetWeighting | number : 2}}%
+                                                                </td>
+                                                            </tr>
+                                                            <tr class="summary-table-row">
+                                                                <td>Total</td>
+                                                                <td>{{region.totalAssets | currency}}</td>
+                                                                <td>{{region.percentage}}%</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+                                    </div>
+                                </div>
+
+
+
+                                <div ng-if="tab===3">
+                                    <div ng-controller="adviserPortfolioSectorDiversificationController">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3><i class="fa fa-bar-chart-o"></i>Sectorial Exposure</h3>
+
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <table class="table table-striped table-hover">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Sector</td>
+                                                                    <td>Value</td>
+                                                                    <td>Percentage</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="item in data.data">
+                                                                    <td>{{item.sector}}</td>
+                                                                    <td>{{item.value | currency}}</td>
+                                                                    <td>{{item.percentage | number : 2}}%</td>
+                                                                </tr>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Total</td>
+                                                                    <td>{{data.total | currency}}</td>
+                                                                    <td>{{data.percentage | number : 2}}%</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3><i class="fa fa-bar-chart-o"></i>Sectorial Pie Chart</h3>
+
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <kendo-chart k-title="{ text: 'Sectorial Pie Chart', position: 'top' }"
+                                                                     k-series-defaults="{ type: 'donut', startAngle: 270 }"
+                                                                     k-series="[{
+                                                field: 'value',
+                                                categoryField: 'sector',
+                                                padding: 0
+                                                }]"
+                                                                     k-rebind="data"
+                                                                     k-series-colors="['#42a7ff', '#666666', '#999999', '#cccccc','#42a7ff', '#666666', '#999999', '#cccccc', '#42a7ff']"
+                                                                     k-data-source="pieSource"
+                                                                     k-legend="{ position: 'bottom' }"
+                                                                     k-tooltip="{
+                                                visible: true,
+                                                color: 'white',
+                                                template: '${ category } - $${ value }'}"></kendo-chart>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3><i class="fa fa-bar-chart-o"></i>Sectorial Exposure</h3>
+
+                                                    </div>
+                                                    <div class="widget-content">
+
+                                                        <kendo-chart k-options="barOptions" k-rebind="data"></kendo-chart>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div ng-if="tab===4">
+                                    <div ng-controller="adviserPortfolioSummaryCashflowDetailController">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <table class="table table-striped table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Items</th>
+                                                            <th ng-repeat="item in data.dateSchema" style="text-align:center" colspan="2">{{item}}</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th ng-repeat-start="item in data.dateSchema" colspan="1" scope="col">Income</th>
+                                                            <th ng-repeat-end colspan="1" scope="col">Expenses</th>
+                                                        </tr>
+                                                        <tr class="summary-table-row">
+                                                            <th></th>
+                                                            <th ng-repeat-start="item in data.total">{{item.income | currency}}</th>
+                                                            <th ng-repeat-end>{{item.expenses | currency}}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody ng-repeat="item in data.data">
+                                                        <!--<tr ng-repeat="record in item.items">
+                            <td>{{record | json}}</td>
+                        </tr>-->
+                                                        <tr ng-repeat="record in item.items">
+                                                            <td>{{record.name}}</td>
+                                                            <td ng-repeat-start="value in record.data">{{value.income | currency}}</td>
+                                                            <td ng-repeat-end>{{value.expenses | currency}}</td>
+                                                        </tr>
+                                                        <tr class="summary-table-row">
+                                                            <td>Total {{item.type}}</td>
+                                                            <td ng-repeat-start="value in item.total">
+                                                                {{value.income | currency}}
+                                                            </td>
+                                                            <td ng-repeat-end>{{value.expenses | currency}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="widget" ng-controller="adviserPortfolioSummaryFiguresController">
+                            <div class="widget-header">
+                                <h3><i class="fa fa-bar-chart-o"></i>My Portfolio Summary</h3>
+
+                            </div>
+                            <div class="widget-content">
+                                <table class="table table-striped table-hover two-col-table">
+                                    <tbody>
+                                        <tr ng-repeat="investment in data.investment.data">
+                                            <td>{{investment.name}}</td>
+                                            <td>{{investment.amount | currency}}</td>
+                                        </tr>
+                                        <tr class="summary-table-row">
+                                            <td>Total Investment Asset: </td>
+                                            <td>{{data.investment.total | currency}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-striped table-hover two-col-table">
+                                    <tbody>
+                                        <tr ng-repeat="liability in data.liability.data">
+                                            <td>{{liability.name}}</td>
+                                            <td>{{liability.amount | currency}}</td>
+                                        </tr>
+                                        <tr class="summary-table-row">
+                                            <td>Total Liability: </td>
+                                            <td>{{data.liability.total | currency}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-striped table-hover two-col-table">
+                                    <tbody>
+                                        <tr ng-repeat="networth in data.networth.data">
+                                            <td>{{networth.name}}</td>
+                                            <td>{{networth.amount | currency}}</td>
+                                        </tr>
+                                        <tr class="summary-table-row">
+                                            <td>Total Net Worth: </td>
+                                            <td>{{data.networth.total | currency}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="widget" ng-controller="adviserPortfolioSummaryCashflowController">
+                            <div class="widget-header">
+                                <h3><i class="fa fa-bar-chart-o"></i>My Cash Flow Summary</h3>
+
+                            </div>
+                            <div class="widget-content">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <td>Month</td>
+                                            <td>Income</td>
+                                            <td>Expense</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in data.data">
+                                            <td>{{item.date | date : 'MMMM'}}</td>
+                                            <td>{{item.income | currency}}</td>
+                                            <td>{{item.expense | currency}}</td>
+                                        </tr>
+                                        <tr class="summary-table-row">
+                                            <td>Total</td>
+                                            <td>{{data.totalIncome | currency}}</td>
+                                            <td>{{data.totalExpense | currency}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="widget" ng-controller="adviserPortfolioAssetClassPerformanceController">
+                            <div class="widget-header">
+                                <h3><i class="fa fa-bar-chart-o"></i>Asset Class Performance Summary</h3>
+
+                            </div>
+                            <div class="widget-content">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr class="summary-table-row">
+                                            <td>Topic</td>
+                                            <td>Asset</td>
+                                            <td>Value</td>
+                                            <td>%Return</td>
+                                            <td>%Weighting</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in bestPerforming">
+                                            <td>{{item.topic}}</td>
+                                            <td>{{item.asset}}</td>
+                                            <td>{{item.value | currency}}</td>
+                                            <td>{{item.rturn}}%</td>
+                                            <td>{{item.weighting}}%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-striped table-hover table-responsive">
+                                    <thead>
+                                        <tr class="summary-table-row">
+                                            <td>Topic</td>
+                                            <td>Asset</td>
+                                            <td>Value</td>
+                                            <td>%Return</td>
+                                            <td>%Weighting</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in worstPerforming">
+                                            <td>{{item.topic}}</td>
+                                            <td>{{item.asset}}</td>
+                                            <td>{{item.value | currency}}</td>
+                                            <td>{{item.rturn}}%</td>
+                                            <td>{{item.weighting}}%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

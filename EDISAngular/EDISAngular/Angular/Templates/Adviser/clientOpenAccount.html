@@ -1,0 +1,477 @@
+﻿<div ng-controller="adviserOpenClient">
+    <script type="text/ng-template" id="clientProfileTomb">
+
+        <div class="col-md-3" ng-repeat="client in selectedClientGroup.ClientMembers" style="height:460px; width:300px;">
+            <div class="user-info-left">
+                <img id="profileImage" ng-src={{client.Image}} class="img-responsive" style="margin:0 auto;" />
+                <h2>{{client.FirstName + " " + client.LastName}}<!--<i class="fa fa-circle green-font online-icon"></i><sup class="sr-only">online</sup>--></h2>
+                <span class="data-name">Compliance</span>
+                <span class="data-value" ng-repeat="x in ratings(client.Compliance) track by $index"><i class="fa fa-star rating-filled" ng-if="x==1" /><i class="fa fa-star-o" ng-if="x==0" /></span>
+                <div class="contact">
+                    <a href="#" class="btn btn-block btn-custom-primary"><i class="fa fa-pencil"></i> Create Note</a>
+                    <a href="#" class="btn btn-block btn-custom-secondary"><i class="fa fa-eye-o"></i> View This Client</a>
+                    <ul class="list-inline social">
+                        <li><a href="#" title="Facebook"><i class="fa fa-facebook-square"></i></a></li>
+                        <li><a href="#" title="Twitter"><i class="fa fa-twitter-square"></i></a></li>
+                        <li><a href="#" title="Google Plus"><i class="fa fa-google-plus-square"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr />
+        </div>
+
+    </script>
+    <script type="text/ng-template" id="clientProfileCarousel">
+        <carousel disable-ng-animate>
+            <slide ng-repeat="client in selectedClientGroup.ClientMembers" active="client.active">
+                <div style="padding:0 15px">
+                    <img ng-src={{client.Image}} class="img-responsive" style="margin:0 auto;" />
+                    <h2>{{client.FirstName + " " + client.LastName}}<!--<i class="fa fa-circle green-font online-icon"></i><sup class="sr-only">online</sup>--></h2>
+                    <span class="data-name">Compliance</span>
+                    <span class="data-value" ng-repeat="x in ratings(client.Compliance) track by $index"><i class="fa fa-star rating-filled" ng-if="x==1" /><i class="fa fa-star-o" ng-if="x==0" /></span>
+                    <div class="contact">
+                        <a href="#" class="btn btn-block btn-custom-primary"><i class="fa fa-pencil"></i> Create Note</a>
+                        <a href="#" class="btn btn-block btn-custom-secondary"><i class="fa fa-eye-o"></i> View This Client</a>
+                        <ul class="list-inline social">
+                            <li><a href="#" title="Facebook"><i class="fa fa-facebook-square"></i></a></li>
+                            <li><a href="#" title="Twitter"><i class="fa fa-twitter-square"></i></a></li>
+                            <li><a href="#" title="Google Plus"><i class="fa fa-google-plus-square"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </slide>
+        </carousel>
+    </script>
+    <script id="bookmarks" type="text/ng-template">
+        <div class="widget" ng-controller="adviserBookmarks">
+            <div class="widget-header">
+                <h3><i class="fa fa-bookmark"></i>Bookmarks</h3>
+            </div>
+            <div class="widget-content">
+                <div class="bookmark-item" ng-click="openLink(x.Href)" ng-repeat="x in bookmarkList">
+                    <span><i class="fa fa-bookmark" style="margin-right:15px; color:#E24715"></i>{{x.Description}}</span>
+                </div>
+                <div class="row" style="margin-top:30px;">
+                    <div class="col-md-3 col-md-offset-2"><a class="btn btn-custom-primary"><i class="fa fa-plus-circle"></i> Add </a></div>
+                    <div class="col-md-3 col-md-offset-2"><a class="btn btn-custom-primary"><i class="fa fa-pencil"></i>Edit</a></div>
+
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <div class="row">
+        <div class="col-md-4 ">
+            <ul class="breadcrumb">
+                <li><i class="fa fa-home"></i><a href="#home">Client Admin</a></li>
+                <li class="active">Open Client Account</li>
+            </ul>
+        </div>
+        <div class="col-md-8 ">
+            <div class="top-content">
+                <ul class="list-inline mini-stat">
+                    <li>
+                        <h5>REFERRALS <span class="stat-value stat-color-orange"><i class="fa fa-plus-circle"></i> 18</span></h5>
+                        <span id="mini-bar-chart1" class="mini-bar-chart"></span>
+                    </li>
+                    <li>
+                        <h5>CLIENTS <span class="stat-value stat-color-blue"><i class="fa fa-plus-circle"></i> 205</span></h5>
+                        <span id="mini-bar-chart2" class="mini-bar-chart"></span>
+                    </li>
+                    <li>
+                        <h5>PORTFOLIO <span class="stat-value stat-color-seagreen"><i class="fa fa-plus-circle"></i> 1.5 Bill</span></h5>
+                        <span id="mini-bar-chart3" class="mini-bar-chart"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- main -->
+    <div class="content">
+        <div class="main-header row">
+
+            <div class="col-md-4"><h2 class="pull-left">View Client Group</h2></div>
+
+            <div class="col-md-6">
+                <div ng-controller="adviserClientSearch">
+                    <!-- search box -->
+                    <div class="input-group searchbox">
+                        <input id="clientSearchBox" type="search" class="form-control" placeholder={{searchBoxPlaceholder}} ng-model="searchString" ng-focus="openSearchResults()" ng-keypress="goToResults($event)">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                    <!--<div id="searchResults" class="searchResults col-md-10" ng-show="searchingClient" ng-blur="closeSearchResults()">
+                        <table id="searchResultTable" style="width:100%;">
+                            <tr ng-repeat="x in clientMembers|filter:searchString" class="searchResultItems" ng-click="closeSearchResults(x)">
+                                <td><span class="searchResultItems" ng-bind-html="x.FirstName + ' ' + x.LastName + ' in ' + x.ClientGroupName + ' '"></span></td>
+                            </tr>
+                        </table>
+
+                    </div>-->
+                    <div id="searchResults" class="searchResults col-md-10" ng-show="searchingClient">
+                        <table id="searchResultTable" style="width:100%;">
+                            <tr ng-repeat="x in clientMembers|filter:searchString" class="searchResultItems" ng-click="closeSearchResults(x)">
+                                <td><span class="searchResultItems" ng-bind-html="x.FirstName + ' ' + x.LastName + ' in ' + x.ClientGroupName + ' '"></span></td>
+                            </tr>
+                        </table>
+
+                    </div>
+                    <!-- end search box -->
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h4>{{selectedClientGroup.ClientGroupName}}</h4>
+            </div>
+        </div>
+
+
+        <div class="main-content ">
+            <!-- NAV TABS -->
+            <ul class="nav nav-tabs" ng-init="tab=1">
+                <!--<li class="active"><a data-target="#profile-tab" data-toggle="tab"><i class="fa fa-user"></i> Profile</a></li>
+                <li><a data-target="#activity-tab" data-toggle="tab"><i class="fa fa-building-o"></i> Company Information</a></li>
+                <li><a data-target="#settings-tab" data-toggle="tab"><i class="fa fa-gear"></i> Settings</a></li>-->
+                <li ng-class="{active:tab==1}"><a ng-click="tab=1"><i class="fa fa-user"></i> Client Group Profile</a></li>
+                <li ng-class="{active:tab==2}">
+                    <a ng-click="togglePFDropdown($event)" ng-mouseover="togglePFHover($event)"><i class="fa fa-building-o"></i> Client Portfolio</a>
+                    <div class="" dropdown is-open="status.pfIsOpen">
+                        <ul class="dropdown-menu" role="menu" ng-init="pfTab=0">
+                            <li><a ng-click="pfTab=1;tab=2" class="porfolioSubMenu"><span class="text">Porfolio Summary</span></a></li>
+                            <li><a ng-click="pfTab=2;tab=2" class="porfolioSubMenu"><span class="text">Australian Equity</span></a></li>
+                            <li><a ng-click="pfTab=3;tab=2" class="porfolioSubMenu"><span class="text">International Equity</span></a></li>
+                            <li><a ng-click="pfTab=4;tab=2" class="porfolioSubMenu"><span class="text">Managed Investment</span></a></li>
+                            <li><a ng-click="pfTab=5;tab=2" class="porfolioSubMenu"><span class="text">Direct Property</span></a></li>
+                            <li><a ng-click="pfTab=6;tab=2" class="porfolioSubMenu"><span class="text">Fixed Income</span></a></li>
+                            <li><a ng-click="pfTab=7;tab=2" class="porfolioSubMenu"><span class="text">Cash &amp; Term Deposit</span></a></li>
+                            <li><a ng-click="pfTab=8;tab=2" class="porfolioSubMenu"><span class="text">Mortgage &amp; Home Loan</span></a></li>
+                            <li><a ng-click="pfTab=9;tab=2" class="porfolioSubMenu"><span class="text">Margin Lending</span></a></li>
+                            <li><a ng-click="pfTab=10;tab=2" class="porfolioSubMenu"><span class="text">Personal &amp; Credit Card Loan</span></a></li>
+                            <li><a ng-click="pfTab=11;tab=2" class="porfolioSubMenu"><span class="text">Insurance</span></a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li ng-class="{active:tab==4}">
+                    <a ng-click="toggleTrDropdown($event)" ng-mouseover="toggleTrHover($event)"><i class="fa fa-stack-exchange"></i> Transactions </a>
+                    <div class="" dropdown is-open="status.trIsOpen">
+                        <ul class="dropdown-menu" role="menu" ng-init="trTab=2">
+                            <!--<li><a ng-click="trTab=1;tab=4" class="porfolioSubMenu"><span class="text">Transaction Summary</span></a></li>-->
+                            <li><a ng-click="trTab=2;tab=4" class="porfolioSubMenu"><span class="text">Australian Equity</span></a></li>
+                            <li><a ng-click="trTab=3;tab=4" class="porfolioSubMenu"><span class="text">International Equity</span></a></li>
+                            <li><a ng-click="trTab=4;tab=4" class="porfolioSubMenu"><span class="text">Managed Investment</span></a></li>
+                            <li><a ng-click="trTab=5;tab=4" class="porfolioSubMenu"><span class="text">Direct Property</span></a></li>
+                            <li><a ng-click="trTab=6;tab=4" class="porfolioSubMenu"><span class="text">Fixed Income</span></a></li>
+                            <li><a ng-click="trTab=7;tab=4" class="porfolioSubMenu"><span class="text">Cash &amp; Term Deposit</span></a></li>
+                            <li><a ng-click="trTab=8;tab=4" class="porfolioSubMenu"><span class="text">Mortgage &amp; Home Loan</span></a></li>
+                            <li><a ng-click="trTab=9;tab=4" class="porfolioSubMenu"><span class="text">Margin Lending</span></a></li>
+                            <li><a ng-click="trTab=10;tab=4" class="porfolioSubMenu"><span class="text">Personal &amp; Credit Card Loan</span></a></li>
+                            <li><a ng-click="trTab=11;tab=4" class="porfolioSubMenu"><span class="text">Insurance</span></a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li ng-class="{active:tab==5}"><a ng-click="tab=5"><i class="fa fa-book"></i> Corporate Actions</a></li>
+                <li ng-class="{active:tab==6}"><a ng-click="tab=6"><i class="fa fa-book"></i> Rebalancing</a></li>
+                <li ng-class="{active:tab==7}"><a ng-click="tab=7"><i class="fa fa-book"></i> Correspondence</a></li>
+                <li ng-class="{active:tab==8}"><a ng-click="tab=8"><i class="fa fa-gear"></i> Reminders</a></li>
+                <li ng-class="{active:tab==9}"><a ng-click="tab=9"><i class="fa fa-gear"></i> Data Input</a></li>
+
+            </ul>
+            <!-- END NAV TABS -->
+
+            <div class="tab-content profile-page">
+                <!-- PROFILE TAB CONTENT -->
+                <div class="tab-pane profile" id="profile-tab" ng-class="{active:tab==1}">
+                    <div class="row" style="height:400px;">
+                        <div ng-include src="'clientProfileTomb'"></div>
+
+
+                    </div>
+
+                </div>
+                <!-- END PROFILE TAB CONTENT -->
+                <div>
+                    <!--  Client Portfolio Summary TAB CONTENT -->
+                    <div class="tab-pane profile active" id="portfolio-tab" ng-if="pfTab==1 && tab==2">
+                        <div class="row">
+                            <ng-include src="'/Angular/Templates/Adviser/Client/clientPortfolioSummary.html'"></ng-include>
+                        </div>
+                    </div>
+                    <!-- END TAB CONTENT -->
+                    <!-- AUSTRALIAN EQUITY TAB CONTENT -->
+                    <div class="tab-pane profile active" id="portfolio-austEquity-tab" ng-if="pfTab==2 && tab==2">
+                        <div class="row">
+                            <ng-include src="'/Angular/Templates/Adviser/adviserPortfolioAE.html'"></ng-include>
+                        </div>
+                    </div>
+                    <!-- END TAB CONTENT -->
+                    <!-- INTERNATIONAL EQUITY TAB CONTENT -->
+                    <div class="tab-pane profile active" id="portfolio-intEquity-tab" ng-if="pfTab==3 && tab==2">
+                        <div class="row">
+                            <ng-include src="'/Angular/Templates/Adviser/adviserPortfolioINT.html'"></ng-include>
+                        </div>
+                    </div>
+                    <!-- END ACTIVITY TAB CONTENT -->
+                    <!-- MANAGED INVESTMENT TAB CONTENT -->
+                    <div class="tab-pane profile active" id="portfolio-managedFund-tab" ng-if="pfTab==4 && tab==2">
+                        <div class="row">
+                            <ng-include src="'/Angular/Templates/Adviser/adviserPortfolioMI.html'"></ng-include>
+                        </div>
+                    </div>
+                    <!-- END TAB CONTENT -->
+                    <!-- DIRECT PROPERTY TAB CONTENT -->
+                    <div class="tab-pane profile active" id="portfolio-DirectProperty-tab" ng-if="pfTab==5 && tab==2">
+                        <div class="row">
+                            <ng-include src="'/Angular/Templates/Adviser/adviserPortfolioDP.html'"></ng-include>
+                        </div>
+                    </div>
+                    <!-- END TAB CONTENT -->
+                    <!-- FIXED INCOME TAB CONTENT -->
+                    <div class="tab-pane profile active" id="portfolio-fixedIncome-tab" ng-if="pfTab==6 && tab==2">
+                        <div class="row">
+                            <ng-include src="'/Angular/Templates/Adviser/adviserPortfolioFI.html'"></ng-include>
+                        </div>
+                    </div>
+                    <!-- END ACTIVITY TAB CONTENT -->
+                    <!-- Cash and Term Deposit TAB CONTENT -->
+                    <div class="tab-pane profile active" id="portfolio-cashTermDeposit-tab" ng-if="pfTab==7 && tab==2">
+                        <div class="row">
+                            <ng-include src="'/Angular/Templates/Adviser/adviserPortfolioCTD.html'"></ng-include>
+                        </div>
+                    </div>
+                    <!-- END TAB CONTENT -->
+                    <!-- Mortgage &amp; Home Loan TAB CONTENT -->
+                    <div class="tab-pane profile active" id="portfolio-mortgage-tab" ng-if="pfTab==8 && tab==2">
+                        <div class="row">
+                            <ng-include src="'/Angular/Templates/Adviser/adviserPortfolioMHL.html'"></ng-include>
+                        </div>
+                    </div>
+                    <!-- END TAB CONTENT -->
+                    <!-- Margin Lending TAB CONTENT -->
+                    <div class="tab-pane profile active" id="portfolio-marginLending-tab" ng-if="pfTab==8 && tab==2">
+                        <div class="row">
+                            <ng-include src="'/Angular/Templates/Adviser/adviserPortfolioML.html'"></ng-include>
+                        </div>
+                    </div>
+                    <!-- END TAB CONTENT -->
+                    <!-- Personal &amp; Credit Card Loan TAB CONTENT -->
+                    <div class="tab-pane profile active" id="portfolio-personalCreditCard-tab" ng-if="pfTab==9 && tab==2">
+                        <div class="row">
+                            <ng-include src="'/Angular/Templates/Adviser/adviserPortfolioCC.html'"></ng-include>
+                        </div>
+                    </div>
+                    <!-- END TAB CONTENT -->
+                    <!-- INSURANCE TAB CONTENT -->
+                    <div class="tab-pane profile active" id="portfolio-insurance-tab" ng-if="pfTab==10 && tab==2">
+                        <div class="row">
+                            <ng-include src="'/Angular/Templates/Adviser/adviserPortfolioINS.html'"></ng-include>
+                        </div>
+                    </div>
+                    <!-- END TAB CONTENT -->
+                </div>
+                <!-- TRANSACTIONS TAB CONTENT -->
+                <div>
+                    <!-- BEGING AUSTRALIAN EQUITY TRANSACTIONS-->
+                    <div class="tab-pane profile active" id="transactions-tab" ng-if="trTab==2 && tab==4">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div ng-include src="'/Angular/Templates/Adviser/Client/clientTransactionsAE.html'"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div ng-include src="'bookmarks'"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--END AUSTRALIAN EQUITY TRANSACTIONS-->
+                    <!-- BEGING INTERNATIONAL EQUITY TRANSACTIONS-->
+                    <div class="tab-pane profile active" id="transactions-tab" ng-if="trTab==3 && tab==4">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div ng-include src="'/Angular/Templates/Adviser/Client/clientTransactionsINT.html'"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div ng-include src="'bookmarks'"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--END INTERNATIONAL EQUITY TRANSACTIONS-->
+                    <!-- BEGING MANAGED INVESTMENTS TRANSACTIONS-->
+                    <div class="tab-pane profile active" id="transactions-tab" ng-if="trTab==4 && tab==4">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div ng-include src="'/Angular/Templates/Adviser/Client/clientTransactionsMI.html'"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div ng-include src="'bookmarks'"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--END MANAGED INVESTMENTS TRANSACTIONS-->
+
+                    <!-- BEGING DIRECT PROPERTY TRANSACTIONS-->
+                    <div class="tab-pane profile active" id="transactions-tab" ng-if="trTab==5 && tab==4">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div ng-include src="'/Angular/Templates/Adviser/Client/clientTransactionsDP.html'"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div ng-include src="'bookmarks'"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--END DIRECT PROPERTY TRANSACTIONS-->
+
+                    <!-- BEGING FIXED INCOME TRANSACTIONS-->
+                    <div class="tab-pane profile active" id="transactions-tab" ng-if="trTab==6 && tab==4">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div ng-include src="'/Angular/Templates/Adviser/Client/clientTransactionsFI.html'"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div ng-include src="'bookmarks'"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--END FIXED INCOME TRANSACTIONS-->
+
+                    <!-- BEGING CASH & TERM DEPOSIT TRANSACTIONS-->
+                    <div class="tab-pane profile active" id="transactions-tab" ng-if="trTab==7 && tab==4">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div ng-include src="'/Angular/Templates/Adviser/Client/clientTransactionsCTD.html'"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div ng-include src="'bookmarks'"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--END CASH & TERM DEPOSIT TRANSACTIONS-->
+
+                    <!-- BEGING MORTGAGE & HOME LOAN TRANSACTIONS-->
+                    <div class="tab-pane profile active" id="transactions-tab" ng-if="trTab==8 && tab==4">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div ng-include src="'/Angular/Templates/Adviser/Client/clientTransactionsMHL.html'"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div ng-include src="'bookmarks'"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--END MORTGAGE & HOME LOAN  TRANSACTIONS-->
+
+                    <!-- BEGING MARGIN LENDING TRANSACTIONS-->
+                    <div class="tab-pane profile active" id="transactions-tab" ng-if="trTab==9 && tab==4">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div ng-include src="'/Angular/Templates/Adviser/Client/clientTransactionsML.html'"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div ng-include src="'bookmarks'"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--END MARGIN LENDING TRANSACTIONS-->
+
+                    <!-- BEGING PERSONAL & CREDIT CARD LOAN TRANSACTIONS-->
+                    <div class="tab-pane profile active" id="transactions-tab" ng-if="trTab==10 && tab==4">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div ng-include src="'/Angular/Templates/Adviser/Client/clientTransactionsCC.html'"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div ng-include src="'bookmarks'"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--END PERSONAL & CREDIT CARD LOAN TRANSACTIONS-->
+
+                    <!-- BEGING INSURANCE TRANSACTIONS-->
+                    <div class="tab-pane profile active" id="transactions-tab" ng-if="trTab==11 && tab==4">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div ng-include src="'/Angular/Templates/Adviser/Client/clientTransactionsINS.html'"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div ng-include src="'bookmarks'"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--END INSURANCE TRANSACTIONS-->
+                </div>
+                <!-- END TAB CONTENT -->
+                <!-- Corporate Actions TAB CONTENT -->
+                <div class="tab-pane profile active" id="corporateActions-tab" ng-if="tab==5">
+                    <div class="row">
+                        <div ng-include src="'/Angular/Templates/Adviser/adviserCorporateActions.html'"></div>
+
+                    </div>
+                </div>
+                <!-- END TAB CONTENT -->
+                <!-- Rebalancing TAB CONTENT -->
+                <div class="tab-pane profile active" id="rebalancing-tab" ng-if="tab==6">
+                    <div class="row">
+                        <div ng-include src="'/Angular/Templates/Adviser/adviserRebalance.html'"></div>
+
+                    </div>
+                </div>
+                <!-- END TAB CONTENT -->
+                <!-- Correspondence ACTIONS TAB CONTENT -->
+                <div class="tab-pane profile active" id="correspondence-tab" ng-if="tab==7">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div ng-include src="'/Angular/Templates/Adviser/Client/clientCorrespondence.html'"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div ng-include src="'clientProfileCarousel'"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END ACTIVITY TAB CONTENT -->
+                <!-- Reminders ACTIONS TAB CONTENT -->
+                <div class="tab-pane profile active" id="reminders-tab" ng-if="tab==8">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div ng-include src="'/Angular/Templates/Adviser/Client/clientReminders.html'">
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div ng-include src="'clientProfileCarousel'"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END ACTIVITY TAB CONTENT -->
+                <!-- Data Input ACTIONS TAB CONTENT -->
+                <div class="tab-pane profilea active" id="dataInput-tab" ng-if="tab==9">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <!--<div ng-include src="'/Angular/Templates/Client/clientCorrespondence.html'">-->
+                            <h3>Data Input</h3>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <!-- END ACTIVITY TAB CONTENT -->
+            </div>
+
+        </div><!-- /main-content -->
+</div><!-- /main -->
+
+
+
+

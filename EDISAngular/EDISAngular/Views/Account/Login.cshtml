@@ -1,0 +1,64 @@
+﻿@using EDISAngular.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+}
+
+
+@using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="wrapper full-page-wrapper page-login text-center">
+
+        <div class="inner-page">
+
+            <div class="login-box center-block">
+                <form class="form-horizontal" role="form">
+                    <p class="title">Welcome back</p>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            @Html.LabelFor(m => m.RememberMe)
+                            @Html.CheckBoxFor(m => m.RememberMe)
+                        </div>
+
+                    </div>
+                    <button type="submit" class="btn btn-custom-primary btn-lg btn-block btn-login"><i class="fa fa-arrow-circle-o-right"></i> Login</button>
+                </form>
+
+            <div class="links">
+                <p>@Html.ActionLink("Forgot username or password", "ForgotPassword")</p>
+                <p>@Html.ActionLink("Register as a new user", "Register", new { ReturnUrl = ViewBag.ReturnUrl })</p>
+            </div>
+        </div>
+    </div>
+    <div class="push-sticky-footer"></div>
+</div>
+
+
+
+
+    <p>
+
+    </p>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

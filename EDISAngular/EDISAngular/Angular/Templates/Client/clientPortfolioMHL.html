@@ -1,0 +1,426 @@
+﻿
+
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+            <li>Portfolio</li>
+            <li class="active">Mortgage &amp; Investment Home Loans</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="main-header">
+        <h2>Mortgage &amp; Investment Home Loans</h2>
+
+    </div>
+    <div class="main-content" ng-controller="clientPortfolioMHLViewController">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-tabs" ng-init="tab=1">
+                            <li ng-class="{active:tab==1}"><a ng-click="tab=1"><i class="fa fa-home"></i> Overview</a></li>
+                          <!--  <li ng-class="{active:tab==3}"><a ng-click="tab=3"><i class="fa fa-list"></i> Diversification</a></li>
+                            <li ng-class="{active:tab==4}"><a ng-click="tab=4"><i class="fa fa-list"></i> Cashflow</a></li>
+                              -->
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active in">
+                                <div ng-if="tab===1">
+                                    <div ng-controller="clientPortfolioMHLBriefInfoController">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="secondary-stat">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item1" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.marketValue | currency}}</span>
+                                                                    <span class="col-right"><em>Total Market Value</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item2" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.outstandingLoans | currency}}</span>
+                                                                    <span class="col-right"><em>Total Out-standing Loans</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item3" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.propertyGearingRatio | number : 0}}%</span>
+                                                                    <span class="col-right"><em>Total Property Gearing Ratio</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item4" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.monthlyRepayment | currency}}%</span>
+                                                                    <span class="col-right"><em>Total Monthly Repayments</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item1" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.annualInterestRepayment | currency}}%</span>
+                                                                    <span class="col-right"><em>Current Annual Interest Repayments</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item2" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.aveTermOfLoans | number : 0}}</span>
+                                                                    <span class="col-right"><em>Average Term of Loans</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-8" ng-controller="clientPortfolioMHLRatingController">
+                                                        <div class="widget">
+                                                            <div class="widget-header">
+                                                                <h3><i class="fa fa-bar-chart-o"></i>Portfolio Rating</h3>
+
+                                                            </div>
+                                                            <div class="widget-content"><div kendo-chart k-rebind="data" k-options="mainOptions"></div></div>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="row">
+                                        <div class="col-md-12" ng-controller="clientPortfolioMHLCashflowController">
+                                            <div class="widget">
+                                                <div class="widget-header">
+                                                    <h3><i class="fa fa-bar-chart-o"></i>Cash Flow Charts</h3>
+
+                                                </div>
+                                                <div class="widget-content">
+                                                    <div kendo-chart k-rebind="data"
+                                                         k-legend="{ position: 'bottom' }"
+                                                         k-series-defaults="{ type: 'column' }"
+                                                         k-series="[
+                                 { field: 'income', name: 'Income', categoryField : 'month' },
+                                 { field: 'expense', name: 'Expense', categoryField : 'month' }
+                             ]"
+                                                         k-tooltip="{visible: true, color: 'white', template: '${ category } - $${ value }'}" k-data-source="dataSource"></div>
+
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12" ng-controller="clientPortfolioMHLInvestmentProfilesController">
+                                            <div class="widget">
+                                                <div class="widget-header">
+                                                    <h3><i class="fa fa-bar-chart-o"></i>Income Details</h3>
+
+                                                </div>
+                                                <div class="widget-content">
+                                                    <div>
+                                                        <table class="table table-striped table-hover">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Property Name</td>
+                                                                    <td>Property Address</td>
+                                                                    <td>Currency</td>
+                                                                    <td>Market Value</td>
+                                                                    <td>Outstanding Loan</td>
+                                                                    <td>Current Property Gearing Ratio</td>
+                                                                    <td>Institution</td>
+                                                                    <td>Type of Rates</td>
+                                                                    <td>Interest Rate</td>
+                                                                    <td>Monthly Repayment Amount</td>
+                                                                    <td>Monthly Repayment Date</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="item in data.data">
+                                                                    <td>{{item.propertyName}}</td>
+                                                                    <td>{{item.address}}</td>
+                                                                    <td>{{item.currency}}</td>
+                                                                    <td>{{item.marketValue | currency}}</td>
+                                                                    <td>{{item.outstandingLoan | currency}}</td>
+                                                                    <td>{{item.currentPropertyGearingRatio | number : 0}}</td>
+                                                                    <td>{{item.institution}}</td>
+                                                                    <td>{{item.typeOfRates}}</td>
+                                                                    <td>{{item.interestRates | number : 0}}%</td>
+                                                                    <td>{{item.monthlyRepaymentAmount | currency}}</td>
+                                                                    <td>{{item.montlyRepaymentDate}}</td>
+
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div style="overflow:auto">
+                                                        <table class="table table-striped table-hover">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Property Name</td>
+                                                                    <td>Property Address</td>
+                                                                    <td>Loan Contract Term (Years)</td>
+                                                                    <td>Start Date</td>
+                                                                    <td>Loan Expiry Date</td>
+                                                                    <td>No. of Years to Date</td>
+                                                                    <td>No. of Years to Expiry</td>
+                                                                    <td>Repayment Type</td>
+                                                                    <td>Maximum Loan Limit</td>
+                                                                    <td>Current Loan Balance</td>
+                                                                    <td>Avaliable Funds</td>
+                                                                    <td>Repayment Method</td>
+                                                                    <td>Current Financial Year Interest</td>
+                                                                    <td>Last Financial Year Interest</td>
+                                                                    <td>Suitability</td>
+
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="item in data.data">
+                                                                    <td>{{item.propertyName}}</td>
+                                                                    <td>{{item.address}}</td>
+                                                                    <td>{{item.loanContractTerm | number : 0}}</td>
+                                                                    <td>{{item.startDate | date}}</td>
+                                                                    <td>{{item.loanExpiryDate | date}}</td>
+                                                                    <td>{{item.numberOfYearsToDate}}</td>
+                                                                    <td>{{item.NumberOfYearsToExpiry}}</td>
+                                                                    <td>{{item.RepaymentType}}</td>
+                                                                    <td>{{item.maximumLoanLimit | currency}}</td>
+                                                                    <td>{{item.currentLoanBalance | currency}}</td>
+                                                                    <td>{{item.avaliableFunds | currency}}</td>
+                                                                    <td>{{item.repaymentMethod}}</td>
+                                                                    <td>{{item.currentFinancialYearInterest | currency}}</td>
+                                                                    <td>{{item.lastFinancialYearInterest | currency}}</td>
+                                                                    <td>{{item.suitability | number : 0}}</td>
+
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div ng-if="tab===3">
+                                    <div ng-controller="clientPortfolioMHLDiversificationController">
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <h5><strong>Filter by Country</strong></h5>
+                                                </div>
+                                            </div>
+                                            <div class="row" ng-repeat="country in countries">
+                                                <div class="col-sm-12">
+                                                    {{country.name}} <input type="checkbox" ng-model="country.checked" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <h5><strong>Filter by State</strong></h5>
+                                                </div>
+                                            </div>
+                                            <div class="row" ng-repeat="state in states">
+                                                <div class="col-sm-12">
+                                                    {{state.name}} <input type="checkbox" ng-model="state.checked" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <h5><strong>Filter by Type</strong></h5>
+                                                </div>
+                                            </div>
+                                            <div class="row" ng-repeat="type in types">
+                                                <div class="col-sm-12">
+                                                    {{type.name}} <input type="checkbox" ng-model="type.checked" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <table class="table table-striped table-hover">
+                                                <thead>
+                                                    <tr class="summary-table-row">
+                                                        <td>Address</td>
+                                                        <td>Market Value</td>
+                                                        <td>Outstanding Loan</td>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="property in properties()">
+                                                        <td>{{property.address}}</td>
+                                                        <td>{{property.marketValue | currency}}</td>
+                                                        <td>{{property.outstandingLoan | currency}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div ng-if="tab===4">
+                                    <div ng-controller="clientPortfolioMHLCashflowPropertySpecificController" style="overflow:auto">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <tr class="summary-table-row">
+                                                    <th>
+                                                        Property Name
+                                                    </th>
+                                                    <th>Property Address</th>
+                                                    <th ng-repeat="item in data.dateSchema" colspan="3">{{item}}</th>
+                                                </tr>
+                                                <tr class="summary-table-row">
+                                                    <th colspan="2">
+                                                    </th>
+                                                    <th ng-repeat-start="item in data.dateSchema">Income</th>
+                                                    <th>Franking</th>
+                                                    <th ng-repeat-end>Expenses</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="company in data.data">
+                                                    <td>{{company.propertyName}}</td>
+                                                    <td>{{company.address}}</td>
+                                                    <td ng-repeat-start="item in company.data">
+                                                        {{item.income | currency}}
+                                                    </td>
+                                                    <td>{{item.franking | currency}}</td>
+                                                    <td ng-repeat-end>{{item.expenses | currency}}</td>
+                                                </tr>
+                                                <tr class="summary-table-row">
+                                                    <td colspan="2">Total</td>
+                                                    <td ng-repeat-start="item in data.total">
+                                                        {{item.income | currency}}
+                                                    </td>
+                                                    <td>{{item.franking | currency}}</td>
+                                                    <td ng-repeat-end>{{item.expenses | currency}}</td>
+                                                </tr>
+
+
+                                            </tbody>
+                                        </table>
+
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="widget" ng-controller="clientPortfolioMHLCashflowController">
+                            <div class="widget-header">
+                                <h3><i class="fa fa-bar-chart-o"></i>Monthly Cash Flow Summary</h3>
+
+                            </div>
+                            <div class="widget-content">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr class="summary-table-row">
+                                            <td>Month</td>
+                                            <td>Income</td>
+                                            <td>Expense</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in data.data">
+                                            <td>{{item.date | date : 'MMMM'}}</td>
+                                            <td>{{item.income | currency}}</td>
+                                            <td>{{item.expense | currency}}</td>
+                                        </tr>
+                                        <tr class="summary-table-row">
+                                            <td>Total</td>
+                                            <td>{{data.totalIncome | currency}}</td>
+                                            <td>{{data.totalExpense | currency}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="widget" ng-controller="clientPortfolioMHLStatisticsController">
+                            <div class="widget-header">
+                                <h3><i class="fa fa-bar-chart-o"></i>Mortgage &amp; Investment Home Loans Statistics</h3>
+
+                            </div>
+                            <div class="widget-content">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr class="summary-table-row">
+                                            <td>Type</td>
+                                            <td>Value</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Debt Level</td>
+                                            <td>{{data.debtLevel | number : 0}}%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Income Level</td>
+                                            <td>{{data.incomeLevel | currency}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cash Flow Level</td>
+                                            <td>{{data.cashFlowLevel | currency}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Market Value</td>
+                                            <td>{{data.marketValue | currency}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Repayments Relative to Income</td>
+                                            <td>{{data.repayments | number : 0}}%</td>
+                                        </tr>
+                                        <tr class="summary-table-row">
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

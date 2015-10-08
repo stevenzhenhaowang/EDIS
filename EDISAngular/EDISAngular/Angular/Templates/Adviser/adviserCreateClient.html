@@ -1,0 +1,202 @@
+﻿
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+            <li>Client Admin</li>
+            <li class="active">Create Client</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="main-header">
+        <h2>Create Client</h2>
+
+    </div>
+    <div class="main-content" ng-controller="adviserCreateClientController">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="widget">
+                    <div class="widget-header"><h3><i class="fa fa-edit"></i> Create Client Form</h3></div>
+                    <div class="widget-content">
+                        <form novalidate name="form">
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label>Account Type</label>
+                                    <div class="radio">
+                                        <label>
+                                            Person
+                                            <input type="radio" ng-model="collection.accountType" value="Person" ng-required="!collection.accountType" />
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            Entity
+                                            <input type="radio" ng-model="collection.accountType" value="Entity" ng-required="!collection.accountType" />
+                                        </label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div ng-if="collection.accountType==='Person'">
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label>First Name</label>
+                                        <input type="text" ng-model="collection.personProfile.firstName" class="form-control" required name="firstName" />
+                                        <div class="error" ng-show="form.firstName.$error.required&&form.firstName.$touched">Please enter client first name</div>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label>Last Name</label>
+                                        <input type="text" ng-model="collection.personProfile.lastName" class="form-control" required name="lastName" />
+                                        <div class="error" ng-show="form.lastName.$error.required&&form.lastName.$touched">Please enter client last name</div>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label>Middle Name</label>
+                                        <input type="text" ng-model="collection.personProfile.middleName" class="form-control" name="middleName" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label>Email</label>
+                                        <input type="email" ng-model="collection.personProfile.email" name="email" required class="form-control" />
+                                        <div class="error" ng-show="form.email.$error.required&&form.email.$touched">Please provide client email address</div>
+                                        <div class="error" ng-show="form.email.$error.email&&form.email.$touched">Please provide valid client email address</div>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label>Contact Phone</label>
+                                        <input type="tel" ng-model="collection.personProfile.phone" name="phone" required class="form-control" />
+                                        <div class="error" ng-show="form.phone.$error.required&&form.phone.$touched">Please provide client contact number</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8 form-group">
+                                        <label>Group Setting</label>
+                                        <div class="radio">
+                                            <label>Create a New Group with Current Client as Main Account</label>
+                                            <input type="radio" name="isleader" ng-model="collection.personProfile.isGroupLeader" value="true" />
+                                        </div>
+                                        <div class="radio">
+                                            <label>Add Current Client to an Existing Group</label>
+                                            <input type="radio" name="isleader" ng-model="collection.personProfile.isGroupLeader" value="false" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+                                <div class="row" ng-if="!(collection.personProfile.isGroupLeader==='true')">
+                                    <div class="col-md-4 form-group">
+                                        <label>Please select from existing group</label>
+                                        <select class="form-control" name="group" ng-model="collection.personProfile.group.id"  ng-options="item.id as item.name for item in existingGroups" required></select>
+                                        <div class="error" ng-show="form.group.$error.required&&form.group.$touched">Please select a group</div>
+                                    </div>
+                                </div>
+
+                                <div class="row" ng-if="(collection.personProfile.isGroupLeader==='true')">
+                                    <div class="col-md-4 form-group">
+                                        <label>Group Account Name</label>
+                                        <input type="text" ng-model="collection.personProfile.groupName" name="groupName" required class="form-control" />
+                                        <div class="error" ng-show="form.groupName.$error.required&&form.groupName.$touched">Please provide group account name</div>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label>Group Account Alias</label>
+                                        <input type="text" ng-model="collection.personProfile.groupAlias" name="groupAlias" required class="form-control" />
+                                        <div class="error" ng-show="form.groupAlias.$error.required&&form.groupAlias.$touched">Please provide group account alias</div>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label>Adviser ID</label>
+                                        <input type="text" ng-model="adviserId" name="adviserId" required class="form-control" />
+                                        <div class="error" ng-show="form.adviserId.$error.required&&form.adviserId.$touched">Please provide group account adviser ID</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-if="collection.accountType==='Entity'">
+
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label>Name of Entity</label>
+                                        <input type="text" ng-model="collection.entityProfile.nameOfEntity" class="form-control" required name="nameOfEntity" />
+                                        <div class="error" ng-show="form.nameOfEntity.$error.required&&form.nameOfEntity.$touched">Please enter the name of entity</div>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label>Type of Entity</label>
+                                        <select ng-model="collection.entityProfile.typeOfEntity" name="typeOfEntity" ng-options="item.name as item.name for item in entityTypes" class="form-control" required></select>
+                                        <div class="error" ng-show="form.typeOfEntity.$error.required&&form.typeOfEntity.$touched">Please enter entity type</div>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label>ABN</label>
+                                        <input type="text" ng-model="collection.entityProfile.abn" class="form-control" name="abn" required />
+                                        <div class="error" ng-show="form.abn.$error.required&&form.abn.$touched">Please enter ABN</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label>ACN</label>
+                                        <input type="text" ng-model="collection.entityProfile.acn" name="acn" required class="form-control" />
+                                        <div class="error" ng-show="form.acn.$error.required&&form.acn.$touched">
+                                            Please provide ACN
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label>Contact Phone</label>
+                                        <input type="tel" ng-model="collection.entityProfile.phone" name="ephone" required class="form-control" />
+                                        <div class="error" ng-show="form.ephone.$error.required&&form.ephone.$touched">Please provide best contact number</div>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label>Email</label>
+                                        <input type="email" ng-model="collection.entityProfile.email" name="eemail" required class="form-control" />
+                                        <div class="error" ng-show="form.eemail.$error.required&&form.eemail.$touched">Please provide email</div>
+                                        <div class="error" ng-show="form.eemail.$error.email&&form.eemail.$touched">Please provide valid email</div>
+                                    </div>
+
+
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label>Please select from existing group</label>
+                                        <select class="form-control" name="egroup" ng-model="collection.entityProfile.group.id" ng-options="item.id as item.name for item in existingGroups" required></select>
+
+                                        <div class="error" ng-show="form.egroup.$error.required&&form.egroup.$touched">Please select a group</div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!--<div ng-if="collection.accountType">
+                                <div class="row">
+                                    <div class="col-md-6 form-group">
+                                        <div class="checkbox-inline">
+                                            <label>
+                                                Complete Risk Profile Now<input type="checkbox" name="riskNow" ng-model="collection.completeRiskProfile" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>-->
+                            <!--<div ng-if="collection.completeRiskProfile">
+                                <div class="row" ng-repeat="question in collection.riskProfile.questions">
+                                    <div class="col-md-12 form-group">
+                                        <label>{{question.question}}</label>
+                                        <textarea class="form-control" ng-model="question.answer" name="question_{{$index}}" required></textarea>
+                                        <div class="error" ng-show="form.question_{{$index}}.$error.required&&form.question_{{$index}}.$touched">Please complete this question</div>
+                                    </div>
+                                </div>
+                            </div>-->
+
+                            <div class="row">
+                                <div class="col-md-12 text-right">
+                                    <button class="btn btn-success" ng-disabled="!form.$valid" ng-click="save()">Create Account</button>
+                                </div>
+                            </div>
+
+
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

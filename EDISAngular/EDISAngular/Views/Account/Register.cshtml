@@ -1,0 +1,80 @@
+﻿@model EDISAngular.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+
+
+@*@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <h4>Create a new account.</h4>
+        <hr />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default" value="Register" />
+            </div>
+        </div>
+    }*@
+
+<div class="wrapper full-page-wrapper page-register text-center">
+
+    <div class="inner-page">
+        <div class="logo"><a href="index.html"><img width="200px" src="~/Images/EDIS_logo.jpg" alt=""></a></div>
+
+
+        <div class="register-box center-block">
+            @using (Html.BeginForm("Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+                
+                <h4>Adviser Registration</h4>
+                @*@Html.RadioButtonFor(m=>m.isAdviser,true) @:Register as Adviser
+                @Html.RadioButtonFor(m=>m.isAdviser,false) @:Register as Client Group Leader*@
+                
+                @*<p class="title">Create Your Account</p>*@
+                @Html.TextBoxFor(m => m.Email, new { @class="form-control", placeholder="Email"})
+                @*<input type="email" name="email" placeholder="email" class="form-control">*@
+    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+                @*<input type="password" name="password" placeholder="password" class="form-control">*@
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class="form-control",placeholder="Repeat password"})
+                @*<input type="password" name="confirmPassword" placeholder="repeat password" class="form-control">*@
+                <div>
+                    @Html.CheckBoxFor(m => m.isAgree, new { @class="simple-checkbox" })
+
+                    @*<input type="checkbox" id="checkbox1" name="isAgree">*@
+                    <label for="checkbox1">I accept the <a href="#">Terms &amp; Agreements</a></label>
+                </div>
+                <button class="btn btn-custom-primary btn-lg btn-block btn-register"><i class="fa fa-check-circle"></i> Create Account</button>
+            }
+        </div>
+    </div>
+    <div class="push-sticky-footer"></div>
+</div>
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

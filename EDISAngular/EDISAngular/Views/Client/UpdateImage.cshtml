@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Update Image";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="form-horizontal">
+                <h2>Update Client Image</h2>
+                @using (Html.BeginForm("UpdateImage", "Client", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="form-group">
+                        <div class="col-md-10 col-md-offset-2">
+                            <img src="@Url.Action("GetImage")" class="img-responsive" />
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-2 control-label">
+                            Profile Image
+                        </div>
+                        <div class="col-md-10">
+                            <input type="file" name="image" style="padding-top:8px" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-10 col-md-offset-2">
+                            <input class="btn btn-default" type="submit" value="Update" />
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

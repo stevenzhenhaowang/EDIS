@@ -1,0 +1,417 @@
+﻿<div ng-controller="adviserOverview">
+    <div class="row">
+        <div class="col-md-4 ">
+            <ul class="breadcrumb">
+                <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+                <li class="active">Adviser Overview</li>
+
+            </ul>
+        </div>
+        <div class="col-md-8 ">
+            <div class="top-content">
+                <ul class="list-inline mini-stat">
+                    <li>
+                        <h5>REFERRALS <span class="stat-value stat-color-orange"><i class="fa fa-plus-circle"></i>18</span></h5>
+                        <span id="mini-bar-chart1" class="mini-bar-chart"></span>
+                    </li>
+                    <li>
+                        <h5>CLIENTS <span class="stat-value stat-color-blue"><i class="fa fa-plus-circle"></i>205</span></h5>
+                        <span id="mini-bar-chart2" class="mini-bar-chart"></span>
+                    </li>
+                    <li>
+                        <h5>PORTFOLIO <span class="stat-value stat-color-seagreen"><i class="fa fa-plus-circle"></i>1.5 Bill</span></h5>
+                        <span id="mini-bar-chart3" class="mini-bar-chart"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- main -->
+    <div class="content">
+        <div class="main-header">
+            <h2>Adviser Overview</h2>
+
+        </div>
+        <div class="main-content">
+            <div class="row">
+                <div class="col-md-8">
+                    <!-- WIDGET NO HEADER -->
+                    <div class="widget widget-hide-header">
+                        <div class="widget-header hide">
+                            <h3>Summary Info</h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div easy-pie-chart data-color="red" data-percent="99" data-title="Task Completion">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div easy-pie-chart data-color="blue" data-percent="22" data-title="Corresponences Responded">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div easy-pie-chart data-color="yellow" data-percent="65" data-title="Portfolios Rebalanced">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div easy-pie-chart data-color="green" data-percent="87" data-title="Referrals Responded">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- secondary stat -->
+                                <div class="secondary-stat">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div id="secondary-stat-item1" class="secondary-stat-item big-number-stat clearfix">
+                                                <div class="data">
+                                                    <span class="col-left big-number">{{businessRev.total | summaryNum}}</span>
+                                                    <span class="col-right"><em>Revenue</em></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div id="secondary-stat-item2" class="secondary-stat-item big-number-stat clearfix">
+                                                <p class="data">
+                                                    <span class="col-left big-number">{{investmentPortfolio.total | summaryNum}}</span>
+                                                    <span class="col-right"><em>Assets</em></span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div id="secondary-stat-item3" class="secondary-stat-item big-number-stat clearfix">
+                                                <p class="data">
+                                                    <span class="col-left big-number">{{debtInstruments.total | summaryNum}}</span>
+                                                    <span class="col-right"><em>Loans</em></span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end secondary stat -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- WIDGET NO HEADER -->
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4>World Markets</h4>
+                            <div class="row" ng-repeat="market in worldMarkets | limitTo: 7">
+                                <div class="col-sm-5">{{market.name}}</div>
+                                <div class="col-sm-3">{{market.value}}</div>
+                                <div class="col-sm-4"><span ng-class="{'text-success' : market.changedValue > 0, 'text-danger' : market.changedValue <= 0}">{{market.changedValue}}({{market.changedRatePercentage}}%)</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4>Currencies</h4>
+                            <div class="row" ng-repeat="currency in currencies | limitTo: 7">
+                                <div class="col-sm-5">{{currency.name}}</div>
+                                <div class="col-sm-3">{{currency.value}}</div>
+                                <div class="col-sm-4"><span ng-class="{'text-success' : currency.changedValue > 0, 'text-danger' : currency.changedValue <= 0}">{{currency.changedValue}}({{currency.changedRatePercentage}}%)</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-controller="adviserPortfolioStockDataController">
+                <div class="col-sm-12">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h3><i class="fa fa-bar-chart-o"></i>Stock Statistics</h3>
+
+                        </div>
+                        <div class="widget-content">
+                            <div kendo-chart
+                                 k-legend="{ position: 'bottom' }"
+                                 k-series-defaults="{ type: 'area' , area : { line : { style : 'smooth' } } }"
+                                 k-series="[
+                                 { field: 'asxbhp', name: 'ASX:BHP', categoryField:'year' },
+                                 { field: 'nysewbc', name: 'NYSE:WEBC', categoryField:'year' },
+                                 { field: 'asxtls', name: 'ASX:TLS', categoryField:'year' }
+                             ]"
+                                 k-data-source="dataSource"
+                                 k-tooltip="{ visible: true, format : '{0:C}' , template: '#= series.name #: $#= value # '}" k-rebind="data"></div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="row col-md-12">
+
+                <!-- WIDGET TABLE -->
+                <div class="widget widget-table">
+                    <div class="widget-header">
+                        <h3><i class="fa fa-desktop"></i>Business Revenue </h3>
+
+                        <div class="btn-group widget-header-toolbar">
+                            <div class="control-inline toolbar-item-group">
+                                <span class="control-title">New Revenue:</span>
+                                <div class="label label-success"><i class="fa fa-caret-up"></i>3.5%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-content col-md-6">
+                        <table id="buiness-rev-table" class="table table-striped table-hover table" cellpadding="0" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Revenue Catergory</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody style="width=100%">
+                                <tr ng-repeat="x in businessRev.data">
+                                    <td>{{x.name}}</td>
+                                    <td>{{x.amount | currency}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total </td>
+                                    <td ng-bind="businessRev.total | currency"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- END WIDGET TABLE -->
+                    <!-- WIDGET DONUT AND PIE CHART -->
+                    <div class="widget-content col-md-6">
+                        <div kendo-chart
+                             k-title="{ text: 'Business Revenue', position: 'top' }"
+                             k-series-defaults="{ type: 'donut', startAngle: 270 }"
+                             k-series="[{
+                                                                        field: 'amount',
+                                                                        categoryField: 'name',
+                                                                        padding: 0
+                                                                      }]"
+                             k-series-colors="['#42a7ff', '#666666', '#999999', '#cccccc','#42a7ff', '#666666', '#999999', '#cccccc', '#42a7ff']"
+                             k-data-source="businessRevDataKendo"
+                             k-legend="{ position: 'bottom' }"
+                             k-tooltip="{
+                                                            visible: true,
+                                                            color: 'white',
+                                                            template: '${ category } - ${ value }'}"></div>
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+            <div class="row col-md-12">
+                <div class="widget widget-table">
+                    <div class="widget-header">
+                        <h3><i class="fa fa-desktop"></i>Totoal Historical Business Revenue </h3>
+                        <div class="btn-group widget-header-toolbar">
+                            <a href="#" title="Focus" class="btn-borderless btn-focus"><i class="fa fa-eye"></i></a>
+                            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>
+
+                        </div>
+
+                    </div>
+                    <div class="widget-content col-md-6">
+                        <table id="lending-debt-table" class="table table-striped table-hover table" cellpadding="0" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Period</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in historicalRevenue.data">
+                                    <td>{{x.title}}</td>
+                                    <td>{{x.amount | currency}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total </td>
+                                    <td ng-bind="debtInstruments.total | currency"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row col-md-12">
+                <div class="widget widget-table">
+                    <div class="widget-header">
+                        <h3><i class="fa fa-desktop"></i>Investment Portfolio </h3>
+                        <div class="btn-group widget-header-toolbar">
+                            <a href="#" title="Focus" class="btn-borderless btn-focus"><i class="fa fa-eye"></i></a>
+                            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>
+                        </div>
+                        <div class="btn-group widget-header-toolbar">
+                            <div class="control-inline toolbar-item-group">
+                                <span class="control-title">Asset Growth:</span>
+                                <div class="label label-success"><i class="fa fa-caret-up"></i>3.5%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-content col-md-6">
+                        <table id="investment-portfolio-table" class="table table-striped table-hover table" cellpadding="0" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Asset Catergory</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in investmentPortfolio.data">
+                                    <td>{{x.name}}</td>
+                                    <td>{{x.amount | currency}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total </td>
+                                    <td ng-bind="investmentPortfolio.total | currency"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="widget-content col-md-6"
+                         kendo-chart
+                         k-title="{ text: 'Investment Portfolio', position: 'top' }"
+                         k-series-defaults="{ type: 'donut', startAngle: 270 }"
+                         k-series="[{
+                                                        field: 'amount',
+                                                        categoryField: 'name',
+                                                        padding: 0
+                                                        }]"
+                         k-series-colors="['#42a7ff', '#666666', '#999999', '#cccccc','#42a7ff', '#666666', '#999999', '#cccccc', '#42a7ff']"
+                         k-data-source="investmentPortfolioDataKendo" k-rebind="investmentPortfolio"
+                         k-legend="{ position: 'bottom' }"
+                         k-tooltip="{
+                                            visible: true,
+                                            color: 'white',
+                                            template: '${ category } - ${ value }'}">
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row col-md-12">
+                <div class="widget widget-table">
+                    <div class="widget-header">
+                        <h3><i class="fa fa-desktop"></i>Lending &amp; Debt </h3>
+                        <div class="btn-group widget-header-toolbar">
+                            <a href="#" title="Focus" class="btn-borderless btn-focus"><i class="fa fa-eye"></i></a>
+                            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>
+
+                        </div>
+                        <div class="btn-group widget-header-toolbar">
+                            <div class="control-inline toolbar-item-group">
+                                <span class="control-title">Borrowing Power:</span>
+                                <div class="label label-success"><i class="fa fa-caret-up"></i>3.5%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-content col-md-6">
+                        <table id="lending-debt-table" class="table table-striped table-hover table" cellpadding="0" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Debt Facility Catergory</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in debtInstruments.data">
+                                    <td>{{x.name}}</td>
+                                    <td>{{x.amount | currency}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total </td>
+                                    <td ng-bind="debtInstruments.total | currency"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="widget-content col-md-6"
+                         kendo-chart
+                         k-title="{ text: 'Debt Facilities', position: 'top' }"
+                         k-series-defaults="{ type: 'donut', startAngle: 270 }"
+                         k-series="[{
+                                                        field: 'amount',
+                                                        categoryField: 'name',
+                                                        padding: 0
+                                                        }]"
+                         k-series-colors="['#42a7ff', '#666666', '#999999', '#cccccc','#42a7ff', '#666666', '#999999', '#cccccc', '#42a7ff']"
+                         k-data-source="debtInstrumentsDataKendo"
+                         k-legend="{ position: 'bottom' }"
+                         k-tooltip="{
+                                            visible: true,
+                                            color: 'white',
+                                            template: '${ category } - ${ value }'}">
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row col-md-12">
+                <div class="widget widget-table">
+                    <div class="widget-header">
+                        <h3><i class="fa fa-desktop"></i>Insurance Statistics </h3>
+                        <div class="btn-group widget-header-toolbar">
+                            <a href="#" title="Focus" class="btn-borderless btn-focus"><i class="fa fa-eye"></i></a>
+                            <a href="#" title="Expand/Collapse" class="btn-borderless btn-toggle-expand"><i class="fa fa-chevron-up"></i></a>
+
+                        </div>
+
+                    </div>
+                    <div class="widget-content col-md-6">
+                        <table id="lending-debt-table" class="table table-striped table-hover table" cellpadding="0" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Insurance Statistics</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in insuranceStatistics.data">
+                                    <td>{{x.name}}</td>
+                                    <td>{{x.amount | currency}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total </td>
+                                    <td ng-bind="insuranceStatistics.total | currency"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="widget-content col-md-6"
+                         kendo-chart k-rebind="insuranceStatistics"
+                         k-title="{ text: 'Insurance Statistics', position: 'top' }"
+                         k-series-defaults="{ type: 'donut', startAngle: 270 }"
+                         k-series="[{
+                                                        field: 'amount',
+                                                        categoryField: 'name',
+                                                        padding: 0
+                                                        }]"
+                         k-series-colors="['#42a7ff', '#666666', '#999999', '#cccccc','#42a7ff', '#666666', '#999999', '#cccccc', '#42a7ff']"
+                         k-data-source="insuranceDataKendo"
+                         k-legend="{ position: 'bottom' }"
+                         k-tooltip="{
+                                            visible: true,
+                                            color: 'white',
+                                            template: '${ category } - ${ value }'}">
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <!-- END WIDGET TASKS -->
+            <!-- WIDGET TICKET TABLE -->
+            <!-- END WIDGET TICKET TABLE -->
+        </div>
+        <!-- /main-content -->
+    </div>
+    <!-- /main -->
+</div>

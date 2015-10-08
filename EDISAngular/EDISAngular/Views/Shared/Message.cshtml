@@ -1,0 +1,16 @@
+﻿
+@if (TempData["message"] != null)
+{
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="well-sm" style="padding-top:30px;margin-top:20px">
+                <div class="alert alert-info" role="alert">
+                    <p style="font-size:1.5em"><strong>@TempData["message"]</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}
+

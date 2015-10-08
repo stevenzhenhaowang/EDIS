@@ -1,0 +1,226 @@
+﻿
+
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+            <li>Portfolio</li>
+            <li class="active">Credit Cards</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="main-header">
+        <h2><client-name></client-name>Credit Cards</h2>
+        <client-selector></client-selector>
+    </div>
+    <div class="main-content">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-tabs" ng-init="tab=1">
+                            <li class="active"><a ng-click="tab=1"><i class="fa fa-home"></i> Overview</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active in">
+                                <div class="row">
+                                    <div class="col-sm-8" ng-controller="adviserPortfolioCCPieChartController">
+                                        <div class="widget">
+                                            <div class="widget-header">
+                                                <h3><i class="fa fa-bar-chart-o"></i>Diversification</h3>
+
+                                            </div>
+                                            <div class="widget-content">
+                                                <div kendo-chart 
+                                                     k-title="{ text: 'Diversification of Miscellaneous Loans / Credit Card', position: 'top' }"
+                                                     k-series-defaults="{ type: 'donut', startAngle: 270 }"
+                                                     k-series="[{
+                                                        field: 'amount',
+                                                        categoryField: 'name',
+                                                        padding: 0
+                                                        }]" k-rebind="data"
+                                                     k-series-colors="['#42a7ff', '#666666', '#999999', '#cccccc','#42a7ff', '#666666', '#999999', '#cccccc', '#42a7ff']"
+                                                     k-data-source="datasource"
+                                                     k-legend="{ position: 'bottom' }"
+                                                     k-tooltip="{
+                                            visible: true,
+                                            color: 'white',
+                                            template: '${ category } - ${ value }'}">
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="widget" ng-controller="adviserPortfolioCCCardDetails">
+                                            <div class="widget-header">
+                                                <h3><i class="fa fa-bar-chart-o"></i>Card Details</h3>
+
+                                            </div>
+                                            <div class="widget-content">
+                                                <table class="table table-striped table-hover">
+                                                    <thead>
+                                                        <tr class="summary-table-row">
+                                                            <td>Type of Loan/Credit Card</td>
+                                                            <td>Issuer of Loan/Credit Card</td>
+                                                            <td>Asset Security</td>
+                                                            <td>Maximum Credit Limt</td>
+                                                            <td>Account Balance</td>
+                                                            <td>Available Funds</td>
+                                                            <td>Term of Loan/Credit Card</td>
+                                                            <td>Loan/Credit Card Expiry Date</td>
+                                                            <td>Interest Rate</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="item in data">
+                                                            <td>{{item.type}}</td>
+                                                            <td>{{item.issuer}}</td>
+                                                            <td>{{item.assetSecurity}}</td>
+                                                            <td>{{item.maximumCreditLimit | currency}}</td>
+                                                            <td>{{item.accountBalance | currency}}</td>
+                                                            <td>{{item.availableFunds | currency}}</td>
+                                                            <td>{{item.termOfLoan}}</td>
+                                                            <td>{{item.expiryDate | date}}</td>
+                                                            <td>{{item.interestRate | number : 0}}%</td>
+
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                        <div class="widget hidden" ng-controller="adviserPortfolioCCCCStatic">
+                                            <div class="widget-header">
+                                                <h3><i class="fa fa-bar-chart-o"></i>Miscellaneous Loan &amp; Credit Card Statistics</h3>
+
+                                            </div>
+                                            <div class="widget-content" style="overflow:auto">
+                                                <table class="table table-hover table-striped">
+                                                    <thead>
+                                                        <tr class="summary-table-row">
+                                                            <td>Account Name</td>
+                                                            <td>BSB</td>
+                                                            <td>Account No.</td>
+                                                            <td>Repayment Frequency</td>
+                                                            <td>Last Payment Date</td>
+                                                            <td>Last Repayment Amount</td>
+                                                            <td>Next Repayment Date</td>
+                                                            <td>Next Repayment Amount</td>
+                                                            <td>Days to Loan Expiry</td>
+                                                            <td>Awards Member</td>
+                                                            <td>Current Award Points</td>
+                                                            <td>Purchased Interest Rate</td>
+                                                            <td>Cash Advance Rate</td>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="item in data">
+                                                            <td>{{item.accountName}}</td>
+                                                            <td>{{item.bsb}}</td>
+                                                            <td>{{item.accountNumber}}</td>
+                                                            <td>{{item.repaymentFrequency}}</td>
+                                                            <td>{{item.lastPaymentDate | date}}</td>
+                                                            <td>{{item.lastRepaymentAmount | currency}}</td>
+                                                            <td>{{item.nextRepaymentDate | date}}</td>
+                                                            <td>{{item.nextRepaymentAmount | currency}}</td>
+                                                            <td>{{item.daysToLoanExpiry}}</td>
+                                                            <td>{{item.awardsMember}}</td>
+                                                            <td>{{item.currentAwardPoints}}</td>
+                                                            <td>{{item.purchasedInterestRate | number : 0}}%</td>
+                                                            <td>{{item.cashAdvanceRate | number : 0}}%</td>
+
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        <!--
+                        <div class="widget" ng-controller="adviserPortfolioCCCashflowController">
+                            <div class="widget-header">
+                                <h3><i class="fa fa-bar-chart-o"></i>Monthly Cash Flow Summary</h3>
+
+                            </div>
+                            
+                            -->
+                            <div class="widget-content">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr class="summary-table-row">
+                                            <td>Month</td>
+                                            <td>Income</td>
+                                            <td>Expense</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in data.data">
+                                            <td>{{item.date | date : 'MMMM'}}</td>
+                                            <td>{{item.income | currency}}</td>
+                                            <td>{{item.expense | currency}}</td>
+                                        </tr>
+                                        <tr class="summary-table-row">
+                                            <td>Total</td>
+                                            <td>{{data.totalIncome | currency}}</td>
+                                            <td>{{data.totalExpense | currency}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="widget" ng-controller="adviserPortfolioCCStatistics">
+                            <div class="widget-header">
+                                <h3><i class="fa fa-bar-chart-o"></i>Quick Statistics</h3>
+
+                            </div>
+                            <div class="widget-content">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr class="summary-table-row">
+                                            <td>Type</td>
+                                            <td>Value</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Total Outstanding Short Term Debt</td>
+                                            <td>{{data.totalOutstandingShortTermDebt | currency}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Available Short Term Credit</td>
+                                            <td>{{data.totalAvailableShortTermCredit | currency}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Available Funds</td>
+                                            <td>{{data.totalAvailableFunds | currency}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

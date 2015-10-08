@@ -1,0 +1,467 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="EDIS.Test.Accounts" Collapsed="true">
+    <Position X="6.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAQAQgAAAAAAAQAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Accounts.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Adviser_Details" Collapsed="true">
+    <Position X="4.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQQAQFYAgCIACEiAAAAQAAEAAAoCABCAgAABpAAAAAg=</HashCode>
+      <FileName>Adviser_Details.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Asset" Collapsed="true">
+    <Position X="8.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACBAACgAQAAAAAAAACQAAEAAAAAAA=</HashCode>
+      <FileName>Asset.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.AssetType" Collapsed="true">
+    <Position X="10.25" Y="1.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AACgAAAAAAAAAAAAAAAAgAAAAAAABAAACAAAAAAAAAA=</HashCode>
+      <FileName>AssetType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Client" Collapsed="true">
+    <Position X="2.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAgAAAAAAAgAAQEAAAAAAwIAAAAABAAAAAFAAACAAA=</HashCode>
+      <FileName>Client.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.ClientGroup" Collapsed="true">
+    <Position X="4.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAIAAAQAAAAAAAwgBAAAQAAAAAAEAAAAAAA=</HashCode>
+      <FileName>ClientGroup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.DailyPrice" Collapsed="true">
+    <Position X="17.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAJgAgAAAAABgAAAABEAAEAAAACAA=</HashCode>
+      <FileName>DailyPrice.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.DealerGroup" Collapsed="true">
+    <Position X="1" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAEAAAAAAAQAAAAAAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>DealerGroup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.DividendHistory" Collapsed="true">
+    <Position X="12.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAEAAAAAAIAAAAAAACAAAAAAAABAAAEAAAACAA=</HashCode>
+      <FileName>DividendHistory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Note" Collapsed="true">
+    <Position X="0.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAACAIEMAAIAQAFAAoABgAQAACAAAoAAYQAEAAIACAQ=</HashCode>
+      <FileName>Note.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Portfolio" Collapsed="true">
+    <Position X="8.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Portfolio.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Sector" Collapsed="true">
+    <Position X="15.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAEAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Transaction" Collapsed="true">
+    <Position X="1.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAQAAAAgAAAAQgIAAAAAAEIAAEMAAAAAA=</HashCode>
+      <FileName>Transaction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.CorporateAction" Collapsed="true">
+    <Position X="8" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CorporateAction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.BalanceSheetType" Collapsed="true">
+    <Position X="8.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BalanceSheetType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Research" Collapsed="true">
+    <Position X="17.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQCAAAAAAAAAAAAAAABAAAgAAAAAAA=</HashCode>
+      <FileName>Research.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Address" Collapsed="true">
+    <Position X="2.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAIAAAAgAAAAAIAAAAAAAAEBAAQAAA=</HashCode>
+      <FileName>Address.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Adviser_CommissionsAndFees" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAEACAAAAAAAAAAkAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Adviser_CommissionsAndFees.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Adviser_CV" Collapsed="true">
+    <Position X="6.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACCAAAAAAAAAAAAAAAAAAkAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Adviser_CV.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Adviser_DealerGroupDetails" Collapsed="true">
+    <Position X="9.25" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACARYAAAIAAAkAAAAAAAkAAAIAAIACAAAAhAAAAAA=</HashCode>
+      <FileName>Adviser_DealerGroupDetails.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Adviser_Description" Collapsed="true">
+    <Position X="11" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAEAAAAAAAAAAAAkAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Adviser_Description.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Adviser_Education" Collapsed="true">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACCAAAAAAAAAAAAQAAAAAkAAAAAAAABAAAAAAAAAIA=</HashCode>
+      <FileName>Adviser_Education.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Adviser_ManagementDetails" Collapsed="true">
+    <Position X="14.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAgCAAAQQEAAAAAAAIAAAAkAAAAAAEAAAgAAAAAAAAA=</HashCode>
+      <FileName>Adviser_ManagementDetails.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Adviser_ProfessionalAssociations" Collapsed="true">
+    <Position X="17.25" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Adviser_ProfessionalAssociations.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Adviser_ProfessionalType" Collapsed="true">
+    <Position X="19.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAgAAAAAABAAAAAAAAAAAgA=</HashCode>
+      <FileName>Adviser_ProfessionalType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Adviser_ProfilePictures" Collapsed="true">
+    <Position X="17.5" Y="1.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAIkAAAAAAAAAAEAAAAAAAgA=</HashCode>
+      <FileName>Adviser_ProfilePictures.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Adviser_Ratings" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACABgAAAAAABAAAAGAIAhQAAJgIACAAAAAQAAAAAA=</HashCode>
+      <FileName>Adviser_Ratings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Adviser_ServicesProviding" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAAAAAAAgAAAAAAAAAAQAAgAAAAgA=</HashCode>
+      <FileName>Adviser_ServicesProviding.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Adviser_Subscriptions" Collapsed="true">
+    <Position X="6" Y="1.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAQAAAAAAAAAAACAAAAggAAAAAQAAAAAAEEAAAAI=</HashCode>
+      <FileName>Adviser_Subscriptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Adviser_Verified_Status" Collapsed="true">
+    <Position X="12.75" Y="1.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Adviser_Verified_Status.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.AspNetRole" Collapsed="true">
+    <Position X="19.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>AspNetRole.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.AspNetUser" Collapsed="true">
+    <Position X="9.5" Y="5.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AACCAAAAACAAIEAAAAAAQAABAAAAAAAIAQQAABAAAQA=</HashCode>
+      <FileName>AspNetUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.AspNetUserClaim" Collapsed="true">
+    <Position X="2.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAQAAAAAgAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>AspNetUserClaim.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.AspNetUserLogin" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAgAAAAAEAAAABAAAAAAAAA=</HashCode>
+      <FileName>AspNetUserLogin.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.AspNetUserRole" Collapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>AspNetUserRole.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Attachment" Collapsed="true">
+    <Position X="13.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAEIAAAAAAAQAACAAQBAAAAAEAAEAIAA=</HashCode>
+      <FileName>Attachment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Beneficiary" Collapsed="true">
+    <Position X="21.75" Y="4.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>ACBAAEAAACAAIAAJAAIEAAQAAAAgAACAAAAFpAAAAAg=</HashCode>
+      <FileName>Beneficiary.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.C__MigrationHistory" Collapsed="true">
+    <Position X="19.75" Y="2.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>ACAAACAAAAEAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>C__MigrationHistory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Client_AdvisoryNeeds" Collapsed="true">
+    <Position X="5.75" Y="4.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACQCAAAAAAAAAAAAAAAAlAAAAAAAAAABAAAAAAAgA=</HashCode>
+      <FileName>Client_AdvisoryNeeds.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Client_Details" Collapsed="true">
+    <Position X="21.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQEAQFYAgCCAAEqAAQAUAAkAQAISAACBAAAApAAAAAg=</HashCode>
+      <FileName>Client_Details.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Client_FinancialPosition" Collapsed="true">
+    <Position X="10.5" Y="3.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAgCAAAAAAAAAAAAAgAAAAkAAAAAAAAAAAIAAAAAAAY=</HashCode>
+      <FileName>Client_FinancialPosition.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Client_InvestmentProfile" Collapsed="true">
+    <Position X="13" Y="3.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAYAAAAAAAAAAkAAAAAAAAMAAAEAQAAAAA=</HashCode>
+      <FileName>Client_InvestmentProfile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Client_Ratings" Collapsed="true">
+    <Position X="15.5" Y="6.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACABgAAAAAABAAAAGAAIhQAAJgIACAAAAAQAAAAAA=</HashCode>
+      <FileName>Client_Ratings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.ClientFileInformation" Collapsed="true">
+    <Position X="15.75" Y="3.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAJAAAAAEAAAAAQAAAAIgAgAAAAkAAAAAAA=</HashCode>
+      <FileName>ClientFileInformation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.CommissionsAndFee" Collapsed="true">
+    <Position X="18.5" Y="3.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>CommissionsAndFee.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.CommunicationRequest" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAACAAAAAAAAAAgAAAAAAAQAAAAAAAAAAoAAAQAA=</HashCode>
+      <FileName>CommunicationRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.DistributionList">
+    <Position X="13" Y="6.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>DistributionList.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.EDIS" Collapsed="true">
+    <Position X="14.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>jADwzIExADQ1hEFUESECEGIMECAERACIGBAAAiAAAAM=</HashCode>
+      <FileName>EDIS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.EducationRecord" Collapsed="true">
+    <Position X="18" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgACAAAgAAAgAAQACAwAAAAAAAAAAAAEAAABIIA=</HashCode>
+      <FileName>EducationRecord.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Industry" Collapsed="true">
+    <Position X="19.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAEABAAAAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Industry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.MorningStarCategory" Collapsed="true">
+    <Position X="19.75" Y="6.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>MorningStarCategory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.MorningStarRating" Collapsed="true">
+    <Position X="0.5" Y="7.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAIAAwQBAAAAEBYAEAAEAAAAAAAAAQAEAAAACAA=</HashCode>
+      <FileName>MorningStarRating.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.NewsletterService" Collapsed="true">
+    <Position X="6.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>NewsletterService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.ProfessionalAssociation" Collapsed="true">
+    <Position X="16" Y="7.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProfessionalAssociation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Program" Collapsed="true">
+    <Position X="2.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Referral" Collapsed="true">
+    <Position X="11" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QCAAAAAQIAAAQCAIAAAEgEQAAABAAAAQAAAEFgEAAAA=</HashCode>
+      <FileName>Referral.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.RiskProfile" Collapsed="true">
+    <Position X="15.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAwgAQQoAAAAcABAAAIQEQCQIAEAAAAkMAAAQIQQ=</HashCode>
+      <FileName>RiskProfile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Service" Collapsed="true">
+    <Position X="18" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>Service.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.ServiceLevel" Collapsed="true">
+    <Position X="19.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAACqAABgAAABAAIAwQAAgQABZBIAAAgAAUFwCAACiA=</HashCode>
+      <FileName>ServiceLevel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.SubService" Collapsed="true">
+    <Position X="16.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>SubService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.User_DistributionList" Collapsed="true">
+    <Position X="7.5" Y="11" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAgQAABAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>User_DistributionList.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.User_DistributionLists" Collapsed="true">
+    <Position X="10" Y="10.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAgAAABAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>User_DistributionLists.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.User_NewsletterServices" Collapsed="true">
+    <Position X="9.75" Y="11.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAACAQAAAAAAAAAkAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>User_NewsletterServices.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Migrations.Configuration" Collapsed="true">
+    <Position X="3.5" Y="7.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Migrations\Configuration.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Dependant" Collapsed="true">
+    <Position X="8.25" Y="4.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAAAAAQAAAgAAAAAAQAFAAAAAAA=</HashCode>
+      <FileName>Dependant.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Migrations.initial" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAMAAAAAAAAAAAAAAAAAAAAAAAAAAQEAAAAAI=</HashCode>
+      <FileName>Migrations\201505010545289_initial.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

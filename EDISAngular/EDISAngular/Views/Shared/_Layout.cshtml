@@ -1,0 +1,384 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="EDIS">
+    <meta name="author" content="The Grand Canal">
+    <!-- CSS -->
+    <link href="/assets/kingAdmin/assets/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="/assets/kingAdmin/assets/css/font-awesome.css" rel="stylesheet" type="text/css">
+    <link href="/assets/kingAdmin/assets/css/main.css" rel="stylesheet" type="text/css">
+    <link href="/assets/kingAdmin/assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/3rd-party.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/chart.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/components.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/forms.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/general.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/main-content.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/navigation.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/page.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/tables.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/top-bar.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/ui-elements.css" rel="stylesheet" />
+    <!-- CSS for demo style switcher. you can remove this -->
+    <link href="/assets/kingAdmin/demo-style-switcher/assets/css/style-switcher.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/adviser.css" rel="stylesheet" />
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/kingAdminassets/ico/kingadmin-favicon144x144.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/assets/kingAdminassets/ico/kingadmin-favicon114x114.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/kingAdminassets/ico/kingadmin-favicon72x72.png">
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/assets/kingAdminassets/ico/kingadmin-favicon57x57.png">
+    <link rel="shortcut icon" href="/assets/kingAdmin/assets/ico/favicon.png">
+</head>
+<body class="dashboard" style="padding-top:0">
+    <div class="wrapper">
+        <div class="top-bar" style="height:40px">
+            <div class="container">
+                <div class="row">
+                    <!-- logo -->
+                    <div class="col-md-2 logo">
+                        <a href="/home">
+                            <img src="/images/EDIS_logo.jpg" style="height:20px">
+                        </a>
+                        <h1 class="sr-only">EDIS Adviser Dashboard</h1>
+                    </div>
+                    <!-- end logo -->
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-3">
+
+                            </div>
+                            <div class="col-md-9">
+                                <div class="top-bar-right">
+
+                                    <!-- responsive menu bar icon -->
+                                    <a href="#" class="hidden-md hidden-lg main-nav-toggle"><i class="fa fa-bars"></i></a>
+
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+
+                                        <div class="notifications">
+                                            <ul>
+                                                <!-- notification: inbox -->
+                                                <li class="notification-item inbox">
+                                                    <div class="btn-group">
+                                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                            <i class="fa fa-envelope"></i><span class="count">2</span>
+                                                            <span class="circle"></span>
+                                                        </a>
+                                                        <ul class="dropdown-menu" role="menu">
+                                                            <li class="notification-header">
+                                                                <em>You have 2 unread messages</em>
+                                                            </li>
+                                                            <li class="inbox-item clearfix">
+                                                                <a href="#">
+                                                                    <div class="media">
+                                                                        <div class="pull-left">
+                                                                            <img class="media-object" src="/assets/kingAdmin/assets/img/user1.png" alt="Antonio">
+                                                                        </div>
+                                                                        <div class="media-body">
+                                                                            <h5 class="media-heading name">Antonius</h5>
+                                                                            <p class="text">The problem just happened this morning. I can't see .</p>
+                                                                            <span class="timestamp">4 minutes ago</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </li>
+                                                            <li class="inbox-item unread clearfix">
+                                                                <a href="#">
+                                                                    <div class="media">
+                                                                        <div class="pull-left">
+                                                                            <img class="media-object" src="/assets/kingAdmin/assets/img/user2.png" alt="Antonio">
+                                                                        </div>
+                                                                        <div class="media-body">
+                                                                            <h5 class="media-heading name">Michael</h5>
+                                                                            <p class="text">Hey dude, cool theme!</p>
+                                                                            <span class="timestamp">2 hours ago</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </li>
+                                                            <li class="inbox-item unread clearfix">
+                                                                <a href="#">
+                                                                    <div class="media">
+                                                                        <div class="pull-left">
+                                                                            <img class="media-object" src="/assets/kingAdmin/assets/img/user3.png" alt="Antonio">
+                                                                        </div>
+                                                                        <div class="media-body">
+                                                                            <h5 class="media-heading name">Stella</h5>
+                                                                            <p class="text">Ok now I can see the status for each item. Thanks! :D</p>
+                                                                            <span class="timestamp">Oct 6</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </li>
+                                                            <li class="inbox-item clearfix">
+                                                                <a href="#">
+                                                                    <div class="media">
+                                                                        <div class="pull-left">
+                                                                            <img class="media-object" src="/assets/kingAdmin/assets/img/user4.png" alt="Antonio">
+                                                                        </div>
+                                                                        <div class="media-body">
+                                                                            <h5 class="media-heading name">Jane Doe</h5>
+                                                                            <p class="text"><i class="fa fa-reply"></i>Please check the status of your .</p>
+                                                                            <span class="timestamp">Oct 2</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </li>
+                                                            <li class="inbox-item clearfix">
+                                                                <a href="#">
+                                                                    <div class="media">
+                                                                        <div class="pull-left">
+                                                                            <img class="media-object" src="/assets/kingAdmin/assets/img/user5.png" alt="Antonio">
+                                                                        </div>
+                                                                        <div class="media-body">
+                                                                            <h5 class="media-heading name">John Simmons</h5>
+                                                                            <p class="text"><i class="fa fa-reply"></i>I've fixed the problem :)</p>
+                                                                            <span class="timestamp">Sep 12</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </li>
+                                                            <li class="notification-footer">
+                                                                <a href="#">View All Messages</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li class="notification-item general">
+                                                    <div class="btn-group">
+                                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                            <i class="fa fa-bell"></i><span class="count">8</span>
+                                                            <span class="circle"></span>
+                                                        </a>
+                                                        <ul class="dropdown-menu" role="menu">
+                                                            <li class="notification-header">
+                                                                <em>You have 8 notifications</em>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#">
+                                                                    <i class="fa fa-comment green-font"></i>
+                                                                    <span class="text">New comment on the blog post</span>
+                                                                    <span class="timestamp">1 minute ago</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#">
+                                                                    <i class="fa fa-user green-font"></i>
+                                                                    <span class="text">New registered Client</span>
+                                                                    <span class="timestamp">12 minutes ago</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#">
+                                                                    <i class="fa fa-comment green-font"></i>
+                                                                    <span class="text">New comment on the blog post</span>
+                                                                    <span class="timestamp">18 minutes ago</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#">
+                                                                    <i class="fa fa-edit yellow-font"></i>
+                                                                    <span class="text">4 New Rebalances</span>
+                                                                    <span class="timestamp">4 hours ago</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#">
+                                                                    <i class="fa fa-edit yellow-font"></i>
+                                                                    <span class="text">3 Corporate Actions</span>
+                                                                    <span class="timestamp">1 day ago</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#">
+                                                                    <i class="fa fa-comment green-font"></i>
+                                                                    <span class="text">New comment on the blog post</span>
+                                                                    <span class="timestamp">3 days ago</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#">
+                                                                    <i class="fa fa-comment green-font"></i>
+                                                                    <span class="text">New comment on the blog post</span>
+                                                                    <span class="timestamp">Oct 15</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#">
+                                                                    <i class="fa fa-edit yellow-font"></i>
+                                                                    <span class="text red-font">New Referral!</span>
+                                                                    <span class="timestamp">Oct 11</span>
+                                                                </a>
+                                                            </li>
+                                                            <li class="notification-footer">
+                                                                <a href="#">View All Notifications</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <!-- end notification: general -->
+                                            </ul>
+                                        </div>
+                                    <!-- logged user and the menu -->
+                                        <div class="logged-user">
+
+
+
+                                            @if (User.IsInRole(EDISAngular.Infrastructure.Authorization.AuthorizationRoles.Role_Client))
+                                            {
+
+                                            <div class="btn-group">
+                                                <a class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                                                    <img src="/client/GetImage" class="img-circle img-responsive" style="height:30px" />
+                                                </a>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li>
+                                                        <a href="/client/Index">
+                                                            <span class="text">Dashboard</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/client/CompleteProfile">
+                                                            <span class="text">Profile Settings</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/client/UpdateImage">
+                                                            <span class="text">Profile Image</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/client/UpdateRiskProfile">
+                                                            <span class="text">Risk Profile</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/account/logoff">
+                                                            <span class="text">Logout</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            }
+
+                                            @if (User.IsInRole(EDISAngular.Infrastructure.Authorization.AuthorizationRoles.Role_Adviser))
+                                            {
+                                            <div class="btn-group">
+                                                <a class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                                                    <img src="/adviser/GetImage" class="img-circle img-responsive" style="height:30px" />
+
+                                                </a>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li>
+                                                        <a href="/adviser/Index">
+                                                            <span class="text">Dashboard</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/adviser/adviserProfile">
+                                                            <span class="text">Profile Settings</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/adviser/updateimage">
+                                                            <span class="text">Profile Image</span>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="/account/logoff">
+                                                            <span class="text">Logout</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        @Html.ActionLink("Login", "login", "account", null, new { @class="btn btn-link"})
+                                    }
+                                </div>
+                                <!-- /top-bar-right -->
+                            </div>
+                        </div>
+                        <!-- /row -->
+                    </div>
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <div class="bottom">
+            <div class="container">
+                <div class="container body-content">
+
+                    <script type="text/javascript">
+                        $(document).ready(function () {
+                            @if (TempData["success"] != null)
+                            {
+                              <text> $.gritter.add({
+                                title: "Success",
+                                text: "</text>@TempData["success"]<text>",
+                                sticky: true
+                            });</text>
+                            }
+
+                            @if (TempData["warning"] != null)
+                            {
+                              <text> $.gritter.add({
+                                title: "Warning",
+                                text: "</text>@TempData["warning"]<text>",
+                                sticky: true
+                            });</text>
+                            }
+
+                            @if (TempData["error"] != null)
+                            {
+                              <text> $.gritter.add({
+                                title: "Error",
+                                text: "</text>@TempData["error"]<text>",
+                                sticky: true
+                            });</text>
+                            }
+                        });
+                    </script>
+
+
+
+                    @RenderBody()
+                    <hr />
+                    <footer class="text-center">
+                        <p>&copy; @DateTime.Now.Year -EDIS</p>
+                    </footer>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+    <script src="~/assets/kingAdmin/assets/js/jquery.gritter.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+
+
+
+
+
+
+
+</html>
+

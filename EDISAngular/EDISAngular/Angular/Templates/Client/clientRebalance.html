@@ -1,0 +1,613 @@
+﻿
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+            <li>Research</li>
+            <li class="active">Rebalance</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="main-header">
+        <h2>Rebalance</h2>
+
+    </div>
+    <div class="main-content">
+        <div class="row" ng-controller="clientResearchRebalanceController">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-tabs">
+                            <li ng-class="{active:selectedModel.modelId === item.modelId}" ng-repeat="item in existingModels">
+                                <a ng-click="selectModel(item.modelId)" class="left-btn"> {{item.modelName}}</a>
+                            </li>
+                            <li ng-class="{active:compareOn}"><a ng-click="enableCompare()" ng-show="canCompare()">  Compare</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active in" ng-if="selectedModel" ng-controller="clientResearchRebalanceController">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="widget">
+                                            <div class="widget-header">
+                                                <h3><i class="fa fa-bar-chart-o"></i>Diversification Bar Chart</h3>
+
+                                            </div>
+                                            <div class="widget-content">
+                                                <kendo-chart k-options="barOptions" k-rebind="barOptions"></kendo-chart>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <ul class="nav nav-tabs" ng-init="step=1">
+                                            <li ng-class="{active:step===1}"><a ng-click="step=1">  Summary</a></li>
+                                            <li ng-class="{active:step===2}"><a ng-click="step=2">  Diversification</a></li>
+                                            <li ng-class="{active:step===3}"><a ng-click="step=3">  CashFlow</a></li>
+                                            <li ng-class="{active:step===4}"><a ng-click="step=4">  Transaction Costs</a></li>
+                                            <li ng-class="{active:step===5}"><a ng-click="step=5">  Conmpliance</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="tab-content">
+                                    <div class="tab-pane active in" ng-show="step===1">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3>Balance Sheet</h3>
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <table class="table table-bordered table-hover">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td></td>
+                                                                    <td>Current</td>
+                                                                    <td>Current Weighting</td>
+                                                                    <td>
+                                                                        Proposed
+                                                                    </td>
+                                                                    <td>Proposed Weighting</td>
+                                                                    <td>Difference</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody ng-repeat="group in selectedModel.balanceSheet.data">
+                                                                <tr>
+                                                                    <td colspan="6" class="summary-table-row">
+                                                                        <strong>{{group.groupName}}</strong>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr ng-repeat="item in group.items">
+                                                                    <td>{{item.itemName}}</td>
+                                                                    <td>{{item.current | currency}}</td>
+                                                                    <td>{{item.currentWeighting | number:2}}%</td>
+                                                                    <td>{{item.proposed | currency}}</td>
+                                                                    <td>{{item.proposedWeighting | number:2}}%</td>
+                                                                    <td>{{item.difference | number:2}}%</td>
+                                                                </tr>
+                                                            </tbody>
+                                                            <tbody>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Total Balance Sheet</td>
+                                                                    <td>{{selectedModel.balanceSheet.current | currency}}</td>
+                                                                    <td>{{selectedModel.balanceSheet.currentWeighting | number:2}}%</td>
+                                                                    <td>{{selectedModel.balanceSheet.proposed | currency}}</td>
+                                                                    <td>{{selectedModel.balanceSheet.proposedWeighting | number:2}}%</td>
+                                                                    <td>{{selectedModel.balanceSheet.difference | number:2}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3></h3>
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <table class="table table-bordered table-hover">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td colspan="3"></td>
+                                                                    <td colspan="3">Current Exposure</td>
+                                                                    <td colspan="3">Rebalance</td>
+                                                                    <td colspan="5">Advantageous/Disadvantageous</td>
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody ng-repeat="group in selectedModel.rebalancedDataAnalysis">
+                                                                <tr class="summary-table-row">
+                                                                    <td colspan="14">{{group.groupName}}</td>
+                                                                </tr>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Ticker</td>
+                                                                    <td>Name</td>
+                                                                    <td>Current Price</td>
+                                                                    <td>Units</td>
+                                                                    <td>Value</td>
+                                                                    <td>Profit/Loss</td>
+                                                                    <td>New Units</td>
+                                                                    <td>New value</td>
+                                                                    <td>Realised Profit/Loss</td>
+                                                                    <td>Differences</td>
+                                                                    <td>Suitability</td>
+                                                                    <td>Target</td>
+                                                                    <td>Diff to Target</td>
+                                                                    <td>APL Approved</td>
+                                                                </tr>
+                                                                <tr ng-repeat="item in group.data">
+                                                                    <td>{{item.ticker}}</td>
+                                                                    <td>{{item.name}}</td>
+                                                                    <td>{{item.currentPrice | currency}}</td>
+                                                                    <td>{{item.currentExposure.units | number : 0 }}</td>
+                                                                    <td>{{item.currentExposure.value | currency}}</td>
+                                                                    <td>{{item.currentExposure.profitAndLoss | number : 0}}%</td>
+                                                                    <td>{{item.rebalance.units | number:0}}</td>
+                                                                    <td>{{item.rebalance.value | currency}}</td>
+                                                                    <td>{{item.rebalance.profitAndLoss | number:0}}%</td>
+                                                                    <td>{{item.advantageousAndDisadvantageous.differences | number:0}}%</td>
+                                                                    <td>{{item.advantageousAndDisadvantageous.suitability | number:0}}%</td>
+                                                                    <td>{{item.advantageousAndDisadvantageous.targe | currency}}%</td>
+                                                                    <td>{{item.advantageousAndDisadvantageous.differenceToTarget | number:0}}%</td>
+                                                                    <td>{{item.advantageousAndDisadvantageous.apl}}</td>
+                                                                </tr>
+
+
+                                                            </tbody>
+
+
+
+                                                        </table>
+
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane active in" ng-show="step===2">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3>Regional and Country Exposure</h3>
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <table class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>
+                                                                        Country
+                                                                    </td>
+                                                                    <td>Current</td>
+                                                                    <td>Current Weighting</td>
+                                                                    <td>Proposed</td>
+                                                                    <td>Proposed Weighting</td>
+                                                                    <td>Differences</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody ng-repeat="group in selectedModel.regionalData.data">
+                                                                <tr class="summary-table-row">
+                                                                    <td colspan="6">{{group.groupName}}</td>
+                                                                </tr>
+                                                                <tr ng-repeat="item in group.items">
+                                                                    <td>{{item.itemName}}</td>
+                                                                    <td>{{item.current | currency}}</td>
+                                                                    <td>{{item.currentWeighting | number:2}}%</td>
+                                                                    <td>{{item.proposed | currency}}</td>
+                                                                    <td>{{item.proposedWeighting | number:2}}%</td>
+                                                                    <td>{{item.difference | number:2}}%</td>
+                                                                </tr>
+
+                                                            </tbody>
+                                                            <tbody>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Total Balance Sheet</td>
+                                                                    <td>{{selectedModel.regionalData.current | currency}}</td>
+                                                                    <td>{{selectedModel.regionalData.currentWeighting | number:2}}%</td>
+                                                                    <td>{{selectedModel.regionalData.proposed | currency}}</td>
+                                                                    <td>{{selectedModel.regionalData.proposedWeighting | number:2}}%</td>
+                                                                    <td>{{selectedModel.regionalData.difference | number:2}}</td>
+                                                                </tr>
+                                                            </tbody>
+
+
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3>Sectorial Exposure</h3>
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <table class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>
+                                                                        Sector
+                                                                    </td>
+                                                                    <td>Current</td>
+                                                                    <td>Current Weighting</td>
+                                                                    <td>Proposed</td>
+                                                                    <td>Proposed Weighting</td>
+                                                                    <td>Differences</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody ng-repeat="group in selectedModel.sectorialData.data">
+                                                                <tr class="summary-table-row">
+                                                                    <td colspan="6">{{group.groupName}}</td>
+                                                                </tr>
+                                                                <tr ng-repeat="item in group.items">
+                                                                    <td>{{item.itemName}}</td>
+                                                                    <td>{{item.current | currency}}</td>
+                                                                    <td>{{item.currentWeighting | number:2}}%</td>
+                                                                    <td>{{item.proposed | currency}}</td>
+                                                                    <td>{{item.proposedWeighting | number:2}}%</td>
+                                                                    <td>{{item.difference | number:2}}%</td>
+                                                                </tr>
+
+                                                            </tbody>
+                                                            <tbody>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Total Balance Sheet</td>
+                                                                    <td>{{selectedModel.sectorialData.current | currency}}</td>
+                                                                    <td>{{selectedModel.sectorialData.currentWeighting | number:2}}%</td>
+                                                                    <td>{{selectedModel.sectorialData.proposed | currency}}</td>
+                                                                    <td>{{selectedModel.sectorialData.proposedWeighting | number:2}}%</td>
+                                                                    <td>{{selectedModel.sectorialData.difference | number:2}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane active in" ng-show="step===3">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3>Monthly Cashflow</h3>
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <table class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>
+                                                                        Cashflow Details
+                                                                    </td>
+                                                                    <td>Current</td>
+                                                                    <td>Proposed</td>
+                                                                    <td>Differences</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody ng-repeat="group in selectedModel.monthlyCashflow.data">
+                                                                <tr class="summary-table-row">
+                                                                    <td colspan="6">{{group.groupName}}</td>
+                                                                </tr>
+                                                                <tr ng-repeat="item in group.items">
+                                                                    <td>{{item.itemName}}</td>
+                                                                    <td>{{item.current | currency}}</td>
+                                                                    <td>{{item.proposed | currency}}</td>
+                                                                    <td>{{item.difference | number:2}}%</td>
+                                                                </tr>
+
+                                                            </tbody>
+                                                            <tbody>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Total Balance Sheet</td>
+                                                                    <td>{{selectedModel.monthlyCashflow.current | currency}}</td>
+                                                                    <td>{{selectedModel.monthlyCashflow.proposed | currency}}</td>
+                                                                    <td>{{selectedModel.monthlyCashflow.difference | number:2}}%</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3>Monthly Investment Income</h3>
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <table class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>
+                                                                        Monthly Income
+                                                                    </td>
+                                                                    <td>Current</td>
+                                                                    <td>Proposed</td>
+                                                                    <td>Differences</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody ng-repeat="group in selectedModel.monthlyInvestmentIncome.data">
+                                                            <td>{{group.name}}</td>
+                                                            <td>{{group.current | currency}}</td>
+                                                            <td>{{group.proposed | currency}}</td>
+                                                            <td>{{group.difference | number:2}}%</td>
+                                                            </tbody>
+                                                            <tbody>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Total Balance Sheet</td>
+                                                                    <td>{{selectedModel.monthlyInvestmentIncome.current | currency}}</td>
+                                                                    <td>{{selectedModel.monthlyInvestmentIncome.proposed | currency}}</td>
+                                                                    <td>{{selectedModel.monthlyInvestmentIncome.difference | number:2}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3>Anticipated First Year Management Cost</h3>
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <table class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>
+                                                                        Brokerage / Management Expense Ratio
+                                                                    </td>
+                                                                    <td>Current</td>
+                                                                    <td>Proposed</td>
+                                                                    <td>Differences</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody ng-repeat="group in selectedModel.anticipatedFirstYearManagementCost.data">
+                                                            <td>{{group.name}}</td>
+                                                            <td>{{group.current | currency}}</td>
+                                                            <td>{{group.proposed | currency}}</td>
+                                                            <td>{{group.difference | number:2}}%</td>
+                                                            </tbody>
+                                                            <tbody>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Total Balance Sheet</td>
+                                                                    <td>{{selectedModel.anticipatedFirstYearManagementCost.current | currency}}</td>
+                                                                    <td>{{selectedModel.anticipatedFirstYearManagementCost.proposed | currency}}</td>
+                                                                    <td>{{selectedModel.anticipatedFirstYearManagementCost.difference | number:2}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3>Anticipated Second Year Management Ratio</h3>
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <table class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>
+                                                                        Brokerage / Management Expense Ratio
+                                                                    </td>
+                                                                    <td>Current</td>
+                                                                    <td>Proposed</td>
+                                                                    <td>Differences</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody ng-repeat="group in selectedModel.anticipatedSecondYearManagementCost.data">
+                                                            <td>{{group.name}}</td>
+                                                            <td>{{group.current | currency}}</td>
+                                                            <td>{{group.proposed | currency}}</td>
+                                                            <td>{{group.difference | number:2}}%</td>
+                                                            </tbody>
+                                                            <tbody>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Total Balance Sheet</td>
+                                                                    <td>{{selectedModel.anticipatedSecondYearManagementCost.current | currency}}</td>
+                                                                    <td>{{selectedModel.anticipatedSecondYearManagementCost.proposed | currency}}</td>
+                                                                    <td>{{selectedModel.anticipatedSecondYearManagementCost.difference | number:2}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3>Anticipated First Year Ongoing Service Fee</h3>
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <table class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>
+                                                                        Brokerage / Management Expense Ratio
+                                                                    </td>
+                                                                    <td>Current</td>
+                                                                    <td>Proposed</td>
+                                                                    <td>Differences</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody ng-repeat="group in selectedModel.anticipatedFirstYearOngoingServiceFee.data">
+                                                            <td>{{group.name}}</td>
+                                                            <td>{{group.current | currency}}</td>
+                                                            <td>{{group.proposed | currency}}</td>
+                                                            <td>{{group.difference | number:2}}%</td>
+                                                            </tbody>
+                                                            <tbody>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Total Balance Sheet</td>
+                                                                    <td>{{selectedModel.anticipatedFirstYearOngoingServiceFee.current | currency}}</td>
+                                                                    <td>{{selectedModel.anticipatedFirstYearOngoingServiceFee.proposed | currency}}</td>
+                                                                    <td>{{selectedModel.anticipatedFirstYearOngoingServiceFee.difference | number:2}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3>Anticipated Second Year Ongoing Service Fee</h3>
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <table class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>
+                                                                        Brokerage / Management Expense Ratio
+                                                                    </td>
+                                                                    <td>Current</td>
+                                                                    <td>Proposed</td>
+                                                                    <td>Differences</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody ng-repeat="group in selectedModel.anticipatedSecondYearOngoingServiceFee.data">
+                                                            <td>{{group.name}}</td>
+                                                            <td>{{group.current | currency}}</td>
+                                                            <td>{{group.proposed | currency}}</td>
+                                                            <td>{{group.difference | number:2}}%</td>
+                                                            </tbody>
+                                                            <tbody>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Total Balance Sheet</td>
+                                                                    <td>{{selectedModel.anticipatedSecondYearOngoingServiceFee.current | currency}}</td>
+                                                                    <td>{{selectedModel.anticipatedSecondYearOngoingServiceFee.proposed | currency}}</td>
+                                                                    <td>{{selectedModel.anticipatedSecondYearOngoingServiceFee.difference | number:2}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane active in" ng-show="step===4">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3></h3>
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <table class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>
+                                                                        Asset Name
+                                                                    </td>
+                                                                    <td>Buy/Sell</td>
+                                                                    <td>Realised Profit/Loss</td>
+                                                                    <td>Transaction Cost</td>
+                                                                    <td>Extra Dividend</td>
+                                                                    <td>Extra MER</td>
+                                                                    <td>Net Value</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody ng-repeat="group in selectedModel.transactionCost">
+                                                                <tr class="summary-table-row">
+                                                                    <td colspan="7">{{group.assetClass}}</td>
+                                                                </tr>
+                                                                <tr ng-repeat="item in group.items">
+                                                                    <td>{{item.name}}</td>
+                                                                    <td>{{item.buySell | currency}}</td>
+                                                                    <td>{{item.profitLoss | currency}}</td>
+                                                                    <td>{{item.transactionCost | currency}}</td>
+                                                                    <td>{{item.extraDividend | currency}}</td>
+                                                                    <td>{{item.extraMER | currency}}</td>
+                                                                    <td>{{item.netValue | currency}}</td>
+                                                                </tr>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Total Changes</td>
+                                                                    <td>{{group.buySell | currency}}</td>
+                                                                    <td>{{group.profitLoss | currency}}</td>
+                                                                    <td>{{group.transactionCost | currency}}</td>
+                                                                    <td>{{group.extraDividend | currency}}</td>
+                                                                    <td>{{group.extraMER | currency}}</td>
+                                                                    <td>{{group.netValue | currency}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane active in" ng-show="step===5">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3>Compliance and Suitability Rating</h3>
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <table class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Product Class / Investments</td>
+                                                                    <td>Current APL Approve</td>
+                                                                    <td>Suitability</td>
+                                                                    <td>Compliant</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody ng-repeat="group in selectedModel.compliance">
+                                                                <tr>
+                                                                    <td colspan="4"><strong>{{group.groupName}}</strong></td>
+                                                                </tr>
+                                                                <tr ng-repeat="item in group.items">
+                                                                    <td>{{item.name}}</td>
+                                                                    <td>{{item.apl}}</td>
+                                                                    <td>{{item.suitability | number:0}}</td>
+                                                                    <td>{{item.compliant}}</td>
+
+                                                                </tr>
+
+
+                                                            </tbody>
+
+
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

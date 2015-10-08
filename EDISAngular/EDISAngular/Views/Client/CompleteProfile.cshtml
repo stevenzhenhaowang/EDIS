@@ -1,0 +1,119 @@
+﻿@model EDISAngular.Models.ViewModels.PreClientViewModel
+
+@{
+    ViewBag.Title = "Client Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    input[type="tel"] {
+        max-width: 280px;
+    }
+</style>
+<link href="~/Content/themes/base/all.css" rel="stylesheet" />
+<link href="~/Content/themes/ui-lightness/jquery-ui.ui-lightness.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/globalize/globalize.js"></script>
+<script src="~/Scripts/globalize/cultures/globalize.culture.en-AU.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.1.js"></script>
+
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <h2>Client Profile</h2>
+
+        @if (User.IsInRole(EDISAngular.Infrastructure.Authorization.AuthorizationRoles.Role_Preclient))
+        {
+
+            @*<div class="row">
+                <div class="col-md-12">
+                    <input id="person" type="radio" name="ClientType" class="typeSelector" value="person" />
+                    <label for="person">Person</label>
+                    <input id="entity" type="radio" name="ClientType" class="typeSelector" value="entity" />
+                    <label for="entity">Entity</label>
+                </div>
+            </div>*@
+
+
+            <div class="entity profile-panel">
+               @Html.Action("CompleteEntityProfile")
+            </div>
+
+            <div class="person profile-panel">
+            @Html.Action("CompletePersonProfile")
+            </div>
+
+            <script>
+                $(document).ready(function () {
+
+                    $.validator.methods.date = function (value, element) {
+                        Globalize.culture("en-AU");
+                        return this.optional(element) || Globalize.parseDate(value) !== null;
+                    }
+
+
+                    // $.noConflict();
+
+
+
+                    var isEntity = @((Model.ClientType==EDISAngular.Services.BusinessLayerParameters.clientType_entity).ToString().ToLower());
+                    var isPerson = @((Model.ClientType==EDISAngular.Services.BusinessLayerParameters.clientType_person).ToString().ToLower());
+                    $(".profile-panel").hide(); //added
+                    if(isEntity){
+                        //$(".typeSelector").removeAttr("checked");
+                        //$("#entity").attr("checked","true");
+                        $(".entity").show();        //added
+                    }
+                    if(isPerson){
+                        //$(".typeSelector").removeAttr("checked");
+                        //$("#person").attr("checked","true");
+                        $(".person").show();        //added
+                    }
+
+
+                    //function RenderPanel(){
+                    //    $(".profile-panel").hide();
+                    //    if(document.getElementById("entity").checked)
+                    //    {
+                    //        $(".entity").show();
+                    //    }
+                    //    if(document.getElementById("person").checked){
+                    //        $(".person").show();
+                    //    }
+                    //}
+
+
+                    //RenderPanel();
+                    //$(".typeSelector").click(function(){
+                    //    RenderPanel();
+                    //});
+
+
+
+                });
+            </script>
+
+        }
+        else
+        {
+
+            if (Model.ClientType == EDISAngular.Services.BusinessLayerParameters.clientType_entity)
+            {
+                @Html.Action("CompleteEntityProfile")
+            }
+            else
+            {
+                @Html.Action("CompletePersonProfile")
+            }
+
+        }
+
+
+        <script>
+            $("input[type='datetime']").datepicker({dateFormat:'dd/mm/yy'});
+        </script>
+
+    </div>
+</div>

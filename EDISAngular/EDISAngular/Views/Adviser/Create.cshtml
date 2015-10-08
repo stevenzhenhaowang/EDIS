@@ -1,0 +1,900 @@
+﻿@model EDISAngular.Models.BindingModels.AdviserRegistrationBindingModel
+@using EDISAngular.Models.BindingModels;
+
+@{
+    ViewBag.Title = "Adviser Registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Adviser profile setup</h2>
+<link href="~/Content/themes/base/all.css" rel="stylesheet" />
+<link href="~/Content/themes/ui-lightness/jquery-ui.ui-lightness.css" rel="stylesheet" />
+<script src="~/assets/kingAdmin/assets/js/wizard.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+@*<script src="~/assets/kingAdmin/assets/js/bootstrap-datepicker.js"></script>*@
+<script src="~/Scripts/jquery-ui-1.11.1.js"></script>
+<h4>Please complete your profile</h4>
+<hr />
+<div class="widget">
+    <div class="widget-header"><h3><i class="fa fa-edit"></i> Profile</h3></div>
+    <div class="widget-content">
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.ValidationSummary("", new { @class = "error" })
+                </div>
+            </div>
+
+
+            <div class="wizard-wrapper">
+                <div id="profile-wizard" class="wizard">
+                    <ul class="steps">
+                        <li data-target="#step1" class="active"><span class="badge badge-info">1</span>Personal Details<span class="chevron"></span></li>
+                        <li data-target="#step2"><span class="badge">2</span>Business Details<span class="chevron"></span></li>
+                        <li data-target="#step3"><span class="badge">3</span>Dealer Group Details<span class="chevron"></span></li>
+                        <li data-target="#step4"><span class="badge">4</span>Asset and Investment Details<span class="chevron"></span></li>
+                        <li data-target="#step5"><span class="badge">4</span>Education Details<span class="chevron"></span></li>
+                        <li data-target="#step6" class="last"><span class="badge">5</span>Client Management Settings</li>
+                    </ul>
+                </div>
+
+                <div class="step-content">
+                    <div class="step-pane active" id="step1">
+
+                        <fieldset>
+                            @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form1" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <legend>Personal Details</legend>
+                                <div class="form-group">
+                                    @Html.HiddenFor(model => model.adviserUserId, htmlAttributes: null)
+
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.currentPositionTitle, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.currentPositionTitle, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.currentPositionTitle, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.companyName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.companyName, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.companyName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ABN, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.ABN, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.ABN, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.firstName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.firstName, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.firstName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.middleName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.middleName, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.middleName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.lastName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.lastName, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.lastName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.gender, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.gender, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.gender, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                            }
+
+
+                        </fieldset>
+                    </div>
+                    <div class="step-pane" id="step2">
+
+                        <fieldset>
+                            @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form2" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+
+                                <legend>Business Details</legend>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.industryExperienceStartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.industryExperienceStartDate, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.industryExperienceStartDate, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.businessPhone, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.businessPhone, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.businessPhone, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.businessMobile, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.businessMobile, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.businessMobile, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.businessFax, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.businessFax, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.businessFax, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.addressLine1, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.addressLine1, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.addressLine1, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.addressLine2, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.addressLine2, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.addressLine2, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.addressLine3, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.addressLine3, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.addressLine3, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.suburb, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.suburb, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.suburb, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.state, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.state, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.state, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.postCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.postCode, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.postCode, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.country, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.country, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.country, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+                            }
+                        </fieldset>
+
+                    </div>
+                    <div class="step-pane" id="step3">
+
+                        <fieldset>
+                            @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form3" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <legend>Dealer Group Details</legend>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.roleAndServicesSummary, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.roleAndServicesSummary, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.roleAndServicesSummary, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.dealerGroupName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.dealerGroupName, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.dealerGroupName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.asfl, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.asfl, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.asfl, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.dealerGroup_addressLine1, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.dealerGroup_addressLine1, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.dealerGroup_addressLine1, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.dealerGroup_addressLine2, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.dealerGroup_addressLine2, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.dealerGroup_addressLine2, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.dealerGroup_addressLine3, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.dealerGroup_addressLine3, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.dealerGroup_addressLine3, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.dealerGroup_suburb, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.dealerGroup_suburb, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.dealerGroup_suburb, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.dealerGroup_state, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.dealerGroup_state, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.dealerGroup_state, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.dealerGroup_postCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.dealerGroup_postCode, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.dealerGroup_postCode, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.dealerGroup_country, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.dealerGroup_country, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.dealerGroup_country, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.dealerGroupHasDerivativesLicense, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        <div class="checkbox">
+                                            @Html.EditorFor(model => model.dealerGroupHasDerivativesLicense)
+                                            @Html.ValidationMessageFor(model => model.dealerGroupHasDerivativesLicense, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            }
+                        </fieldset>
+
+
+                    </div>
+                    <div class="step-pane" id="step4">
+
+                        <fieldset>
+                            @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form4" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <legend>Asset and Investment Details</legend>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.isAuthorizedRepresentative, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        <div class="checkbox">
+                                            @Html.EditorFor(model => model.isAuthorizedRepresentative)
+                                            @Html.ValidationMessageFor(model => model.isAuthorizedRepresentative, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.authorizedRepresentativeNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.authorizedRepresentativeNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.authorizedRepresentativeNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.totalAssetUnderManagement, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.totalAssetUnderManagement, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.totalAssetUnderManagement, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.totalInvestmentUndermanagement, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.totalInvestmentUndermanagement, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.totalInvestmentUndermanagement, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.totalDirectAustralianEquitiesUnderManagement, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.totalDirectAustralianEquitiesUnderManagement, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.totalDirectAustralianEquitiesUnderManagement, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.totalDirectInterantionalEquitiesUnderManagement, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.totalDirectInterantionalEquitiesUnderManagement, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.totalDirectInterantionalEquitiesUnderManagement, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.totalDirectFixedInterestUnderManagement, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.totalDirectFixedInterestUnderManagement, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.totalDirectFixedInterestUnderManagement, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.totalDirectLendingBookInterestUnderManagement, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.totalDirectLendingBookInterestUnderManagement, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.totalDirectLendingBookInterestUnderManagement, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.approximateNumberOfClients, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.approximateNumberOfClients, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.approximateNumberOfClients, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                            }
+                        </fieldset>
+
+                    </div>
+
+                    <div id="step5" class="step-pane">
+                        <fieldset>
+                            @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form5" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <legend>Education Details</legend>
+
+                                @*Start of section: This section needs to be implemented with jquery List insertion with proper index*@
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <button class="btn btn-info" id="newEducation">Add Education Details</button>
+                                    </div>
+                                </div>
+
+                                if (Model.educations != null && Model.educations.Count > 0)
+                                {
+
+                                    for (int i = 0; i < Model.educations.Count; i++)
+                                    {
+                                        <div class="form-group">
+                                            <div class="col-md-2 control-label">Education Institution</div>
+                                            <div class="col-md-10">
+                                                <input type="text" class="form-control" name="educations[@i].institution" value="@Model.educations[i].institution" />
+                                                @Html.ValidationMessage("educations[" + i + "].institution", new { @class = "text-danger" })
+
+                                                <span class="field-validation-valid text-danger" data-valmsg-for="educations[@i].institution" data-valmsg-replace="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-2 control-label">Education Level</div>
+                                            <div class="col-md-10">
+                                                @{
+                                        List<SelectListItem> lists = new List<SelectListItem>();
+                                        using (EDISAngular.Infrastructure.DatabaseAccess.CommonReferenceDataRepository repo = new EDISAngular.Infrastructure.DatabaseAccess.CommonReferenceDataRepository())
+                                        {
+
+                                            repo.GetAllEducationLevels().ForEach(level =>
+                                            {
+                                                SelectListItem item = new SelectListItem();
+                                                item.Text = level.EducationLevels;
+                                                item.Value = level.EducationLevelsId.ToString();
+                                                item.Selected = Model.educations[i].educationLevelId == level.EducationLevelsId;
+                                                lists.Add(item);
+                                            });
+                                        }
+                                                }
+
+                                                @Html.DropDownList("educations[" + i + "].educationLevelId", lists, new { @class = "form-control" })
+                                                @Html.ValidationMessage("educations[" + i + "].educationLevelId", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-2 control-label">Course Title</div>
+                                            <div class="col-md-10">
+                                                <input type="text" class="form-control" name="educations[@i].courseTitle" value="@Model.educations[i].courseTitle" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-2 control-label"> Course Status</div>
+                                            <div class="col-md-10">
+                                                <select class="form-control" name="educations[@i].courseStatus">
+                                                    <option value="">Please select...</option>
+                                                    <option value="true" @(Model.educations[i].courseStatus ? "selected" : "")>Yes</option>
+                                                    <option value="true" @(!Model.educations[i].courseStatus ? "selected" : "")>No</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    }
+                                }
+                                <div class="education-panel">
+                                </div>
+                            }
+
+                        </fieldset>
+                    </div>
+
+
+                    <div class="step-pane" id="step6">
+                        <fieldset>
+                            @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form6" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <legend>Client Management Settings</legend>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.professiontypeId, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.DropDownListFor(model => model.professiontypeId, (IEnumerable<SelectListItem>)ViewBag.professTypes, "Please select", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.professiontypeId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+                                @*<div class="form-group">
+                                    @Html.LabelFor(model => model.services, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+
+                                        @for (var i = 0; i < Model.services.Count; i++)
+                                        {
+                                            var group = Model.services[i];
+                                            <div class="row">
+
+                                                @Html.HiddenFor(model => model.services[i].groupName)
+                                                <div class="col-sm-12"><strong>@group.groupName</strong></div>
+                                                @for (var j = 0; j < group.services.Count; j++)
+                                                {
+                                                    var service = group.services[j];
+                                                    @Html.HiddenFor(model => model.services[i].services[j].serviceId)
+                                                    @Html.HiddenFor(model => model.services[i].services[j].serviceName)
+                                                    <div class="checkbox col-sm-3">
+                                                        <label>
+                                                            @Html.CheckBoxFor(model => model.services[i].services[j].providing)
+                                                            @service.serviceName
+                                                        </label>
+                                                    </div>
+                                                }
+                                            </div>
+
+                                        }
+
+
+
+                                    </div>
+                                </div>*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newsLetterServices, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            @for (int i = 0; i < Model.newsLetterServices.Count; i++)
+                                            {
+                                                var service = Model.newsLetterServices[i];
+
+                                                <div class="checkbox col-sm-3">
+                                                    <label>
+                                                        @Html.CheckBoxFor(model => model.newsLetterServices[i].selected)
+                                                        @service.serviceName
+                                                        @Html.HiddenFor(model => model.newsLetterServices[i].newsLetterServiceId)
+                                                        @Html.HiddenFor(model => model.newsLetterServices[i].serviceName)
+                                                    </label>
+                                                </div>
+
+                                            }
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+
+                                @*<div class="form-group">
+                                    @Html.LabelFor(model => model.commissionsAndFees, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            @for (int i = 0; i < Model.commissionsAndFees.Count; i++)
+                                            {
+                                                var question = Model.commissionsAndFees[i];
+
+                                                <div class="checkbox col-sm-3">
+                                                    <label>
+                                                        @Html.CheckBoxFor(model => model.commissionsAndFees[i].selected)
+                                                        @question.description
+                                                        @Html.HiddenFor(model => model.commissionsAndFees[i].id)
+                                                        @Html.HiddenFor(model => model.commissionsAndFees[i].description)
+                                                    </label>
+                                                </div>
+
+                                            }
+                                        </div>
+
+
+                                    </div>
+                                </div>*@
+
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.remunerationMethodSpecified, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        <div class="checkbox">
+                                            @Html.EditorFor(model => model.remunerationMethodSpecified)
+                                            @Html.ValidationMessageFor(model => model.remunerationMethodSpecified, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.remunerationMethod, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.remunerationMethod, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.remunerationMethod, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+                                            List<SelectListItem> numberOfClients = new List<SelectListItem>();
+                                            numberOfClients.Add(new SelectListItem()
+                                            {
+                                                Text = "Please select....",
+                                                Value = ""
+                                            });
+
+                                            using (EDISAngular.Infrastructure.DatabaseAccess.CommonReferenceDataRepository repo = new EDISAngular.Infrastructure.DatabaseAccess.CommonReferenceDataRepository())
+                                            {
+
+                                                foreach (var item in repo.GetApproxClientNumbers())
+                                                {
+                                                    numberOfClients.Add(new SelectListItem()
+                                                    {
+                                                        Value = item.ApproxClientNumbersId.ToString(),
+                                                        Text = item.ApproxClientNumbers
+                                                    });
+                                                }
+
+
+                                            }
+
+
+
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.numberOfClientsId, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                <div class="col-md-10">
+
+                                                    @Html.DropDownListFor(m => m.numberOfClientsId, numberOfClients, new { @class = "form-control" })
+
+                                                    @Html.ValidationMessageFor(model => model.numberOfClientsId, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+
+
+
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.annualIncomeLevelId, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                <div class="col-md-10">
+                                                    @{
+                                            var annualIncomeLevelList = new List<SelectListItem>();
+                                            annualIncomeLevelList.Add(new SelectListItem()
+                                            {
+                                                Text = "Please select",
+                                                Value = ""
+                                            });
+                                            using (EDISAngular.Infrastructure.DatabaseAccess.CommonReferenceDataRepository repo = new EDISAngular.Infrastructure.DatabaseAccess.CommonReferenceDataRepository())
+                                            {
+
+                                                foreach (var income in repo.GetAllAnnualIncomeLevels())
+                                                {
+                                                    annualIncomeLevelList.Add(new SelectListItem()
+                                                    {
+                                                        Text = income.AnnualIncomeLevels,
+                                                        Value = income.AnnualIncomeLevelsId.ToString()
+                                                    });
+                                                }
+                                            }
+                                                    }
+
+
+                                                    @Html.DropDownListFor(m => m.annualIncomeLevelId, annualIncomeLevelList, new { @class = "form-control" })
+
+                                                    @Html.ValidationMessageFor(model => model.annualIncomeLevelId, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+
+
+                                            var investibleLevelList = new List<SelectListItem>();
+                                            investibleLevelList.Add(new SelectListItem()
+                                            {
+                                                Text = "Please select...",
+                                                Value = ""
+                                            });
+
+                                            using (EDISAngular.Infrastructure.DatabaseAccess.CommonReferenceDataRepository repo = new EDISAngular.Infrastructure.DatabaseAccess.CommonReferenceDataRepository())
+                                            {
+                                                foreach (var item in repo.GetAllInvestibleAssetLevels())
+                                                {
+                                                    investibleLevelList.Add(new SelectListItem()
+                                                    {
+                                                        Text = item.InvestibleAssetsLevel1,
+                                                        Value = item.InvestibleAssetsLevelId.ToString()
+                                                    });
+                                                }
+                                            }
+
+
+
+
+
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.investibleAssetLevel, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                <div class="col-md-10">
+                                                    @Html.DropDownListFor(m => m.investibleAssetLevel, investibleLevelList, new { @class = "form-control" })
+
+
+                                                    @Html.ValidationMessageFor(model => model.investibleAssetLevel, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+
+
+                                            var totalAssetLevels = new List<SelectListItem>();
+                                            totalAssetLevels.Add(new SelectListItem()
+                                            {
+                                                Value = "",
+                                                Text = "Please select....."
+                                            });
+                                            using (EDISAngular.Infrastructure.DatabaseAccess.CommonReferenceDataRepository repo = new EDISAngular.Infrastructure.DatabaseAccess.CommonReferenceDataRepository())
+                                            {
+
+                                                foreach (var item in repo.GetAllTotalAssetLevels())
+                                                {
+                                                    totalAssetLevels.Add(new SelectListItem()
+                                                    {
+                                                        Text = item.TotalAssetsLevel1,
+                                                        Value = item.TotalAssetsLevelId.ToString()
+                                                    });
+                                                }
+
+                                            }
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.totalAssetLevelId, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                <div class="col-md-10">
+
+
+                                                    @Html.DropDownListFor(m => m.totalAssetLevelId, totalAssetLevels, new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.totalAssetLevelId, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                            }
+                        </fieldset>
+
+                    </div>
+
+                </div>
+                <div class="actions">
+                    <button type="button" class="btn btn-default btn-prev"><i class="fa fa-arrow-left"></i> Prev</button>
+                    <button type="button" class="btn btn-primary btn-next">Next <i class="fa fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <script>
+                $(document).ready(function () {
+                    var educationLevels = [];
+                    $.get("http://"+document.location.host+"/api/educationlevel",function(data){
+                        educationLevels = data;
+                    })
+                    $('#profile-wizard').on('change', function (e, data) {
+                        // validation
+                        $('#form' + data.step).validate();
+                        if (!$("#form" + data.step).valid())
+                            return false;
+                        // last step button
+                        $btnNext = $(this).parents('.wizard-wrapper').find('.btn-next');
+                        var numberOfSteps = $(".step-pane").length - 1;
+                        if (data.step === numberOfSteps && data.direction == 'next') {
+                            $btnNext.text(' Create My Account')
+                            .prepend('<i class="fa fa-check-circle"></i>')
+                            .removeClass('btn-primary').addClass('btn-success final-btn');
+                        } else {
+                            $btnNext.text('Next ').
+                            append('<i class="fa fa-arrow-right"></i>')
+                            .removeClass('btn-success').addClass('btn-primary');
+
+                        }
+
+                    }).on('finished', function () {
+
+                        $('#form'+$(".step-pane").length).validate();
+                        if ($("#form"+$(".step-pane").length).valid()){
+                            $("#final").remove();
+                            $(".final-btn").attr("disabled", "disabled");
+                            var completeForm = $(".step-content form");
+                            var form = $("<form id='final' style='display:none' action='/Adviser/Create' method='post'></form>");
+                            $(completeForm).each(function (index, element) {
+                                var allChildren = $(element).find("input,select");
+                                form.append(allChildren);
+                            });
+                            form.append("<input id='finalPost' type='submit'/>")
+                            form.appendTo($('body'));
+                            $("#finalPost").click();
+                        }
+                    });
+
+                    //$btnNext.click(function(){
+                    //    $('#step-content').wizard("next");
+                        
+                    //});
+
+                    $("ul.steps li").click(function(){
+                        var step = $(this).data("target").substring(5)
+                        $("#profile-wizard").trigger("change",{step:step});
+                    })
+
+                    $('.wizard-wrapper .btn-next').click(function () {
+                        $('#profile-wizard').wizard('next');
+                    });
+
+                    $('.wizard-wrapper .btn-prev').click(function () {
+                        $('#profile-wizard').wizard('previous');
+                    });
+
+
+                    var numberOfEducations = @ViewBag.numberOfEducations;
+                    $("#newEducation").click(function(e){
+                        e.preventDefault();
+                        var panel = $(".education-panel");
+                        var content = "<div class='education-container'><div class='form-group'>"
+                                            +"<div class='col-md-2 control-label'>Education Institution</div>"
+                                            +"<div class='col-md-10'><input type='text' class='form-control' name='educations["+numberOfEducations+"].institution'/>"
+                                            +"</div>"
+                                     +"</div>";
+                        content += ('<div class="form-group">'
+                                            + '<div class="col-md-2 control-label">Qualification Level</div>'
+                                            +'<div class="col-md-10">'+generateEducationLevelsDropdownFor("educations["+numberOfEducations+"].educationLevelId")+'</div>'
+                                       +'</div>');
+
+                        content += ('<div class="form-group">'+
+                                            '<div class="col-md-2 control-label">Course Title</div>'+
+                                            '<div class="col-md-10">'+
+                                                '<input type="text" class="form-control" name="educations['+numberOfEducations+'].courseTitle" />'+
+                                            '</div>'+
+                                        '</div>');
+                        content += ('<div class="form-group">'+
+                                            '<div class="col-md-2 control-label"> Currently Studying?</div>'+
+                                            '<div class="col-md-10">'+
+                                                '<select class="form-control" name="educations['+numberOfEducations+'].courseStatus"><option value="">Please select...</option><option value="true">Yes</option><option value="false">No</option></select>'+
+                                            '</div>'+
+                                        '</div><div class="form-group"><button class="btn btn-danger remove">Remove</button></div>')
+
+
+                        panel.append(content);
+                        refreshEducationValidation();
+                        numberOfEducations++;
+                    });
+                    $("body").on("click",".remove",function(){
+                        $(this).closest(".education-container").remove();
+                    })
+                    function refreshEducationValidation(){
+                        $("#form5").validate();
+                        var inputs = $("body").find("*[name*='educations']");
+                        inputs.each(function(index,item){
+
+                            $(item).rules("add",
+                                {
+                                    required:true,
+                                    message:{
+                                        required:"This value is required",
+                                    }
+                                });
+                        });
+                    }
+                    function generateEducationLevelsDropdownFor(propertyName)
+                    {
+                        var content = "<select name='"+propertyName+"' class='form-control'>";
+                        content+="<option value=''>Please select...</option>";
+                        for (var i = 0; i < educationLevels.length; i++) {
+                            content+="<option value='"+educationLevels[i].EducationLevelsId+"'>"+educationLevels[i].EducationLevels+"</option>";
+                        }
+                        content+="</select>";
+                        return content;
+                    }
+                    refreshEducationValidation();
+                    $("input[type='date']").attr("type","text");
+                    @if (!IsPost)
+                    {
+                     <text>$("input[name='industryExperienceStartDate']").val("");</text>
+                    }
+
+                    $("input[name='industryExperienceStartDate']").datepicker({dateFormat:'dd/mm/yy'});
+
+                });
+            </script>
+
+        </div>
+    </div>
+</div>
+
+
+<div>
+
+</div>

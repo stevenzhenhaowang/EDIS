@@ -1,0 +1,412 @@
+﻿@model EDISAngular.Models.BindingModels.AdviserRegistrationBindingModel
+
+@{
+    ViewBag.Title = "Adviser Details";
+}
+
+<style type="text/css">
+    @@media (min-width: 768px) {
+        .dl-horizontal dt {
+            width: 350px;
+        }
+
+        .dl-horizontal dd {
+            margin-left: 370px;
+        }
+
+            .dl-horizontal dd.split {
+                margin-bottom: 20px;
+            }
+    }
+
+    .btn {
+        margin: 2px;
+    }
+</style>
+
+
+<h2>Adviser Details</h2>
+
+<div class="container">
+
+    <hr />
+    <div class="row">
+        <div class="col-md-8 col-md-offset-1">
+
+
+
+            <dl class="dl-horizontal">
+                
+    <dt>
+        @Html.DisplayNameFor(model => model.firstName)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.firstName)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.middleName)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.middleName)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.lastName)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.lastName)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.currentPositionTitle)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.currentPositionTitle)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.companyName)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.companyName)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.ABN)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.ABN)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.title)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.title)
+    </dd>
+
+
+
+
+    <dt>
+        @Html.DisplayNameFor(model => model.gender)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.gender)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.industryExperienceStartDate)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.industryExperienceStartDate.Value)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.businessPhone)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.businessPhone)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.businessMobile)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.businessMobile)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.businessFax)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.businessFax)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.GeoString)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.GeoString)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.addressLine1)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.addressLine1)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.addressLine2)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.addressLine2)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.addressLine3)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.addressLine3)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.suburb)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.suburb)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.state)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.state)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.postCode)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.postCode)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.country)
+    </dt>
+
+    <dd class="split">
+        @Html.DisplayFor(model => model.country)
+    </dd>
+
+
+
+    <dt>
+        @Html.DisplayNameFor(model => model.dealerGroupName)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.dealerGroupName)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.asfl)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.asfl)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.dealerGroup_addressLine1)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.dealerGroup_addressLine1)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.dealerGroup_addressLine2)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.dealerGroup_addressLine2)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.dealerGroup_addressLine3)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.dealerGroup_addressLine3)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.dealerGroup_suburb)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.dealerGroup_suburb)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.dealerGroup_state)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.dealerGroup_state)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.dealerGroup_postCode)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.dealerGroup_postCode)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.dealerGroup_country)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.dealerGroup_country)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.dealerGroupHasDerivativesLicense)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.dealerGroupHasDerivativesLicense)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.isAuthorizedRepresentative)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.isAuthorizedRepresentative)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.authorizedRepresentativeNumber)
+    </dt>
+
+    <dd class="split">
+        @Html.DisplayFor(model => model.authorizedRepresentativeNumber)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.totalAssetUnderManagement)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.totalAssetUnderManagement)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.totalInvestmentUndermanagement)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.totalInvestmentUndermanagement)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.totalDirectAustralianEquitiesUnderManagement)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.totalDirectAustralianEquitiesUnderManagement)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.totalDirectInterantionalEquitiesUnderManagement)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.totalDirectInterantionalEquitiesUnderManagement)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.totalDirectFixedInterestUnderManagement)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.totalDirectFixedInterestUnderManagement)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.totalDirectLendingBookInterestUnderManagement)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.totalDirectLendingBookInterestUnderManagement)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.approxNumberOfClients)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.approxNumberOfClients)
+    </dd>
+
+
+
+
+    <dt>
+        @Html.DisplayNameFor(model => model.AnnualIncomeLevel)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.AnnualIncomeLevel)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.InvestibleAssetLevelString)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.InvestibleAssetLevelString)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.TotalAssetLevel)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.TotalAssetLevel)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.ProvidedServicesString)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.ProvidedServicesString)
+    </dd>
+    <dt>
+        Actions
+    </dt>
+    <dd>
+        @Html.ActionLink("Approve", "AdviserApprove", new { id = Model.adviserUserId }, new { @class = "btn btn-success" })
+
+    </dd>
+    <dd>
+        @Html.ActionLink("Reject", "AdviserBlock", new { id = Model.adviserUserId }, new { @class = "btn btn-danger" })
+
+    </dd>
+    <dd>
+        @Html.ActionLink("Back", "PendingProfiles", null, new { @class = "btn btn-info" })
+
+    </dd>
+
+                
+            </dl>
+
+
+
+        </div>
+    </div>
+
+
+</div>

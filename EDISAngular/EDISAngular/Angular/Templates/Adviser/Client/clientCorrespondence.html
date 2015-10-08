@@ -1,0 +1,291 @@
+﻿<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Client</a></li>
+            <li class="active">Correspondence</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <!--<div class="main-header">
+        <h2>Correspondence</h2>
+
+    </div>-->
+    <div class="main-content" ng-controller="AdviserCorrespondenceViewController">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-tabs" ng-init="tab=1">
+                            <li ng-class="{active:tab==1}"><a ng-click="tab=1"><i class="fa fa-home"></i> Notes</a></li>
+                            <li ng-class="{active:tab==2}"><a ng-click="tab=2"><i class="fa fa-user"></i> Messages</a></li>
+                            <li ng-class="{active:tab==3}"><a ng-click="tab=3"><i class="fa fa-list"></i> Voice Recording</a></li>
+                            <li ng-class="{active:tab==4}"><a ng-click="tab=4"><i class="fa fa-list"></i> Documents</a></li>
+
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade" ng-class="{'active in':tab==1}">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button class="btn btn-success" value="Create New Note" ng-click="newNote()">Create New Note</button>
+                                    </div>
+                                </div>
+
+                                <kendo-grid options="notesOptions">
+                                    <div k-detail-template>
+                                        <kendo-tabstrip>
+                                            <ul><li class="k-state-active">Commentray</li></ul>
+                                            <div>
+                                                <span>{{dataItem.commentray}}</span>
+                                            </div>
+
+                                        </kendo-tabstrip>
+                                    </div>
+                                </kendo-grid>
+
+                            </div>
+                            <div class="tab-pane fade" ng-class="{'active in':tab==2}">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button class="btn btn-success" value="Create New message" ng-click="newMessage()">Create New Message</button>
+                                    </div>
+                                </div>
+                                <kendo-grid options="messageOptions">
+                                    <div k-detail-template>
+                                        <kendo-tabstrip>
+                                            <ul><li class="k-state-active">Message</li></ul>
+                                            <div>
+                                                <span>{{dataItem.message}}</span>
+                                            </div>
+
+                                        </kendo-tabstrip>
+                                    </div>
+                                </kendo-grid>
+
+
+
+                            </div>
+                            <div class="tab-pane fade" ng-class="{'active in':tab==3}">
+                                <kendo-grid options="voiceOptions">
+                                    <div k-detail-template>
+                                        <kendo-tabstrip>
+                                            <ul><li class="k-state-active">Recording</li></ul>
+                                            <div>
+                                                <audio controls>
+                                                    <source ng-src="dataItem.src" type="dataItem.type" />
+                                                </audio>
+                                            </div>
+
+                                        </kendo-tabstrip>
+                                    </div>
+                                </kendo-grid>
+                            </div>
+                            <div class="tab-pane fade" ng-class="{'active in':tab==4}">
+
+                                <div kendo-tree-view="tree"
+                                     k-options="documentOptions">
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<script type="text/ng-template" id="newCorrespondenceMessage">
+    <div class="NewNote">
+        <form name="noteForm" novalidate>
+            <div class="row">
+                <div class="col-sm-12">
+                    <table class="table table-dark-header">
+                        <thead>
+                            <tr>
+                                <td>Date</td>
+                                <td>Time</td>
+                                <td>Account No.</td>
+                                <td>Account Name</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{date | date: 'dd-MM-yyyy'}}</td>
+                                <td>{{date | date: 'HH:mm:ss' }}</td>
+                                <td>{{accountNumber}}</td>
+                                <td>{{accountName}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <label>Asset Class</label>
+                        <select class="form-control" ng-model="assetClass" name="assetClass" ng-options="aClass for aClass in assetClasses" required>
+                            <option value="">Please select...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <label>Product Class</label>
+                        <select class="form-control" ng-model="productClass" name="productClass" ng-options="pClass for pClass in productClasses" required>
+                            <option value="">Please select...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <label>Product</label>
+                        <select class="form-control" ng-model="product" name="product" ng-options="productO for productO in products" required>
+                            <option value="">Please select...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <table class="table table-dark-header">
+                        <thead>
+                            <tr>
+                                <td>User ID</td>
+                                <td>Personnel Title</td>
+                                <td>Client Name</td>
+                                <td>Purpose of Call</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{userid}}</td>
+                                <td>{{title }}</td>
+                                <td>{{clientName}}</td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="text" name="purpose" ng-model="purpose" required class="form-control" placeholder="Purpose of Call" />
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <label>Time Spent on Matter</label>
+                        <input type="number" name="timeSpent" ng-model="timeSpent" required class="form-control" placeholder="in Minutes" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <label>Note Serial No</label>
+                        <span class="form-control">{{noteSerialNo}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="input-group">
+                        <label>Subject Heading</label>
+                        <input type="text" name="subject" required ng-model="subject" class="form-control" placeholder="Subject Heading" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="input-group">
+                        <label>Commentary</label>
+                        <textarea name="commentary" ng-model="commentary" required class="form-control" style="height:50px;"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="input-group">
+                        <label>Actions Required</label>
+                        <textarea name="actions" ng-model="actions" required class="form-control" style="height:50px;"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <label>Completion Date</label>
+                        <input type="text" class="form-control" edis-datepicker ng-model="completionDate" name="completionDate" required />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <label>Reassigned to User ID</label>
+                        <input class="form-control" name="assignedUserId" ng-model="assignedUserId" required type="text" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <label>Status</label>
+                        <input type="text" class="form-control" ng-model="status" name="status" required />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <label>Reassigned ID Name</label>
+                        <span class="form-control">{{reassignedIdName}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <label>Is Followup Required?</label>
+                        <select required ng-model="requireFollowup" name="requireFollowup" class="form-control">
+                            <option value="">Select...</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6" ng-if="requireFollowup">
+                    <div class="input-group">
+                        <label>Followup Date</label>
+                        <input type="text" class="form-control" edis-datepicker ng-model="followupDate" name="followupDate" required />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <label>Remove from Reminder</label>
+                        <select ng-model="removeFromReminder" name="removeFromReminder" class="form-control" required>
+                            <option value="">Select...</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <label>Supporting Document</label>
+                        <input id="File1" type="file" required name="document" ng-model="document" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button class="btn btn-danger" value="Cancel" ng-click="close()">Cancel</button>
+                    <button class="btn btn-success" value="Save" ng-disabled="noteForm.$invalid" ng-click="save()">Save</button>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</script>

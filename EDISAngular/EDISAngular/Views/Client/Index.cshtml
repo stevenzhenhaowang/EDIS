@@ -1,0 +1,326 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html ng-app="EDIS">
+<head>
+    <title>Client</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="EDIS">
+    <meta name="author" content="The Grand Canal">
+    <!-- CSS -->
+    <link href="/assets/kingAdmin/assets/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="/assets/kingAdmin/assets/css/font-awesome.css" rel="stylesheet" type="text/css">
+    <link href="/assets/kingAdmin/assets/css/main.css" rel="stylesheet" type="text/css">
+    <link href="/assets/kingAdmin/assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/3rd-party.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/chart.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/components.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/forms.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/general.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/main-content.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/navigation.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/page.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/tables.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/top-bar.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/assets/css/ui-elements.css" rel="stylesheet" />
+    <link href="/assets/kingAdmin/demo-style-switcher/assets/css/style-switcher.css" rel="stylesheet" type="text/css">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/kingAdminassets/ico/kingadmin-favicon144x144.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/assets/kingAdminassets/ico/kingadmin-favicon114x114.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/kingAdminassets/ico/kingadmin-favicon72x72.png">
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/assets/kingAdminassets/ico/kingadmin-favicon57x57.png">
+    <link rel="shortcut icon" href="/assets/kingAdmin/assets/ico/favicon.png">
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.dataviz.default.min.css" />
+
+    <link href="/content/adviser.css" rel="stylesheet" />
+</head>
+<body class="dashboard" ng-cloak>
+    <!-- WRAPPER -->
+    <div class="wrapper">
+
+        <div class="top-bar" style="height:40px">
+            <div class="container">
+                <div class="row">
+                    <!-- logo -->
+                    <div class="col-md-2 logo hidden-sm hidden-xs">
+                        <a href="/home">
+                            <img src="/images/EDIS_logo.jpg" style="height:20px" />
+                        </a>
+                        <h1 class="sr-only">EDIS Client Dashboard</h1>
+                    </div>
+                    <!-- end logo -->
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-9">
+                                <div class="top-bar-right">
+                                    <!-- responsive menu bar icon -->
+                                    <a href="#" class="hidden-md hidden-lg main-nav-toggle"><i class="fa fa-bars"></i></a>
+                                    <!-- end responsive menu bar icon -->
+                                    @*<button type="button" id="global-volume" class="btn btn-link btn-global-volume"><i class="fa"></i><span class="badge element-bg-color-blue">New</span></button>*@
+
+                                    <!-- logged user and the menu -->
+                                    <div class="logged-user">
+                                        <div class="btn-group">
+                                            <a class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                                                <img src="/client/GetImage" class="img-circle img-responsive" style="height:30px" />
+                                                <span class="name">{{adviser.FirstName + " " + adviser.LastName}}</span> <span class="caret"></span>
+                                            </a>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    <a href="/client/Index">
+                                                        <span class="text">Dashboard</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="/client/CompleteProfile">
+                                                        <span class="text">Profile Settings</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="/client/UpdateImage">
+                                                        <span class="text">Profile Image</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="/client/UpdateRiskProfile">
+                                                        <span class="text">Risk Profile</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="/account/logoff">
+                                                        <span class="text">Logout</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!-- end logged user and the menu -->
+                                </div>
+                                <!-- /top-bar-right -->
+                            </div>
+                        </div>
+                        <!-- /row -->
+                    </div>
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /top -->
+        <!-- BOTTOM: LEFT NAV AND RIGHT MAIN CONTENT -->
+        <div class="bottom">
+            <div class="container">
+                <div class="row">
+                    <!-- left sidebar -->
+                    <div class="col-md-2 left-sidebar">
+                        <!-- main-nav -->
+                        <nav class="main-nav">
+
+                            <ul class="main-menu">
+                                <li class="active"><a href="#/home"><i class="fa fa-dashboard fa-fw"></i><span class="text">Client Dashboard</span></a></li>
+                                <li>
+                                    <a href="#" class="js-sub-menu-toggle">
+                                        <i class="fa fa-clipboard fa-fw"></i><span class="text">Portfolio</span>
+                                        <i class="toggle-icon fa fa-angle-left"></i>
+                                    </a>
+                                    <ul class="sub-menu ">
+                                        <li><a href="#/clientportfoliosummary"><span class="text">Portfolio Summary</span></a></li>
+                                        <li><a href="#/clientportfolioae"><span class="text">Australian Equity</span></a></li>
+                                        <li><a href="#/clientportfolioint"><span class="text">International Equity</span></a></li>
+                                        <li><a href="#/clientportfoliomi"><span class="text">Managed Investment</span></a></li>
+                                        <li><a href="#/clientportfoliodp"><span class="text">Direct Property</span></a></li>
+                                        <li><a href="#/clientportfoliofi"><span class="text">Fixed Income</span></a></li>
+                                        <li><a href="#/clientportfolioctd"><span class="text">Cash &amp; Term Deposit</span></a></li>
+                                        <li><a href="#/clientportfoliomhl"><span class="text">Mortgage &amp; Home Loan</span></a></li>
+                                        <li><a href="#/clientportfolioml"><span class="text">Margin Lending</span></a></li>
+                                        <li><a href="#/clientportfoliocc"><span class="text">Personal &amp; Credit Card Loan</span></a></li>
+                                        <li><a href="#/clientportfolioins"><span class="text">Insurance</span></a></li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a href="#/clientcorrespondence">
+                                        <i class="fa fa-envelope-o"></i><span class="text">Correspondence</span>
+                                    </a>
+
+                                </li>
+
+                                @*<li>
+                                    <a href="#/clientCorporateActions">
+                                        <i class="fa fa-bar-chart-o fw"></i><span class="text">Corporate Actions</span>
+                                    </a>
+
+                                </li>*@
+                                <li>
+                                    <a href="#" class="js-sub-menu-toggle">
+                                        <i class="fa fa-edit fw"></i><span class="text">Research</span>
+                                        <i class="toggle-icon fa fa-angle-left"></i>
+                                    </a>
+                                    <ul class="sub-menu ">
+                                        <li><a href="#/clientresearchAnalysis"><span class="text">Analysis</span></a></li>
+                                        <li><a href="#/clientresearchRebalance"><span class="text">Rebalance Modelling</span></a></li>
+                                    </ul>
+                                @*</li>
+                                <li>
+                                    <a href="#" class="js-sub-menu-toggle">
+                                        <i class="fa fa-list-alt fw"></i><span class="text">Data Input</span>
+                                        <i class="toggle-icon fa fa-angle-left"></i>
+                                    </a>
+                                    <ul class="sub-menu ">
+                                        <li><a href="components-wizard.html"><span class="text">Transactions</span></a></li>
+                                        <li><a href="components-calendar.html"><span class="text">Statements</span></a></li>
+                                        <li><a href="components-maps.html"><span class="text">Corporate Actions</span></a></li>
+                                    </ul>
+                                </li>*@
+                                @*<li>
+                                    <a href="#/clientProfile">
+                                        <i class="fa fa-user"></i><span class="text">Manage Profile</span>
+                                    </a>
+
+                                </li>*@
+                            </ul>
+                        </nav>
+                        <!-- /main-nav -->
+                        <div class="sidebar-minified js-toggle-minified">
+                            <i class="fa fa-angle-left"></i>
+                        </div>
+                        <!-- sidebar content -->
+                        @*<div class="sidebar-content" ng-controller="adviserSideBarRemindersController">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h5><i class="fa fa-lightbulb-o"></i>Tips</h5>
+                                </div>
+                                <div class="panel-body">
+                                    <p>You can do live search to the widget at search box located at top bar. It's very useful if your dashboard is full of widget.</p>
+                                </div>
+                            </div>
+
+                            <h5 class="label label-default"><i class="fa fa-info-circle"></i>Reminders</h5>
+                            <ul class="list-unstyled list-info-sidebar bottom-30px">
+                                <li class="data-row" ng-repeat="x in reminders">
+                                    <span class="data-name">{{x.name}}</span>
+                                    <span class="data-value">
+                                        {{x.value}}
+                                        <div class="progress progress-xs">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%">
+                                                <span class="sr-only">10%</span>
+                                            </div>
+                                        </div>
+                                    </span>
+                                </li>
+
+                            </ul>
+                        </div>*@
+                        <!-- end sidebar content -->
+                    </div>
+                    <div class="col-md-10 content-wrapper">
+                        <ng-view></ng-view>
+
+                    </div>
+                    <!-- /content-wrapper -->
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- END BOTTOM: LEFT NAV AND RIGHT MAIN CONTENT -->
+        <div class="push-sticky-footer"></div>
+    </div>
+    <!-- /wrapper -->
+    <!-- FOOTER -->
+    <footer class="footer">
+        &copy; 2015 Grand Canal
+    </footer>
+    <script src="/assets/kingAdmin/assets/js/jquery-2.1.0.min.js"></script>
+    <script src="/assets/kingAdmin/assets/js/jquery-ui-1.10.4.custom.js"></script>
+    <script src="/assets/kingAdmin/assets/js/bootstrap.js"></script>
+    <script src="/assets/kingAdmin/assets/js/bootstrap-datepicker.js"></script>
+    <script src="/Scripts/angular.js"></script>
+    <script src="/Scripts/angular-route.js"></script>
+    <script src="/Scripts/angular-animate.js"></script>
+    <script src="/Scripts/angular-resource.js"></script>
+    <script src="http://cdn.kendostatic.com/2014.3.1119/js/kendo.all.min.js"></script>
+    <script src="/assets/kingAdmin/assets/js/modernizr.js"></script>
+    <script src="/assets/kingAdmin/assets/js/bootstrap-tour.custom.js"></script>
+    <script src="/assets/kingAdmin/assets/js/king-common.js"></script>
+    <script src="/assets/kingAdmin/demo-style-switcher/assets/js/deliswitch.js"></script>
+    <script src="/assets/kingAdmin/assets/js/stat/jquery.easypiechart.min.js"></script>
+    <script src="/assets/kingAdmin/assets/js/raphael-2.1.0.js"></script>
+    <script src="/assets/kingAdmin/assets/js/jquery.mapael.js"></script>
+    <script src="/assets/kingAdmin/assets/js/maps/world_countries.js"></script>
+
+
+    <script src="/assets/kingAdmin/assets/js/stat/flot/jquery.flot.min.js"></script>
+    <script src="/assets/kingAdmin/assets/js/stat/flot/jquery.flot.resize.min.js"></script>
+    <script src="/assets/kingAdmin/assets/js/stat/flot/jquery.flot.time.min.js"></script>
+    <script src="/assets/kingAdmin/assets/js/stat/flot/jquery.flot.pie.min.js"></script>
+    <script src="/assets/kingAdmin/assets/js/stat/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="/assets/kingAdmin/assets/js/jquery.sparkline.min.js"></script>
+    <script src="/assets/kingAdmin/assets/js/datatable/jquery.dataTables.min.js"></script>
+    <script src="/assets/kingAdmin/assets/js/datatable/jquery.dataTables.bootstrap.js"></script>
+
+
+
+    <script src="/assets/kingAdmin/assets/js/maps/usa_states.js"></script>
+    <script src="/assets/kingAdmin/assets/js/king-chart-stat.js"></script>
+    <script src="/assets/kingAdmin/assets/js/king-table.js"></script>
+
+    <script src="/assets/kingAdmin/assets/js/wizard.min.js"></script>
+    <script src="/assets/kingAdmin/assets/js/parsley.min.js"></script>
+    <script src="/assets/kingAdmin/assets/js/king-components.js"></script>
+
+    <script src="/Scripts/angular-sanitize.min.js"></script>
+    <!--<script src="../../Scripts/angular-resource.js"></script>-->
+    <script src="/Scripts/angular-bootstrap-checkbox.js"></script>
+    <script src="/Scripts/ui-bootstrap-tpls-0.12.0.js"></script>
+    <script src="/Scripts/lodash.js"></script>
+    <script src="/Scripts/angular-google-maps.js"></script>
+
+
+    <script>
+        var app = angular.module("EDIS", ["kendo.directives", "ngRoute", "ngResource", "ngSanitize", "ui.checkbox", "ui.bootstrap", "ngAnimate", "uiGmapgoogle-maps"]);
+    </script>
+    <script src="~/Angular/Scripts/Client/clientApp.js"></script>
+    <script src="~/Angular/Scripts/Adviser/utilityDirectives.js"></script>
+    <script src="~/Angular/Scripts/Adviser/utilityFilters.js"></script>
+    <script src="~/Angular/Scripts/Client/Services/clientPortfolioSummaryServices.js"></script>
+    <script src="~/Angular/Scripts/Client/clientPortfolioSummaryControllers.js"></script>
+    <script src="~/Angular/Scripts/Client/Services/clientPortfolioAEServices.js"></script>
+    <script src="~/Angular/Scripts/Client/Services/clientPortfolioCCServices.js"></script>
+    <script src="~/Angular/Scripts/Client/Services/clientPortfolioCTDServices.js"></script>
+    <script src="~/Angular/Scripts/Client/Services/clientPortfolioDPServices.js"></script>
+    <script src="~/Angular/Scripts/Client/Services/clientPortfolioFIServices.js"></script>
+    <script src="~/Angular/Scripts/Client/Services/clientPortfolioINSServices.js"></script>
+    <script src="~/Angular/Scripts/Client/Services/clientPortfolioINTServices.js"></script>
+    <script src="~/Angular/Scripts/Client/Services/clientPortfolioMHLServices.js"></script>
+    <script src="~/Angular/Scripts/Client/Services/clientPortfolioMIServices.js"></script>
+    <script src="~/Angular/Scripts/Client/Services/clientPortfolioMLServices.js"></script>
+    <script src="~/Angular/Scripts/Client/Services/clientPortfolioResearchServices.js"></script>
+
+    <script src="~/Angular/Scripts/Client/clientPortfolioAEControllers.js"></script>
+    <script src="~/Angular/Scripts/Client/clientPortfolioCCController.js"></script>
+    <script src="~/Angular/Scripts/Client/clientPortfolioCTDControllers.js"></script>
+    <script src="~/Angular/Scripts/Client/clientPortfolioDPControllers.js"></script>
+    <script src="~/Angular/Scripts/Client/clientPortfolioFIControllers.js"></script>
+    <script src="~/Angular/Scripts/Client/clientPortfolioINSController.js"></script>
+    <script src="~/Angular/Scripts/Client/clientPortfolioINTControllers.js"></script>
+    <script src="~/Angular/Scripts/Client/clientPortfolioMHLControllers.js"></script>
+    <script src="~/Angular/Scripts/Client/clientPortfolioMIControllers.js"></script>
+    <script src="~/Angular/Scripts/Client/clientPortfolioMLControllers.js"></script>
+    <script src="~/Angular/Scripts/Client/clientResearchControllers.js"></script>
+    <script src="~/Angular/Scripts/Client/clientResearchRebalanceControllers.js"></script>
+    <script src="~/Angular/Scripts/Client/clientCorrespondenceViewControllers.js"></script>
+
+
+
+
+</body>
+</html>

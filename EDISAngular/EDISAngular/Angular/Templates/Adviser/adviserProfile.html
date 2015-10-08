@@ -1,0 +1,434 @@
+﻿<div ng-controller="adviserProfile">
+    <style>
+        .data-name.data-name-full {
+            width:24em;
+            margin-bottom:1em;
+        }
+        .data-value.data-value-full {
+             width: 24em;
+             padding-left:1em;             
+        }
+    </style>
+    <script type="text/ng-template" id="profileTomb">
+        <div class="user-info-left">
+            <!--<%--<img src="../Images/Peter_Truong.jpg" alt="Profile Picture" class="img-responsive" />--%>-->
+            <img id="profileImage" ng-src={{adviserimage}} class="img-responsive" style="margin:0 auto;" alt="../../Images/no_image.jpg" />
+            <h2>{{adviser.FirstName + " " + adviser.LastName}}<!--<i class="fa fa-circle green-font online-icon"></i><sup class="sr-only">online</sup>--></h2>
+            <span class="data-name">Client Feedback</span>
+            <!--TODO-->
+            <span class="data-value"><i class="glyphicon glyphicon-star" ng-repeat="x in ratings() track by $index" /></span>
+            <div class="contact">
+                <a href="#" class="btn btn-block btn-custom-primary"><i class="fa fa-pencil"></i> Edit Profile</a>
+                <a href="#" class="btn btn-block btn-custom-secondary"><i class="fa fa-picture-o"></i> Change Profile Image</a>
+                <ul class="list-inline social">
+                    <li><a href="#" title="Facebook"><i class="fa fa-facebook-square"></i></a></li>
+                    <li><a href="#" title="Twitter"><i class="fa fa-twitter-square"></i></a></li>
+                    <li><a href="#" title="Google Plus"><i class="fa fa-google-plus-square"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </script>
+    <div class="row">
+        <div class="col-md-4 ">
+            <ul class="breadcrumb">
+                <li><i class="fa fa-home"></i><a href="adviserOverview.aspx">Home</a></li>
+                <li class="active">Profile</li>
+            </ul>
+        </div>
+        <div class="col-md-8 ">
+            <div class="top-content">
+                <ul class="list-inline mini-stat">
+                    <li>
+                        <h5>REFERRALS <span class="stat-value stat-color-orange"><i class="fa fa-plus-circle"></i> 18</span></h5>
+                        <span id="mini-bar-chart1" class="mini-bar-chart"></span>
+                    </li>
+                    <li>
+                        <h5>CLIENTS <span class="stat-value stat-color-blue"><i class="fa fa-plus-circle"></i> 205</span></h5>
+                        <span id="mini-bar-chart2" class="mini-bar-chart"></span>
+                    </li>
+                    <li>
+                        <h5>PORTFOLIO <span class="stat-value stat-color-seagreen"><i class="fa fa-plus-circle"></i> 1.5 Bill</span></h5>
+                        <span id="mini-bar-chart3" class="mini-bar-chart"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- main -->
+    <div class="content">
+        <div class="main-header">
+            <h2>Profile</h2>
+            <em>user profile page</em>
+        </div>
+
+        <div class="main-content">
+            <!-- NAV TABS -->
+            <ul class="nav nav-tabs" >
+                <!--<li class="active"><a data-target="#profile-tab" data-toggle="tab"><i class="fa fa-user"></i> Profile</a></li>
+                <li><a data-target="#activity-tab" data-toggle="tab"><i class="fa fa-building-o"></i> Company Information</a></li>
+                <li><a data-target="#settings-tab" data-toggle="tab"><i class="fa fa-gear"></i> Settings</a></li>-->
+
+                <li ng-class="{active:tab==1}"><a ng-init="tab=1" ng-click="tab=1"><i class="fa fa-user"></i> Profile</a></li>
+                <li ng-class="{active:tab==2}"><a ng-click="tab=2"><i class="fa fa-building-o"></i> Company Information</a></li>
+                <li ng-class="{active:tab==3}"><a ng-click="tab=3"><i class="fa fa-book"></i> Professional Background</a></li>
+                <li ng-class="{active:tab==4}"><a ng-click="tab=4"><i class="fa fa-gear"></i> Settings</a></li>
+            </ul>
+            <!-- END NAV TABS -->
+
+            <div class="tab-content profile-page">
+                <!-- PROFILE TAB CONTENT -->
+                <div class="tab-pane profile" id="profile-tab" ng-class="{active:tab==1}">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div ng-include src="'profileTomb'"></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="user-info-right">
+                                <div class="basic-info">
+                                    <h3><i class="fa fa-square"></i> Personal Information</h3>
+                                    <p class="data-row">
+                                        <span class="data-name">Account Number</span>
+                                        <span class="data-value">{{adviser.AccountNumber}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Birth Date</span>
+                                        <span class="data-value">{{additionalInfo.BirthDate}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Gender</span>
+                                        <span class="data-value">{{adviser.Gender}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Website</span>
+                                        <span class="data-value"><a href={{additionalInfo.Website}}>{{additionalInfo.Website}}</a></span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Last Login</span>
+                                        <span class="data-value">{{additionalInfo.LastLogin}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Date Joined</span>
+                                        <span class="data-value">{{additionalInfo.DateJoined}}</span>
+                                    </p>
+                                </div>
+                                <div class="contact_info">
+                                    <h3><i class="fa fa-square"></i> Contact Information</h3>
+                                    <p class="data-row">
+                                        <span class="data-name">Email</span>
+                                        <span class="data-value">{{additionalInfo.Email}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Phone</span>
+                                        <span class="data-value">{{adviser.Phone}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Mobile</span>
+                                        <span class="data-value">{{adviser.Mobile}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Address</span>
+                                        <span class="data-value" ng-bind-html="adviseraddress"></span>
+                                    </p>
+
+                                </div> 
+                                <div class="about">
+                                    <h3><i class="fa fa-square"></i> About Me</h3>
+                                    <div>{{adviserDescription}}</div>
+
+                                </div>                               
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="user-info-right">
+                                <div class="basic-info">
+                                    <h3><i class="fa fa-square"></i> Subscription Information</h3>
+                                    <p class="data-row">
+                                        <span class="data-name">Subscription Plan</span>
+                                        <span class="data-value">{{adviserAdditional.adviserSubscription.PlanType}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Subscription Status</span>
+                                        <span class="data-value">{{adviserAdditional.adviserSubscription.SubscriptionStatus}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Adviser Verification Status</span>
+                                        <span class="data-value">{{adviserAdditional.adviserSubscription.VerifiedStatus}}</span>
+                                    </p>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <!-- END PROFILE TAB CONTENT -->
+                <!-- ACTIVITY TAB CONTENT -->
+                <div class="tab-pane profile" id="company-tab" ng-class="{active:tab==2}">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div ng-include src="'profileTomb'"></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="user-info-right">
+                                <div class="basic-info">
+                                    <h3><i class="fa fa-square"></i> Company Information</h3>
+                                    <p class="data-row">
+                                        <span class="data-name">Company Name</span>
+                                        <span class="data-value">{{adviser.CompanyName}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Position</span>
+                                        <span class="data-value">{{adviser.CurrentTitle}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Dealer Group Name</span>
+                                        <span class="data-value">{{dealerGroup.DealerGroupName}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">AFSL</span>
+                                        <span class="data-value">{{dealerGroup.AFSL}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Has Derivatives License</span>
+                                        <span class="data-value"><span ng-show="dealerGroup.HasDerivativesLicense=='1'">Yes</span><span ng-show="dealerGroup.HasDerivativesLicense!='1'">No</span></span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Authorised Representative Number</span>
+                                        <span class="data-value">{{dealerGroup.AuthorisedRepNumber}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Address</span>
+                                        <span ng-bind-html="dealerGroupAddress" class="data-value"></span>
+                                    </p>
+                                </div>
+                                <div class="contact_info">
+                                    <h3><i class="fa fa-square"></i> Management Information</h3>
+                                    <p class="data-row">
+                                        <span class="data-name">Total Assets</span>
+                                        <span class="data-value">{{adviserManagementDetails.TotalAssets|currency:undefined: 0}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Total Manged Investments</span>
+                                        <span class="data-value">{{adviserManagementDetails.TotalManagedInvestments|currency:undefined: 0}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Total Direct Australian Equities</span>
+                                        <span class="data-value">{{adviserManagementDetails.TotalDirectAustralianEquities|currency:undefined: 0}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Total Direct International Equities</span>
+                                        <span class="data-value">{{adviserManagementDetails.TotalDirectInternational|currency:undefined: 0}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Total Fixed Interest</span>
+                                        <span class="data-value">{{adviserManagementDetails.TotalFixedInterest|currency:undefined: 0}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Total Lending Book</span>
+                                        <span class="data-value">{{adviserManagementDetails.TotalLendingBook|currency:undefined: 0}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Approximate Number of Clients</span>
+                                        <span class="data-value">{{adviserManagementDetails.ApproxClientNumbersId}}</span>
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="user-info-right">
+                                <div class="contact_info">
+                                    <h3><i class="fa fa-square"></i> Target Clients</h3>
+                                    <p class="data-row">
+                                        <span class="data-name">Annual Income Level</span>
+                                        <span class="data-value">{{adviserAdditional.adviserTargetClient.AnnualIncomeLevels}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Investible Assets Level</span>
+                                        <span class="data-value">{{adviserAdditional.adviserTargetClient.InvestibleAssetsLevel}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Total Assets Level</span>
+                                        <span class="data-value">{{adviserAdditional.adviserTargetClient.TotalAssetsLevel}}</span>
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END ACTIVITY TAB CONTENT -->
+                <!-- ACTIVITY TAB CONTENT -->
+                <div class="tab-pane profile" id="professional-tab" ng-class="{active:tab==3}">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div ng-include src="'profileTomb'"></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="user-info-right">
+                                <div class="basic-info">
+                                    <h3><i class="fa fa-square"></i> Professional Background</h3>
+                                    <p class="data-row">
+                                        <span class="data-name">Profession Type</span>
+                                        <span class="data-value">{{adviserAdditional.adviserProfessionalType}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name">Industry Experience</span>
+                                        <span class="data-value">{{adviserAdditional.adviserIndustryExp}}</span>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name data-name-full">Professional Memebership &amp; Association</span>
+                                        <div class="data-value data-value-full" ng-repeat="x in adviserAdditional.adviserProfessionalAssociations">
+                                            <span ng-bind-html="x.ProfessionalAssociations"><br /></span>
+                                        </div>
+                                    </p>
+                                </div>
+                                <div class="contact_info">
+                                    <h3><i class="fa fa-square"></i> Education History</h3>
+                                    <p class="data-row">
+                                        <span class="data-name data-name-full">Currently Studying or Completed</span>
+                                        <div class="data-value data-value-full" ng-repeat="x in adviserAdditional.adviserEducation">
+                                            <span ng-trim="false" ng-bind-html="x.EducationLevels + '\n'"></span><span ng-trim="false" ng-bind-html="x.Institution + '\n'"></span><span ng-bind-html="x.CourseName"></span>
+                                            
+                                        </div>
+                                    </p>
+                                </div>
+                                <div class="contact_info">
+                                    <h3><i class="fa fa-square"></i> Services Provided</h3>
+                                    <p class="data-row">
+                                        <span class="data-name data-name-full">Provide Services In The Following Areas</span>
+                                        <div class="data-value data-value-full" ng-repeat="x in adviserAdditional.adviserServicesProvided">
+                                            <span ng-bind-html="x.ServiceName"><br /></span>
+                                        </div>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="user-info-right">
+                                <div class="contact_info">
+                                    <h3><i class="fa fa-square"></i> Adviser Capability</h3>
+                                    <p class="data-row">
+                                        <span class="data-name data-name-full">General Investment &amp; Debt</span>
+                                        <div class="data-value data-value-full" ng-repeat="x in adviserAdditional.adviserCapability.GeneralInvestDebt">
+                                            <span ng-bind-html="x.Capability"><br /></span>
+                                        </div>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name data-name-full">Platforms &amp; Systems</span>
+                                        <div class="data-value data-value-full" ng-repeat="x in adviserAdditional.adviserCapability.adviserPlatforms">
+                                            <span ng-bind-html="x.Platform"><br /></span>
+                                        </div>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name data-name-full">Approved Research</span>
+                                        <div class="data-value data-value-full" ng-repeat="x in adviserAdditional.adviserCapability.approvedResearch">
+                                            <span ng-bind-html="x.Research"><br /></span>
+                                        </div>
+                                    </p>
+                                    <p class="data-row">
+                                        <span class="data-name data-name-full">Specialised Products</span>
+                                        <div class="data-value data-value-full" ng-repeat="x in adviserAdditional.adviserCapability.adviserSpecialisedProducts">
+                                            <span ng-bind-html="x.SpecialProduct"><br /></span>
+                                        </div>
+                                    </p>
+
+
+                                </div>
+                                <!--<div class="about">
+            <h3><i class="fa fa-square"></i> Background</h3>
+            <p>Dramatically facilitate proactive solutions whereas professional intellectual capital. Holisticly utilize competitive e-markets through intermandated meta-services. Objectively.</p>
+            <p>Monotonectally foster future-proof infomediaries before principle-centered interfaces. Assertively recaptiualize cutting-edge web services rather than emerging "outside the box" thinking. Phosfluorescently cultivate resource maximizing technologies and user-centric convergence. Completely underwhelm cross functional innovation vis-a-vis.</p>
+        </div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END ACTIVITY TAB CONTENT -->
+                <!-- SETTINGS TAB CONTENT -->
+                <div class="tab-pane profile" id="settings-tab" ng-class="{active:tab==4}">
+                    <form class="form-horizontal" role="form">
+                        <fieldset>
+                            <h3><i class="fa fa-square"></i> Change Password</h3>
+                            <div class="form-group">
+                                <label for="old-password" class="col-sm-3 control-label">Old Password</label>
+                                <div class="col-sm-4">
+                                    <input type="password" id="old-password" name="old-password" class="form-control">
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="form-group">
+                                <label for="password" class="col-sm-3 control-label">New Password</label>
+                                <div class="col-sm-4">
+                                    <input type="password" id="password" name="password" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password2" class="col-sm-3 control-label">Repeat Password</label>
+                                <div class="col-sm-4">
+                                    <input type="password" id="password2" name="password2" class="form-control">
+                                </div>
+                            </div>
+                            <p class="text-center"><a href="#" class="btn btn-custom-primary"><i class="fa fa-floppy-o"></i> Save Changes</a></p>
+                        </fieldset>
+
+                        <!--<fieldset>
+                            <h3><i class="fa fa-square"></i> Adviser Subcription</h3>
+                            <div class="simple-checkbox">
+                                <input type="checkbox" id="checkbox">
+                                <label for="checkbox">Show my display name</label>
+                            </div>
+                            <div class="simple-checkbox">
+                                <input type="checkbox" id="checkbox2">
+                                <label for="checkbox2">Show my birth date</label>
+                            </div>
+                            <div class="simple-checkbox">
+                                <input type="checkbox" id="checkbox3">
+                                <label for="checkbox3">Show my email</label>
+                            </div>
+                            <div class="simple-checkbox">
+                                <input type="checkbox" id="checkbox4">
+                                <label for="checkbox4">Show my online status on chat</label>
+                            </div>
+                        </fieldset>-->
+
+                        <h3><i class="fa fa-square"> </i>Change Subscription</h3>
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Current Plan</label>
+                                <ul class="col-sm-4 list-inline">
+                                    <li>
+                                        {{adviserAdditional.adviserSubscription.PlanType}}
+                                    </li>                                    
+                                </ul>
+                               
+                            </div>
+                            <p class="text-center"><a href="#" class="btn btn-custom-primary"><i class="fa fa-arrow-circle-o-right"></i> View Other Plans</a></p>
+                            <!--<div class="form-group">
+                                <label class="col-sm-5 control-label">Others liked your post</label>
+                                <ul class="col-sm-7 list-inline">
+                                    <li>
+                                        <input type="checkbox" class="bs-switch switch-small" data-off="default" data-on-label="><i class='glyphicon glyphicon-globe'></i>" data-off-label="<i class='glyphicon glyphicon-globe'></i>">
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" class="bs-switch switch-small" data-off="default" data-on-label="><i class='glyphicon glyphicon-phone'></i>" data-off-label="<i class='glyphicon glyphicon-phone'></i>">
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" class="bs-switch switch-small" data-off="default" data-on-label="><i class='glyphicon glyphicon-envelope'></i>" data-off-label="<i class='glyphicon glyphicon-envelope'></i>">
+                                    </li>
+                                </ul>
+                            </div>-->
+                        </fieldset>
+                    </form>
+
+                    
+
+                </div>
+                <!-- END SETTINGS TAB CONTENT -->
+            </div>
+
+        </div><!-- /main-content -->
+    </div><!-- /main -->
+</div>
+

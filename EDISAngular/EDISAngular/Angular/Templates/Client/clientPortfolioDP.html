@@ -1,0 +1,314 @@
+﻿
+
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+            <li>Portfolio</li>
+            <li class="active">Direct Property</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="main-header">
+        <h2>Direct Property</h2>
+
+    </div>
+    <div class="main-content" ng-controller="clientPortfolioDPViewController">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-tabs" ng-init="tab=1">
+                            <li ng-class="{active:tab==1}"><a ng-click="tab=1"><i class="fa fa-home"></i> Overview</a></li>
+                       <!--     <li ng-class="{active:tab==3}"><a ng-click="tab=3"><i class="fa fa-list"></i> Diversification</a></li>
+                            <li ng-class="{active:tab==4}"><a ng-click="tab=4"><i class="fa fa-list"></i> Cashflow</a></li>
+                           -->
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active in">
+                                <div ng-if="tab===1">
+                                    <div>
+                                        <div class="row">
+                                            <div class="col-md-12" ng-controller="clientPortfolioDPBriefInfoController">
+                                                <div class="secondary-stat">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item1" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.cost | currency}}</span>
+                                                                    <span class="col-right"><em>Cost Value</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item2" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.marketValue | currency}}</span>
+                                                                    <span class="col-right"><em>Market Value</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item3" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.pl | currency}}</span>
+                                                                    <span class="col-right"><em>Profit/Loss</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div id="secondary-stat-item4" class="secondary-stat-item big-number-stat clearfix">
+                                                                <div class="data">
+                                                                    <span class="col-left big-number">{{data.plp | currency}}</span>
+                                                                    <span class="col-right"><em>Profit/Loss (%)</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="row" ng-controller="clientPortfolioDPMapController">
+                                            <div class="col-sm-12">
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3><i class="fa fa-bar-chart-o"></i>Property Information</h3>
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <ui-gmap-google-map center='map.center' zoom='map.zoom'>
+                                                            <ui-gmap-markers models='markers'
+                                                                             coords="'self'">
+                                                                <ui-gmap-windows show="address">
+                                                                    <div class="marker-box" ng-non-bindable>{{address}}<br /><strong>Value: </strong>{{value | currency}}</div>
+                                                                </ui-gmap-windows>
+
+                                                            </ui-gmap-markers>
+
+
+                                                        </ui-gmap-google-map>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3><i class="fa fa-bar-chart-o"></i>Property Details</h3>
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <table class="table table-striped table-hover">
+                                                            <thead>
+                                                                <tr class="summary-table-row">
+                                                                    <td>Address</td>
+                                                                    <td>Value</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="item in markers" ng-click="clickAddress(item)">
+                                                                    <td>{{item.address}}</td>
+                                                                    <td>{{item.value | currency}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                                <div ng-if="tab===3">
+                                    <div ng-controller="clientPortfolioDPDiversificationController">
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <h5><strong>Filter by Country</strong></h5>
+                                                </div>
+                                            </div>
+                                            <div class="row" ng-repeat="country in countries">
+                                                <div class="col-sm-12">
+                                                    {{country.name}} <input type="checkbox" ng-model="country.checked" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <h5><strong>Filter by State</strong></h5>
+                                                </div>
+                                            </div>
+                                            <div class="row" ng-repeat="state in states">
+                                                <div class="col-sm-12">
+                                                    {{state.name}} <input type="checkbox" ng-model="state.checked" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <h5><strong>Filter by Type</strong></h5>
+                                                </div>
+                                            </div>
+                                            <div class="row" ng-repeat="type in types">
+                                                <div class="col-sm-12">
+                                                    {{type.name}} <input type="checkbox" ng-model="type.checked" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr class="summary-table-row">
+                                                        <td>Address</td>
+                                                        <td>Value</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="property in properties()">
+                                                        <td>{{property.address}}</td>
+                                                        <td>{{property.value | currency}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div ng-if="tab===4">
+                                    <div ng-controller="clientPortfolioDPCashflowPropertySpecificController">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <tr class="summary-table-row">
+                                                    <th>
+                                                       Property Name
+                                                    </th>
+                                                    <th>Property Address</th>
+                                                    <th ng-repeat="item in data.dateSchema" colspan="3">{{item}}</th>
+                                                </tr>
+                                                <tr class="summary-table-row">
+                                                    <th colspan="2">
+                                                    </th>
+                                                    <th ng-repeat-start="item in data.dateSchema">Income</th>
+                                                    <th>Franking</th>
+                                                    <th ng-repeat-end>Expenses</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="company in data.data">
+                                                    <td>{{company.propertyName}}</td>
+                                                    <td>{{company.address}}</td>
+                                                    <td ng-repeat-start="item in company.data">
+                                                        {{item.income | currency}}
+                                                    </td>
+                                                    <td>{{item.franking | currency}}</td>
+                                                    <td ng-repeat-end>{{item.expenses | currency}}</td>
+                                                </tr>
+                                                <tr class="summary-table-row">
+                                                    <td colspan="2">Total</td>
+                                                    <td ng-repeat-start="item in data.total">
+                                                        {{item.income | currency}}
+                                                    </td>
+                                                    <td>{{item.franking | currency}}</td>
+                                                    <td ng-repeat-end>{{item.expenses | currency}}</td>
+                                                </tr>
+
+
+                                            </tbody>
+                                        </table>
+
+
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="widget" ng-controller="clientPortfolioDPQuickStatsController">
+                            <div class="widget-header">
+                                <h3><i class="fa fa-bar-chart-o"></i>Quick Statistics</h3>
+
+                            </div>
+                            <div class="widget-content">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr class="summary-table-row">
+                                            <th colspan="2">Quick Statistics</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in data">
+                                            <td>{{item.name}}</td>
+                                            <td>{{item.value}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="widget" ng-controller="clientPortfolioDPRatingController">
+                            <div class="widget-header">
+                                <h3><i class="fa fa-bar-chart-o"></i>Portfolio Rating</h3>
+
+                            </div>
+                            <div class="widget-content">
+                                <kendo-chart k-rebind="data" k-options="mainOptions"></kendo-chart>
+                                <kendo-chart k-rebind="data" k-options="detailOptions"></kendo-chart>
+                            </div>
+                        </div>
+
+                        <div class="widget" ng-controller="clientPortfolioDPCashflowController">
+                            <div class="widget-header">
+                                <h3><i class="fa fa-bar-chart-o"></i>Monthly Cash Flow Summary</h3>
+
+                            </div>
+                            <div class="widget-content">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <td>Month</td>
+                                            <td>Income</td>
+                                            <td>Expense</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in data.data">
+                                            <td>{{item.date | date : 'MMMM'}}</td>
+                                            <td>{{item.income | currency}}</td>
+                                            <td>{{item.expense | currency}}</td>
+                                        </tr>
+                                        <tr class="summary-table-row">
+                                            <td>Total</td>
+                                            <td>{{data.totalIncome | currency}}</td>
+                                            <td>{{data.totalExpense | currency}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

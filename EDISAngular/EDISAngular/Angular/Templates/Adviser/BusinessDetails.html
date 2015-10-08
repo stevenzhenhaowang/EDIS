@@ -1,0 +1,533 @@
+﻿
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+            <li class="active">Business Details</li>
+        </ul>
+    </div>
+</div>
+<div class="content" ng-controller="BusinessDetailsController">
+    <div class="main-header">
+        <h2>Business Details</h2>
+
+    </div>
+    <div class="main-content">
+        <div class="row">
+            <div class="col-sm-12">
+                <ul class="nav nav-tabs">
+                    <li ng-class="{active:tab==1}"><a ng-click="tab=1"><i class="fa fa-home"></i> Asset Statistics</a></li>
+                    <li ng-class="{active:tab==2}"><a ng-click="
+                                                      "><i class="fa fa-user"></i> Client Position Monitor</a></li>
+                    <li ng-class="{active:tab==3}"><a ng-click="tab=3"><i class="fa fa-globe"></i> Client Demographics</a></li>
+                    <li ng-class="{active:tab==4}"><a ng-click="tab=4"><i class="fa fa-money"></i> Business Revenue</a></li>
+                    <li ng-class="{active:tab==5}"><a ng-click="tab=5"><i class="fa fa-lock"></i> Compliant Files</a></li>
+
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade" ng-class="{'active in':tab==1}">
+                        <div ng-controller="InvestmentStatisticsViewController">
+                            <div class="widget" ng-if="data">
+                                <div class="widget-header">
+                                    <h3><i class="fa fa-bar-chart-o"></i>Investment Statistics</h3>
+                                    <div class="btn-group widget-header-toolbar">
+                                        <div class="label" ng-class="{'label-success' : data.total >= 0,'label-danger' : data.total < 0}">{{data.total | currency}}</div>
+                                    </div>
+                                </div>
+                                <div class="widget-content">
+                                    <kendo-grid options="TopLayerOptions">
+                                        <div k-detail-template>
+                                            <kendo-tabstrip>
+                                                <ul class="hide-element">
+                                                    <li class="k-state-active">Stock Information</li>
+                                                </ul>
+                                                <div>
+                                                    <div kendo-grid k-options="SecondLayerOptions(dataItem)">
+                                                        <div k-detail-template>
+                                                            <kendo-tabstrip>
+                                                                <ul class="hide-element">
+                                                                    <li class="k-state-active">Account Information</li>
+                                                                </ul>
+                                                                <div>
+                                                                    <div kendo-grid k-options="ThirdLayerOptions(dataItem)">
+
+                                                                    </div>
+                                                                </div>
+
+                                                            </kendo-tabstrip>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </kendo-tabstrip>
+                                        </div>
+                                    </kendo-grid>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+                        <div ng-controller="LendingDebtStatisticsViewController">
+                            <div class="widget" ng-if="data">
+                                <div class="widget-header">
+                                    <h3><i class="fa fa-bar-chart-o"></i>Lending &amp; Debt Statistics</h3>
+                                    <div class="btn-group widget-header-toolbar">
+                                        <div class="label" ng-class="{'label-success' : data.total >= 0,'label-danger' : data.total < 0}">{{data.total | currency}}</div>
+                                    </div>
+                                </div>
+                                <div class="widget-content">
+                                    <kendo-grid options="TopLayerOptions">
+                                        <div k-detail-template>
+                                            <kendo-tabstrip>
+                                                <ul class="hide-element">
+                                                    <li class="k-state-active">Stock Information</li>
+                                                </ul>
+                                                <div>
+                                                    <div kendo-grid k-options="SecondLayerOptions(dataItem)">
+                                                        <div k-detail-template>
+                                                            <kendo-tabstrip>
+                                                                <ul class="hide">
+                                                                    <li class="k-state-active">Account Information</li>
+                                                                </ul>
+                                                                <div>
+                                                                    <div kendo-grid k-options="ThirdLayerOptions(dataItem)">
+
+                                                                    </div>
+                                                                </div>
+
+                                                            </kendo-tabstrip>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </kendo-tabstrip>
+                                        </div>
+                                    </kendo-grid>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+
+                        <div ng-controller="InsuranceStatisticsViewController">
+                            <div class="widget" ng-if="data">
+                                <div class="widget-header">
+                                    <h3><i class="fa fa-bar-chart-o"></i>Insurance Statistics</h3>
+                                    <div class="btn-group widget-header-toolbar">
+                                        <div class="label" ng-class="{'label-success' : data.total >= 0,'label-danger' : data.total < 0}">{{data.total | currency}}</div>
+                                    </div>
+                                </div>
+                                <div class="widget-content">
+                                    <kendo-grid options="TopLayerOptions">
+                                        <div k-detail-template>
+                                            <kendo-tabstrip>
+                                                <ul class="hide-element">
+                                                    <li class="k-state-active">Insurance Information</li>
+                                                </ul>
+                                                <div>
+                                                    <div kendo-grid k-options="SecondLayerOptions(dataItem)">
+                                                        <div k-detail-template>
+                                                            <kendo-tabstrip>
+                                                                <ul class="hide-element">
+                                                                    <li class="k-state-active">Insurance Details</li>
+                                                                </ul>
+                                                                <div>
+                                                                    <div kendo-grid k-options="ThirdLayerOptions(dataItem)">
+                                                                        <div k-detail-template>
+                                                                            <kendo-tabstrip>
+                                                                                <ul class="hide-element">
+                                                                                    <li class="k-state-active">Insurance Details</li>
+                                                                                </ul>
+                                                                                <div>
+                                                                                    <div kendo-grid k-options="FourthLayerOptions(dataItem)">
+
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </kendo-tabstrip>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </kendo-tabstrip>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </kendo-tabstrip>
+                                        </div>
+                                    </kendo-grid>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" ng-class="{'active in':tab==2}" ng-controller="ClientPositionMonitorController">
+                        <div class="widget" ng-if="data">
+                            <div class="widget-header">
+                                <h3><i class="fa fa-bar-chart-o"></i>Investment Statistics</h3>
+                                <div class="btn-group widget-header-toolbar">
+                                    <div class="label" ng-class="{'label-success' : data.total >= 0,'label-danger' : data.total < 0}">{{data.total | currency}}</div>
+                                </div>
+                            </div>
+                            <div class="widget-content">
+                                <kendo-grid options="TopLayerOptions">
+                                    <div k-detail-template>
+                                        <kendo-tabstrip>
+                                            <ul class="hide-element">
+                                                <li class="k-state-active">Stock Information</li>
+                                            </ul>
+                                            <div>
+                                                <div kendo-grid k-options="SecondLayerOptions(dataItem)">
+                                                    <div k-detail-template>
+                                                        <kendo-tabstrip>
+                                                            <ul class="hide-element">
+                                                                <li class="k-state-active">Account Information</li>
+                                                            </ul>
+                                                            <div>
+                                                                <div kendo-grid k-options="ThirdLayerOptions(dataItem)">
+
+                                                                </div>
+                                                            </div>
+
+                                                        </kendo-tabstrip>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </kendo-tabstrip>
+                                    </div>
+                                </kendo-grid>
+                            </div>
+
+
+
+
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" ng-class="{'active in':tab==3}" ng-controller="ClientDemographicsController">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ul>
+                                    <li ng-repeat="state in locations">
+                                        All {{state.State}} ({{state.Clients}}) <input type="checkbox" ng-model="state.checked" ng-change="setAllState(state,state.checked)">
+                                        <ul>
+                                            <li ng-repeat="city in state.Data">
+                                                {{city.City}} ({{city.Clients}}) <input type="checkbox" ng-model="city.checked" ng-change="setAllCity(city,city.checked)">
+                                                <ul>
+                                                    <li ng-repeat="suburb in city.Data">
+                                                        {{suburb.Suburb}} ({{suburb.Clients}}) <input type="checkbox" ng-change="refreshLocationSelect()" ng-model="suburb.checked">
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="widget" ng-show="data.ClientByAge">
+                                            <div class="widget-header">
+                                                <h3><i class="fa fa-bar-chart-o"></i>Clients by Age</h3>
+
+                                            </div>
+                                            <div class="widget-content">
+                                                <table class="table invoice-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Groups</th>
+                                                            <th>No. of Clients</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="item in data.ClientByAge.Data">
+                                                            <td>{{item.Group}}</td>
+                                                            <td>{{item.Number}}</td>
+                                                        </tr>
+                                                        <tr><td></td><td><strong>Total Number of Clients: {{data.ClientByAge.Total}}</strong></td></tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="widget" ng-show="data.AssetsUnderManagement">
+                                            <div class="widget-header">
+                                                <h3><i class="fa fa-bar-chart-o"></i>Assets Under Management</h3>
+
+                                            </div>
+                                            <div class="widget-content">
+                                                <table class="table invoice-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Groups</th>
+                                                            <th>No. of Clients</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="item in data.AssetsUnderManagement.Data">
+                                                            <td>{{item.Group}}</td>
+                                                            <td>{{item.Number}}</td>
+                                                        </tr>
+                                                        <tr><td></td><td><strong>Total Number of Clients: {{data.AssetsUnderManagement.Total}}</strong></td></tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="widget" ng-show="data.ClientProfileClassification">
+                                            <div class="widget-header">
+                                                <h3><i class="fa fa-bar-chart-o"></i>Client Risk Profile Classification</h3>
+
+                                            </div>
+                                            <div class="widget-content">
+                                                <table class="table invoice-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Groups</th>
+                                                            <th>No. of Clients</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="item in data.ClientProfileClassification.Data">
+                                                            <td>{{item.Group}}</td>
+                                                            <td>{{item.Number}}</td>
+                                                        </tr>
+                                                        <tr><td></td><td><strong>Total Number of Clients: {{data.ClientProfileClassification.Total}}</strong></td></tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="widget" ng-show="data.ClientTimeFrameClassification">
+                                            <div class="widget-header">
+                                                <h3><i class="fa fa-bar-chart-o"></i>Client Timeframe Classification</h3>
+
+                                            </div>
+                                            <div class="widget-content">
+                                                <table class="table invoice-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Groups</th>
+                                                            <th>No. of Clients</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="item in data.ClientTimeFrameClassification.Data">
+                                                            <td>{{item.Group}}</td>
+                                                            <td>{{item.Number}}</td>
+                                                        </tr>
+                                                        <tr><td></td><td><strong>Total Number of Clients: {{data.ClientTimeFrameClassification.Total}}</strong></td></tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="widget" ng-show="data.TopUsedInvestments">
+                                            <div class="widget-header">
+                                                <h3><i class="fa fa-bar-chart-o"></i>Top 10 Used Investments</h3>
+
+                                            </div>
+                                            <div class="widget-content">
+                                                <table class="table invoice-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Groups</th>
+                                                            <th>Value of Assets</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="item in data.TopUsedInvestments.Data">
+                                                            <td>{{item.Name}}</td>
+                                                            <td>{{item.Value | currency}}</td>
+                                                        </tr>
+                                                        <tr><td></td><td><strong>Total Value: {{data.TopUsedInvestments.Total | currency}}</strong></td></tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="widget" ng-show="data.TopUsedDebt">
+                                            <div class="widget-header">
+                                                <h3><i class="fa fa-bar-chart-o"></i>Top 10 Used Debt Instruments</h3>
+
+                                            </div>
+                                            <div class="widget-content">
+                                                <table class="table invoice-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Groups</th>
+                                                            <th>Value of Debt</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="item in data.TopUsedDebt.Data">
+                                                            <td>{{item.Name}}</td>
+                                                            <td>{{item.Value | currency}}</td>
+                                                        </tr>
+                                                        <tr><td></td><td><strong>Total Value: {{data.TopUsedDebt.Total | currency}}</strong></td></tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" ng-class="{'active in':tab==4}" ng-controller="BusinessRevenueDetailsViewController">
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3">
+                                <div kendo-chart
+                                     k-title="{ text: 'Business Revenue', position: 'top' }"
+                                     k-series-defaults="{ type: 'donut', startAngle: 270 }"
+                                     k-series="[{
+                                                                        field: 'amount',
+                                                                        categoryField: 'name',
+                                                                        padding: 0
+                                                                      }]"
+                                     k-series-colors="['#42a7ff', '#666666', '#999999', '#cccccc','#42a7ff', '#666666', '#999999', '#cccccc', '#42a7ff']"
+                                     k-data-source="businessRevDataKendo"
+                                     k-legend="{ position: 'bottom' }"
+                                     k-tooltip="{
+                                                            visible: true,
+                                                            color: 'white',
+                                                            template: '${ category } - ${ value }'}"></div>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class="widget">
+                                <div class="widget-header">
+                                    <h3><i class="fa fa-bar-chart-o"></i>Assets Under Management Fees</h3>
+                                    <div class="btn-group widget-header-toolbar">
+                                        <div class="label" ng-class="{'label-success' : data.total >= 0,'label-danger' : data.total < 0}">{{data.total | currency}}</div>
+                                    </div>
+                                </div>
+                                <div ng-if="businessRev">
+                                    <div class="widget-content">
+                                        <kendo-grid options="TopLayerOptions">
+                                            <div k-detail-template>
+                                                <kendo-tabstrip>
+                                                    <ul class="hide-element">
+                                                        <li class="k-state-active">Stock Information</li>
+                                                    </ul>
+                                                    <div>
+                                                        <div kendo-grid k-options="SecondLayerOptions(dataItem)">
+                                                        </div>
+                                                    </div>
+
+                                                </kendo-tabstrip>
+                                            </div>
+                                        </kendo-grid>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" ng-class="{'active in':tab==5}" ng-controller="CompliantFilesViewController">
+
+
+                        <div ng-if="data">
+                            <div class="row">
+                                <div class="widget">
+                                    <div class="widget-header">
+                                        <h3><i class="fa fa-bar-chart-o"></i>Compliant Files</h3>
+                                        <div class="btn-group widget-header-toolbar">
+                                            <div class="label" ng-class="{'label-success' : data.CompliantFiles.total >= 0,'label-danger' : data.CompliantFiles.total < 0}">Total: {{data.CompliantFiles.total | number}}</div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <div class="widget-content">
+                                        <kendo-grid options="TopLayerOptions_CompliantFiles">
+                                            <div k-detail-template>
+                                                <kendo-tabstrip>
+                                                    <ul class="hide-element">
+                                                        <li class="k-state-active">Account Information</li>
+                                                    </ul>
+                                                    <div>
+                                                        <div kendo-grid k-options="SecondLayerOptions_CompliantFiles(dataItem)">
+                                                        </div>
+                                                    </div>
+
+                                                </kendo-tabstrip>
+                                            </div>
+                                        </kendo-grid>
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+                            <div class="row">
+                                <div class="widget">
+                                    <div class="widget-header">
+                                        <h3><i class="fa fa-bar-chart-o"></i>Compliance Overview</h3>
+                                        <div class="btn-group widget-header-toolbar">
+                                            <div class="label" ng-class="{'label-success' : data.ComplianceOverview.total >= 0,'label-danger' : data.ComplianceOverview.total < 0}">Total: {{data.ComplianceOverview.total | number}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="widget-content">
+                                        <kendo-grid options="TopLayerOptions_ComplianceOverview">
+                                            <div k-detail-template>
+                                                <kendo-tabstrip>
+                                                    <ul class="hide-element">
+                                                        <li class="k-state-active">Account Information</li>
+                                                    </ul>
+                                                    <div>
+                                                        <div kendo-grid k-options="SecondLayerOptions_ComplianceOverview(dataItem)">
+                                                        </div>
+                                                    </div>
+
+                                                </kendo-tabstrip>
+                                            </div>
+                                        </kendo-grid>
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-md-offset-2"><a href="#" class="btn btn-custom-primary"><i class="fa fa-eye"></i> View Compliance Files </a></div>
+                            <div class="col-md-3 col-md-offset-3"><a class="btn btn-custom-primary"><i class="fa fa-long-arrow-right"></i>Send to Compliance</a></div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

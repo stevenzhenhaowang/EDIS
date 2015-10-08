@@ -1,0 +1,4 @@
+﻿@model bool?
+           @{
+               <span data-boolean-value="@Model.ToString().ToLowerInvariant()">@(Model.HasValue? (Model.Value? "Yes":"No"):"Not Specified")</span>
+           }

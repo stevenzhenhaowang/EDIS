@@ -1,0 +1,67 @@
+﻿<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+            <li class="active">Client Admin</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="main-header">
+        <h2>Link Client Account</h2>
+
+    </div>
+    <div class="main-content" ng-controller="AdviserLinkClientController">
+        <div class="row">
+            <div class="widget" ng-controller="adviserClientSummaryController">
+                <div class="widget-header">
+                    <h3><i class="fa fa-users"></i>Please select client Group to send confirmation to</h3>
+                </div>
+                <div class="widget-content">
+                    <div>
+                        <div class="">
+
+                            <kendo-grid options="adviserClientListGrid"></kendo-grid>
+
+                        </div>
+                        <br />
+                        <div class="">
+                            <button class="btn btn-success" value="Create New Note" ng-click="linkClient()">Send Confirmation</button>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+<script type="text/ng-template" id="newLinkClientMessage">
+    <div class="NewNote">
+        <form name="noteForm" novalidate>
+            <div class="panel-success">
+                <div class="panel-heading">
+                    Confirmation Message to link with Client Group Account
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="input-group">
+                    <label>Message to Client</label>
+                    <textarea name="actions" ng-model="actions" required class="form-control" style="height:50px;"></textarea>
+                </div>
+                <br />
+                <div class="text-right">
+                    <button class="btn btn-danger" value="Cancel" ng-click="close()">Cancel</button>
+                    <button class="btn btn-success" value="Save" ng-disabled="noteForm.$invalid" ng-click="save()">Save</button>
+                </div>
+            </div>
+  
+
+
+        </form>
+    </div>
+</script>

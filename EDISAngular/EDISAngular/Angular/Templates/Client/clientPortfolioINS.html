@@ -1,0 +1,218 @@
+﻿
+
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+            <li>Portfolio</li>
+            <li class="active">Insurance</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="main-header">
+        <h2>Insurance</h2>
+
+    </div>
+    <div class="main-content">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-tabs" ng-init="tab=1">
+                            <li class="active"><a ng-click="tab=1"><i class="fa fa-home"></i> Overview</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active in">
+                                <div class="row">
+                                    <div class="col-sm-12" ng-controller="clientPortfolioPremiumInsuranceProductsController">
+                                        <div class="widget">
+                                            <div class="widget-header">
+                                                <h3><i class="fa fa-bar-chart-o"></i>Bar Chart on Premium VS Insurance Product</h3>
+
+                                            </div>
+                                            <div class="widget-content">
+                                                <div kendo-chart k-rebind="data" k-options="options">
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12" ng-controller="clientPortfolioPremiumInsuranceMonthlyCashflowController">
+                                        <div class="widget">
+                                            <div class="widget-header">
+                                                <h3><i class="fa fa-bar-chart-o"></i>Monthly Expenses</h3>
+
+                                            </div>
+                                            <div class="widget-content">
+                                                <div kendo-chart k-rebind="data" k-options="options">
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12" ng-controller="clientPortfolioPremiumDetailTableController">
+                                        <div class="widget" ng-repeat="table in data">
+                                            <div class="widget-header">
+                                                <h3><i class="fa fa-bar-chart-o"></i>{{table.insuranceMetaType}}</h3>
+
+                                            </div>
+                                            <div class="widget-content" style="overflow:auto">
+                                                <table class="table table-hover table-striped">
+                                                    <thead>
+                                                        <tr class="summary-table-row">
+                                                            <td>Type of Insurance</td>
+                                                            <td>Insurer</td>
+                                                            <td>Type of Policy</td>
+                                                            <td>Policy No.</td>
+                                                            <td>Name of Policy</td>
+                                                            <td>Policy Address</td>
+                                                            <td>Asset/Individual/Purpose Insured</td>
+                                                            <td>Amount Insured</td>
+                                                            <td>Premium</td>
+                                                            <td>Premium Expiry</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="item in table.data">
+                                                            <td>{{item.type}}</td>
+                                                            <td>{{item.insurer}}</td>
+                                                            <td>{{item.typeOfPolicy}}</td>
+                                                            <td>{{item.policyNumber}}</td>
+                                                            <td>{{item.nameOfPolicy}}</td>
+                                                            <td>{{item.policyAddress}}</td>
+                                                            <td>{{item.assetInsured}}</td>
+                                                            <td>{{item.amountInsured | currency}}</td>
+                                                            <td>{{item.premium | currency}}</td>
+                                                            <td>{{item.premiumExpiry | date}}</td>
+                                                        </tr>
+
+                                                    </tbody>
+
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12" ng-controller="clientPortfolioPremiumConditionListController">
+                                        <div class="widget">
+                                            <div class="widget-header">
+                                                <h3><i class="fa fa-bar-chart-o"></i>Insurance Information</h3>
+
+                                            </div>
+                                            <div class="widget-content" style="overflow:auto">
+                                                <table class="table table-hover table-striped">
+                                                    <thead>
+                                                        <tr class="summary-table-row">
+                                                            <td></td>
+                                                            <td>Type of Insurance</td>
+                                                            <td>Policy No.</td>
+                                                            <td>What is Covered/Benefit 1</td>
+                                                            <td>What is Covered/Benefit 2</td>
+                                                            <td>What is Covered/Benefit 3</td>
+                                                            <td>What is Covered/Benefit 4</td>
+                                                            <td>What is Covered/Benefit 5</td>
+                                                            <td>Not Covered/Conditions 1</td>
+                                                            <td>Not Covered/Conditions 2</td>
+                                                            <td>Not Covered/Conditions 3</td>
+                                                            <td>Not Covered/Conditions 4</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="item in data">
+                                                            <td>{{item.number}}</td>
+                                                            <td>{{item.typeOfInsurance}}</td>
+                                                            <td>{{item.policyNumber}}</td>
+                                                            <td>{{item.benefit1}}</td>
+                                                            <td>{{item.benefit2}}</td>
+                                                            <td>{{item.benefit3}}</td>
+                                                            <td>{{item.benefit4}}</td>
+                                                            <td>{{item.benefit5}}</td>
+                                                            <td>{{item.condition1}}</td>
+                                                            <td>{{item.condition2}}</td>
+                                                            <td>{{item.condition3}}</td>
+                                                            <td>{{item.condition4}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        <div class="widget" ng-controller="clientPortfolioPremiumStatsController">
+                            <div class="widget-header">
+                                <h3><i class="fa fa-bar-chart-o"></i>Quick Statistics</h3>
+                            </div>
+                            <div class="widget-content">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr class="summary-table-row">
+                                            <td>Type</td>
+                                            <td>Value</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Total Annual Premium</td>
+                                            <td>{{data.totalAnnualPremium | currency}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Number of Policies</td>
+                                            <td>{{data.totalNumberOfPolicies | number}}</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="widget" ng-controller="clientPortfolioPremiumInsuranceMonthlyCashflowController">
+                            <div class="widget-header">
+                                <h3><i class="fa fa-bar-chart-o"></i>Monthly Cash Flow Summary</h3>
+
+                            </div>
+                            <div class="widget-content">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr class="summary-table-row">
+                                            <td>Month</td>
+                                            <td>Expense</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in data">
+                                            <td>{{item.date | date : 'MMMM'}}</td>
+                                            <td>{{item.expense | currency}}</td>
+                                        </tr>
+                                        <tr class="summary-table-row">
+                                            <td>Total</td>
+                                            <td>{{total | currency}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

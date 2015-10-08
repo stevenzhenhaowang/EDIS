@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="EDIS.Test.Accounts" Collapsed="true">
+    <Position X="6.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Accounts.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Adviser_Details" Collapsed="true">
+    <Position X="3" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQQAQFYAgCIACEiAAAAQAAkAAAoCABCAAAABpAAAAAg=</HashCode>
+      <FileName>Adviser_Details.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Asset" Collapsed="true">
+    <Position X="9.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Asset.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.AssetType" Collapsed="true">
+    <Position X="8.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACgAAQAAAAAAAABAAAAgAABAAAABIAACRAAEAAAAAA=</HashCode>
+      <FileName>AssetType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Client" Collapsed="true">
+    <Position X="2.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAgAAQAAAIhQEQFAAAAAAxBQAAAAJAAABQFEAACAAA=</HashCode>
+      <FileName>Client.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.ClientGroup" Collapsed="true">
+    <Position X="2.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAIAAAQAAAAAAAwgBQAAQAAAAAQEAAAAAAA=</HashCode>
+      <FileName>ClientGroup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.DailyPrice" Collapsed="true">
+    <Position X="12.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAJgAgAAAAgBgAAAABEAAEAAAACAA=</HashCode>
+      <FileName>DailyPrice.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.DealerGroup" Collapsed="true">
+    <Position X="1" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAEAAAAAAAQAAAAAAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>DealerGroup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.DividendHistory" Collapsed="true">
+    <Position X="12.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAEAAAAAAIAAAAAAACAiAAAAAABAAAEAAAACAA=</HashCode>
+      <FileName>DividendHistory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Note" Collapsed="true">
+    <Position X="0.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAACAKEMAAIAQAFAAoABgAYAACAAAoAAYQAEAAIACAQ=</HashCode>
+      <FileName>Note.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Portfolio" Collapsed="true">
+    <Position X="2.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Portfolio.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Sector" Collapsed="true">
+    <Position X="10.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAEAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Transaction" Collapsed="true">
+    <Position X="6.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAEAAAAAAQIAAAgAAgAQgIQAAAAEFEAAEGAAAAAA=</HashCode>
+      <FileName>Transaction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.CorporateAction" Collapsed="true">
+    <Position X="6.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CorporateAction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.BalanceSheetType" Collapsed="true">
+    <Position X="6.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BalanceSheetType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EDIS.Test.Research" Collapsed="true">
+    <Position X="11" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Research.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

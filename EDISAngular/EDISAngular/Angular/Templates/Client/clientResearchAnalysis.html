@@ -1,0 +1,570 @@
+﻿
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+            <li>Research</li>
+            <li class="active">Analysis</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="main-header">
+        <h2>Analysis</h2>
+
+    </div>
+    <div class="main-content" ng-controller="clientResearchAnalysisController">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-tabs">
+                            <li ng-class="{active:currentCompanyDetails.id === item.id && !compareOn}" ng-repeat="item in userCompanyList"><a ng-click="selectCompany(item)" class="left-btn"> {{item.fullName}}</a><a class="removeBtn right-btn" ng-class="{active:currentCompanyDetails.id === item.id}" ng-click="remove(item)"><i class="fa fa-times"></i></a></li>
+                            <li><a ng-click="add()"> Add</a></li>
+                            <li ng-class="{active:compareOn}"><a ng-click="enableCompare()" ng-show="canCompare()">  Compare</a></li>
+                        </ul>
+                        <div class="tab-content">
+
+
+                            <div class="tab-pane active in" ng-if="panelCanShow() && !compareOn" ng-controller="clientResearchCompanyProfileDetailsController">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div kendo-chart k-rebind="currentCompanyDetails"
+                                             k-legend="{ position: 'bottom' }"
+                                             k-series-defaults="{ type: 'area' , area : { line : { style : 'smooth' } } }"
+                                             k-series="[
+                                 { field: 'company', name: 'Underlying Company', categoryField:'month' },
+                                 { field: 'portfolio', name: 'Portfolio', categoryField:'month' },
+                                 { field: 'asx200', name: 'ASX 200', categoryField:'month' }
+                             ]"
+                                             k-data-source="dataSource"
+                                             k-tooltip="{ visible: true, format : '{0}' , template: '#= series.name #: $ #= value #'}"></div>
+
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <ul class="nav nav-tabs" ng-init="tab = 1">
+                                                    <li ng-class="{active:tab===1}"><a ng-click="tab=1">Currrent</a></li>
+                                                    <li ng-class="{active:tab===2}"><a ng-click="tab=2">Forecast</a></li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div class="tab-pane fade" ng-class="{'active in':tab===1}">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <div class="widget widget-table">
+                                                                    <div class="widget-header">
+                                                                        <h3><i class="fa fa-desktop"></i>Company Briefing</h3>
+                                                                        <div class="btn-group widget-header-toolbar">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="widget-content">
+                                                                        {{currentCompanyDetails.companyBriefing}}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <div class="widget widget-table">
+                                                                    <div class="widget-header">
+                                                                        <h3><i class="fa fa-desktop"></i>Company Strategy</h3>
+                                                                        <div class="btn-group widget-header-toolbar">
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="widget-content">
+                                                                        {{currentCompanyDetails.companyStrategies}}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" ng-repeat="group in currentCompanyDetails.currentAnalysis.groups">
+                                                            <div class="col-sm-12">
+                                                                <div class="widget widget-table">
+                                                                    <div class="widget-header">
+                                                                        <h3><i class="fa fa-desktop"></i> {{group.name}}</h3>
+                                                                        <div class="btn-group widget-header-toolbar">
+
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="widget-content">
+                                                                        <table class="table table-striped table-hover">
+                                                                            <thead>
+                                                                                <tr class="summary-table-row">
+                                                                                    <td></td>
+                                                                                    <td ng-repeat="item in currentCompanyDetails.currentAnalysis.metaProperties">
+                                                                                        {{item.displayName}}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr ng-repeat="item in group.data">
+                                                                                    <td>{{item.name}}</td>
+                                                                                    <td ng-repeat="property in currentCompanyDetails.currentAnalysis.metaProperties">
+                                                                                        {{item[property.propertyName]}}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+
+
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+
+
+
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="tab-pane fade" ng-class="{'active in':tab===2}">
+
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <div class="widget widget-table">
+                                                                    <div class="widget-header">
+                                                                        <h3><i class="fa fa-desktop"></i>Forecast Year 1 Company Statistics</h3>
+                                                                        <div class="btn-group widget-header-toolbar">
+
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="widget-content">
+                                                                        <table class="table table-striped table-hover" ng-repeat="group in currentCompanyDetails.forecast.oneYearForecastGroups">
+                                                                            <thead>
+                                                                                <tr class="summary-table-row">
+                                                                                    <td>{{group.name}}</td>
+                                                                                    <td ng-repeat="item in currentCompanyDetails.forecast.metaProperties">
+                                                                                        {{item.displayName}}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr ng-repeat="item in group.data">
+                                                                                    <td>{{item.name}}</td>
+                                                                                    <td ng-repeat="property in currentCompanyDetails.forecast.metaProperties">
+                                                                                        {{item[property.propertyName]}}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+
+
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <div class="widget widget-table">
+                                                                    <div class="widget-header">
+                                                                        <h3><i class="fa fa-desktop"></i>Forecast Year 2 Company Statistics</h3>
+                                                                        <div class="btn-group widget-header-toolbar">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="widget-content">
+                                                                        <table class="table table-striped table-hover" ng-repeat="group in currentCompanyDetails.forecast.twoYearForecastGroups">
+                                                                            <thead>
+                                                                                <tr class="summary-table-row">
+                                                                                    <td>{{group.name}}</td>
+                                                                                    <td ng-repeat="item in currentCompanyDetails.forecast.metaProperties">
+                                                                                        {{item.displayName}}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr ng-repeat="item in group.data">
+                                                                                    <td>{{item.name}}</td>
+                                                                                    <td ng-repeat="property in currentCompanyDetails.forecast.metaProperties">
+                                                                                        {{item[property.propertyName]}}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+
+
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+
+
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="widget widget-table">
+                                            <div class="widget-header">
+                                                <h3><i class="fa fa-desktop"></i>{{currentCompanyDetails.fullName}} </h3>
+                                                <div class="btn-group widget-header-toolbar">
+
+
+                                                </div>
+
+                                            </div>
+                                            <div class="widget-content">
+                                                <table class="table table-striped table-hover table-strong-title"
+                                                       cellpadding="0" cellspacing="0" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:30%"></th>
+                                                            <th style="width:70%"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td><h4><strong>{{currentCompanyDetails.ticker}}</strong></h4></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Country</td>
+                                                            <td>{{currentCompanyDetails.country}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Exchange</td>
+                                                            <td>{{currentCompanyDetails.exchange}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Asset Class</td>
+                                                            <td>{{currentCompanyDetails.assetClass}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                Sector
+                                                            </td>
+                                                            <td>
+                                                                {{currentCompanyDetails.sector}}
+                                                            </td>
+                                                        </tr>
+
+
+
+
+
+
+
+                                                    </tbody>
+                                                </table>
+                                                <table class="table table-striped table-hover table-strong-title"
+                                                       cellpadding="0" cellspacing="0" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:30%"></th>
+                                                            <th style="width:70%"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td><h4><strong>{{currentCompanyDetails.closingPrice | currency}}</strong></h4></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Change</td>
+                                                            <td>{{currentCompanyDetails.changeAmount | currency}} | {{currentCompanyDetails.changeRatePercentage | number : 0}}%</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>52 Weeks Low/High</td>
+                                                            <td>{{currentCompanyDetails.weeksDifferenceAmount | currency}} | {{currentCompanyDetails.weeksDifferenceRatePercentage | number : 0}}%</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Market Capitalisation</td>
+                                                            <td>{{currentCompanyDetails.marketCapitalisation}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                Price Date
+                                                            </td>
+                                                            <td>
+                                                                {{currentCompanyDetails.priceDate | date}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Currency Type</td>
+                                                            <td>{{currentCompanyDetails.currencyType}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table class="table table-striped table-hover table-strong-title"
+                                                       cellpadding="0" cellspacing="0" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:30%"></th>
+                                                            <th style="width:70%"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="padding-top:20px">Suitability Score</td>
+                                                            <td><h4><strong>{{currentCompanyDetails.suitabilityScore | number : 0}}</strong></h4> </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Suits type of Clients</td>
+                                                            <td>{{currentCompanyDetails.suitsTypeOfClients}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Some Reason</td>
+                                                            <td>{{currentCompanyDetails.reasons}}</td>
+                                                        </tr>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="tab-pane active in" ng-if="compareOn && canCompare()" ng-controller="clientResearchCompareController">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="widget widget-table">
+                                            <div class="widget-header">
+                                                <h3><i class="fa fa-desktop"></i> Comparison Between Investments</h3>
+                                                <div class="btn-group widget-header-toolbar">
+
+
+                                                </div>
+
+                                            </div>
+                                            <div class="widget-content">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+
+                                                        <div kendo-chart k-options="options" k-rebind="options"></div>
+                                                </div>
+
+
+                                                <table class="table table-striped table-hover table-bordered table-strong-title">
+                                                    <thead>
+                                                        <tr class="summary-table-row">
+                                                            <td></td>
+                                                            <td colspan="3" ng-repeat="detail in details">
+                                                                {{detail.ticker}}
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Asset Class</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.assetClass}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Investment</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.investment}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Country</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.country}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Exchange</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.exchange}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Ticker</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.ticker}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Investment Name</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.investmentName}}</td>
+                                                        </tr>
+
+                                                        <tr class="summary-table-row">
+                                                            <td>Suitability Indicators</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.ticker}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Annual Return</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.suitability.annualReturn}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>1 Year Beta</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.suitability.oneYearBeta}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Company Gearing</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.suitability.companyGearing}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Debt/Equity Ratio</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.suitability.annualReturn}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Dividend Yield</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.suitability.dividendYield}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Earnings Per Share Growth</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.suitability.earningsPerShareGrowth}}</td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>Interest Cover</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.suitability.interestCover}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Market Capitalisation</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.suitability.marketCapitalisation}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Price Earnings Ratio</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.suitability.priceEarningsRatio}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Total Standard Rating</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.suitability.totalStandardRating | number : 0}}</td>
+                                                        </tr>
+                                                        <tr class="summary-table-row">
+                                                            <td>Recommendation Suitability Indicators</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.ticker}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Recommendation on Investment Asset</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.recommendationSuitability.recommendationOnInvestmentAsset}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Forecast Dividend Yield</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.recommendationSuitability.forecastDividendYield}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Forecast Dividend Franking</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.recommendationSuitability.forecastDividendFranking}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Forecast Earnings Per Share Growth</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.recommendationSuitability.forecastEarningsPerShareGrowth}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Forecast 1 Year Beta</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.recommendationSuitability.forecastOneYearBeta}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Forecast Company Gearing</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.recommendationSuitability.forecastCompanyGearing}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Forecast Price Earnings Ratio</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.recommendationSuitability.forecastPriceEarningsRatio}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Forecast Price Earnings Ratio Growth</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.recommendationSuitability.forecastPriceEarningsRatioGrowth}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Forecast Interest Cover</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.recommendationSuitability.forecastInterestCover}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Forecast Debt/Equity Ratio</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.recommendationSuitability.forecastDebtEquityRatio}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Forecast Return on Equity</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.recommendationSuitability.forecastReturnOnEquity}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Forecast Return on Asset</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.recommendationSuitability.forecastReturnOnAsset}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Forecast Asset Allocation</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.recommendationSuitability.forecastAssetAllocation}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Total Recommendation Suitability Score</td>
+                                                            <td colspan="3" ng-repeat="detail in details">{{detail.comparisonDetails.recommendationSuitability.totalRecommendationSuitabilityScore | number : 0}}</td>
+                                                        </tr>
+                                                        <tr class="summary-table-row">
+                                                            <td>
+                                                                Investment Analysis
+                                                            </td>
+                                                            <td ng-repeat-start="detail in details">
+                                                                Base Information
+                                                            </td>
+                                                            <td>
+                                                                Client Objective
+                                                            </td>
+                                                            <td ng-repeat-end>
+                                                                Client Suitability
+                                                            </td>
+
+                                                        </tr>
+
+                                                        <tr class="summary-table-row" ng-repeat-start="detail in compareMeta.compareDetailsInvestmentAnalysisProperties">
+                                                            <td>{{detail.displayName}}</td>
+                                                            <td ng-repeat="item in details" colspan="3"></td>
+                                                        </tr>
+                                                        <tr ng-repeat="property in detail.properties">
+                                                            <td>{{property.displayName}}</td>
+                                                            <td ng-repeat-start="item in details">
+                                                                {{item.comparisonDetails.investmentAnalysis[detail.propertyName][property.propertyName].baseInformation}}
+                                                            </td>
+                                                            <td>
+                                                                {{item.comparisonDetails.investmentAnalysis[detail.propertyName][property.propertyName].clientObjective}}
+                                                            </td>
+                                                            <td ng-repeat-end>
+                                                                {{item.comparisonDetails.investmentAnalysis[detail.propertyName][property.propertyName].clientSuitability}}
+                                                            </td>
+
+
+                                                        </tr>
+                                                        <tr ng-repeat-end></tr>
+
+
+
+
+
+
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/ng-template" id="addCompanyProfile">
+    <div class="NewNote">
+        <form name="noteForm" novalidate>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <label>Select a company profile to add</label>
+                        <select ng-model="selectedCompanyId" class="form-control" ng-options="item.id as item.name for item in companyList" required></select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button class="btn btn-danger" value="Cancel" ng-click="close()">Cancel</button>
+                    <button class="btn btn-success" value="Save" ng-click="save()">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+

@@ -1,0 +1,226 @@
+﻿//override default template theme
+
+@import "animate";
+
+.big-number {
+    font-size: 2em;
+}
+
+.big-number-stat em {
+    display: inline-block;
+}
+
+.invoice-table thead tr th:nth-child(even) {
+    text-align: right;
+}
+
+//end of override
+
+
+
+.animatable {
+
+
+    &.ng-hide-add-active, &.ng-hide-remove-active {
+        -webkit-transition: all linear 0.5s;
+        -moz-transition: all linear 0.5s;
+        -o-transition: all linear 0.5s;
+        transition: all linear 0.5s;
+    }
+
+    &.ng-hide {
+        opacity: 0;
+    }
+}
+
+.NewNote {
+    width: 100%;
+    padding: 20px;
+
+    .row {
+        margin-top: 5px;
+    }
+
+    .input-group {
+        width: 100%;
+    }
+
+    .table {
+        text-align: center;
+
+        td {
+            width: 25%;
+        }
+    }
+
+    .form-control.ng-dirty.ng-invalid {
+        border-color: red;
+    }
+}
+
+
+.table {
+
+    .summary-table-row, .summary-table-row td, .summary-table-row th {
+        background-color: black !important;
+        color: white !important;
+        border-bottom: solid white 1px !important;
+        font-weight: 600;
+    }
+
+    &.two-col-table {
+        td {
+            width: 50%;
+        }
+    }
+
+    thead th {
+        text-align: center;
+    }
+}
+
+
+.details {
+    height: 50px;
+}
+
+.label-lg {
+    font-size: 1.5em;
+}
+
+.overflow-container {
+    .widget-content {
+        overflow: auto;
+    }
+}
+
+.searchResults {
+    position: absolute !important;
+    z-index: 1000 !important;
+    background-color: white !important;
+    border: 1px solid #aeaaaa !important;
+}
+
+.searchResultItems {
+    height: 50px;
+}
+
+.searchResultItems:hover {
+    background-color: aliceblue;
+}
+
+.dropdown-menu > li > a {
+    display: block;
+    padding: 10px 10px 10px 15px;
+    color: #555;
+    background-color: #ECECEC;
+    height: 40px;
+}
+
+.dropdown-menu {
+    padding: 0 !important;
+}
+
+.angular-google-map-container {
+    height: 500px;
+}
+
+.marker-box {
+    min-height: 90px;
+    min-width: 200px;
+    font-size: 18px;
+}
+
+.rating-filled {
+    color: #5CB85C !important;
+}
+
+.bookmark-item {
+    height: 50px;
+    padding: 15px 15px;
+    display: block;
+    margin: -10px -10px;
+}
+
+.bookmark-item:hover {
+    background-color: #DDD;
+}
+
+.table-strong-title tbody tr td:first-child {
+    font-weight: 900;
+}
+
+.nav > li > a {
+    display: inline-block !important;
+}
+
+
+
+
+a.left-btn {
+    margin-right: 0 !important;
+    border-right: 0 !important;
+}
+
+a.right-btn {
+    margin-left: 0 !important;
+    border-left: 0 !important;
+    /*border-radius: 10px !important;*/
+}
+
+
+.checkbox {
+    display: inline-block;
+}
+
+.error {
+    font-weight: 500;
+    color: red;
+}
+
+.k-chart {
+    z-index: 1000;
+}
+
+.parameter-panel {
+    border: 1px solid #aeaaaa;
+    padding: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.parameters-view {
+    max-height: 250px;
+    overflow: auto;
+}
+
+.newModel {
+    @extend .NewNote;
+
+    label, tbody tr td:first-child {
+        font-weight: 800;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .modal-lg {
+        width: 900px;
+    }
+}
+
+.modal-content{
+    padding:10px;
+}
+
+.message{
+    display:none;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+.hide-element{
+    display:none
+}
+
