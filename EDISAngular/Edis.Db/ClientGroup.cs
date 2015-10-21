@@ -32,5 +32,10 @@ namespace Edis.Db
         public virtual ICollection<Account> GroupAccounts { get; set; }
 
         public virtual Adviser Adviser { get; set; }
+
+        public ClientGroup()
+        {
+            this.GroupAccounts = new HashSet<Account>();
+        }
     }
 }

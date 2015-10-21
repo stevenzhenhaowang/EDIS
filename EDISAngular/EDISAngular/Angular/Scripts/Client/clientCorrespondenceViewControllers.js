@@ -190,7 +190,7 @@
             } else {
                 var model = {
                     clientId: $scope.clientId,
-                    adviserId: $scope.adviser.accountNumber,
+                    adviserNumber: $scope.adviser.accountNumber,
                     assetTypeId: $scope.assetClass,
                     productTypeId: $scope.productClass,
                     timespent: $scope.timeSpent,

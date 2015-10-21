@@ -87,7 +87,7 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
                 DateDue = message.dateDue,
                 DateModified = DateTime.Now,
                 FollowupActions = message.followupActions,
-                FollowupDate = message.followupDate,
+                //FollowupDate = message.followupDate,
                 IsAccepted = message.isAccepted,
                 IsDeclined = message.isDeclined,
                 NoteType = message.noteTypeId,

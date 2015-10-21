@@ -5782,4 +5782,10 @@ button.close {
     display: none !important;
   }
 }
+
+.company-list-selector{
+  position: center;
+  width: auto;
+  margin-right: 10px;
+}
 /*# sourceMappingURL=bootstrap.css.map */

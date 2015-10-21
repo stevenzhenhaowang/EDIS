@@ -47,7 +47,7 @@ angular.module("EDIS")
             },//resource
             getModelProfile: function () { return $resource(AppStrings.EDIS_IP + "api/adviser/model"); },//resource, needs id
             getParameterFilters: function () { return $resource(AppStrings.EDIS_IP + "api/adviser/model/filters"); },//resource
-            getParameters: function () { return $resource(AppStrings.EDIS_IP + "api/adviser/model/parameters"); },//resource, needs id
+            getParameters: function () { return $resource(AppStrings.EDIS_IP + "api/adviser/model/parameters"); },//resource, needs id        //, clientGroupId : clientGroupId 
             addNewModel: function () { return $resource(AppStrings.EDIS_IP + "api/adviser/model/create"); },//resource, needs object
             removeModel: removeModel//resource, needs id
         };

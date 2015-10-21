@@ -21,8 +21,6 @@ namespace Edis.Db.Liabilities
         public double? LoanAmount { get; set; }
         [Required]
         public DateTime? ExpiryDate { get; set; }
-        [Required]
-        public virtual ICollection<LoanValueRatio> LoanValueRatios { get; set; }
 
         [Required]
         public bool? IsAcquire { get; set; }
@@ -34,8 +32,14 @@ namespace Edis.Db.Liabilities
 
 
         [Required]
+        public virtual ICollection<LoanValueRatio> LoanValueRatios { get; set; }
+        [Required]
         public virtual ICollection<LiabilityRate> LiabilityRates { get; set; }
 
+        public MarginLendingTransaction() { 
+            this.LoanValueRatios = new HashSet<LoanValueRatio>();
+            this.LiabilityRates = new HashSet<LiabilityRate>();
 
+        }
     }
 }

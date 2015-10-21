@@ -231,7 +231,7 @@
                     body: $scope.commentary,
                     followupActions: $scope.actions,
                     dateCompleted: convertStringToDate($scope.completionDate),
-                    followupDate: convertStringToDate($scope.followupDate),
+                    followupDate: $scope.followupDate === null ? null : convertStringToDate($scope.followupDate),
                     reminder: $scope.removeFromReminder === "true" ? false : true,
                     noteTypeId: $scope.messageType,
                     resourceToken: getToken,

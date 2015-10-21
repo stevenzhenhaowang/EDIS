@@ -74,6 +74,8 @@ namespace EDISAngular.APIControllers
             {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
 
                 List<LiabilityBase> liabilities = new List<LiabilityBase>();
 
@@ -82,9 +84,8 @@ namespace EDISAngular.APIControllers
                 double propertyGearingRatio = 0;
                 double monthlyRepayment = 0;
 
-                foreach (var account in accounts) {
-                    liabilities.AddRange(account.GetLiabilitiesSync());
-                }
+                clientAccounts.ForEach(a => liabilities.AddRange(a.GetLiabilitiesSync()));
+                accounts.ForEach(a => liabilities.AddRange(a.GetLiabilitiesSync()));
                 var mahs = liabilities.OfType<MortgageAndHomeLiability>();
 
                 foreach (var mah in mahs) {
@@ -304,6 +305,9 @@ namespace EDISAngular.APIControllers
             {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
+
                 double totalExpenseInAssets = 0;
                 double totalIncomeInAssets = 0;
 
@@ -321,34 +325,33 @@ namespace EDISAngular.APIControllers
                 CashFlowBriefItem oct = new CashFlowBriefItem { month = "Oct" };
                 CashFlowBriefItem nov = new CashFlowBriefItem { month = "Nov" };
                 CashFlowBriefItem dec = new CashFlowBriefItem { month = "Dec" };
+                
+                List<Cashflow> cashFlows = new List<Cashflow>();
+                
+                clientAccounts.ForEach(a => cashFlows.AddRange(a.GetLiabilitiesSync().OfType<MortgageAndHomeLiability>().Cast<LiabilityBase>().ToList().GetMonthlyCashflows()));
+                accounts.ForEach(a => cashFlows.AddRange(a.GetLiabilitiesSync().OfType<MortgageAndHomeLiability>().Cast<LiabilityBase>().ToList().GetMonthlyCashflows()));
 
-                foreach (var account in accounts)
+
+                foreach (var cashflow in cashFlows)
                 {
-                    //List<Cashflow> cashFlows = account.GetAssetsSync().GetMonthlyCashflows();
-
-                    List<Cashflow> cashFlows = account.GetLiabilitiesSync().OfType<MortgageAndHomeLiability>().Cast<LiabilityBase>().ToList().GetMonthlyCashflows();
-
-                    foreach (var cashflow in cashFlows)
+                    switch (cashflow.Month)
                     {
-                        switch (cashflow.Month)
-                        {
-                            case "Jan": jan.date = DateTime.Now; jan.expense += cashflow.Expenses; jan.income += cashflow.Income; break;
-                            case "Feb": feb.date = DateTime.Now; feb.expense += cashflow.Expenses; feb.income += cashflow.Income; break;
-                            case "Mar": mar.date = DateTime.Now; mar.expense += cashflow.Expenses; mar.income += cashflow.Income; break;
-                            case "Apr": apr.date = DateTime.Now; apr.expense += cashflow.Expenses; apr.income += cashflow.Income; break;
-                            case "May": may.date = DateTime.Now; may.expense += cashflow.Expenses; may.income += cashflow.Income; break;
-                            case "Jun": jun.date = DateTime.Now; jun.expense += cashflow.Expenses; jun.income += cashflow.Income; break;
-                            case "Jul": jul.date = DateTime.Now; jul.expense += cashflow.Expenses; jul.income += cashflow.Income; break;
-                            case "Aug": aug.date = DateTime.Now; aug.expense += cashflow.Expenses; aug.income += cashflow.Income; break;
-                            case "Sep": sep.date = DateTime.Now; sep.expense += cashflow.Expenses; sep.income += cashflow.Income; break;
-                            case "Oct": oct.date = DateTime.Now; oct.expense += cashflow.Expenses; oct.income += cashflow.Income; break;
-                            case "Nov": nov.date = DateTime.Now; nov.expense += cashflow.Expenses; nov.income += cashflow.Income; break;
-                            case "Dec": dec.date = DateTime.Now; dec.expense += cashflow.Expenses; dec.income += cashflow.Income; break;
-                            default: break;
-                        }
-                        totalExpenseInAssets += cashflow.Expenses;
-                        totalIncomeInAssets += cashflow.Income;
+                        case "Jan": jan.date = DateTime.Now; jan.expense += cashflow.Expenses; jan.income += cashflow.Income; break;
+                        case "Feb": feb.date = DateTime.Now; feb.expense += cashflow.Expenses; feb.income += cashflow.Income; break;
+                        case "Mar": mar.date = DateTime.Now; mar.expense += cashflow.Expenses; mar.income += cashflow.Income; break;
+                        case "Apr": apr.date = DateTime.Now; apr.expense += cashflow.Expenses; apr.income += cashflow.Income; break;
+                        case "May": may.date = DateTime.Now; may.expense += cashflow.Expenses; may.income += cashflow.Income; break;
+                        case "Jun": jun.date = DateTime.Now; jun.expense += cashflow.Expenses; jun.income += cashflow.Income; break;
+                        case "Jul": jul.date = DateTime.Now; jul.expense += cashflow.Expenses; jul.income += cashflow.Income; break;
+                        case "Aug": aug.date = DateTime.Now; aug.expense += cashflow.Expenses; aug.income += cashflow.Income; break;
+                        case "Sep": sep.date = DateTime.Now; sep.expense += cashflow.Expenses; sep.income += cashflow.Income; break;
+                        case "Oct": oct.date = DateTime.Now; oct.expense += cashflow.Expenses; oct.income += cashflow.Income; break;
+                        case "Nov": nov.date = DateTime.Now; nov.expense += cashflow.Expenses; nov.income += cashflow.Income; break;
+                        case "Dec": dec.date = DateTime.Now; dec.expense += cashflow.Expenses; dec.income += cashflow.Income; break;
+                        default: break;
                     }
+                    totalExpenseInAssets += cashflow.Expenses;
+                    totalIncomeInAssets += cashflow.Income;
                 }
 
                 items.Add(jan);
@@ -627,11 +630,15 @@ namespace EDISAngular.APIControllers
             {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
 
                 List<LiabilityBase> liabilities = new List<LiabilityBase>();
                 foreach (var account in accounts) {
                     liabilities.AddRange(account.GetLiabilitiesSync());
                 }
+                accounts.ForEach(a => liabilities.AddRange(a.GetLiabilitiesSync()));
+                clientAccounts.ForEach(a => liabilities.AddRange(a.GetLiabilitiesSync()));
 
                 MortgageInvestmentStatModel model = new MortgageInvestmentStatModel { 
                     Combination = 0,
@@ -821,13 +828,15 @@ namespace EDISAngular.APIControllers
             {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
+
                 MortgageInvestmentProfileModel model = new MortgageInvestmentProfileModel { data = new List<MortgageInvestmentProfileItem>() };
 
                 List<LiabilityBase> liabilities = new List<LiabilityBase>();
-                foreach (var account in accounts)
-                {
-                    liabilities.AddRange(account.GetLiabilitiesSync());
-                }
+                
+                clientAccounts.ForEach(a => liabilities.AddRange(a.GetLiabilitiesSync()));
+                accounts.ForEach(a => liabilities.AddRange(a.GetLiabilitiesSync()));
                 var mortgageAndHomes = liabilities.OfType<MortgageAndHomeLiability>();
                 foreach(var mortgageAndHome in mortgageAndHomes){
                     double monthlyRepayment = 0;

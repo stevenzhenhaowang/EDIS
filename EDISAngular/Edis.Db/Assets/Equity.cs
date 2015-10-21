@@ -21,15 +21,20 @@ namespace Edis.Db.Assets
         [Required]
         public string Sector { get; set; }
 
-
-
-
-
+        public EquityTypes EquityType { get; set; }
 
         public virtual ICollection<AssetPrice> Prices { get; set; }
-        public EquityTypes EquityType { get; set; }
         public virtual ICollection<Dividend> Dividends { get; set; }
         public virtual ICollection<EquityTransaction> EquityTransactions { get; set; }
         public virtual ICollection<ResearchValue> ResearchValues { get; set; }
+
+        public Equity()
+        {
+            this.Prices = new HashSet<AssetPrice>();
+            this.Dividends = new HashSet<Dividend>();
+            this.EquityTransactions = new HashSet<EquityTransaction>();
+            this.ResearchValues = new HashSet<ResearchValue>();
+        }
     }
+
 }

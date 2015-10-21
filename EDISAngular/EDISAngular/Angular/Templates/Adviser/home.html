@@ -124,25 +124,25 @@
                     <div class="widget">
                         <div class="widget-header">
                             <h3><i class="fa fa-bar-chart-o"></i>Stock Statistics</h3>
-
                         </div>
                         <div class="widget-content">
+                            <div><company-selector></company-selector> <period-selector></period-selector></div>
                             <div kendo-chart
                                  k-legend="{ position: 'bottom' }"
                                  k-series-defaults="{ type: 'area' , area : { line : { style : 'smooth' } } }"
+                                 k-value-axis="{ labels : { format : 'c2' } }"
+                                 k-category-axis="{labels: { rotation: 315 }}"
                                  k-series="[
-                                 { field: 'asxbhp', name: 'ASX:BHP', categoryField:'year' },
-                                 { field: 'nysewbc', name: 'NYSE:WEBC', categoryField:'year' },
-                                 { field: 'asxtls', name: 'ASX:TLS', categoryField:'year' }
-                             ]"
+                                                                    { field: 'AssetUnitPrice', name: 'AssetName', categoryField:'year' }
+                                                                ]"
+                                 k-rebind="data"
                                  k-data-source="dataSource"
-                                 k-tooltip="{ visible: true, format : '{0:C}' , template: '#= series.name #: $#= value # '}" k-rebind="data"></div>
+                                 k-tooltip="{ visible: true, format : '{0}' , template: '#= category # : $#= value #'}"></div>
                         </div>
                     </div>
 
 
                 </div>
-
             </div>
             <div class="row col-md-12">
 

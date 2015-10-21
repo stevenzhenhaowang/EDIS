@@ -22,6 +22,8 @@ using SqlRepository;
 using Domain.Portfolio.Correspondence;
 
 using SqlRepository;
+using System.Reflection;
+using System.ComponentModel;
 
 
 namespace EDISAngular.APIControllers
@@ -48,7 +50,7 @@ namespace EDISAngular.APIControllers
 
         #region common user actions for both client and adviser
         [HttpPost, Route("api/correspondence/file/upload")]
-        public async Task<IHttpActionResult> postFiles(string resourceToken)
+        public IHttpActionResult postFiles(string resourceToken)
         {
 
             var httpRequest = HttpContext.Current.Request;
@@ -107,11 +109,12 @@ namespace EDISAngular.APIControllers
 
                     #endregion
 
-                    Message messageData = new Message(edisRepo) { 
-                        adviserNumber = message.adviserNumber,
-                        assetTypeId = message.assetTypeId,
+                    Message messageData = new Message(edisRepo)
+                    {
+                        adviserNumber = adviser.Id,
+                        assetTypeId = Int32.Parse(message.assetTypeId),
                         body = message.body,
-                        accountId = message.accountId,
+                        accountId = message.adviserNumber,
                         clientId = message.clientId,
                         dateCompleted = message.dateCompleted,
                         dateDue = message.dateDue,
@@ -121,9 +124,9 @@ namespace EDISAngular.APIControllers
                         isDeclined = message.isDeclined,
                         noteSerial = message.noteSerial,
                         noteTypeId = message.noteTypeId,
-                        productTypeId = message.productTypeId,
+                        productTypeId = Int32.Parse(message.productTypeId),
                         reminder = message.reminder,
-                        reminderDate = DateTime.Now,                    //need to be changed
+                        reminderDate = DateTime.Now,                    //need to be updated
                         resourceToken = message.resourceToken,
                         status = message.status,
                         subject = message.subject,
@@ -133,11 +136,7 @@ namespace EDISAngular.APIControllers
                     edisRepo.CreateNewMessageSync(messageData, senderRole);
 
                 }
-
-
                 return Ok();
-
-
             }
             else
             {
@@ -151,14 +150,19 @@ namespace EDISAngular.APIControllers
 
         [HttpPost, Route("api/correspondence/followup")]
         [Authorize(Roles = AuthorizationRoles.Role_Client + "," + AuthorizationRoles.Role_Adviser)]
-        public async Task<IHttpActionResult> followUp(CorrespondenceFollowupBindingModel model)
+        public IHttpActionResult followUp(CorrespondenceFollowupBindingModel model)
         {
             if (model != null && ModelState.IsValid)
             {
                 var senderRole = User.IsInRole(AuthorizationRoles.Role_Adviser) ?
                             BusinessLayerParameters.correspondenceSenderRole_adviser
                             : BusinessLayerParameters.correspondenceSenderRole_client;
-                await corresRepo.CreateMessageFollowup(model, senderRole);
+                CorrespondenceFollowup message = new CorrespondenceFollowup { 
+                    existingNoteId = model.existingNoteId,
+                    body = model.body
+                };
+
+                edisRepo.CreateMessageFollowup(message, senderRole);
                 return Ok();
             }
             else
@@ -191,13 +195,25 @@ namespace EDISAngular.APIControllers
         [Authorize(Roles = AuthorizationRoles.Role_Client + "," + AuthorizationRoles.Role_Adviser)]
         public List<NoteTypeView> getNoteTypes()
         {
+            var noteTypes = Enum.GetValues(typeof(EDIS_DOMAIN.Enum.Enums.NoteTypes)).Cast<EDIS_DOMAIN.Enum.Enums.NoteTypes>();
+            List<EDISAngular.Models.ViewModels.NoteTypeView> result = new List<EDISAngular.Models.ViewModels.NoteTypeView>();
+
+            foreach (var ptype in noteTypes)
+            {
+                result.Add(new EDISAngular.Models.ViewModels.NoteTypeView
+                {
+                    id = (int)ptype,
+                    name = GetEnumDescription(ptype)
+                });
+            }
+
             if (User.IsInRole(AuthorizationRoles.Role_Adviser))
             {
-                return comRepo.GetAllNoteTypes();
+                return result;
             }
             else
             {
-                return comRepo.GetAllNoteTypes().Where(t => t.id != BusinessLayerParameters.noteType_note).ToList();
+                return result.Where(t => t.id != BusinessLayerParameters.noteType_note).ToList();
             }
 
         }
@@ -228,6 +244,7 @@ namespace EDISAngular.APIControllers
         [Authorize(Roles = AuthorizationRoles.Role_Adviser)]
         public List<CorrespondenceView> getNotes_adviser()
         {
+
             return getNotesForCurrentAdviser(BusinessLayerParameters.noteType_note);
         }
 
@@ -247,9 +264,42 @@ namespace EDISAngular.APIControllers
         private List<CorrespondenceView> getNotesForCurrentAdviser(int noteType)
         {
 
+            List<CorrespondenceView> views = new List<CorrespondenceView>();
             var userid = User.Identity.GetUserId();
-            return corresRepo.GetNotesForAdviserByUserId(userid, noteType);
+            foreach (var correspondence in edisRepo.GetNotesForAdviserByUserId(userid, noteType))
+            {
+                List<Models.ViewModels.CorrespondenceConversation> conversations = new List<Models.ViewModels.CorrespondenceConversation>();
+                foreach (var conversation in correspondence.conversations)
+                {
+                    conversations.Add(new Models.ViewModels.CorrespondenceConversation
+                    {
+                        content = conversation.content,
+                        createdOn = conversation.createdOn,
+                        senderName = conversation.senderName,
+                        senderRole = conversation.senderRole
+                    });
+                }
+                views.Add(new CorrespondenceView
+                {
+                    actionsRequired = correspondence.actionsRequired,
+                    adviserId = correspondence.adviserId,
+                    adviserName = correspondence.adviserName,
+                    assetClass = correspondence.assetClass,
+                    clientId = correspondence.clientId,
+                    clientName = correspondence.clientName,
+                    completionDate = correspondence.completionDate,
+                    conversations = conversations,
+                    date = correspondence.date,
+                    noteId = correspondence.noteId,
+                    path = correspondence.path == "" ? "" : System.Web.VirtualPathUtility.ToAbsolute(correspondence.path),
+                    productClass = correspondence.productClass,
+                    subject = correspondence.subject,
+                    type = correspondence.type,
+                    typeName = correspondence.typeName
+                });
+            }
 
+            return views;
         }
         #endregion
 
@@ -268,8 +318,43 @@ namespace EDISAngular.APIControllers
         }
         private List<CorrespondenceView> getNotesForCurrentClient(int noteType)
         {
+            List<CorrespondenceView> views = new List<CorrespondenceView>();
             var userid = User.Identity.GetUserId();
-            return corresRepo.GetNotesForClientByUserId(userid, noteType);
+            foreach (var correspondence in edisRepo.GetNotesForClientByUserId(userid, noteType))
+            {
+                List<Models.ViewModels.CorrespondenceConversation> conversations = new List<Models.ViewModels.CorrespondenceConversation>();
+                foreach (var conversation in correspondence.conversations)
+                {
+                    conversations.Add(new Models.ViewModels.CorrespondenceConversation
+                    {
+                        content = conversation.content,
+                        createdOn = conversation.createdOn,
+                        senderName = conversation.senderName,
+                        senderRole = conversation.senderRole
+                    });
+                }
+                views.Add(new CorrespondenceView
+                {
+                    actionsRequired = correspondence.actionsRequired,
+                    adviserId = correspondence.adviserId,
+                    adviserName = correspondence.adviserName,
+                    assetClass = correspondence.assetClass,
+                    clientId = correspondence.clientId,
+                    clientName = correspondence.clientName,
+                    completionDate = correspondence.completionDate,
+                    conversations = conversations,
+                    date = correspondence.date,
+                    noteId = correspondence.noteId,
+                    path = correspondence.path == "" ? "" : System.Web.VirtualPathUtility.ToAbsolute(correspondence.path),
+                    productClass = correspondence.productClass,
+                    subject = correspondence.subject,
+                    type = correspondence.type,
+                    typeName = correspondence.typeName
+                });
+            }
+
+            return views;
+            //return corresRepo.GetNotesForClientByUserId(userid, noteType);
 
         }
 
@@ -277,7 +362,21 @@ namespace EDISAngular.APIControllers
 
 
 
+        private static string GetEnumDescription(Enum value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
 
+            DescriptionAttribute[] attributes =
+                (DescriptionAttribute[])fi.GetCustomAttributes(
+                typeof(DescriptionAttribute),
+                false);
+
+            if (attributes != null &&
+                attributes.Length > 0)
+                return attributes[0].Description;
+            else
+                return value.ToString();
+        }
 
     }
 }

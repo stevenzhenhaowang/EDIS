@@ -31,10 +31,10 @@ namespace Edis.Db
         public string NoteSerial { get; set; }
         public string Body { get; set; }
         public string FollowupActions { get; set; }
-        public DateTime DateDue { get; set; }
-        public DateTime FollowupDate { get; set; }
+        public DateTime? DateDue { get; set; }
+        public DateTime? FollowupDate { get; set; }
         public DateTime DateCompleted { get; set; }
-        public DateTime ReminderDate { get; set; }
+        public DateTime? ReminderDate { get; set; }
         public string Status { get; set; }
         public bool Reminder { get; set; }
         public bool IsAccepted { get; set; }

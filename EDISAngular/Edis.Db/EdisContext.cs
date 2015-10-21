@@ -49,11 +49,13 @@ namespace Edis.Db
         public DbSet<Notes> Notes { get; set; }
         public DbSet<NoteLinks> NoteLinks { get; set; }
         public DbSet<Attachments> Attachments { get; set; }
+        public DbSet<ResearchValue> ResearchValues { get; set; }
 
 
 
 
-        public EdisContext() : base("EDIS")
+        public EdisContext()
+            : base("EDIS")
         {            
         }
 
@@ -98,22 +100,37 @@ namespace Edis.Db
             }
             catch (DbEntityValidationException ex)
             {
-                var sb = new StringBuilder();
+                //var sb = new StringBuilder();
 
-                foreach (var failure in ex.EntityValidationErrors)
+                //foreach (var failure in ex.EntityValidationErrors)
+                //{
+                //    sb.AppendFormat("{0} failed validation\n", failure.Entry.Entity.GetType());
+                //    foreach (var error in failure.ValidationErrors)
+                //    {
+                //        sb.AppendFormat("- {0} : {1}", error.PropertyName, error.ErrorMessage);
+                //        sb.AppendLine();
+                //    }
+                //}
+
+                //throw new DbEntityValidationException(
+                //    "Entity Validation Failed - errors follow:\n" +
+                //    sb.ToString(), ex
+                //    ); // Add the original exception as the innerException
+
+                Exception raise = ex;
+                foreach (var validationErrors in ex.EntityValidationErrors)
                 {
-                    sb.AppendFormat("{0} failed validation\n", failure.Entry.Entity.GetType());
-                    foreach (var error in failure.ValidationErrors)
+                    foreach (var validationError in validationErrors.ValidationErrors)
                     {
-                        sb.AppendFormat("- {0} : {1}", error.PropertyName, error.ErrorMessage);
-                        sb.AppendLine();
+                        string message = string.Format("{0}:{1}",
+                            validationErrors.Entry.Entity.ToString(),
+                            validationError.ErrorMessage);
+                        // raise a new exception nesting
+                        // the current instance as InnerException
+                        raise = new InvalidOperationException(message, raise);
                     }
                 }
-
-                throw new DbEntityValidationException(
-                    "Entity Validation Failed - errors follow:\n" +
-                    sb.ToString(), ex
-                    ); // Add the original exception as the innerException
+                throw raise;
             }
         }
 

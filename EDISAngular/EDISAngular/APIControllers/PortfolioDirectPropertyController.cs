@@ -66,16 +66,20 @@ namespace EDISAngular.APIControllers
             {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
+                List<AssetBase> assets = new List<AssetBase>();
+
                 double totalCost = 0;
                 double totalMarketValue = 0;
-                foreach (var account in accounts)
+
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<DirectProperty>().Cast<AssetBase>().ToList()));
+                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<DirectProperty>().Cast<AssetBase>().ToList()));
+
+                foreach (var asset in assets)
                 {
-                    List<AssetBase> assets = account.GetAssetsSync().OfType<DirectProperty>().Cast<AssetBase>().ToList();
-                    foreach (var asset in assets)
-                    {
-                        totalCost += asset.GetCost().Total;
-                        totalMarketValue += asset.GetTotalMarketValue();
-                    }
+                    totalCost += asset.GetCost().Total;
+                    totalMarketValue += asset.GetTotalMarketValue();
                 }
                 SummaryGeneralInfo summary = new SummaryGeneralInfo
                 {
@@ -204,15 +208,15 @@ namespace EDISAngular.APIControllers
             else {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
-
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
 
                 List<DirectPropertyGeoItem> dataList = new List<DirectPropertyGeoItem>();
 
                 List<DirectProperty> properties = new List<DirectProperty>();
-                foreach (var account in accounts)
-                {
-                    properties.AddRange(account.GetAssetsSync().OfType<DirectProperty>().ToList());
-                }
+
+                clientAccounts.ForEach(a => properties.AddRange(a.GetAssetsSync().OfType<DirectProperty>().ToList()));
+                accounts.ForEach(a => properties.AddRange(a.GetAssetsSync().OfType<DirectProperty>().ToList()));
 
                 foreach (var property in properties)
                 {
@@ -382,10 +386,24 @@ namespace EDISAngular.APIControllers
             {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
 
                 double assetsSuitability = 0;
                 double percentage = 0;
                 foreach (var account in accounts)
+                {
+                    var equityWithResearchValues = account.GetAssetsSync().OfType<DirectProperty>().ToList();
+
+                    assetsSuitability += equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings().Sum(w => w.Percentage * ((DirectProperty)w.Weightable).GetRating().TotalScore);
+
+                    //var weigthings = equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings();
+
+                    //% of not suitable assets
+                    percentage += equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
+                        / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
+                }
+                foreach (var account in clientAccounts)
                 {
                     var equityWithResearchValues = account.GetAssetsSync().OfType<DirectProperty>().ToList();
 

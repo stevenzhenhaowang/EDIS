@@ -46,6 +46,23 @@
             });
         })
     }]);
+
+    //app.controller("adviserPortfolioStockDataController", ["$scope", "$http", "companySelectionService", "periodSelectionService", function ($scope, $http, companySelectionService, periodSelectionService) {
+
+    //    $http.get(AppStrings.EDIS_IP + "api/PortfolioOverview/RecentStock", { companyId: companySelectionService.getCurrentCompanyId(), periodId: periodSelectionService.getCurrentPeriodId() }).success(function (response) {
+    //        $scope.data = response;
+    //        console.log(data);
+    //        $scope.dataSource = new kendo.data.DataSource({
+    //            //data: $scope.data,
+    //            data: data,
+    //            sort: {
+    //                field: "year",
+    //                dir: "asc"
+    //            }
+    //        });
+    //    })
+
+    //}]);
     app.controller("adviserPortfolioInvestmentPiechartController", ["$scope", "AdviserBusinessDetailsDBService", function ($scope, DBContext) {
 
         DBContext.GetInvestmentPorfolioData().get(function (data) {

@@ -65,17 +65,18 @@ namespace EDISAngular.APIControllers
             {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
                 double totalCost = 0;
                 double totalMarketValue = 0;
-                foreach (var account in accounts)
-                {
+                List<AssetBase> assets = new List<AssetBase>();
+                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<ManagedInvestment>().Cast<AssetBase>().ToList()));
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<ManagedInvestment>().Cast<AssetBase>().ToList()));
 
-                    List<AssetBase> assets = account.GetAssetsSync().OfType<ManagedInvestment>().Cast<AssetBase>().ToList();
-                    foreach (var asset in assets)
-                    {
-                        totalCost += asset.GetCost().Total;
-                        totalMarketValue += asset.GetTotalMarketValue();
-                    }
+                foreach (var asset in assets)
+                {
+                    totalCost += asset.GetCost().Total;
+                    totalMarketValue += asset.GetTotalMarketValue();
                 }
                 SummaryGeneralInfo summary = new SummaryGeneralInfo
                 {
@@ -265,6 +266,8 @@ namespace EDISAngular.APIControllers
             {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
                 double totalExpenseInAssets = 0;
                 double totalIncomeInAssets = 0;
 
@@ -283,32 +286,33 @@ namespace EDISAngular.APIControllers
                 CashFlowBriefItem nov = new CashFlowBriefItem { month = "Nov" };
                 CashFlowBriefItem dec = new CashFlowBriefItem { month = "Dec" };
 
-                foreach (var account in accounts)
-                {
-                    List<Cashflow> cashFlows = account.GetAssetsSync().OfType<ManagedInvestment>().Cast<AssetBase>().ToList().GetMonthlyCashflows();
 
-                    foreach (var cashflow in cashFlows)
+                List<Cashflow> cashFlows = new List<Cashflow>();
+
+                clientAccounts.ForEach(a => cashFlows.AddRange(a.GetAssetsSync().OfType<ManagedInvestment>().Cast<AssetBase>().ToList().GetMonthlyCashflows()));
+                accounts.ForEach(a => cashFlows.AddRange(a.GetAssetsSync().OfType<ManagedInvestment>().Cast<AssetBase>().ToList().GetMonthlyCashflows()));
+                foreach (var cashflow in cashFlows)
+                {
+                    switch (cashflow.Month)
                     {
-                        switch (cashflow.Month)
-                        {
-                            case "Jan": jan.date = DateTime.Now; jan.expense += cashflow.Expenses; jan.income += cashflow.Income; break;
-                            case "Feb": feb.date = DateTime.Now; feb.expense += cashflow.Expenses; feb.income += cashflow.Income; break;
-                            case "Mar": mar.date = DateTime.Now; mar.expense += cashflow.Expenses; mar.income += cashflow.Income; break;
-                            case "Apr": apr.date = DateTime.Now; apr.expense += cashflow.Expenses; apr.income += cashflow.Income; break;
-                            case "May": may.date = DateTime.Now; may.expense += cashflow.Expenses; may.income += cashflow.Income; break;
-                            case "Jun": jun.date = DateTime.Now; jun.expense += cashflow.Expenses; jun.income += cashflow.Income; break;
-                            case "Jul": jul.date = DateTime.Now; jul.expense += cashflow.Expenses; jul.income += cashflow.Income; break;
-                            case "Aug": aug.date = DateTime.Now; aug.expense += cashflow.Expenses; aug.income += cashflow.Income; break;
-                            case "Sep": sep.date = DateTime.Now; sep.expense += cashflow.Expenses; sep.income += cashflow.Income; break;
-                            case "Oct": oct.date = DateTime.Now; oct.expense += cashflow.Expenses; oct.income += cashflow.Income; break;
-                            case "Nov": nov.date = DateTime.Now; nov.expense += cashflow.Expenses; nov.income += cashflow.Income; break;
-                            case "Dec": dec.date = DateTime.Now; dec.expense += cashflow.Expenses; dec.income += cashflow.Income; break;
-                            default: break;
-                        }
-                        totalExpenseInAssets += cashflow.Expenses;
-                        totalIncomeInAssets += cashflow.Income;
+                        case "Jan": jan.date = DateTime.Now; jan.expense += cashflow.Expenses; jan.income += cashflow.Income; break;
+                        case "Feb": feb.date = DateTime.Now; feb.expense += cashflow.Expenses; feb.income += cashflow.Income; break;
+                        case "Mar": mar.date = DateTime.Now; mar.expense += cashflow.Expenses; mar.income += cashflow.Income; break;
+                        case "Apr": apr.date = DateTime.Now; apr.expense += cashflow.Expenses; apr.income += cashflow.Income; break;
+                        case "May": may.date = DateTime.Now; may.expense += cashflow.Expenses; may.income += cashflow.Income; break;
+                        case "Jun": jun.date = DateTime.Now; jun.expense += cashflow.Expenses; jun.income += cashflow.Income; break;
+                        case "Jul": jul.date = DateTime.Now; jul.expense += cashflow.Expenses; jul.income += cashflow.Income; break;
+                        case "Aug": aug.date = DateTime.Now; aug.expense += cashflow.Expenses; aug.income += cashflow.Income; break;
+                        case "Sep": sep.date = DateTime.Now; sep.expense += cashflow.Expenses; sep.income += cashflow.Income; break;
+                        case "Oct": oct.date = DateTime.Now; oct.expense += cashflow.Expenses; oct.income += cashflow.Income; break;
+                        case "Nov": nov.date = DateTime.Now; nov.expense += cashflow.Expenses; nov.income += cashflow.Income; break;
+                        case "Dec": dec.date = DateTime.Now; dec.expense += cashflow.Expenses; dec.income += cashflow.Income; break;
+                        default: break;
                     }
+                    totalExpenseInAssets += cashflow.Expenses;
+                    totalIncomeInAssets += cashflow.Income;
                 }
+
 
                 items.Add(jan);
                 items.Add(feb);
@@ -518,48 +522,104 @@ namespace EDISAngular.APIControllers
         [HttpGet, Route("api/Adviser/ManagedInvestmentPortfolio/AssetAllocation")]
         public InvestmentPortfolioModel GetAssetAllocationSummary_Adviser(string clientGroupId = null)
         {
-            List<GroupAccount> groupAccounts = edisRepo.getAllClientGroupAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
-            List<ClientAccount> clientAccounts = edisRepo.getAllClientAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
 
-            double totalMarketValueAE = 0;
-            double totalMarketValueIE = 0;
-            double totalMarketValueMI = 0;
-            double totalMarketValueDP = 0;
-            double totalMarketValueFI = 0;
-            double totalMarketValueCD = 0;
-
-            foreach (var account in groupAccounts) {
-                totalMarketValueAE += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<AustralianEquity>();
-                totalMarketValueIE += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<InternationalEquity>();
-                totalMarketValueMI += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<ManagedInvestment>();
-                totalMarketValueDP += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<DirectProperty>();
-                totalMarketValueFI += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<FixedIncome>();
-                totalMarketValueCD += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<Cash>();
-            }
-            foreach (var account in clientAccounts)
+            if (string.IsNullOrEmpty(clientGroupId))
             {
-                totalMarketValueAE += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<AustralianEquity>();
-                totalMarketValueIE += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<InternationalEquity>();
-                totalMarketValueMI += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<ManagedInvestment>();
-                totalMarketValueDP += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<DirectProperty>();
-                totalMarketValueFI += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<FixedIncome>();
-                totalMarketValueCD += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<Cash>();
+                List<GroupAccount> groupAccounts = edisRepo.getAllClientGroupAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
+                List<ClientAccount> clientAccounts = edisRepo.getAllClientAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
+
+                double totalMarketValueAE = 0;
+                double totalMarketValueIE = 0;
+                double totalMarketValueMI = 0;
+                double totalMarketValueDP = 0;
+                double totalMarketValueFI = 0;
+                double totalMarketValueCD = 0;
+
+                foreach (var account in groupAccounts)
+                {
+                    totalMarketValueAE += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<AustralianEquity>();
+                    totalMarketValueIE += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<InternationalEquity>();
+                    totalMarketValueMI += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<ManagedInvestment>();
+                    totalMarketValueDP += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<DirectProperty>();
+                    totalMarketValueFI += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<FixedIncome>();
+                    totalMarketValueCD += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<Cash>();
+                }
+                foreach (var account in clientAccounts)
+                {
+                    totalMarketValueAE += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<AustralianEquity>();
+                    totalMarketValueIE += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<InternationalEquity>();
+                    totalMarketValueMI += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<ManagedInvestment>();
+                    totalMarketValueDP += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<DirectProperty>();
+                    totalMarketValueFI += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<FixedIncome>();
+                    totalMarketValueCD += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<Cash>();
+                }
+
+                InvestmentPortfolioModel model = new InvestmentPortfolioModel
+                {
+                    data = new List<DataNameAmountPair>{
+
+                        new DataNameAmountPair{name="Australian Equity", amount= totalMarketValueAE},
+                        new DataNameAmountPair{name="International Equity", amount= totalMarketValueIE},
+                        new DataNameAmountPair{name="Managed Investments", amount= totalMarketValueMI},
+                        new DataNameAmountPair{name="Direct & Listed Property", amount= totalMarketValueDP},
+                        new DataNameAmountPair{name="Miscellaneous Investments", amount= totalMarketValueAE},
+                        new DataNameAmountPair{name="Fixed Income Investments", amount= totalMarketValueFI},
+                        new DataNameAmountPair{name="Cash & Term Deposit", amount= totalMarketValueCD},
+                    },
+                };
+
+                return model;
             }
+            else {
+                ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
+                List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
 
-            InvestmentPortfolioModel model = new InvestmentPortfolioModel{
-                data = new List<DataNameAmountPair>{
 
-                    new DataNameAmountPair{name="Australian Equity", amount= totalMarketValueAE},
-                    new DataNameAmountPair{name="International Equity", amount= totalMarketValueIE},
-                    new DataNameAmountPair{name="Managed Investments", amount= totalMarketValueMI},
-                    new DataNameAmountPair{name="Direct & Listed Property", amount= totalMarketValueDP},
-                    new DataNameAmountPair{name="Miscellaneous Investments", amount= totalMarketValueAE},
-                    new DataNameAmountPair{name="Fixed Income Investments", amount= totalMarketValueFI},
-                    new DataNameAmountPair{name="Cash & Term Deposit", amount= totalMarketValueCD},
-                },
-            };
+                double totalMarketValueAE = 0;
+                double totalMarketValueIE = 0;
+                double totalMarketValueMI = 0;
+                double totalMarketValueDP = 0;
+                double totalMarketValueFI = 0;
+                double totalMarketValueCD = 0;
 
-            return model;
+                foreach (var account in accounts)
+                {
+                    totalMarketValueAE += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<AustralianEquity>();
+                    totalMarketValueIE += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<InternationalEquity>();
+                    totalMarketValueMI += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<ManagedInvestment>();
+                    totalMarketValueDP += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<DirectProperty>();
+                    totalMarketValueFI += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<FixedIncome>();
+                    totalMarketValueCD += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<Cash>();
+                }
+                foreach (var account in clientAccounts)
+                {
+                    totalMarketValueAE += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<AustralianEquity>();
+                    totalMarketValueIE += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<InternationalEquity>();
+                    totalMarketValueMI += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<ManagedInvestment>();
+                    totalMarketValueDP += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<DirectProperty>();
+                    totalMarketValueFI += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<FixedIncome>();
+                    totalMarketValueCD += account.GetAssetsSync().GetTotalMarketValue_ByAssetType<Cash>();
+                }
+
+                InvestmentPortfolioModel model = new InvestmentPortfolioModel
+                {
+                    data = new List<DataNameAmountPair>{
+
+                        new DataNameAmountPair{name="Australian Equity", amount= totalMarketValueAE},
+                        new DataNameAmountPair{name="International Equity", amount= totalMarketValueIE},
+                        new DataNameAmountPair{name="Managed Investments", amount= totalMarketValueMI},
+                        new DataNameAmountPair{name="Direct & Listed Property", amount= totalMarketValueDP},
+                        new DataNameAmountPair{name="Miscellaneous Investments", amount= totalMarketValueAE},
+                        new DataNameAmountPair{name="Fixed Income Investments", amount= totalMarketValueFI},
+                        new DataNameAmountPair{name="Cash & Term Deposit", amount= totalMarketValueCD},
+                    },
+                };
+
+                return model;
+            }
+            
             //return repo.ManagedInvestment_GetAssetAllocation_Adviser(User.Identity.GetUserId());
         }
 
@@ -627,13 +687,14 @@ namespace EDISAngular.APIControllers
 
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
                 List<ManagedInvestmentCompanyProfileItem> itemList = new List<ManagedInvestmentCompanyProfileItem>();
 
                 List<AssetBase> assets = new List<AssetBase>();
-                foreach (var account in accounts)
-                {
-                    assets.AddRange(account.GetAssetsSync().OfType<ManagedInvestment>().Cast<AssetBase>().ToList());
-                }
+
+                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<ManagedInvestment>().Cast<AssetBase>().ToList()));
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<ManagedInvestment>().Cast<AssetBase>().ToList()));
                 var managedAssets = assets.OfType<ManagedInvestment>();
 
                 var ratios = assets.GetAverageRatiosFor<ManagedInvestment>();
@@ -837,6 +898,8 @@ namespace EDISAngular.APIControllers
             {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
 
                 double assetsSuitability = 0;
                 double percentage = 0;
@@ -849,6 +912,15 @@ namespace EDISAngular.APIControllers
                     //var weigthings = equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings();
 
                     //% of not suitable assets
+                    percentage += equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
+                        / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
+                }
+                foreach (var account in clientAccounts)
+                {
+                    var equityWithResearchValues = account.GetAssetsSync().OfType<ManagedInvestment>().ToList();
+
+                    assetsSuitability += equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings().Sum(w => w.Percentage * ((ManagedInvestment)w.Weightable).GetRating().TotalScore);
+
                     percentage += equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
                         / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
                 }

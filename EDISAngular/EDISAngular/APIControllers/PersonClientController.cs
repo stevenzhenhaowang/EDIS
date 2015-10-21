@@ -72,7 +72,7 @@ namespace EDISAngular.APIControllers
                     Email = model.email,
                     LastName = model.lastName,
                     Phone = model.contactPhone,                        
-                    ClientType = BusinessLayerParameters.clientType_person,                      
+                    ClientType = EDISAngular.Services.BusinessLayerParameters.clientType_person,                      
                 };
                 #endregion
 

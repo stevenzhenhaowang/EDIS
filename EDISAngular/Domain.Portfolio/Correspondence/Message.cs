@@ -18,8 +18,10 @@ namespace Domain.Portfolio.Correspondence
 
         public string clientId { get; set; }
 
-        public string assetTypeId { get; set; }
-        public string productTypeId { get; set; }
+        public int assetTypeId { get; set; }
+        public int productTypeId { get; set; }
+        public string assetClass { get; set; }
+        public string productClass { get; set; }
 
         public double timespent { get; set; }
         public string noteSerial { get; set; }//self generated
@@ -28,7 +30,7 @@ namespace Domain.Portfolio.Correspondence
         public string followupActions { get; set; }
         public DateTime dateDue { get; set; }
         public string status { get; set; }//not supplied from client
-        public DateTime followupDate { get; set; }
+        public DateTime? followupDate { get; set; }
         public DateTime dateCompleted { get; set; }//not supplied from client
         public bool reminder { get; set; }
         public DateTime reminderDate { get; set; }//not supplied from client

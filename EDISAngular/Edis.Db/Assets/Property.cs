@@ -19,7 +19,6 @@ namespace Edis.Db.Assets
 
 
 
-        public virtual ICollection<AssetPrice> Prices { get; set; }
         public string StreetAddress { get; set; }
         public string City { get; set; }
         public string State { get; set; }
@@ -27,8 +26,17 @@ namespace Edis.Db.Assets
         public string Postcode { get; set; }
         public double? Longitude { get; set; }
         public double? Latitude { get; set; }
+        public virtual ICollection<AssetPrice> Prices { get; set; }
         public virtual ICollection<Rental> Rentals { get; set; }
         public virtual ICollection<PropertyTransaction> PropertyTransactions { get; set; }
         public virtual ICollection<ResearchValue> ResearchValues { get; set; }
+
+        public Property()
+        {
+            this.Prices = new HashSet<AssetPrice>();
+            this.Rentals = new HashSet<Rental>();
+            this.PropertyTransactions = new HashSet<PropertyTransaction>();
+            this.ResearchValues = new HashSet<ResearchValue>();
+        }
     }
 }

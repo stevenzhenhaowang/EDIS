@@ -30,7 +30,13 @@ namespace Edis.Db.Assets
         public virtual ICollection<ResearchValue> ResearchValues { get; set; }
 
 
-
+        public Bond()
+        {
+            this.Prices = new HashSet<AssetPrice>();
+            this.CouponPayments = new HashSet<CouponPayment>();
+            this.BondTransactions = new HashSet<BondTransaction>();
+            this.ResearchValues = new HashSet<ResearchValue>();
+        }
 
 
 

@@ -288,12 +288,12 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
                 {
 
                     AssetName = "TestAsset",
-                    year = startYear + i,
+                    //year = startYear + i,
                     AssetUnitPrice = RandomMoney(),
                     asxbhp = RandomPercentage(),
-                    asxtls= RandomPercentage(),
-                    nysewbc= RandomPercentage()
-                
+                    asxtls = RandomPercentage(),
+                    nysewbc = RandomPercentage()
+
                 });
             }
             return result;

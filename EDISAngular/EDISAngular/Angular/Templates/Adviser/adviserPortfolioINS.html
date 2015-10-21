@@ -198,7 +198,8 @@
                                     </thead>
                                     <tbody>
                                         <tr ng-repeat="item in data">
-                                            <td>{{item.date | date : 'MMMM'}}</td>
+                                            <!--<td>{{item.date | date : 'MMMM'}}</td>-->
+                                            <td>{{item.month}}</td>
                                             <td>{{item.expense | currency}}</td>
                                         </tr>
                                         <tr class="summary-table-row">

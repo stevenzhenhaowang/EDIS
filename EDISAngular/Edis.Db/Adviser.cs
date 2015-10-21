@@ -122,6 +122,11 @@ namespace Edis.Db
         public virtual ICollection<ConsultancyExpense> ConsultancyExpenses { get; set; }
 
 
-
+        public Adviser()
+        {
+            this.TransactionExpenses = new HashSet<TransactionExpense>();
+            this.ConsultancyExpenses = new HashSet<ConsultancyExpense>();
+        }
     }
+
 }

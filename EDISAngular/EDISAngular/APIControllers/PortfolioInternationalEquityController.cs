@@ -68,16 +68,19 @@ namespace EDISAngular.APIControllers
             {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
+
+                List<AssetBase> assets = new List<AssetBase>();
+
                 double totalCost = 0;
                 double totalMarketValue = 0;
-                foreach (var account in accounts)
+                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
+                foreach (var asset in assets)
                 {
-                    List<AssetBase> assets = account.GetAssetsSync().OfType<InternationalEquity>().Cast<AssetBase>().ToList();
-                    foreach (var asset in assets)
-                    {
-                        totalCost += asset.GetCost().Total;
-                        totalMarketValue += asset.GetTotalMarketValue();
-                    }
+                    totalCost += asset.GetCost().Total;
+                    totalMarketValue += asset.GetTotalMarketValue();
                 }
                 SummaryGeneralInfo summary = new SummaryGeneralInfo
                 {
@@ -264,6 +267,8 @@ namespace EDISAngular.APIControllers
             {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
 
                 EvaluationModel model1 = new EvaluationModel { title = "One Year Return" };
                 EvaluationModel model3 = new EvaluationModel { title = "Debt Equity Ratio" };
@@ -275,41 +280,40 @@ namespace EDISAngular.APIControllers
                 EvaluationModel model9 = new EvaluationModel { title = "Return On Asset" };
                 EvaluationModel model10 = new EvaluationModel { title = "Return On Equity" };
 
+                List<AssetBase> assets = new List<AssetBase>();
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
+                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
 
-                foreach (var account in accounts)
-                {
-                    List<AssetBase> assets = account.GetAssetsSync();
+                Ratios ratios = assets.GetAverageRatiosFor<InternationalEquity>();
+                Recommendation expected = assets.GetAverageExpectedFor<InternationalEquity>();
 
-                    Ratios ratios = assets.GetAverageRatiosFor<InternationalEquity>();
-                    Recommendation expected = assets.GetAverageExpectedFor<InternationalEquity>();
+                model1.actual += ratios.OneYearReturn;
+                model1.expected += expected.OneYearReturn == null ? 0 : (double)expected.OneYearReturn;
 
-                    model1.actual += ratios.OneYearReturn;
-                    model1.expected += expected.OneYearReturn == null ? 0 : (double)expected.OneYearReturn;
+                model3.actual += ratios.DebtEquityRatio;
+                model3.expected += expected.DebtEquityRatio;
 
-                    model3.actual += ratios.DebtEquityRatio;
-                    model3.expected += expected.DebtEquityRatio;
+                model4.actual += ratios.EpsGrowth;
+                model4.expected += expected.EpsGrowth;
 
-                    model4.actual += ratios.EpsGrowth;
-                    model4.expected += expected.EpsGrowth;
+                model5.actual += ratios.DividendYield;
+                model5.expected += expected.DividendYield;
 
-                    model5.actual += ratios.DividendYield;
-                    model5.expected += expected.DividendYield;
+                model6.actual += ratios.Frank;
+                model6.expected += expected.Frank;
 
-                    model6.actual += ratios.Frank;
-                    model6.expected += expected.Frank;
+                model7.actual += ratios.InterestCover;
+                model7.expected += expected.InterestCover;
 
-                    model7.actual += ratios.InterestCover;
-                    model7.expected += expected.InterestCover;
+                model8.actual += ratios.PriceEarningRatio;
+                model8.expected += expected.PriceEarningRatio;
 
-                    model8.actual += ratios.PriceEarningRatio;
-                    model8.expected += expected.PriceEarningRatio;
+                model9.actual += ratios.ReturnOnAsset;
+                model9.expected += expected.ReturnOnAsset;
 
-                    model9.actual += ratios.ReturnOnAsset;
-                    model9.expected += expected.ReturnOnAsset;
+                model10.actual += ratios.ReturnOnEquity;
+                model10.expected += expected.ReturnOnEquity;
 
-                    model10.actual += ratios.ReturnOnEquity;
-                    model10.expected += expected.ReturnOnEquity;
-                }
                 List<EvaluationModel> models = new List<EvaluationModel>();
                 models.Add(model1);
                 models.Add(model3);
@@ -600,6 +604,8 @@ namespace EDISAngular.APIControllers
             {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
                 double totalExpenseInAssets = 0;
                 double totalIncomeInAssets = 0;
 
@@ -618,31 +624,30 @@ namespace EDISAngular.APIControllers
                 CashFlowBriefItem nov = new CashFlowBriefItem { month = "Nov" };
                 CashFlowBriefItem dec = new CashFlowBriefItem { month = "Dec" };
 
-                foreach (var account in accounts)
-                {
-                    List<Cashflow> cashFlows = account.GetAssetsSync().OfType<InternationalEquity>().Cast<AssetBase>().ToList().GetMonthlyCashflows();
+                List<Cashflow> cashFlows = new List<Cashflow>();
+                accounts.ForEach(a => cashFlows.AddRange(a.GetAssetsSync().OfType<InternationalEquity>().Cast<AssetBase>().ToList().GetMonthlyCashflows()));
+                clientAccounts.ForEach(a => cashFlows.AddRange(a.GetAssetsSync().OfType<InternationalEquity>().Cast<AssetBase>().ToList().GetMonthlyCashflows()));
 
-                    foreach (var cashflow in cashFlows)
+                foreach (var cashflow in cashFlows)
+                {
+                    switch (cashflow.Month)
                     {
-                        switch (cashflow.Month)
-                        {
-                            case "Jan": jan.date = DateTime.Now; jan.expense += cashflow.Expenses; jan.income += cashflow.Income; break;
-                            case "Feb": feb.date = DateTime.Now; feb.expense += cashflow.Expenses; feb.income += cashflow.Income; break;
-                            case "Mar": mar.date = DateTime.Now; mar.expense += cashflow.Expenses; mar.income += cashflow.Income; break;
-                            case "Apr": apr.date = DateTime.Now; apr.expense += cashflow.Expenses; apr.income += cashflow.Income; break;
-                            case "May": may.date = DateTime.Now; may.expense += cashflow.Expenses; may.income += cashflow.Income; break;
-                            case "Jun": jun.date = DateTime.Now; jun.expense += cashflow.Expenses; jun.income += cashflow.Income; break;
-                            case "Jul": jul.date = DateTime.Now; jul.expense += cashflow.Expenses; jul.income += cashflow.Income; break;
-                            case "Aug": aug.date = DateTime.Now; aug.expense += cashflow.Expenses; aug.income += cashflow.Income; break;
-                            case "Sep": sep.date = DateTime.Now; sep.expense += cashflow.Expenses; sep.income += cashflow.Income; break;
-                            case "Oct": oct.date = DateTime.Now; oct.expense += cashflow.Expenses; oct.income += cashflow.Income; break;
-                            case "Nov": nov.date = DateTime.Now; nov.expense += cashflow.Expenses; nov.income += cashflow.Income; break;
-                            case "Dec": dec.date = DateTime.Now; dec.expense += cashflow.Expenses; dec.income += cashflow.Income; break;
-                            default: break;
-                        }
-                        totalExpenseInAssets += cashflow.Expenses;
-                        totalIncomeInAssets += cashflow.Income;
+                        case "Jan": jan.date = DateTime.Now; jan.expense += cashflow.Expenses; jan.income += cashflow.Income; break;
+                        case "Feb": feb.date = DateTime.Now; feb.expense += cashflow.Expenses; feb.income += cashflow.Income; break;
+                        case "Mar": mar.date = DateTime.Now; mar.expense += cashflow.Expenses; mar.income += cashflow.Income; break;
+                        case "Apr": apr.date = DateTime.Now; apr.expense += cashflow.Expenses; apr.income += cashflow.Income; break;
+                        case "May": may.date = DateTime.Now; may.expense += cashflow.Expenses; may.income += cashflow.Income; break;
+                        case "Jun": jun.date = DateTime.Now; jun.expense += cashflow.Expenses; jun.income += cashflow.Income; break;
+                        case "Jul": jul.date = DateTime.Now; jul.expense += cashflow.Expenses; jul.income += cashflow.Income; break;
+                        case "Aug": aug.date = DateTime.Now; aug.expense += cashflow.Expenses; aug.income += cashflow.Income; break;
+                        case "Sep": sep.date = DateTime.Now; sep.expense += cashflow.Expenses; sep.income += cashflow.Income; break;
+                        case "Oct": oct.date = DateTime.Now; oct.expense += cashflow.Expenses; oct.income += cashflow.Income; break;
+                        case "Nov": nov.date = DateTime.Now; nov.expense += cashflow.Expenses; nov.income += cashflow.Income; break;
+                        case "Dec": dec.date = DateTime.Now; dec.expense += cashflow.Expenses; dec.income += cashflow.Income; break;
+                        default: break;
                     }
+                    totalExpenseInAssets += cashflow.Expenses;
+                    totalIncomeInAssets += cashflow.Income;
                 }
 
                 items.Add(jan);
@@ -910,13 +915,14 @@ namespace EDISAngular.APIControllers
 
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
                 List<EquityCompanyProfileItemModel> itemList = new List<EquityCompanyProfileItemModel>();
 
                 List<AssetBase> assets = new List<AssetBase>();
-                foreach (var account in accounts)
-                {
-                    assets.AddRange(account.GetAssetsSync().OfType<InternationalEquity>().Cast<AssetBase>().ToList());
-                }
+
+                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<InternationalEquity>().Cast<AssetBase>().ToList()));
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<InternationalEquity>().Cast<AssetBase>().ToList()));
                 var internationalAssets = assets.OfType<InternationalEquity>();
 
                 var ratios = assets.GetAverageRatiosFor<InternationalEquity>();
@@ -1129,10 +1135,24 @@ namespace EDISAngular.APIControllers
             {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
 
                 double assetsSuitability = 0;
                 double percentage = 0;
                 foreach (var account in accounts)
+                {
+                    var equityWithResearchValues = account.GetAssetsSync().OfType<InternationalEquity>().ToList();
+
+                    assetsSuitability += equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings().Sum(w => w.Percentage * ((InternationalEquity)w.Weightable).GetRating().TotalScore);
+
+                    //var weigthings = equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings();
+
+                    //% of not suitable assets
+                    percentage += equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
+                        / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
+                }
+                foreach (var account in clientAccounts)
                 {
                     var equityWithResearchValues = account.GetAssetsSync().OfType<InternationalEquity>().ToList();
 

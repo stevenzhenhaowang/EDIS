@@ -39,5 +39,21 @@ namespace Edis.Db
         public virtual ICollection<Interest> CashAndTermDepositPayments { get; set; }
         public virtual ICollection<Dividend> EquityPayments { get; set; }
         public virtual ICollection<Rental> DirectPropertyPayments { get; set; }
+
+        public Account()
+        {
+            this.MarginLendings = new HashSet<MarginLendingTransaction>();
+            this.MortgageHomeLoans = new HashSet<MortgageHomeLoanTransaction>();
+            this.Insurances = new HashSet<InsuranceTransaction>();
+            this.RepaymentRecords = new HashSet<RepaymentRecord>();
+            this.BondTransactions = new HashSet<BondTransaction>();
+            this.CashTransactions = new HashSet<CashTransaction>();
+            this.EquityTransactions = new HashSet<EquityTransaction>();
+            this.PropertyTransactions = new HashSet<PropertyTransaction>();
+            this.FixedIncomePayments = new HashSet<CouponPayment>();
+            this.CashAndTermDepositPayments = new HashSet<Interest>();
+            this.EquityPayments = new HashSet<Dividend>();
+            this.DirectPropertyPayments = new HashSet<Rental>();
+        }
     }
 }

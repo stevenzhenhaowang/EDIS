@@ -7,12 +7,12 @@ namespace Edis.Db.Migrations
     {
         public override void Up()
         {
-            AddColumn("dbo.ResearchValues", "StringValue", c => c.String());
         }
         
         public override void Down()
         {
-            DropColumn("dbo.ResearchValues", "StringValue");
+
+            DropColumn("dbo.ResearchValues", "Value");
         }
     }
 }

@@ -17,6 +17,19 @@ namespace Shared
         [Description("Fixed Income Investments")]
         FixedIncomeInvestments = 6,
         [Description("Cash and Term Deposit")]
-        CashAndTermDeposit = 7
+        CashAndTermDeposit = 7,
+
+
+
+        #region loan types temp
+        [Description("Mortgage and Home Loan")]
+        MortgageAndHomeLoan = 8,
+        [Description("Margin Lending")]
+        MarginLending = 9,
+        [Description("Personal & Credit Card Loan")]
+        PersonalAndCreditCardLoan = 10,
+        [Description("Insurance")]
+        Insurance = 11
+        #endregion
     }
 }

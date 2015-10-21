@@ -54,6 +54,8 @@
   <ItemGroup>
     <Compile Include="AccountType.cs" />
     <Compile Include="ASXIndexTypes.cs" />
+    <Compile Include="BalanceGroups.cs" />
+    <Compile Include="BusinessLayerParameters.cs" />
     <Compile Include="ClientDocInfo.cs" />
     <Compile Include="ConsultancyExpenseType.cs" />
     <Compile Include="CreditCardType.cs" />
@@ -61,7 +63,12 @@
     <Compile Include="InsuranceType.cs" />
     <Compile Include="LiabilityTransactionType.cs" />
     <Compile Include="LoanRepaymentType.cs" />
+    <Compile Include="RebalanceClassificationType.cs" />
+    <Compile Include="RebalanceModelProfile.cs" />
+    <Compile Include="NoteTypes.cs" />
+    <Compile Include="Period.cs" />
     <Compile Include="PolicyType.cs" />
+    <Compile Include="ProductTypes.cs" />
     <Compile Include="PropertyType.cs" />
     <Compile Include="TransactionExpenseType.cs" />
     <Compile Include="AssetTypes.cs" />

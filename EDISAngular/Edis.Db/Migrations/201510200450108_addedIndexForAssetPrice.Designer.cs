@@ -7,13 +7,13 @@ namespace Edis.Db.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class init1 : IMigrationMetadata
+    public sealed partial class addedIndexForAssetPrice : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(init1));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(addedIndexForAssetPrice));
         
         string IMigrationMetadata.Id
         {
-            get { return "201510060438093_init1"; }
+            get { return "201510200450108_addedIndexForAssetPrice"; }
         }
         
         string IMigrationMetadata.Source

@@ -50,5 +50,10 @@ namespace Edis.Db.Assets
         public virtual ICollection<CashTransaction> CashTransactions { get; set; }
         public virtual ICollection<Interest> Interests { get; set; }
 
+        public CashAccount()
+        {
+            this.CashTransactions = new HashSet<CashTransaction>();
+            this.Interests = new HashSet<Interest>();
+        }
     }
 }

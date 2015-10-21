@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Shared;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Edis.Db.Assets
 {
@@ -17,10 +18,11 @@ namespace Edis.Db.Assets
         [Required]
         public DateTime? CreatedOn { get; set; }
         [Required]
-        public AssetTypes AssetType { get; set; }
-        [Required]
+        [Index]
+        [MaxLength(300)]
         public string CorrespondingAssetKey { get; set; }
-
-
+        [Required]
+        [Index]
+        public AssetTypes AssetType { get; set; }
     }
 }

@@ -87,6 +87,8 @@ namespace EDISAngular.APIControllers
         public string insertAssetsData()
         {
             //edisRepo.InsertRandomDataIntoAssets();
+            edisRepo.insertData3();
+
             return "success";
 
         }
@@ -389,8 +391,24 @@ namespace EDISAngular.APIControllers
                 });
             }
 
-            return companies;
+            return companies.OrderBy(c => c.name).ToList();
             //return advisorRepo.GetAnalysisCompaniesList(User.Identity.GetUserId());
+        }
+
+        [HttpGet, Route("api/adviser/periodList")]
+        public List<StockPeriodModel> GetPeriodList()
+        {
+            List<StockPeriodModel> periods = new List<StockPeriodModel>();
+
+            foreach (Period period in Enum.GetValues(typeof(Period))) {
+                periods.Add(new StockPeriodModel
+                {
+                    id = period.ToString(),
+                    name = edisRepo.GetEnumDescription(period)
+                });
+            }
+
+            return periods;
         }
         [HttpGet, Route("api/adviser/research/companyProfile")]
         public CompanyProfileDataItem GetCompanyProfile(string companyId)
@@ -407,20 +425,22 @@ namespace EDISAngular.APIControllers
                 assetClass = equity.EquityType.ToString(),
                 changeAmount = edisRepo.GetResearchValueForEquitySync("changeAmount", equity.Ticker) == null ? 0 : (double)edisRepo.GetResearchValueForEquitySync("changeAmount", equity.Ticker),
                 changeRatePercentage = edisRepo.GetResearchValueForEquitySync("changeRatePercentage", equity.Ticker) == null ? 0 : (double)edisRepo.GetResearchValueForEquitySync("changeRatePercentage", equity.Ticker),
-                weeksDifferenceAmount = edisRepo.GetResearchValueForEquitySync("weeksDifferenceAmount", equity.Ticker) == null ? 0 : (double)edisRepo.GetResearchValueForEquitySync("weeksDifferenceAmount", equity.Ticker),
-                weeksDifferenceRatePercentage = edisRepo.GetResearchValueForEquitySync("weeksDifferenceRatePercentage", equity.Ticker) == null ? 0 : (double)edisRepo.GetResearchValueForEquitySync("weeksDifferenceRatePercentage", equity.Ticker),
+                weeksDifferenceAmount = (double)edisRepo.GetResearchValueForEquitySync("52WkHighPrice", equity.Ticker),
+                weeksDifferenceRatePercentage = (double)(edisRepo.GetResearchValueForEquitySync("52WkLowPrice", equity.Ticker) / edisRepo.GetResearchValueForEquitySync("52WkHighPrice", equity.Ticker) == null ? 1 : edisRepo.GetResearchValueForEquitySync("52WkHighPrice", equity.Ticker)),
                 suitabilityScore = edisRepo.GetResearchValueForEquitySync("suitabilityScore", equity.Ticker) == null ? 0 : (double)edisRepo.GetResearchValueForEquitySync("suitabilityScore", equity.Ticker),
                 suitsTypeOfClients = edisRepo.GetStringResearchValueForEquitySync("suitsTypeOfClients", equity.Ticker),
-                country = edisRepo.GetStringResearchValueForEquitySync("country", equity.Ticker),
-                exchange = edisRepo.GetStringResearchValueForEquitySync("exchange", equity.Ticker),
-                marketCapitalisation = edisRepo.GetStringResearchValueForEquitySync("marketCapitalisation", equity.Ticker),
-                currencyType = edisRepo.GetStringResearchValueForEquitySync("currencyType", equity.Ticker),
+                country = edisRepo.GetStringResearchValueForEquitySync("Country", equity.Ticker),
+                exchange = edisRepo.GetStringResearchValueForEquitySync("Exchange", equity.Ticker),
+                marketCapitalisation = edisRepo.GetResearchValueForEquitySync("MarketCap", equity.Ticker).ToString(),
+                currencyType = edisRepo.GetStringResearchValueForEquitySync("Currency", equity.Ticker),
                 reasons = edisRepo.GetStringResearchValueForEquitySync("reasons", equity.Ticker),
                 companyBriefing = edisRepo.GetStringResearchValueForEquitySync("companyBriefing", equity.Ticker),
                 companyStrategies = edisRepo.GetStringResearchValueForEquitySync("companyStrategies", equity.Ticker),
                 investment = edisRepo.GetStringResearchValueForEquitySync("investment", equity.Ticker),
                 investmentName = edisRepo.GetStringResearchValueForEquitySync("investmentName", equity.Ticker),
                 //priceDate = DateTime.Now,
+
+                indexData = new List<CompanyProfileIndexData>(),
 
                 currentAnalysis = new CurrentAnalysisPayload
                 {
@@ -485,8 +505,22 @@ namespace EDISAngular.APIControllers
                 },
             };
 
+
+            List<AssetPrice> assetPrices = edisRepo.getPricesByEquityIdAndDates(companyId, Period.LastSixMonths.ToString());
+            
+            foreach(var price in assetPrices){
+
+                model.indexData.Add(new CompanyProfileIndexData { 
+                    company = price.Price.Value,
+                    month = price.CreatedOn.Value.Date.ToString("yy-MM-dd"),
+                    date = (DateTime)price.CreatedOn
+                });
+            }
+
             return model;
-            return advisorRepo.GetCompanyProfile(User.Identity.GetUserId(), companyId);
+            //return advisorRepo.GetCompanyProfile(User.Identity.GetUserId(), companyId);
         }
+
+
     }
 }

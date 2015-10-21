@@ -80,24 +80,29 @@ namespace EDISAngular.APIControllers
             {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
                 double totalCost = 0;
                 double totalMarketValue = 0;
                 double coupon = 0;
                 double faceValue = 0;
-                foreach (var account in accounts)
+
+                List<AssetBase> assets = new List<AssetBase>();
+
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<FixedIncome>().Cast<AssetBase>().ToList()));
+                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<FixedIncome>().Cast<AssetBase>().ToList()));
+
+
+                var fixedIncomes = assets.OfType<FixedIncome>();
+                foreach (var asset in assets)
                 {
-                    List<AssetBase> assets = account.GetAssetsSync().OfType<FixedIncome>().Cast<AssetBase>().ToList();
-                    var fixedIncomes = assets.OfType<FixedIncome>();
-                    foreach (var asset in assets)
-                    {
-                        totalCost += asset.GetCost().Total;
-                        totalMarketValue += asset.GetTotalMarketValue();
-                        faceValue += asset.LatestPrice;
-                    }
-                    foreach (var income in fixedIncomes)
-                    {
-                        coupon += income.CouponRate == null ? 0 : (double)income.CouponRate;
-                    }
+                    totalCost += asset.GetCost().Total;
+                    totalMarketValue += asset.GetTotalMarketValue();
+                    faceValue += asset.LatestPrice;
+                }
+                foreach (var income in fixedIncomes)
+                {
+                    coupon += income.CouponRate == null ? 0 : (double)income.CouponRate;
                 }
                 SummaryGeneralInfoFCL summary = new SummaryGeneralInfoFCL
                 {
@@ -242,6 +247,8 @@ namespace EDISAngular.APIControllers
 
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
 
                 foreach (var account in accounts)
                 {
@@ -382,6 +389,8 @@ namespace EDISAngular.APIControllers
             {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
                 double totalExpenseInAssets = 0;
                 double totalIncomeInAssets = 0;
 
@@ -400,31 +409,31 @@ namespace EDISAngular.APIControllers
                 CashFlowBriefItem nov = new CashFlowBriefItem { month = "Nov" };
                 CashFlowBriefItem dec = new CashFlowBriefItem { month = "Dec" };
 
-                foreach (var account in accounts)
-                {
-                    List<Cashflow> cashFlows = account.GetAssetsSync().OfType<FixedIncome>().Cast<AssetBase>().ToList().GetMonthlyCashflows();
+                List<Cashflow> cashFlows = new List<Cashflow>();
 
-                    foreach (var cashflow in cashFlows)
+                accounts.ForEach(a => cashFlows.AddRange(a.GetAssetsSync().OfType<FixedIncome>().Cast<AssetBase>().ToList().GetMonthlyCashflows()));
+                clientAccounts.ForEach(a => cashFlows.AddRange(a.GetAssetsSync().OfType<FixedIncome>().Cast<AssetBase>().ToList().GetMonthlyCashflows()));
+
+                foreach (var cashflow in cashFlows)
+                {
+                    switch (cashflow.Month)
                     {
-                        switch (cashflow.Month)
-                        {
-                            case "Jan": jan.date = DateTime.Now; jan.expense += cashflow.Expenses; jan.income += cashflow.Income; break;
-                            case "Feb": feb.date = DateTime.Now; feb.expense += cashflow.Expenses; feb.income += cashflow.Income; break;
-                            case "Mar": mar.date = DateTime.Now; mar.expense += cashflow.Expenses; mar.income += cashflow.Income; break;
-                            case "Apr": apr.date = DateTime.Now; apr.expense += cashflow.Expenses; apr.income += cashflow.Income; break;
-                            case "May": may.date = DateTime.Now; may.expense += cashflow.Expenses; may.income += cashflow.Income; break;
-                            case "Jun": jun.date = DateTime.Now; jun.expense += cashflow.Expenses; jun.income += cashflow.Income; break;
-                            case "Jul": jul.date = DateTime.Now; jul.expense += cashflow.Expenses; jul.income += cashflow.Income; break;
-                            case "Aug": aug.date = DateTime.Now; aug.expense += cashflow.Expenses; aug.income += cashflow.Income; break;
-                            case "Sep": sep.date = DateTime.Now; sep.expense += cashflow.Expenses; sep.income += cashflow.Income; break;
-                            case "Oct": oct.date = DateTime.Now; oct.expense += cashflow.Expenses; oct.income += cashflow.Income; break;
-                            case "Nov": nov.date = DateTime.Now; nov.expense += cashflow.Expenses; nov.income += cashflow.Income; break;
-                            case "Dec": dec.date = DateTime.Now; dec.expense += cashflow.Expenses; dec.income += cashflow.Income; break;
-                            default: break;
-                        }
-                        totalExpenseInAssets += cashflow.Expenses;
-                        totalIncomeInAssets += cashflow.Income;
+                        case "Jan": jan.date = DateTime.Now; jan.expense += cashflow.Expenses; jan.income += cashflow.Income; break;
+                        case "Feb": feb.date = DateTime.Now; feb.expense += cashflow.Expenses; feb.income += cashflow.Income; break;
+                        case "Mar": mar.date = DateTime.Now; mar.expense += cashflow.Expenses; mar.income += cashflow.Income; break;
+                        case "Apr": apr.date = DateTime.Now; apr.expense += cashflow.Expenses; apr.income += cashflow.Income; break;
+                        case "May": may.date = DateTime.Now; may.expense += cashflow.Expenses; may.income += cashflow.Income; break;
+                        case "Jun": jun.date = DateTime.Now; jun.expense += cashflow.Expenses; jun.income += cashflow.Income; break;
+                        case "Jul": jul.date = DateTime.Now; jul.expense += cashflow.Expenses; jul.income += cashflow.Income; break;
+                        case "Aug": aug.date = DateTime.Now; aug.expense += cashflow.Expenses; aug.income += cashflow.Income; break;
+                        case "Sep": sep.date = DateTime.Now; sep.expense += cashflow.Expenses; sep.income += cashflow.Income; break;
+                        case "Oct": oct.date = DateTime.Now; oct.expense += cashflow.Expenses; oct.income += cashflow.Income; break;
+                        case "Nov": nov.date = DateTime.Now; nov.expense += cashflow.Expenses; nov.income += cashflow.Income; break;
+                        case "Dec": dec.date = DateTime.Now; dec.expense += cashflow.Expenses; dec.income += cashflow.Income; break;
+                        default: break;
                     }
+                    totalExpenseInAssets += cashflow.Expenses;
+                    totalIncomeInAssets += cashflow.Income;
                 }
 
                 items.Add(jan);
@@ -680,13 +689,15 @@ namespace EDISAngular.APIControllers
             {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
                 FixedIncomeProfileModel model = new FixedIncomeProfileModel { data = new List<FixedIncomeProfileItem>() };
 
                 List<AssetBase> assets = new List<AssetBase>();
-                foreach (var account in accounts)
-                {
-                    assets.AddRange(account.GetAssetsSync());
-                }
+
+                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
+
                 var incomes = assets.OfType<FixedIncome>();
                 foreach (var income in incomes)
                 {
@@ -842,14 +853,15 @@ namespace EDISAngular.APIControllers
             {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
 
                 List<IncomeStatisticsModel> incomeModelList = new List<IncomeStatisticsModel>();
 
                 List<AssetBase> assets = new List<AssetBase>();
-                foreach (var account in accounts)
-                {
-                    assets.AddRange(account.GetAssetsSync());
-                }
+
+                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
 
                 var fixedIncomesGroup = assets.OfType<FixedIncome>().GroupBy(i => i.BondType);
 

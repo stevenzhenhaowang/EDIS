@@ -7,7 +7,7 @@ namespace EDISAngular.Models.ServiceModels.PortfolioModels
 {
     public class StockDataModel
     {
-        public int year { get; set; }
+        public string year { get; set; }
         public double asxbhp { get; set; }
         public double nysewbc { get; set; }
         public string AssetName { get; set; }

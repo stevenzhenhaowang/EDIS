@@ -5,16 +5,15 @@ namespace Edis.Db.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-
-    internal sealed class Configuration : DbMigrationsConfiguration<EdisContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<Edis.Db.EdisContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            AutomaticMigrationDataLossAllowed = true;
+            CommandTimeout = int.MaxValue;
         }
 
-        protected override void Seed(EdisContext context)
+        protected override void Seed(Edis.Db.EdisContext context)
         {
             //  This method will be called after migrating to the latest version.
 

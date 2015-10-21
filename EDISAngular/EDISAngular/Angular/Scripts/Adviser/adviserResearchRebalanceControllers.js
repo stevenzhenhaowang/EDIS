@@ -164,7 +164,7 @@ app.controller("addNewModelController", function ($scope, $modalInstance, rebala
         return false;
     }
     $scope.parameterGroupChanged = function () {
-        rebalanceService.getParameters().query({ groupId: $scope.newModel.parameterGroup.groupId }, function (data) {
+        rebalanceService.getParameters().query({ groupId: $scope.newModel.parameterGroup.groupId, clientGroupId: $scope.newModel.clientGroupId }, function (data) {
             $scope.newModel.parameters = data;
         });
     }

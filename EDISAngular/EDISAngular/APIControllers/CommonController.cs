@@ -8,36 +8,75 @@ using EDISAngular;
 using EDISAngular.Models.ViewModels;
 using EDIS_DOMAIN;
 using EDISAngular.Infrastructure.DatabaseAccess;
+using Shared;
+using EDISAngular.Models;
+using System.Reflection;
+using System.ComponentModel;
 
 namespace EDISAngular.APIControllers
 {
     public class CommonController : ApiController
     {
-
-
-        private CommonReferenceDataRepository comRepo;
         public CommonController()
         {
-            comRepo = new CommonReferenceDataRepository();
+            //comRepo = new CommonReferenceDataRepository();
         }
 
         [HttpGet, Route("api/common/assetClasses")]
         public List<AssetTypeView> getAssetTypes()
         {
-            return comRepo.GetAssetTypes().Select(a => new AssetTypeView()
+
+            var assetTypes = Enum.GetValues(typeof(BalanceGroups)).Cast<BalanceGroups>();
+            List<AssetType> result = new List<AssetType>();
+
+            foreach (var ptype in assetTypes)
+            {
+                result.Add(new AssetType
+                {
+                    AssetTypeID = (int)ptype,
+                    AssetTypeName = GetEnumDescription(ptype)
+                });
+            }
+
+            return result.Select(a => new AssetTypeView()
             {
                 id = a.AssetTypeID,
                 name = a.AssetTypeName
             }).ToList();
-
         }
         [HttpGet, Route("api/common/productClasses")]
         public List<ProductTypeView> getProductTypes()
         {
-            return comRepo.GetAllProductTypes();
+            var productTypes = Enum.GetValues(typeof(ProductTypes)).Cast<ProductTypes>();
+            List<EDISAngular.Models.ViewModels.ProductTypeView> result = new List<EDISAngular.Models.ViewModels.ProductTypeView>();
+
+            foreach (var ptype in productTypes)
+            {
+                result.Add(new EDISAngular.Models.ViewModels.ProductTypeView
+                {
+                    id = (int)ptype,
+                    name = GetEnumDescription(ptype)
+                });
+            }
+
+            return result;
         }
 
+        private static string GetEnumDescription(Enum value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
 
+            DescriptionAttribute[] attributes =
+                (DescriptionAttribute[])fi.GetCustomAttributes(
+                typeof(DescriptionAttribute),
+                false);
+
+            if (attributes != null &&
+                attributes.Length > 0)
+                return attributes[0].Description;
+            else
+                return value.ToString();
+        }
 
 
     }

@@ -81,7 +81,8 @@ namespace Domain.Portfolio.Interfaces
         Task FeedResearchValueForBond(string key, double value, string ticker, string issuer);
         Task<double?> GetResearchValueForBond(string key, string ticker);
         Task FeedResearchValueForEquity(string key, double value, string propertyId, string issuer);
-        Task<double?> GetResearchValueForEquity(string key, string ticker) ;
+        Task<double
+            ?> GetResearchValueForEquity(string key, string ticker) ;
         Task FeedResearchValueForProperty(string key, double value, string ticker, string issuer);
         Task<double?> GetResearchValueForProperty(string key, string propertyId);
         Task<string> GetLatestIssuerForEquityResearchValue(string key, string ticker);

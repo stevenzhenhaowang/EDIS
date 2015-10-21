@@ -40,7 +40,10 @@ using InsuranceTransaction = Domain.Portfolio.Entities.Transactions.InsuranceTra
 using MarginLendingTransactionCreation = Domain.Portfolio.Entities.CreationModels.Transaction.MarginLendingTransactionCreation;
 using PropertyTransaction = Edis.Db.Transactions.PropertyTransaction;
 using RepaymentCreation = Domain.Portfolio.Entities.CreationModels.RepaymentCreation;
+using AssetPrice = Edis.Db.Assets.AssetPrice;
 using Domain.Portfolio.Correspondence;
+using System.Reflection;
+using System.ComponentModel;
 
 namespace SqlRepository
 {
@@ -93,7 +96,7 @@ namespace SqlRepository
 
         public void insertData3()
         {
-            var account = GetClientGroupAccountSync("65593420", DateTime.Now);
+            var account = GetClientAccountSync("04263398", DateTime.Now);
             account.MakeTransactionSync(new InsuranceTransactionCreation()
             {
                 AmountInsured = 20000,
@@ -168,6 +171,265 @@ namespace SqlRepository
                 Issuer = "Steven",
                 PolicyAddress = "517 flinders lane, melbourne, vic",
                 PolicyNumber = "0193"
+            });
+
+            account.MakeTransactionSync(new PropertyTransactionCreation()
+            {
+                FeesRecords = new List<TransactionFeeRecordCreation>()
+                {
+                    new TransactionFeeRecordCreation()
+                    {
+                        Amount = 888,
+                        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
+                    }
+                },
+                FullAddress = "292 Waverley Road, Malvern East, 3145",
+                IsBuy = true,
+                Price = 980000,
+                PropertyType = "Office",
+                TransactionDate = new DateTime(2015, 1, 1, 12, 32, 30),
+            });
+            account.MakeTransactionSync(new PropertyTransactionCreation()
+            {
+                FeesRecords = new List<TransactionFeeRecordCreation>()
+                {
+                    new TransactionFeeRecordCreation()
+                    {
+                        Amount = 777,
+                        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
+                    }
+                },
+                FullAddress = "5 inga street, oakleigh east, 3166",
+                IsBuy = true,
+                Price = 580000,
+                PropertyType = "Home",
+                TransactionDate = new DateTime(2015, 12, 1, 12, 32, 30),
+            });
+            //...................
+            account.MakeTransactionSync(new EquityTransactionCreation()
+            {
+                EquityType = EquityTypes.InternationalEquity,
+                FeesRecords = new List<TransactionFeeRecordCreation>(),
+                Name = "Test Stock",
+                NumberOfUnits = 100,
+                Price = 320,
+                Sector = "Test Sector1",
+                Ticker = "ONT",
+                TransactionDate = new DateTime(2015, 6, 1, 12, 32, 30),
+            });
+
+            account.MakeTransactionSync(new EquityTransactionCreation()
+            {
+                EquityType = EquityTypes.InternationalEquity,
+                FeesRecords = new List<TransactionFeeRecordCreation>(),
+                Name = "Test Stock",
+                NumberOfUnits = 100,
+                Price = 120,
+                Sector = "Test Sector2",
+                Ticker = "ONT",
+                TransactionDate = new DateTime(2015, 2, 1, 12, 32, 30),
+            });
+
+            account.MakeTransactionSync(new EquityTransactionCreation()
+            {
+                EquityType = EquityTypes.ManagedInvestments,
+                FeesRecords = new List<TransactionFeeRecordCreation>(),
+                Name = "Test Stock",
+                NumberOfUnits = 100,
+                Price = 220,
+                Sector = "Test Sector3",
+                Ticker = "ONT",
+                TransactionDate = new DateTime(2015, 3, 1, 12, 32, 30),
+            });
+
+
+            account.MakeTransactionSync(new EquityTransactionCreation()
+            {
+                EquityType = EquityTypes.ManagedInvestments,
+                FeesRecords = new List<TransactionFeeRecordCreation>(),
+                Name = "Test Stock",
+                NumberOfUnits = 100,
+                Price = 320,
+                Sector = "Test Sector4",
+                Ticker = "AYC",
+                TransactionDate = new DateTime(2015, 3, 1, 12, 32, 30),
+            });
+
+            account.MakeTransactionSync(new CashAccountTransactionAccountCreation()
+            {
+                Amount = 150000,
+                AnnualInterestSoFar = 0,
+                Bsb = "123456",
+                CashAccountName = "Account name",
+                CashAccountNumber = "Number",
+                CashAccountType = CashAccountType.TermDeposit,
+                CurrencyType = CurrencyType.AustralianDollar,
+                Frequency = Frequency.Annually,
+                InterestRate = 0.9,
+                MaturityDate = DateTime.Now.AddYears(1),
+                TermsInMonths = 20,
+                TransactionDate = new DateTime(2015, 11, 1, 12, 32, 30),
+                TransactionFeeRecords = new List<TransactionFeeRecordCreation>()
+                {
+                    new TransactionFeeRecordCreation()
+                    {
+                        Amount = 8909,
+                        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
+                    }
+                }
+
+            });
+
+
+
+            account.MakeTransactionSync(new CashAccountTransactionAccountCreation()
+            {
+                Amount = 150000,
+                AnnualInterestSoFar = 0,
+                Bsb = "123456",
+                CashAccountName = "Account name",
+                CashAccountNumber = "Number",
+                CashAccountType = CashAccountType.TermDeposit,
+                CurrencyType = CurrencyType.AustralianDollar,
+                Frequency = Frequency.Annually,
+                InterestRate = 0.9,
+                MaturityDate = DateTime.Now.AddYears(1),
+                TermsInMonths = 20,
+                TransactionDate = new DateTime(2015, 6, 1, 12, 32, 30),
+                TransactionFeeRecords = new List<TransactionFeeRecordCreation>()
+                {
+                    new TransactionFeeRecordCreation()
+                    {
+                        Amount = 1231,
+                        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
+                    }
+                }
+
+            });
+
+            account.MakeTransactionSync(new CashAccountTransactionAccountCreation()
+            {
+                Amount = 150000,
+                AnnualInterestSoFar = 0,
+                Bsb = "123456",
+                CashAccountName = "Account name",
+                CashAccountNumber = "Number",
+                CashAccountType = CashAccountType.TermDeposit,
+                CurrencyType = CurrencyType.AustralianDollar,
+                Frequency = Frequency.Annually,
+                InterestRate = 0.9,
+                MaturityDate = DateTime.Now.AddYears(1),
+                TermsInMonths = 20,
+                TransactionDate = new DateTime(2015, 5, 1, 12, 32, 30),
+                TransactionFeeRecords = new List<TransactionFeeRecordCreation>()
+                {
+                    new TransactionFeeRecordCreation()
+                    {
+                        Amount = 5675,
+                        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
+                    }
+                }
+
+            });
+
+            account.MakeTransactionSync(new CashAccountTransactionAccountCreation()
+            {
+                Amount = 150000,
+                AnnualInterestSoFar = 0,
+                Bsb = "123456",
+                CashAccountName = "Account name",
+                CashAccountNumber = "Number",
+                CashAccountType = CashAccountType.TermDeposit,
+                CurrencyType = CurrencyType.AustralianDollar,
+                Frequency = Frequency.Annually,
+                InterestRate = 0.9,
+                MaturityDate = DateTime.Now.AddYears(1),
+                TermsInMonths = 20,
+                TransactionDate = new DateTime(2015, 4, 1, 12, 32, 30),
+                TransactionFeeRecords = new List<TransactionFeeRecordCreation>()
+                {
+                    new TransactionFeeRecordCreation()
+                    {
+                        Amount = 4564,
+                        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
+                    }
+                }
+
+            });
+
+            account.MakeTransactionSync(new CashAccountTransactionAccountCreation()
+            {
+                Amount = 150000,
+                AnnualInterestSoFar = 0,
+                Bsb = "123456",
+                CashAccountName = "Account name",
+                CashAccountNumber = "Number",
+                CashAccountType = CashAccountType.TermDeposit,
+                CurrencyType = CurrencyType.AustralianDollar,
+                Frequency = Frequency.Annually,
+                InterestRate = 0.9,
+                MaturityDate = DateTime.Now.AddYears(1),
+                TermsInMonths = 20,
+                TransactionDate = new DateTime(2015, 3, 1, 12, 32, 30),
+                TransactionFeeRecords = new List<TransactionFeeRecordCreation>()
+                {
+                    new TransactionFeeRecordCreation()
+                    {
+                        Amount = 3453,
+                        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
+                    }
+                }
+
+            });
+
+            account.MakeTransactionSync(new CashAccountTransactionAccountCreation()
+            {
+                Amount = 150000,
+                AnnualInterestSoFar = 0,
+                Bsb = "123456",
+                CashAccountName = "Account name",
+                CashAccountNumber = "Number",
+                CashAccountType = CashAccountType.TermDeposit,
+                CurrencyType = CurrencyType.AustralianDollar,
+                Frequency = Frequency.Annually,
+                InterestRate = 0.9,
+                MaturityDate = DateTime.Now.AddYears(1),
+                TermsInMonths = 20,
+                TransactionDate = new DateTime(2015, 2, 1, 12, 32, 30),
+                TransactionFeeRecords = new List<TransactionFeeRecordCreation>()
+                {
+                    new TransactionFeeRecordCreation()
+                    {
+                        Amount = 2342,
+                        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
+                    }
+                }
+
+            });
+
+            account.MakeTransactionSync(new CashAccountTransactionAccountCreation()
+            {
+                Amount = 150000,
+                AnnualInterestSoFar = 0,
+                Bsb = "123456",
+                CashAccountName = "Account name",
+                CashAccountNumber = "Number",
+                CashAccountType = CashAccountType.TermDeposit,
+                CurrencyType = CurrencyType.AustralianDollar,
+                Frequency = Frequency.Annually,
+                InterestRate = 0.9,
+                MaturityDate = DateTime.Now.AddYears(1),
+                TermsInMonths = 20,
+                TransactionDate = new DateTime(2015, 1, 1, 12, 32, 30),
+                TransactionFeeRecords = new List<TransactionFeeRecordCreation>()
+                {
+                    new TransactionFeeRecordCreation()
+                    {
+                        Amount = 2312,
+                        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
+                    }
+                }
+
             });
         }
 
@@ -1178,7 +1440,7 @@ namespace SqlRepository
 
         public List<string> GetAllSectorsSync()             //added
         {
-            return _db.Sectors.Select(s => s.SectorName).ToList();
+            return _db.Sectors.Select(s => s.SectorName).Distinct().ToList();
         }
 
         public async Task<List<string>> GetAllBondTypes()
@@ -1872,6 +2134,7 @@ namespace SqlRepository
                 Accounts = new List<Account>(),
                 CreatedOn = DateTime.Now,
                 FirstName = clientGroup.client.FirstName,
+                MiddleName = clientGroup.client.MiddleName,
                 LastName = clientGroup.client.LastName,
                 Address = clientGroup.client.Address,
                 Dob = clientGroup.client.Dob,
@@ -1988,8 +2251,8 @@ namespace SqlRepository
         public void RecordTransactionSync(TransactionCreationBase transaction)            //added
         {
             var adviser = _db.Advisers.Where(ad => _db.ClientGroups.Where(g => g.GroupAccounts
-                .Any(a => a.AccountNumber == transaction.AccountNumber
-                          || _db.Clients.Any(c => c.ClientGroupId == g.ClientGroupId &&
+                .Any(a => a.AccountNumber == transaction.AccountNumber)
+                          || (_db.Clients.Any(c => c.ClientGroupId == g.ClientGroupId &&
                                                  c.Accounts.Any(acc => acc.AccountNumber == transaction.AccountNumber))))
                 .Any(c => c.Adviser.AdviserId == ad.AdviserId))
                 .FirstOrDefault();
@@ -2562,6 +2825,20 @@ namespace SqlRepository
         }
 
 
+        public Adviser GetAdviserForClient(string clientUserId)
+        {
+            var client = _db.Clients.FirstOrDefault(c => c.ClientNumber == clientUserId);
+            var clientGroup = _db.ClientGroups.FirstOrDefault(g => g.ClientGroupId == client.ClientGroupId);
+            var adviser = _db.Advisers.FirstOrDefault(a => a.AdviserId == clientGroup.Adviser.AdviserId);
+            return new Adviser(this)
+            {
+                Id = clientGroup.Adviser.AdviserId,
+                FirstName = adviser.FirstName,
+                LastName = adviser.LastName
+            };
+        }
+
+
         public List<ClientGroup> GetAllClientGroupsForAdviserSync(string adviserNumber, DateTime todate)
         {
             var groups =
@@ -3115,11 +3392,14 @@ namespace SqlRepository
                                     " or no research value for this equity of key " + key +
                                     " is yet available from database");
             }
-            return equity.ResearchValues == null || !equity.ResearchValues.Any() ? (double?)0 :
-                equity.ResearchValues.Where(v => v.Key == key)
-                    .OrderByDescending(c => c.CreatedOn)
+
+            var researchValue = equity.ResearchValues.Where(v => v.Key == key);
+
+            return equity.ResearchValues == null || !equity.ResearchValues.Any() || researchValue.Count() == 0 ? (double?)null :
+                researchValue.OrderByDescending(c => c.CreatedOn)
                     .FirstOrDefault()
                     .Value;
+                    
         }
 
 
@@ -3137,11 +3417,12 @@ namespace SqlRepository
                                     " or no research value for this equity of key " + key +
                                     " is yet available from database");
             }
-            return equity.ResearchValues == null || !equity.ResearchValues.Any() ? "" :
-                equity.ResearchValues.Where(v => v.Key == key)
-                    .OrderByDescending(c => c.CreatedOn)
+            var researchValue = equity.ResearchValues.Where(v => v.Key == key);
+
+            return equity.ResearchValues == null || !equity.ResearchValues.Any() || researchValue.Count() == 0 ? (string)null :
+                researchValue.OrderByDescending(c => c.CreatedOn)
                     .FirstOrDefault()
-                    .Value.ToString();              // StringValue => Value.ToString()
+                    .StringValue;            // StringValue => Value.ToString()
         }
 
         public async Task FeedResearchValueForProperty(string key, double value, string propertyId, string issuer)
@@ -7113,13 +7394,20 @@ namespace SqlRepository
             var resource = _db.ResourcesReferences.SingleOrDefault(r => r.TokenValue == message.resourceToken);
             Edis.Db.Notes note = new Edis.Db.Notes
             {
-                AccountId = "",
+                AccountId = message.accountId,
                 AdviserId = message.adviserNumber,
-                AssetTypeId = message.assetTypeId,
+                AssetTypeId = message.assetTypeId.ToString(),
+                Product = message.productTypeId.ToString(),
+                AssetClass = ((AssetTypes)message.assetTypeId).ToString(),
+                ProductClass = ((ProductTypes)message.productTypeId).ToString(),
                 Body = message.body,
                 ClientId = message.clientId,
                 DateCompleted = message.dateCompleted,
                 DateCreated = DateTime.Now,
+                TimeSpend = Convert.ToSingle(message.timespent),
+                Reminder = message.reminder,
+                Status = message.status,
+                NoteSerial = message.noteSerial,
                 DateDue = message.dateDue,
                 DateModified = DateTime.Now,
                 FollowupActions = message.followupActions,
@@ -7153,5 +7441,516 @@ namespace SqlRepository
             _db.SaveChanges();
         }
 
+
+        public List<Correspondence> GetNotesForAdviserByUserId(string adviserUserId, int noteType)
+        {
+            List<Correspondence> result = new List<Correspondence>();
+            var adviser = _db.Advisers.SingleOrDefault(ad => ad.AdviserNumber == adviserUserId);
+            var adviserId = adviser.AdviserId.ToString();
+            var relevantNoteType = noteType;
+            foreach (var note in _db.Notes.Where(n => n.AdviserId == adviserId &&          //n.AccountId ==> n.AdviserId
+                n.NoteType == relevantNoteType && _db.NoteLinks.Where(l => l.NoteId2 == n.NoteId).Count() == 0))
+            {
+                var client = _db.Clients.SingleOrDefault(c => c.ClientId == note.Client.ClientId);
+                //var resource = note.Attachments.FirstOrDefault();
+                var resource = _db.Attachments.SingleOrDefault(a => a.NoteId == note.NoteId);
+                #region create correspondence payload skeleton first
+                Correspondence item = new Correspondence()
+                {
+                    adviserId = adviser.AdviserId.ToString(),
+                    adviserName = adviser.FirstName + " " + adviser.LastName,
+                    clientId = note.ClientId,
+                    clientName = client.ClientType == BusinessLayerParameters.clientType_person ? client.FirstName + " " + client.LastName : client.EntityName,
+                    date = note.DateCreated,
+                    noteId = note.NoteId,
+                    //path = resource == null ? "" : System.Web.VirtualPathUtility.ToAbsolute(resource.Path),
+                    path = resource == null ? "" : resource.Path,
+                    subject = note.Subject,
+                    //typeName = CommonHelpers.GetEnumDescription((NoteTypes)note.NoteType),
+                    typeName = ((NoteTypes)note.NoteType).ToString(),
+                    type = resource == null ? "" : resource.AttachmentType,
+                    conversations = new List<CorrespondenceConversation>(),
+                    actionsRequired = note.FollowupActions,
+                    assetClass = note.AssetClass,
+                    completionDate = note.DateCompleted,
+                    productClass = note.ProductClass
+                };
+                #endregion
+                #region inject the initial conversation
+
+                CorrespondenceConversation initial = new CorrespondenceConversation()
+                {
+                    content = note.Body,
+                    createdOn = note.DateCreated,
+                    senderRole = note.SenderRole,
+                    senderName = note.SenderRole == BusinessLayerParameters.correspondenceSenderRole_adviser ? adviser.FirstName + " " + adviser.LastName
+                    : (client.ClientType == BusinessLayerParameters.clientType_person ? client.FirstName + " " + client.LastName : client.EntityName)
+                };
+                item.conversations.Add(initial);
+                #endregion
+                #region insert all other conversations
+                foreach (var subnote in _db.NoteLinks.Where(n => n.NoteId1 == note.NoteId))
+                {
+                    var subNoteContent = _db.Notes.SingleOrDefault(n => n.NoteId == subnote.NoteId2);
+                    CorrespondenceConversation conversation = new CorrespondenceConversation()
+                    {
+                        content = subNoteContent.Body,
+                        senderRole = subNoteContent.SenderRole,
+                        createdOn = subNoteContent.DateCreated,
+                        senderName = subNoteContent.SenderRole == BusinessLayerParameters.correspondenceSenderRole_adviser ? adviser.FirstName + " " + adviser.LastName
+                        : (client.ClientType == BusinessLayerParameters.clientType_person ? client.FirstName + " " + client.LastName : client.EntityName)
+                    };
+                    item.conversations.Add(conversation);
+                }
+
+
+                #endregion
+                item.conversations = item.conversations.OrderBy(s => s.createdOn).ToList();
+                result.Add(item);
+            }
+            return result;
+        }
+
+        public void CreateMessageFollowup(CorrespondenceFollowup model, int senderRole)
+        {
+            var correspondingNote = _db.Notes.SingleOrDefault(n => n.NoteId == model.existingNoteId);
+            Notes note = new Notes()
+            {
+                NoteId = Guid.NewGuid().ToString(),
+                AdviserId= correspondingNote.AdviserId,
+                AccountId = correspondingNote.AccountId,
+                AssetClass = correspondingNote.AssetClass,
+                AssetTypeId = correspondingNote.AssetTypeId,
+                Body = model.body,
+                IsAccepted = correspondingNote.IsAccepted,
+                IsDeclined = correspondingNote.IsDeclined,
+                NoteSerial = correspondingNote.NoteSerial,
+                Product = correspondingNote.Product,
+                Purpose = correspondingNote.Purpose,
+                ProductClass = correspondingNote.ProductClass,
+                Reminder = correspondingNote.Reminder,
+                FollowupActions = correspondingNote.FollowupActions,
+                FollowupDate = correspondingNote.FollowupDate,
+                ReminderDate = correspondingNote.ReminderDate,
+                Status = correspondingNote.Status,
+                TimeSpend = correspondingNote.TimeSpend,
+                ClientId = correspondingNote.ClientId,
+                DateCompleted = correspondingNote.DateCompleted,
+                DateCreated = DateTime.Now,
+                DateDue = correspondingNote.DateDue,
+                DateModified = DateTime.Now,
+                NoteType = correspondingNote.NoteType,
+                Subject = correspondingNote.Subject,
+                SenderRole = senderRole
+            };
+
+            NoteLinks link = new NoteLinks()
+            {
+                Id = Guid.NewGuid().ToString(),
+                DateCreated = DateTime.Now,
+                NoteId1 = correspondingNote.NoteId,
+                NoteId2 = note.NoteId
+            };
+            _db.Notes.Add(note);
+            _db.NoteLinks.Add(link);
+            _db.SaveChanges();
+        }
+
+        public List<Correspondence> GetNotesForClientByUserId(string clientUserId, int noteType)
+        {
+            List<Correspondence> result = new List<Correspondence>();
+            var client = _db.Clients.SingleOrDefault(c => c.ClientNumber == clientUserId);
+            var relevantNoteType = noteType;
+            foreach (var note in _db.Notes.Where(n => n.ClientId == client.ClientId &&
+                n.NoteType == relevantNoteType && _db.NoteLinks.Where(l => l.NoteId2 == n.NoteId).Count() == 0))
+            {
+                var adviser = _db.Advisers.FirstOrDefault(ad => ad.AdviserNumber.ToString() == note.AccountId);
+                var resource = _db.Attachments.SingleOrDefault(a => a.NoteId == note.NoteId);
+                #region create correspondence payload skeleton first
+                Correspondence item = new Correspondence()
+                {
+                    adviserId = adviser.AdviserId.ToString(),
+                    adviserName = adviser.FirstName + " " + adviser.LastName,
+                    clientId = note.ClientId,
+                    clientName = client.ClientType == BusinessLayerParameters.clientType_person ? client.FirstName + " " + client.LastName : client.EntityName,
+                    date = note.DateCreated,
+                    noteId = note.NoteId,
+                    path = resource == null ? "" : resource.Path,
+                    subject = note.Subject,
+                    //typeName = CommonHelpers.GetEnumDescription((NoteTypes)note.NoteType),
+                    typeName = ((NoteTypes)note.NoteType).ToString(),
+                    type = resource == null ? "" : resource.AttachmentType,
+                    conversations = new List<CorrespondenceConversation>(),
+                    actionsRequired = note.FollowupActions,
+                    assetClass = note.AssetClass,
+                    completionDate = note.DateCompleted,
+                    productClass = note.ProductClass
+                };
+                #endregion
+                #region inject the initial conversation
+
+                CorrespondenceConversation initial = new CorrespondenceConversation()
+                {
+                    content = note.Body,
+                    createdOn = note.DateCreated,
+                    senderRole = note.SenderRole,
+                    senderName = note.SenderRole == BusinessLayerParameters.correspondenceSenderRole_adviser ? adviser.FirstName + " " + adviser.LastName
+                    : (client.ClientType == BusinessLayerParameters.clientType_person ? client.FirstName + " " + client.LastName : client.EntityName)
+                };
+                item.conversations.Add(initial);
+                #endregion
+                #region insert all other conversations
+                foreach (var subnote in _db.NoteLinks.Where(n => n.NoteId1 == note.NoteId))
+                {
+                    var subNoteContent = _db.Notes.SingleOrDefault(n => n.NoteId == subnote.NoteId2);
+                    CorrespondenceConversation conversation = new CorrespondenceConversation()
+                    {
+                        content = subNoteContent.Body,
+                        senderRole = subNoteContent.SenderRole,
+                        createdOn = subNoteContent.DateCreated,
+                        senderName = subNoteContent.SenderRole == BusinessLayerParameters.correspondenceSenderRole_adviser ? adviser.FirstName + " " + adviser.LastName
+                        : (client.ClientType == BusinessLayerParameters.clientType_person ? client.FirstName + " " + client.LastName : client.EntityName)
+                    };
+                    item.conversations.Add(conversation);
+                }
+
+
+                #endregion
+                item.conversations = item.conversations.OrderBy(s => s.createdOn).ToList();
+                result.Add(item);
+            }
+            return result;
+        }
+
+        public void InsertEquityData(Domain.Portfolio.AggregateRoots.Asset.Equity equity) {
+            _db.Equities.Add(new Equity
+            {
+                AssetId = Guid.NewGuid().ToString(),
+                Sector = equity.Sector,
+                EquityTransactions = new List<EquityTransaction>(),
+                Ticker = equity.Ticker,
+                EquityType = equity.EquityType,
+                Prices = new List<AssetPrice>(),
+                Name = equity.Name,
+                Dividends = new List<Dividend>()
+            });
+
+            _db.SaveChanges();
+        }
+
+        public Equity getEquityByTicker(string ticker, EquityTypes type) {
+            Equity equity = _db.Equities.SingleOrDefault(e => e.Ticker == ticker && e.EquityType == type);
+
+            return new Equity
+            {
+                AssetId = equity.AssetId
+            };
+        }
+
+        public Domain.Portfolio.AggregateRoots.Asset.Equity getEquityById(string equityId) {
+            Equity equity = _db.Equities.SingleOrDefault(e => e.AssetId == equityId);
+            if(equity.EquityType == EquityTypes.AustralianEquity){
+                return new Domain.Portfolio.AggregateRoots.Asset.AustralianEquity(this)
+                {
+                    Id = equity.AssetId,
+                    Name = equity.Name,
+                    EquityType = equity.EquityType,
+                    Ticker = equity.Ticker
+                };
+            }else if(equity.EquityType == EquityTypes.InternationalEquity){
+                return new Domain.Portfolio.AggregateRoots.Asset.InternationalEquity(this)
+                {
+                    Id = equity.AssetId,
+                    Name = equity.Name,
+                    EquityType = equity.EquityType,
+                    Ticker = equity.Ticker
+                };
+            }
+            else if (equity.EquityType == EquityTypes.ManagedInvestments)
+            {
+                return new Domain.Portfolio.AggregateRoots.Asset.ManagedInvestment(this)
+                {
+                    Id = equity.AssetId,
+                    Name = equity.Name,
+                    EquityType = equity.EquityType,
+                    Ticker = equity.Ticker
+                };
+            }
+            else {
+                return null;
+            }
+        }
+
+        public Domain.Portfolio.AggregateRoots.Asset.Equity getFirstEquity()
+        {
+            Equity equity = _db.Equities.FirstOrDefault();
+            if (equity.EquityType == EquityTypes.AustralianEquity)
+            {
+                return new Domain.Portfolio.AggregateRoots.Asset.AustralianEquity(this)
+                {
+                    Id = equity.AssetId,
+                    Name = equity.Name,
+                    EquityType = equity.EquityType,
+                    Ticker = equity.Ticker
+                };
+            }
+            else if (equity.EquityType == EquityTypes.InternationalEquity)
+            {
+                return new Domain.Portfolio.AggregateRoots.Asset.InternationalEquity(this)
+                {
+                    Id = equity.AssetId,
+                    Name = equity.Name,
+                    EquityType = equity.EquityType,
+                    Ticker = equity.Ticker
+                };
+            }
+            else if (equity.EquityType == EquityTypes.ManagedInvestments)
+            {
+                return new Domain.Portfolio.AggregateRoots.Asset.ManagedInvestment(this)
+                {
+                    Id = equity.AssetId,
+                    Name = equity.Name,
+                    EquityType = equity.EquityType,
+                    Ticker = equity.Ticker
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public List<Domain.Portfolio.AggregateRoots.Asset.AssetPrice> getPricesByEquityIdAndDates(string equityId, string periodId)
+        {
+            List<Domain.Portfolio.AggregateRoots.Asset.AssetPrice> assetPrices = new List<Domain.Portfolio.AggregateRoots.Asset.AssetPrice>();
+
+            Equity equity = _db.Equities.SingleOrDefault(e => e.AssetId == equityId);
+
+            List<AssetPrice> prices = new List<AssetPrice>();
+
+            var allPrices = equity.Prices;
+            if (allPrices.Count == 0) {
+                return assetPrices;
+            }
+
+            DateTime lastDate = (DateTime)allPrices.Max(p => p.CreatedOn);
+
+            if (periodId == Period.LastMonth.ToString())
+            {
+                for (int i = 0; i < 30; i++)
+                {
+                    var currentPrice = allPrices.SingleOrDefault(p => p.CreatedOn.Value.Date == lastDate.AddDays(-i));
+                    if (currentPrice != null)
+                    {
+                        prices.Add(currentPrice);
+                    }
+                }
+            }
+            else if (periodId == Period.LastSixMonths.ToString())
+            {
+                for (int i = 0; i < 26; i++)
+                {
+                    var currentPrice = allPrices.SingleOrDefault(p => p.CreatedOn.Value.Date == lastDate.AddDays(-7 * i));
+                    if (currentPrice != null)
+                    {
+                        prices.Add(currentPrice);
+                    }
+                }
+            }
+            else if (periodId == Period.LastTwelveMonths.ToString())
+            {
+                for (int i = 0; i < 26; i++)
+                {
+                    var currentPrice = allPrices.SingleOrDefault(p => p.CreatedOn.Value.Date == lastDate.AddDays(-14 * i));
+                    if (currentPrice != null)
+                    {
+                        prices.Add(currentPrice);
+                    }
+                }
+            }
+            else if (periodId == Period.LastThreeYears.ToString())
+            {
+                for (int i = 0; i < 36; i++)
+                {
+                    var currentPrice = allPrices.SingleOrDefault(p => p.CreatedOn.Value.Date == lastDate.AddMonths(-i));
+                    if (currentPrice != null)
+                    {
+                        prices.Add(currentPrice);
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    var currentPrice = allPrices.SingleOrDefault(p => p.CreatedOn.Value.Date == lastDate.AddMonths(-6 * i));
+                    if (currentPrice != null) {
+                        prices.Add(currentPrice);
+                    }
+                }
+            }
+
+
+
+            //foreach (var date in dateList)
+            //{
+            //    prices.Add(equity.Prices.SingleOrDefault(p => p.CreatedOn.Value.Date == date));                
+            //}
+
+            var pricesOrder = prices.OrderByDescending(p => p.CreatedOn).ToList();
+            foreach (var price in pricesOrder) {
+                assetPrices.Add(new Domain.Portfolio.AggregateRoots.Asset.AssetPrice
+                {
+                    Id = price.Id,
+                    AssetType = price.AssetType,
+                    CorrespondingAssetKey = price.CorrespondingAssetKey,
+                    CreatedOn = price.CreatedOn,
+                    Price = price.Price
+                });
+            }
+
+            //var pricesOrder = equity.Prices.ToList().OrderByDescending(p => p.CreatedOn).ToList();
+            //for (int i = 0; i < 180; i++) {
+            //    var price = pricesOrder[i];
+            //    assetPrices.Add(new Domain.Portfolio.AggregateRoots.Asset.AssetPrice { 
+            //        Id = price.Id,
+            //        AssetType = price.AssetType,
+            //        CorrespondingAssetKey = price.CorrespondingAssetKey,
+            //        CreatedOn = price.CreatedOn,
+            //        Price = price.Price
+            //    });
+            //}
+
+            return assetPrices;
+        }
+
+        public List<Domain.Portfolio.AggregateRoots.Asset.Equity> GetAllEquitiesBySectorName(string sectorName)
+        {
+            var equities = _db.Equities.Where(e => _db.Sectors.Where(s => s.SectorName == sectorName).Select(sc => sc.Id).ToList().Contains(e.Sector));
+            List<Domain.Portfolio.AggregateRoots.Asset.Equity> allEquities = new List<Domain.Portfolio.AggregateRoots.Asset.Equity>();
+            foreach (var equity in equities)
+            {
+                switch (equity.EquityType)
+                {
+                    case EquityTypes.AustralianEquity:
+                        allEquities.Add(new AustralianEquity(this)
+                        {
+                            Id = equity.AssetId,
+                            Name = equity.Name,
+                            EquityType = equity.EquityType,
+                            Sector = equity.Sector,
+                            Ticker = equity.Ticker
+                        });
+                        break;
+                    case EquityTypes.InternationalEquity:
+                        allEquities.Add(new InternationalEquity(this)
+                        {
+                            Id = equity.AssetId,
+                            Name = equity.Name,
+                            EquityType = equity.EquityType,
+                            Sector = equity.Sector,
+                            Ticker = equity.Ticker
+                        });
+                        break;
+                    case EquityTypes.ManagedInvestments:
+                        allEquities.Add(new ManagedInvestment(this)
+                        {
+                            Id = equity.AssetId,
+                            Name = equity.Name,
+                            EquityType = equity.EquityType,
+                            Sector = equity.Sector,
+                            Ticker = equity.Ticker
+                        });
+                        break;
+                }
+            }
+            return allEquities;
+        }
+
+        public List<string> GetAllResearchStringValueByKey(string key) {
+            return _db.ResearchValues.Where(r => r.Key == key).Select(re => re.StringValue).Distinct().ToList();
+        }
+
+        public List<Domain.Portfolio.AggregateRoots.Asset.Equity> GetAllEquitiesByResearchStringValue(string researchStringValue) {
+            var equities = _db.Equities.Where(e => e.ResearchValues.Where(r => r.StringValue == researchStringValue).Any()).ToList();
+            List<Domain.Portfolio.AggregateRoots.Asset.Equity> allEquities = new List<Domain.Portfolio.AggregateRoots.Asset.Equity>();
+            foreach (var equity in equities) {
+                switch (equity.EquityType) { 
+                    case EquityTypes.AustralianEquity :
+                        allEquities.Add(new AustralianEquity(this) {
+                            Id = equity.AssetId,
+                            Name = equity.Name,
+                            EquityType = equity.EquityType,
+                            Sector = equity.Sector,
+                            Ticker = equity.Ticker
+                        });
+                        break;
+                    case EquityTypes.InternationalEquity:
+                        allEquities.Add(new InternationalEquity(this)
+                        {
+                            Id = equity.AssetId,
+                            Name = equity.Name,
+                            EquityType = equity.EquityType,
+                            Sector = equity.Sector,
+                            Ticker = equity.Ticker
+                        });
+                        break;
+                    case EquityTypes.ManagedInvestments:
+                        allEquities.Add(new ManagedInvestment(this)
+                        {
+                            Id = equity.AssetId,
+                            Name = equity.Name,
+                            EquityType = equity.EquityType,
+                            Sector = equity.Sector,
+                            Ticker = equity.Ticker
+                        });
+                        break;
+                }
+            }
+            return allEquities;
+        }
+
+        public void InsertStockPricesData(List<AssetPrice> assetPrices) {
+            string id = assetPrices[0].CorrespondingAssetKey;
+            Equity equity = _db.Equities.SingleOrDefault(e => e.AssetId == id);
+
+            foreach(var price in assetPrices){
+                equity.Prices.Add(new AssetPrice { 
+                    Id = Guid.NewGuid().ToString(),
+                    AssetType = price.AssetType,
+                    CreatedOn = price.CreatedOn,
+                    CorrespondingAssetKey = price.CorrespondingAssetKey,
+                    Price = price.Price
+                });
+            }
+
+            _db.SaveChanges();
+            
+        }
+
+        
+
+
+
+
+
+
+
+
+        public string GetEnumDescription(Enum value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
+
+            DescriptionAttribute[] attributes =
+                (DescriptionAttribute[])fi.GetCustomAttributes(
+                typeof(DescriptionAttribute),
+                false);
+
+            if (attributes != null &&
+                attributes.Length > 0)
+                return attributes[0].Description;
+            else
+                return value.ToString();
+        }
     }
 }

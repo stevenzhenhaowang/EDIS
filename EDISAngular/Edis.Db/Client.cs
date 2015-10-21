@@ -44,5 +44,10 @@ namespace Edis.Db
         public string ACN { get; set; }
 
         public virtual ICollection<Account> Accounts { get; set; }
+
+        public Client ()
+	    {
+            this.Accounts = new HashSet<Account>();
+	    }
     }
 }

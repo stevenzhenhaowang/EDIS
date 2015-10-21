@@ -1493,37 +1493,37 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
         }
         #endregion
         #region services added on 26/05/2015
-        public List<CorporateActionClientAccountModel> GetAllClientAccounts(string clientUserId)
-        {
-            return new List<CorporateActionClientAccountModel>
-            {
-                new CorporateActionClientAccountModel{
-                    edisAccountNumber= "0008",
-                    brokerAccountNumber= "0008",
-                    brokerHinSrn= "X1111118",
-                    type= "Autolink",
-                    name="Peter Truong 008",
-                },new CorporateActionClientAccountModel{
-                    edisAccountNumber= "0007",
-                    brokerAccountNumber= "0007",
-                    brokerHinSrn= "X1111117",
-                    type= "Autolink",
-                    name="Peter Truong 007",
-                },new CorporateActionClientAccountModel{
-                    edisAccountNumber= "0006",
-                    brokerAccountNumber= "0006",
-                    brokerHinSrn= "X1111116",
-                    type= "Autolink",
-                    name="Peter Truong 006",
-                },new CorporateActionClientAccountModel{
-                    edisAccountNumber= "0005",
-                    brokerAccountNumber= "0005",
-                    brokerHinSrn= "X1111115",
-                    type= "Autolink",
-                    name="Peter Truong 005",
-                },
-            };
-        }
+        //public List<CorporateActionClientAccountModel> GetAllClientAccounts(string clientUserId)
+        //{
+        //    return new List<CorporateActionClientAccountModel>
+        //    {
+        //        new CorporateActionClientAccountModel{
+        //            edisAccountNumber= "0008",
+        //            brokerAccountNumber= "0008",
+        //            brokerHinSrn= "X1111118",
+        //            type= "Autolink",
+        //            name="Peter Truong 008",
+        //        },new CorporateActionClientAccountModel{
+        //            edisAccountNumber= "0007",
+        //            brokerAccountNumber= "0007",
+        //            brokerHinSrn= "X1111117",
+        //            type= "Autolink",
+        //            name="Peter Truong 007",
+        //        },new CorporateActionClientAccountModel{
+        //            edisAccountNumber= "0006",
+        //            brokerAccountNumber= "0006",
+        //            brokerHinSrn= "X1111116",
+        //            type= "Autolink",
+        //            name="Peter Truong 006",
+        //        },new CorporateActionClientAccountModel{
+        //            edisAccountNumber= "0005",
+        //            brokerAccountNumber= "0005",
+        //            brokerHinSrn= "X1111115",
+        //            type= "Autolink",
+        //            name="Peter Truong 005",
+        //        },
+        //    };
+        //}
         #endregion
 
         #region mock helpers
@@ -1540,13 +1540,13 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
 
         public AdviserView GetAdviserAccountNumberForClient(string clientUserId)
         {
-            var client = db.Clients.FirstOrDefault(c => c.ClientId == clientUserId);
+            var client = db.Clients.FirstOrDefault(c => c.ClientNumber == clientUserId);
             var clientGroup = db.ClientGroups.FirstOrDefault(g => g.ClientGroupId == client.ClientGroupId);
-            var adviser = db.Advisers.FirstOrDefault(a => a.AdviserNumber == clientGroup.Adviser_AdviserId);
+            var adviser = db.Advisers.FirstOrDefault(a => a.AdviserId == clientGroup.Adviser_AdviserId);
             return new AdviserView
             {
-                //accountNumber = clientGroup.Adviser.,
-                //name = adviser.FirstName + " " + adviser.LastName
+                accountNumber = clientGroup.Adviser.AdviserId,
+                name = adviser.FirstName + " " + adviser.LastName
             };
         }
 

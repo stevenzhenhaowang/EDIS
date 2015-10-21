@@ -189,6 +189,7 @@
     <Compile Include="Abstract\IRepository.cs" />
     <Compile Include="APIControllers\AccountController.cs" />
     <Compile Include="APIControllers\AdviserController.cs" />
+    <Compile Include="APIControllers\ClientController.cs" />
     <Compile Include="APIControllers\CorporateActionController.cs" />
     <Compile Include="APIControllers\CommonController.cs" />
     <Compile Include="APIControllers\CorrespondenceController.cs">
@@ -196,6 +197,7 @@
     </Compile>
     <Compile Include="APIControllers\EducationLevelController.cs" />
     <Compile Include="APIControllers\EntityClientController.cs" />
+    <Compile Include="APIControllers\ImportExcelData.cs" />
     <Compile Include="APIControllers\PersonClientController.cs" />
     <Compile Include="APIControllers\PortfolioAustralianEquityController.cs" />
     <Compile Include="APIControllers\PortfolioCashTermDepositController.cs" />
@@ -207,6 +209,7 @@
     <Compile Include="APIControllers\PortfolioManagedInvestmentController.cs" />
     <Compile Include="APIControllers\PortfolioMortgageInvestmentController.cs" />
     <Compile Include="APIControllers\PortfolioOverviewController.cs" />
+    <Compile Include="APIControllers\RebalanceController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -252,11 +255,13 @@
     <Compile Include="Infrastructure\Authorization\AuthorizationParameters.cs" />
     <Compile Include="Infrastructure\DatabaseAccess\AdviserRepository.cs" />
     <Compile Include="Infrastructure\DatabaseAccess\BaseRepository.cs" />
+    <Compile Include="Infrastructure\DatabaseAccess\ClientRepository.cs" />
     <Compile Include="Infrastructure\DatabaseAccess\CommonReferenceDataRepository.cs" />
     <Compile Include="Infrastructure\DatabaseAccess\CorrespondenceRepository.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Infrastructure\DatabaseAccess\PortfolioRepository.cs" />
+    <Compile Include="Infrastructure\DatabaseAccess\RebalanceRepository.cs" />
     <Compile Include="Infrastructure\DbFirst\Account.cs">
       <DependentUpon>EFModels.tt</DependentUpon>
     </Compile>
@@ -461,6 +466,7 @@
     <Compile Include="Models\ServiceModels\AdviserProfile\BusinessStatDetailModel.cs" />
     <Compile Include="Models\ServiceModels\AdviserProfile\ReminderModel.cs" />
     <Compile Include="Models\ServiceModels\AdviserProfile\ResearchAnalysisModel.cs" />
+    <Compile Include="Models\ServiceModels\AdviserProfile\StockPeriodModel.cs" />
     <Compile Include="Models\ServiceModels\AdviserProfile\WordMarketItemModel.cs" />
     <Compile Include="Models\ServiceModels\CashTermDepositProfileModel.cs" />
     <Compile Include="Models\ServiceModels\CompanyBriefModel.cs" />
@@ -3467,6 +3473,29 @@
       <Project>{79a3d390-0fa5-4975-a62e-600c00094884}</Project>
       <Name>SqlRepository</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>8</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

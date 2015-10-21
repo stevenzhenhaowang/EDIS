@@ -13,6 +13,8 @@ using EDIS_DOMAIN;
 using EDISAngular.Infrastructure.DatabaseAccess;
 using EDISAngular.Models.ServiceModels.AdviserProfile;
 using EDISAngular.Models.ServiceModels.CorporateActions;
+using Domain.Portfolio.AggregateRoots;
+using SqlRepository;
 
 
 
@@ -22,9 +24,11 @@ namespace EDISAngular.APIControllers
     public class ClientController : ApiController
     {
         private ClientRepository clientRepo;
+        private EdisRepository edisRepo;
         public ClientController()
         {
             clientRepo = new ClientRepository();
+            edisRepo = new EdisRepository();
         }
         [HttpGet, Route("api/client/id")]
         [Authorize(Roles = AuthorizationRoles.Role_Client)]
@@ -38,7 +42,14 @@ namespace EDISAngular.APIControllers
         public AdviserView getAdviserAccountNumber()
         {
             var userid = User.Identity.GetUserId();
-            return clientRepo.GetAdviserAccountNumberForClient(userid);
+            Adviser adviser = edisRepo.GetAdviserForClient(userid);
+            AdviserView view = new AdviserView { 
+                accountNumber = adviser.Id,
+                name = adviser.FirstName + " " + adviser.LastName
+            };
+
+            return view;
+            //return clientRepo.GetAdviserAccountNumberForClient(userid);
         }
 
 
@@ -138,12 +149,12 @@ namespace EDISAngular.APIControllers
         #endregion
         #region methods added 26/05/2015
 
-        [HttpGet, Route("api/client/clientaccounts")]
-        [Authorize(Roles = AuthorizationRoles.Role_Client)]
-        public List<CorporateActionClientAccountModel> GetAllClientAccounts()
-        {
-            return clientRepo.GetAllClientAccounts(User.Identity.GetUserId());
-        }
+        //[HttpGet, Route("api/client/clientaccounts")]
+        //[Authorize(Roles = AuthorizationRoles.Role_Client)]
+        //public List<CorporateActionClientAccountModel> GetAllClientAccounts()
+        //{
+        //    return clientRepo.GetAllClientAccounts(User.Identity.GetUserId());
+        //}
         #endregion
 
 

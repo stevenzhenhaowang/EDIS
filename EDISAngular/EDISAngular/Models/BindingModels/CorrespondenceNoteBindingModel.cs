@@ -32,7 +32,7 @@ namespace EDISAngular.Models.BindingModels
         public string followupActions { get; set; }
         public DateTime dateDue { get; set; }
         public string status { get; set; }//not supplied from client
-        public DateTime followupDate { get; set; }
+        public DateTime? followupDate { get; set; }
         public DateTime dateCompleted { get; set; }//not supplied from client
         public bool reminder { get; set; }
         public DateTime reminderDate { get; set; }//not supplied from client

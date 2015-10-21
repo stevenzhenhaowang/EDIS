@@ -335,9 +335,6 @@
                  template: " $#= value #"
              }
          };*/
-
-         console.log("??AAA weishenme");
-
          $scope.pieSource = {
              data: $scope.data.data
          }

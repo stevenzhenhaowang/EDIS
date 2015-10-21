@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AggregateRoots\Adviser.cs" />
+    <Compile Include="AggregateRoots\Asset\AssetPrice.cs" />
     <Compile Include="AggregateRoots\Asset\AustralianEquity.cs" />
     <Compile Include="AggregateRoots\Asset\InternationalEquity.cs" />
     <Compile Include="AggregateRoots\Client.cs" />
@@ -67,7 +68,10 @@
     <Compile Include="AggregateRoots\Accounts\AccountBase.cs" />
     <Compile Include="AggregateRoots\Accounts\ClientAccount.cs" />
     <Compile Include="AggregateRoots\Accounts\GroupAccount.cs" />
+    <Compile Include="Correspondence\Correspondence.cs" />
+    <Compile Include="Correspondence\CorrespondenceFollowup.cs" />
     <Compile Include="Correspondence\Message.cs" />
+    <Compile Include="EdisDatabase\Sector.cs" />
     <Compile Include="Entities\Activity\ActivityBase.cs" />
     <Compile Include="AggregateRoots\AssetBase.cs" />
     <Compile Include="Entities\Activity\ConsultancyActivity.cs" />
@@ -166,7 +170,6 @@
     <Compile Include="Values\Weighting\Weighting.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="EdisDatabase\" />
     <Folder Include="Policies\" />
   </ItemGroup>
   <ItemGroup>
