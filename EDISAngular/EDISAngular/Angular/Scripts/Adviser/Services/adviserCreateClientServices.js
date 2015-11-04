@@ -97,43 +97,46 @@
             question: " % of total Asset for Short Term Trading:",
         }, {
             question: "% of total Domestic Equity for Short Term Trading:",
-        }, {
-            question: "Are there any particular asset classes you wish to include in the portfolio?",
-        }, {
-            question: "Are there any specific Domestic Equity stocks you wish to include?",
-        }, {
-            question: "Are there any sectors you wish to include in the portfolio?",
-        }, {
-            question: "Are there any particular Managed Investment vehicle you wish to include?",
-        }, {
-            question: "Are there any additional comments you wish to add?",
-        }, {
-            question: "Are there any particular asset classes you wish to avoid in the portfolio?",
-        }, {
-            question: "Are there any specific Domestic Equity stocks you wish to avoid?",
-        }, {
-            question: "Are there any sectors you wish to avoid in the portfolio?",
-        }, {
-            question: "Are there any particular Managed Investment vehicle you wish to avoid?",
-        }, {
-            question: "Are there any additional comments you wish to add?",
+        //}, {
+            //question: "Are there any particular asset classes you wish to include in the portfolio?",
+        //}, {
+        //    question: "Are there any specific Domestic Equity stocks you wish to include?",
+        //}, {
+        //    question: "Are there any sectors you wish to include in the portfolio?",
+        //}, {
+        //    question: "Are there any particular Managed Investment vehicle you wish to include?",
+        //}, {
+        //    question: "Are there any additional comments you wish to add?",
+        //}, {
+        //    question: "Are there any particular asset classes you wish to avoid in the portfolio?",
+        //}, {
+        //    question: "Are there any specific Domestic Equity stocks you wish to avoid?",
+        //}, {
+        //    question: "Are there any sectors you wish to avoid in the portfolio?",
+        //}, {
+        //    question: "Are there any particular Managed Investment vehicle you wish to avoid?",
+        //}, {
+        //    question: "Are there any additional comments you wish to add?",
         },
     ];
     var riskLevels = [
         {
-            value: 1,
+            id: 0,
+            name:"Not Set"
+        }, {
+            id: 1,
             name:"Defensive"
         }, {
-            value: 2,
+            id: 2,
             name: "Conservative"
         }, {
-            value: 3,
+            id: 3,
             name: "Balanced"
         }, {
-            value: 4,
+            id: 4,
             name: "Assertive"
         }, {
-            value: 5,
+            id: 5,
             name: "Aggressive"
         },
     ];

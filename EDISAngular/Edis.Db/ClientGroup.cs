@@ -23,11 +23,8 @@ namespace Edis.Db
         [Required]
         public string GroupNumber { get; set; }
 
-
         public string GroupName { get; set; }
         public string GroupAlias { get; set; }
-
-
 
         public virtual ICollection<Account> GroupAccounts { get; set; }
 

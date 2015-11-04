@@ -16,13 +16,14 @@ using EDISAngular.Models;
 using EDISAngular.Providers;
 using EDISAngular.Results;
 using System.Web.Security;
-using EDISAngular.Services;
 using EDISAngular.Infrastructure.Authorization;
 using EDIS_DOMAIN;
 using EDISAngular.Infrastructure.DbFirst;
 using Domain.Portfolio.Entities.CreationModels;
 using SqlRepository;
 using System.Web;
+using Domain.Portfolio.EdisDatabase;
+using Shared;
 
 namespace EDISAngular.APIControllers
 {
@@ -79,44 +80,42 @@ namespace EDISAngular.APIControllers
                     edisRepo.CreateNewClientSync(client);
                     #endregion
 
-                    //#region create risk profile if present
-                    //if (model.riskProfile != null)
-                    //{
-                    //    var riskProfile = model.riskProfile;
-                    //    RiskProfile profile = new RiskProfile
-                    //    {
-                    //        CapitalLossAttitude = riskProfile.capitalLossAttitude,
-                    //        ClientID = client.ClientUserID,
-                    //        Comments = riskProfile.comments,
-                    //        DateCreated = DateTime.Now,
-                    //        DateModified = DateTime.Now,
-                    //        IncomeSource = riskProfile.incomeSource,
-                    //        InvestmentKnowledge = riskProfile.investmentKnowledge,
-                    //        InvestmentObjective1 = riskProfile.investmentObjective1,
-                    //        InvestmentObjective2 = riskProfile.investmentObjective2,
-                    //        InvestmentObjective3 = riskProfile.investmentObjective3,
-                    //        InvestmentProfile = riskProfile.investmentProfile,
-                    //        InvestmentTimeHorizon = riskProfile.investmentTimeHorizon,
-                    //        LongTermGoal1 = riskProfile.longTermGoal1,
-                    //        LongTermGoal2 = riskProfile.longTermGoal2,
-                    //        LongTermGoal3 = riskProfile.longTermGoal3,
-                    //        MedTermGoal1 = riskProfile.medTermGoal1,
-                    //        MedTermGoal2 = riskProfile.medTermGoal2,
-                    //        MedTermGoal3 = riskProfile.medTermGoal3,
-                    //        RetirementAge = string.IsNullOrEmpty(riskProfile.retirementAge)? (int?)null: Convert.ToInt32(riskProfile.retirementAge),
-                    //        RetirementIncome = riskProfile.retirementIncome,
-                    //        RiskProfileID = Guid.NewGuid().ToString(),
-                    //        RiskAttitude = riskProfile.riskAttitude,
-                    //        ShortTermAssetPercent = riskProfile.shortTermAssetPercent,
-                    //        ShortTermEquityPercent = riskProfile.shortTermEquityPercent,
-                    //        ShortTermGoal1 = riskProfile.shortTermGoal1,
-                    //        ShortTermGoal2 = riskProfile.shortTermGoal2,
-                    //        ShortTermGoal3 = riskProfile.shortTermGoal3,
-                    //        ShortTermTrading = riskProfile.shortTermTrading
-                    //    };
-                    //    db.RiskProfiles.Add(profile);
-                    //}
-                    //#endregion
+                    #region create risk profile if present
+                    if (model.riskProfile != null) {
+                        var riskProfile = model.riskProfile;
+                        RiskProfile profile = new RiskProfile {
+                            CapitalLossAttitude = riskProfile.capitalLossAttitude,
+                            ClientID = edisRepo.GetClientSync(user.Id, DateTime.Now).Id,
+                            Comments = riskProfile.comments,
+                            DateCreated = DateTime.Now,
+                            DateModified = DateTime.Now,
+                            IncomeSource = riskProfile.incomeSource,
+                            InvestmentKnowledge = riskProfile.investmentKnowledge,
+                            InvestmentObjective1 = riskProfile.investmentObjective1,
+                            InvestmentObjective2 = riskProfile.investmentObjective2,
+                            InvestmentObjective3 = riskProfile.investmentObjective3,
+                            InvestmentProfile = riskProfile.investmentProfile,
+                            InvestmentTimeHorizon = riskProfile.investmentTimeHorizon,
+                            LongTermGoal1 = riskProfile.longTermGoal1,
+                            LongTermGoal2 = riskProfile.longTermGoal2,
+                            LongTermGoal3 = riskProfile.longTermGoal3,
+                            MedTermGoal1 = riskProfile.medTermGoal1,
+                            MedTermGoal2 = riskProfile.medTermGoal2,
+                            MedTermGoal3 = riskProfile.medTermGoal3,
+                            RetirementAge = string.IsNullOrEmpty(riskProfile.retirementAge) ? (int?)null : Convert.ToInt32(riskProfile.retirementAge),
+                            RetirementIncome = riskProfile.retirementIncome,
+                            RiskAttitude = riskProfile.riskAttitude,
+                            ShortTermAssetPercent = riskProfile.shortTermAssetPercent,
+                            ShortTermEquityPercent = riskProfile.shortTermEquityPercent,
+                            ShortTermGoal1 = riskProfile.shortTermGoal1,
+                            ShortTermGoal2 = riskProfile.shortTermGoal2,
+                            ShortTermGoal3 = riskProfile.shortTermGoal3,
+                            ShortTermTrading = riskProfile.shortTermTrading,
+                            riskLevel = Int32.Parse(riskProfile.riskLevel)
+                        };
+                        edisRepo.CreateRiskProfileForClient(profile);
+                    }
+                    #endregion
 
                     //#region save all changes and return ok
 

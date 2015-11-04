@@ -6,7 +6,7 @@ namespace Shared
     {
         [Description("Sectors")]
         Sectors = 1,
-        [Description("Country")]
-        Country = 2
+        [Description("Countries")]
+        Countries = 2
     }
 }

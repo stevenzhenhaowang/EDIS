@@ -61,6 +61,8 @@ namespace EDISAngular.Models.BindingModels
         public string ACN { get; set; }
 
 
+        [Display(Name = "Risk Profile")]
+        public RiskProfileBindingModel riskProfile { get; set; }
 
     }
 }

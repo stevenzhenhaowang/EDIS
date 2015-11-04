@@ -72,6 +72,7 @@
     <Compile Include="Correspondence\Correspondence.cs" />
     <Compile Include="Correspondence\CorrespondenceFollowup.cs" />
     <Compile Include="Correspondence\Message.cs" />
+    <Compile Include="EdisDatabase\RiskProfile.cs" />
     <Compile Include="EdisDatabase\Sector.cs" />
     <Compile Include="Entities\Activity\ActivityBase.cs" />
     <Compile Include="AggregateRoots\AssetBase.cs" />
@@ -127,6 +128,8 @@
     <Compile Include="Internals\SellTransactionModel.cs" />
     <Compile Include="Internals\TransactionPosition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rebalance\RebalanceModel.cs" />
+    <Compile Include="Rebalance\TemplateDetailsItemParameter.cs" />
     <Compile Include="Services\AssetsExtensions.cs" />
     <Compile Include="Services\CurrencyConverter.cs" />
     <Compile Include="Services\LiabilitiesExtensions.cs" />

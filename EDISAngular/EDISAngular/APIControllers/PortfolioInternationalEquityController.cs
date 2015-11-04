@@ -878,10 +878,8 @@ namespace EDISAngular.APIControllers
 
                 var ratios = assets.GetAverageRatiosFor<InternationalEquity>();
 
-                foreach (var asset in internationalAssets)
-                {
-                    itemList.Add(new EquityCompanyProfileItemModel
-                    {
+                foreach (var asset in internationalAssets) {
+                    itemList.Add(new EquityCompanyProfileItemModel {
                         asx = asset.Ticker,
                         beta = ratios.Beta,
                         company = asset.Name,
@@ -897,7 +895,11 @@ namespace EDISAngular.APIControllers
                         priceEarningsRatio = ratios.PriceEarningRatio,
                         quickRatio = ratios.QuickRatio,
                         returnOnAsset = ratios.ReturnOnAsset,
-                        returnOnEquity = ratios.ReturnOnEquity
+                        returnOnEquity = ratios.ReturnOnEquity,
+                        marketPrice = asset.LatestPrice,
+                        marketValue = asset.GetTotalMarketValue(),
+                        totalCostValue = asset.GetCost().Total,
+                        costValue = asset.GetCost().AssetCost,
                     });
                 }
 
@@ -927,10 +929,8 @@ namespace EDISAngular.APIControllers
 
                 var ratios = assets.GetAverageRatiosFor<InternationalEquity>();
 
-                foreach (var asset in internationalAssets)
-                {
-                    itemList.Add(new EquityCompanyProfileItemModel
-                    {
+                foreach (var asset in internationalAssets) {
+                    itemList.Add(new EquityCompanyProfileItemModel {
                         asx = asset.Ticker,
                         beta = ratios.Beta,
                         company = asset.Name,
@@ -946,7 +946,11 @@ namespace EDISAngular.APIControllers
                         priceEarningsRatio = ratios.PriceEarningRatio,
                         quickRatio = ratios.QuickRatio,
                         returnOnAsset = ratios.ReturnOnAsset,
-                        returnOnEquity = ratios.ReturnOnEquity
+                        returnOnEquity = ratios.ReturnOnEquity,
+                        marketPrice = asset.LatestPrice,
+                        marketValue = asset.GetTotalMarketValue(),
+                        totalCostValue = asset.GetCost().Total,
+                        costValue = asset.GetCost().AssetCost,
                     });
                 }
 
@@ -988,10 +992,8 @@ namespace EDISAngular.APIControllers
 
                 var ratios = assets.GetAverageRatiosFor<InternationalEquity>();
 
-                foreach (var asset in internationalAssets)
-                {
-                    itemList.Add(new EquityCompanyProfileItemModel
-                    {
+                foreach (var asset in internationalAssets) {
+                    itemList.Add(new EquityCompanyProfileItemModel {
                         asx = asset.Ticker,
                         beta = ratios.Beta,
                         company = asset.Name,
@@ -1007,7 +1009,11 @@ namespace EDISAngular.APIControllers
                         priceEarningsRatio = ratios.PriceEarningRatio,
                         quickRatio = ratios.QuickRatio,
                         returnOnAsset = ratios.ReturnOnAsset,
-                        returnOnEquity = ratios.ReturnOnEquity
+                        returnOnEquity = ratios.ReturnOnEquity,
+                        marketPrice = asset.LatestPrice,
+                        marketValue = asset.GetTotalMarketValue(),
+                        totalCostValue = asset.GetCost().Total,
+                        costValue = asset.GetCost().AssetCost,
                     });
                 }
 
@@ -1034,10 +1040,8 @@ namespace EDISAngular.APIControllers
 
                 var ratios = assets.GetAverageRatiosFor<InternationalEquity>();
 
-                foreach (var asset in internationalAssets)
-                {
-                    itemList.Add(new EquityCompanyProfileItemModel
-                    {
+                foreach (var asset in internationalAssets) {
+                    itemList.Add(new EquityCompanyProfileItemModel {
                         asx = asset.Ticker,
                         beta = ratios.Beta,
                         company = asset.Name,
@@ -1053,7 +1057,11 @@ namespace EDISAngular.APIControllers
                         priceEarningsRatio = ratios.PriceEarningRatio,
                         quickRatio = ratios.QuickRatio,
                         returnOnAsset = ratios.ReturnOnAsset,
-                        returnOnEquity = ratios.ReturnOnEquity
+                        returnOnEquity = ratios.ReturnOnEquity,
+                        marketPrice = asset.LatestPrice,
+                        marketValue = asset.GetTotalMarketValue(),
+                        totalCostValue = asset.GetCost().Total,
+                        costValue = asset.GetCost().AssetCost,
                     });
                 }
 

@@ -41,6 +41,9 @@ using MarginLendingTransactionCreation = Domain.Portfolio.Entities.CreationModel
 using PropertyTransaction = Edis.Db.Transactions.PropertyTransaction;
 using RepaymentCreation = Domain.Portfolio.Entities.CreationModels.RepaymentCreation;
 using AssetPrice = Edis.Db.Assets.AssetPrice;
+using RebalanceModel = Domain.Portfolio.Rebalance.RebalanceModel;
+using TemplateDetailsItemParameter = Domain.Portfolio.Rebalance.TemplateDetailsItemParameter;
+using RiskProfile = Domain.Portfolio.EdisDatabase.RiskProfile;
 using Domain.Portfolio.Correspondence;
 using System.Reflection;
 using System.ComponentModel;
@@ -2164,6 +2167,110 @@ namespace SqlRepository
             //_db.Clients
             //var entry = _db.Entry(currentClient);
             //entry.Property(e => e.Email).IsModified = true;
+            _db.SaveChanges();
+        }
+
+        public void CreateRiskProfileForClient(RiskProfile riskProfile) {
+            _db.RiskProfiles.Add(new Edis.Db.RiskProfile {
+                RiskProfileID = Guid.NewGuid().ToString(),
+                CapitalLossAttitude = riskProfile.CapitalLossAttitude,
+                ClientID = riskProfile.ClientID,
+                Comments = riskProfile.Comments,
+                DateCreated = riskProfile.DateCreated,
+                DateModified = riskProfile.DateModified,
+                IncomeSource = riskProfile.IncomeSource,
+                InvestmentKnowledge = riskProfile.InvestmentKnowledge,
+                InvestmentObjective1 = riskProfile.InvestmentObjective1,
+                InvestmentObjective2 = riskProfile.InvestmentObjective2,
+                InvestmentObjective3 = riskProfile.InvestmentObjective3,
+                InvestmentProfile = riskProfile.InvestmentProfile,
+                InvestmentTimeHorizon = riskProfile.InvestmentTimeHorizon,
+                LongTermGoal1 = riskProfile.LongTermGoal1,
+                LongTermGoal2 = riskProfile.LongTermGoal2,
+                LongTermGoal3 = riskProfile.LongTermGoal3,
+                MedTermGoal1 = riskProfile.MedTermGoal1,
+                MedTermGoal2 = riskProfile.MedTermGoal2,
+                MedTermGoal3 = riskProfile.MedTermGoal3,
+                RetirementAge = riskProfile.RetirementAge,
+                RetirementIncome = riskProfile.RetirementIncome,
+                RiskAttitude = riskProfile.RiskAttitude,
+                ShortTermAssetPercent = riskProfile.ShortTermAssetPercent,
+                ShortTermEquityPercent = riskProfile.ShortTermEquityPercent,
+                ShortTermGoal1 = riskProfile.ShortTermGoal1,
+                ShortTermGoal2 = riskProfile.ShortTermGoal2,
+                ShortTermGoal3 = riskProfile.ShortTermGoal3,
+                ShortTermTrading = riskProfile.ShortTermTrading,
+                riskLevel = riskProfile.riskLevel
+            });
+            _db.SaveChanges();
+        }
+
+        public RiskProfile getRiskProfileForClient(string clientID) {
+            var riskProfile = _db.RiskProfiles.SingleOrDefault(r => r.ClientID == clientID);
+
+            return new RiskProfile { 
+                ClientID = riskProfile.ClientID,
+                CapitalLossAttitude = riskProfile.CapitalLossAttitude,
+                RetirementAge = riskProfile.RetirementAge,
+                riskLevel = riskProfile.riskLevel,
+                RiskAttitude = riskProfile.RiskAttitude,
+                ShortTermAssetPercent = riskProfile.ShortTermAssetPercent,
+                Comments = riskProfile.Comments,
+                DateCreated = riskProfile.DateCreated,
+                DateModified = riskProfile.DateModified,
+                IncomeSource = riskProfile.IncomeSource,
+                InvestmentKnowledge = riskProfile.InvestmentKnowledge,
+                InvestmentObjective1 = riskProfile.InvestmentObjective1,
+                InvestmentObjective2 = riskProfile.InvestmentObjective2,
+                InvestmentObjective3 = riskProfile.InvestmentObjective3,
+                InvestmentProfile = riskProfile.InvestmentProfile,
+                InvestmentTimeHorizon = riskProfile.InvestmentTimeHorizon,
+                LongTermGoal1 = riskProfile.LongTermGoal1,
+                LongTermGoal2 = riskProfile.LongTermGoal2,
+                LongTermGoal3 = riskProfile.LongTermGoal3,
+                MedTermGoal1 = riskProfile.MedTermGoal1,
+                MedTermGoal2 = riskProfile.MedTermGoal2,
+                MedTermGoal3 = riskProfile.MedTermGoal3,
+                RetirementIncome = riskProfile.RetirementIncome,
+                RiskProfileID = riskProfile.RiskProfileID,
+                ShortTermEquityPercent = riskProfile.ShortTermEquityPercent,
+                ShortTermGoal1 = riskProfile.ShortTermGoal1,
+                ShortTermGoal2 = riskProfile.ShortTermGoal2,
+                ShortTermGoal3 = riskProfile.ShortTermGoal3,
+                ShortTermTrading = riskProfile.ShortTermTrading
+            };
+        }
+
+        public void UpdateRiskProfile(RiskProfile riskProfile) {
+            Edis.Db.RiskProfile existingProfile = _db.RiskProfiles.SingleOrDefault(r => r.ClientID == riskProfile.ClientID);
+            existingProfile.CapitalLossAttitude = riskProfile.CapitalLossAttitude;
+            existingProfile.RetirementAge = riskProfile.RetirementAge;
+            existingProfile.riskLevel = riskProfile.riskLevel;
+            existingProfile.RiskAttitude = riskProfile.RiskAttitude;
+            existingProfile.ShortTermAssetPercent = riskProfile.ShortTermAssetPercent;
+            existingProfile.Comments = riskProfile.Comments;
+            existingProfile.DateCreated = riskProfile.DateCreated;
+            existingProfile.DateModified = riskProfile.DateModified;
+            existingProfile.IncomeSource = riskProfile.IncomeSource;
+            existingProfile.InvestmentKnowledge = riskProfile.InvestmentKnowledge;
+            existingProfile.InvestmentObjective1 = riskProfile.InvestmentObjective1;
+            existingProfile.InvestmentObjective2 = riskProfile.InvestmentObjective2;
+            existingProfile.InvestmentObjective3 = riskProfile.InvestmentObjective3;
+            existingProfile.InvestmentProfile = riskProfile.InvestmentProfile;
+            existingProfile.InvestmentTimeHorizon = riskProfile.InvestmentTimeHorizon;
+            existingProfile.LongTermGoal1 = riskProfile.LongTermGoal1;
+            existingProfile.LongTermGoal2 = riskProfile.LongTermGoal2;
+            existingProfile.LongTermGoal3 = riskProfile.LongTermGoal3;
+            existingProfile.MedTermGoal1 = riskProfile.MedTermGoal1;
+            existingProfile.MedTermGoal2 = riskProfile.MedTermGoal2;
+            existingProfile.MedTermGoal3 = riskProfile.MedTermGoal3;
+            existingProfile.RetirementIncome = riskProfile.RetirementIncome;
+            existingProfile.ShortTermEquityPercent = riskProfile.ShortTermEquityPercent;
+            existingProfile.ShortTermGoal1 = riskProfile.ShortTermGoal1;
+            existingProfile.ShortTermGoal2 = riskProfile.ShortTermGoal2;
+            existingProfile.ShortTermGoal3 = riskProfile.ShortTermGoal3;
+            existingProfile.ShortTermTrading = riskProfile.ShortTermTrading;
+
             _db.SaveChanges();
         }
 
@@ -7242,6 +7349,7 @@ namespace SqlRepository
                     internationalEquity.Sector = equity.Sector;
                     internationalEquity.Ticker = equity.Ticker;
                     internationalEquity.TotalNumberOfUnits = assetGroup.Sum(a => a.NumberOfUnits).GetValueOrDefault();
+                    internationalEquity.EquityType = EquityTypes.InternationalEquity;
                     result.Add(internationalEquity);
                 }
                 else
@@ -7317,6 +7425,7 @@ namespace SqlRepository
                     australianEquity.Sector = equity.Sector;
                     australianEquity.Ticker = equity.Ticker;
                     australianEquity.TotalNumberOfUnits = assetGroup.Sum(a => a.NumberOfUnits).GetValueOrDefault();
+                    australianEquity.EquityType = EquityTypes.AustralianEquity;
                     result.Add(australianEquity);
                 }
                 else
@@ -7779,15 +7888,65 @@ namespace SqlRepository
             };
         }
 
+        public List<Domain.Portfolio.AggregateRoots.Asset.Equity> GetEquityForAccountSync(string equityId, ClientGroup clientGroup) {
+
+            List<GroupAccount> GroupAccounts = GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+            List<ClientAccount> clientAccounts = new List<ClientAccount>();
+            clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
+
+            List<Account> accounts = new List<Account>();
+            GroupAccounts.ForEach(g => accounts.AddRange(_db.Accounts.Where(a => a.AccountNumber == g.AccountNumber)));
+            clientAccounts.ForEach(c => accounts.AddRange(_db.Accounts.Where(a => a.AccountNumber == c.AccountNumber)));
+
+
+            Equity equity = _db.Equities.SingleOrDefault(e => e.AssetId == equityId);
+            List<Domain.Portfolio.AggregateRoots.Asset.Equity> equities = new List<Domain.Portfolio.AggregateRoots.Asset.Equity>();
+
+            switch (equity.EquityType) {
+                case EquityTypes.AustralianEquity:
+                    accounts.ForEach(a => equities.AddRange(GenerateAustralianEquityForAccountSync(a.AccountId, DateTime.Now, a).Where(auE => auE.Id == equityId)));
+                    break;
+                case EquityTypes.InternationalEquity:
+                    accounts.ForEach(a => equities.AddRange(GenerateInternationalEquityForAccountSync(a.AccountId, DateTime.Now, a).Where(inE => inE.Id == equityId)));
+                    break;
+            }
+
+            return equities;
+        }
+
+
+        public int GetEquityUnitByEquityIdAndClientGroup(string equityId, ClientGroup clientGroup) {
+            List<GroupAccount> GroupAccounts = GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+            List<ClientAccount> clientAccounts = new List<ClientAccount>();
+            clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
+
+            List<Account> accounts = new List<Account>();
+            GroupAccounts.ForEach(g => accounts.AddRange(_db.Accounts.Where(a => a.AccountNumber == g.AccountNumber)));
+            clientAccounts.ForEach(c => accounts.AddRange(_db.Accounts.Where(a => a.AccountNumber == c.AccountNumber)));
+
+            int numberOfUnit = 0;
+
+            accounts.ForEach(a => numberOfUnit += a.EquityTransactions.Sum(e => e.NumberOfUnits) == null ? 0 : (int)a.EquityTransactions.Sum(e => e.NumberOfUnits));
+
+            return numberOfUnit;
+        }
+
         public Domain.Portfolio.AggregateRoots.Asset.Equity getEquityById(string equityId) {
             Equity equity = _db.Equities.SingleOrDefault(e => e.AssetId == equityId);
+
+            var latestPrice = equity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault();
+            
+
             if(equity.EquityType == EquityTypes.AustralianEquity){
                 return new Domain.Portfolio.AggregateRoots.Asset.AustralianEquity(this)
                 {
                     Id = equity.AssetId,
                     Name = equity.Name,
                     EquityType = equity.EquityType,
-                    Ticker = equity.Ticker
+                    Ticker = equity.Ticker,
+                    Sector = equity.Sector,
+                    LatestPrice = latestPrice
+                    //ClientAccountId = equity.
                 };
             }else if(equity.EquityType == EquityTypes.InternationalEquity){
                 return new Domain.Portfolio.AggregateRoots.Asset.InternationalEquity(this)
@@ -7795,7 +7954,9 @@ namespace SqlRepository
                     Id = equity.AssetId,
                     Name = equity.Name,
                     EquityType = equity.EquityType,
-                    Ticker = equity.Ticker
+                    Ticker = equity.Ticker,
+                    Sector = equity.Sector,
+                    LatestPrice = latestPrice
                 };
             }
             else if (equity.EquityType == EquityTypes.ManagedInvestments)
@@ -7805,10 +7966,59 @@ namespace SqlRepository
                     Id = equity.AssetId,
                     Name = equity.Name,
                     EquityType = equity.EquityType,
-                    Ticker = equity.Ticker
+                    Ticker = equity.Ticker,
+                    Sector = equity.Sector,
+                    LatestPrice = latestPrice
                 };
             }
             else {
+                return null;
+            }
+        }
+
+
+        public Domain.Portfolio.AggregateRoots.Asset.Equity getEquityByIdAndClientGroup(string equityId, ClientGroup clientGroup) {
+            Equity equity = _db.Equities.SingleOrDefault(e => e.AssetId == equityId);
+
+            var latestPrice = equity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault();
+
+            if (equity.EquityType == EquityTypes.AustralianEquity) {
+                return new Domain.Portfolio.AggregateRoots.Asset.AustralianEquity(this) {
+                    Id = equity.AssetId,
+                    Name = equity.Name,
+                    EquityType = equity.EquityType,
+                    Ticker = equity.Ticker,
+                    F0Ratios = GetF0RatiosForEquitySync(equity.Ticker),
+                    F1Recommendation = GetF1RatiosForEquitySync(equity.Ticker),
+                    Sector = equity.Sector,
+                    TotalNumberOfUnits = GetEquityUnitByEquityIdAndClientGroup(equityId, clientGroup),
+                    LatestPrice = latestPrice == null ? 0 : (double)latestPrice
+                };
+            } else if (equity.EquityType == EquityTypes.InternationalEquity) {
+                return new Domain.Portfolio.AggregateRoots.Asset.InternationalEquity(this) {
+                    Id = equity.AssetId,
+                    Name = equity.Name,
+                    EquityType = equity.EquityType,
+                    Ticker = equity.Ticker,
+                    F0Ratios = GetF0RatiosForEquitySync(equity.Ticker),
+                    F1Recommendation = GetF1RatiosForEquitySync(equity.Ticker),
+                    Sector = equity.Sector,
+                    TotalNumberOfUnits = GetEquityUnitByEquityIdAndClientGroup(equityId, clientGroup),
+                    LatestPrice = latestPrice == null ? 0 : (double)latestPrice
+                };
+            } else if (equity.EquityType == EquityTypes.ManagedInvestments) {
+                return new Domain.Portfolio.AggregateRoots.Asset.ManagedInvestment(this) {
+                    Id = equity.AssetId,
+                    Name = equity.Name,
+                    EquityType = equity.EquityType,
+                    Ticker = equity.Ticker,
+                    F0Ratios = GetF0RatiosForEquitySync(equity.Ticker),
+                    F1Recommendation = GetF1RatiosForEquitySync(equity.Ticker),
+                    Sector = equity.Sector,
+                    TotalNumberOfUnits = GetEquityUnitByEquityIdAndClientGroup(equityId, clientGroup),
+                    LatestPrice = latestPrice == null ? 0 : (double)latestPrice
+                };
+            } else {
                 return null;
             }
         }
@@ -7958,7 +8168,8 @@ namespace SqlRepository
 
         public List<Domain.Portfolio.AggregateRoots.Asset.Equity> GetAllEquitiesBySectorName(string sectorName)
         {
-            var equities = _db.Equities.Where(e => _db.Sectors.Where(s => s.SectorName == sectorName).Select(sc => sc.Id).ToList().Contains(e.Sector));
+            //var equities = _db.Equities.Where(e => _db.Sectors.Where(s => s.SectorName == sectorName).Select(sc => sc.Id).ToList().Contains(e.Sector));
+            var equities = _db.Equities.Where(e => e.Sector == sectorName);
             List<Domain.Portfolio.AggregateRoots.Asset.Equity> allEquities = new List<Domain.Portfolio.AggregateRoots.Asset.Equity>();
             foreach (var equity in equities)
             {
@@ -8055,13 +8266,91 @@ namespace SqlRepository
                     Price = price.Price
                 });
             }
+            _db.SaveChanges();
+        }
+
+        public void CreateRebalanceModel(RebalanceModel model) {
+            var adviser = _db.Advisers.SingleOrDefault(a => a.AdviserNumber == model.AdviserId);
+            var clientGroup = _db.ClientGroups.SingleOrDefault(c => c.ClientGroupId == model.ClientGroupId);
+            List<Edis.Db.Rebalance.TemplateDetailsItemParameter> parameters = new List<Edis.Db.Rebalance.TemplateDetailsItemParameter>();
+            foreach(var parameter in model.TemplateDetailsItemParameters){
+                parameters.Add(new Edis.Db.Rebalance.TemplateDetailsItemParameter
+                { 
+                    Id = Guid.NewGuid().ToString(),
+                    EquityId = parameter.EquityId,
+                    ItemName = parameter.ItemName,
+                    CurrentWeighting = parameter.CurrentWeighting,
+                    identityMetaKey = parameter.identityMetaKey
+                });
+            }
+
+            Edis.Db.Rebalance.RebalanceModel newModel = new Edis.Db.Rebalance.RebalanceModel
+            {
+                ModelId = Guid.NewGuid().ToString(),
+                ProfileId = model.ProfileId,
+                Adviser = adviser,
+                ClientGroup = clientGroup,
+                ModelName = model.ModelName,
+                TemplateDetailsItemParameters = parameters
+            };
+            
+            foreach(var parameter in newModel.TemplateDetailsItemParameters){
+                //parameter.ModelRefId = newModel.ModelId;
+            };
+
+            _db.RebalanceModels.Add(newModel);
+
 
             _db.SaveChanges();
-            
         }
 
 
+        public void UpdateRebalanceModel(RebalanceModel model) {
+            var currentModel = _db.RebalanceModels.SingleOrDefault(r => r.ModelId == model.ModelId);
+            
+            currentModel.ModelId = model.ModelId;
+            currentModel.ModelName = model.ModelName;
+            currentModel.ProfileId = model.ProfileId;
+            _db.TemplateDetailsItemParameters.RemoveRange(currentModel.TemplateDetailsItemParameters);
+            foreach(var parameter in model.TemplateDetailsItemParameters){
+                currentModel.TemplateDetailsItemParameters.Add(new Edis.Db.Rebalance.TemplateDetailsItemParameter { 
+                    Id = Guid.NewGuid().ToString(),
+                    EquityId = parameter.EquityId,
+                    ItemName = parameter.ItemName,
+                    CurrentWeighting = parameter.CurrentWeighting,
+                    identityMetaKey = parameter.identityMetaKey,
+                    Model=currentModel
+                });
+            }
+            _db.SaveChanges();         
+        }
 
+        public List<RebalanceModel> GetRebalanceModelByAdviserId(string adviserId)
+        {
+            var adviser = _db.Advisers.SingleOrDefault(a => a.AdviserNumber == adviserId);
+            List<Edis.Db.Rebalance.RebalanceModel> models = _db.RebalanceModels.Where(r => r.Adviser.AdviserId == adviser.AdviserId).ToList();
+
+            List<RebalanceModel> results = new List<RebalanceModel>();
+
+            foreach (var model in models) {
+                List<TemplateDetailsItemParameter> parameters = new List<TemplateDetailsItemParameter>();
+                foreach(var parameter in model.TemplateDetailsItemParameters){
+        
+                    parameters.Add(new TemplateDetailsItemParameter
+                    {
+                        CurrentWeighting = parameter.CurrentWeighting,
+                        EquityId = parameter.EquityId,
+                        ItemName = parameter.ItemName,
+                    });  
+                };
+
+                results.Add(new RebalanceModel { 
+                    ProfileId = model.ProfileId,
+                    ModelId = model.ModelId,
+                    ModelName = model.ModelName,
+                    TemplateDetailsItemParameters = parameters
+                });
+            };
 
         public void CreateNewReturnOfCapitalAction(ReturnOfCapitalCreationModel model) {
             //to do 
@@ -8088,10 +8377,29 @@ namespace SqlRepository
                 
             }
 
+        public RebalanceModel GetRebalanceModelByModelId(string modelId) {
+            var savedMode = _db.RebalanceModels.SingleOrDefault(r => r.ModelId == modelId);
         }
 
+            List<TemplateDetailsItemParameter> parameters = new List<TemplateDetailsItemParameter>();
 
+            foreach (var parameter in savedMode.TemplateDetailsItemParameters) {
+                parameters.Add(new TemplateDetailsItemParameter { 
+                    EquityId = parameter.EquityId,
+                    CurrentWeighting = parameter.CurrentWeighting,
+                    ItemName = parameter.ItemName,
+                    identityMetaKey = parameter.identityMetaKey
+                });
+            };
 
+            return new RebalanceModel() { 
+                ProfileId = savedMode.ProfileId,
+                ModelId = savedMode.ModelId,
+                ModelName = savedMode.ModelName,
+                TemplateDetailsItemParameters = parameters,
+                ClientGroupId = savedMode.ClientGroup.ClientGroupId
+            };
+        }
 
 
         public string GetEnumDescription(Enum value)

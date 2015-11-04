@@ -47,8 +47,7 @@ namespace EDISAngular.Models.ServiceModels.RebalanceModels
         /// <summary>
         /// Metadata of this parameter's category structure,in the format of [type]#[subtype]#[sub-subtype]...
         /// </summary>
-        public List<string> identityMetaKey{ get; set; }
-
+        public string identityMetaKey{ get; set; }
     }
 
 

@@ -612,6 +612,7 @@
     <Content Include="Angular\Templates\Adviser\adviserActivity.html" />
     <Content Include="Angular\Templates\Adviser\adviserCorporateActions.html" />
     <Content Include="Angular\Templates\Adviser\adviserCreateClient.html" />
+    <Content Include="Angular\Templates\Adviser\adviserEvaluateRiskLevel.html" />
     <Content Include="Angular\Templates\Adviser\adviserMakeEquityTransForClient.html" />
     <Content Include="Angular\Templates\Adviser\InsertAssetsData.html" />
     <Content Include="Angular\Templates\Adviser\adviserCreateClientGroupAccount.html" />

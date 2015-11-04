@@ -44,9 +44,9 @@
                                         <ul class="nav nav-tabs" ng-init="step=1">
                                             <li ng-class="{active:step===1}"><a ng-click="step=1">  Summary</a></li>
                                             <li ng-class="{active:step===2}"><a ng-click="step=2">  Diversification</a></li>
-                                            <li ng-class="{active:step===3}"><a ng-click="step=3">  CashFlow</a></li>
+                                            <!--<li ng-class="{active:step===3}"><a ng-click="step=3">  CashFlow</a></li>-->
                                             <li ng-class="{active:step===4}"><a ng-click="step=4">  Transaction Costs</a></li>
-                                            <li ng-class="{active:step===5}"><a ng-click="step=5">  Conmpliance</a></li>
+                                            <!--<li ng-class="{active:step===5}"><a ng-click="step=5">  Conmpliance</a></li>-->
                                         </ul>
                                     </div>
                                 </div>
@@ -135,8 +135,8 @@
                                                                     <td>Realised Profit/Loss</td>
                                                                     <td>Differences</td>
                                                                     <td>Suitability</td>
-                                                                    <td>Target</td>
-                                                                    <td>Diff to Target</td>
+                                                                    <!--<td>Target</td>
+                                                                    <td>Diff to Target</td>-->
                                                                     <td>APL Approved</td>
                                                                 </tr>
                                                                 <tr ng-repeat="item in group.data">
@@ -151,8 +151,8 @@
                                                                     <td>{{item.rebalance.profitAndLoss | number:0}}%</td>
                                                                     <td>{{item.advantageousAndDisadvantageous.differences | number:0}}%</td>
                                                                     <td>{{item.advantageousAndDisadvantageous.suitability | number:0}}%</td>
-                                                                    <td>{{item.advantageousAndDisadvantageous.targe | currency}}%</td>
-                                                                    <td>{{item.advantageousAndDisadvantageous.differenceToTarget | number:0}}%</td>
+                                                                    <!--<td>{{item.advantageousAndDisadvantageous.targe | currency}}%</td>
+                                                                    <td>{{item.advantageousAndDisadvantageous.differenceToTarget | number:0}}%</td>-->
                                                                     <td>{{item.advantageousAndDisadvantageous.apl}}</td>
                                                                 </tr>
 
@@ -274,7 +274,7 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane active in" ng-show="step===3">
-                                        <div class="row">
+                                        <!--<div class="row">
                                             <div class="col-md-12">
                                                 <div class="widget">
                                                     <div class="widget-header">
@@ -353,7 +353,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>-->
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="widget">
@@ -520,8 +520,8 @@
                                                                     <td>Buy/Sell</td>
                                                                     <td>Realised Profit/Loss</td>
                                                                     <td>Transaction Cost</td>
-                                                                    <td>Extra Dividend</td>
-                                                                    <td>Extra MER</td>
+                                                                    <!--<td>Extra Dividend</td>
+                                                                    <td>Extra MER</td>-->
                                                                     <td>Net Value</td>
                                                                 </tr>
                                                             </thead>
@@ -534,8 +534,8 @@
                                                                     <td>{{item.buySell | currency}}</td>
                                                                     <td>{{item.profitLoss | currency}}</td>
                                                                     <td>{{item.transactionCost | currency}}</td>
-                                                                    <td>{{item.extraDividend | currency}}</td>
-                                                                    <td>{{item.extraMER | currency}}</td>
+                                                                    <!--<td>{{item.extraDividend | currency}}</td>
+                                                                    <td>{{item.extraMER | currency}}</td>-->
                                                                     <td>{{item.netValue | currency}}</td>
                                                                 </tr>
                                                                 <tr class="summary-table-row">
@@ -543,8 +543,8 @@
                                                                     <td>{{group.buySell | currency}}</td>
                                                                     <td>{{group.profitLoss | currency}}</td>
                                                                     <td>{{group.transactionCost | currency}}</td>
-                                                                    <td>{{group.extraDividend | currency}}</td>
-                                                                    <td>{{group.extraMER | currency}}</td>
+                                                                    <!--<td>{{group.extraDividend | currency}}</td>
+                                                                    <td>{{group.extraMER | currency}}</td>-->
                                                                     <td>{{group.netValue | currency}}</td>
                                                                 </tr>
                                                             </tbody>
@@ -696,6 +696,7 @@
                                             <label>Add</label>
 
                                             <button class="btn btn-success btn-block" ng-if="newModel.parameter" ng-click="addParameter()">Assign an individual weighting</button>
+                                            <button class="btn btn-success btn-block" ng-if="newModel.parameterGroup" ng-click="addGroupPrameter()">Assign a group weighting</button>
                                         </div>
                                     </div>
                                 </div>

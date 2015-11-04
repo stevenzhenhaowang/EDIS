@@ -669,7 +669,11 @@ namespace EDISAngular.APIControllers
                         priceEarningsRatio = ratios.PriceEarningRatio,
                         quickRatio = ratios.QuickRatio,
                         returnOnAsset = ratios.ReturnOnAsset,
-                        returnOnEquity = ratios.ReturnOnEquity
+                        returnOnEquity = ratios.ReturnOnEquity,
+                        marketPrice = asset.LatestPrice,
+                        marketValue = asset.GetTotalMarketValue(),
+                        totalCostValue = asset.GetCost().Total,
+                        costValue = asset.GetCost().AssetCost,
                     });
                 }
 
@@ -718,7 +722,11 @@ namespace EDISAngular.APIControllers
                         priceEarningsRatio = ratios.PriceEarningRatio,
                         quickRatio = ratios.QuickRatio,
                         returnOnAsset = ratios.ReturnOnAsset,
-                        returnOnEquity = ratios.ReturnOnEquity
+                        returnOnEquity = ratios.ReturnOnEquity,
+                        marketPrice = asset.LatestPrice,
+                        marketValue = asset.GetTotalMarketValue(),
+                        totalCostValue = asset.GetCost().Total,
+                        costValue = asset.GetCost().AssetCost,
                     });
                 }
 
@@ -780,7 +788,11 @@ namespace EDISAngular.APIControllers
                         priceEarningsRatio = ratios.PriceEarningRatio,
                         quickRatio = ratios.QuickRatio,
                         returnOnAsset = ratios.ReturnOnAsset,
-                        returnOnEquity = ratios.ReturnOnEquity
+                        returnOnEquity = ratios.ReturnOnEquity,
+                        marketPrice = asset.LatestPrice,
+                        marketValue = asset.GetTotalMarketValue(),
+                        totalCostValue = asset.GetCost().Total,
+                        costValue = asset.GetCost().AssetCost,
                     });
                 }
 
@@ -826,7 +838,11 @@ namespace EDISAngular.APIControllers
                         priceEarningsRatio = ratios.PriceEarningRatio,
                         quickRatio = ratios.QuickRatio,
                         returnOnAsset = ratios.ReturnOnAsset,
-                        returnOnEquity = ratios.ReturnOnEquity
+                        returnOnEquity = ratios.ReturnOnEquity,
+                        marketPrice = asset.LatestPrice,
+                        marketValue = asset.GetTotalMarketValue(),
+                        totalCostValue = asset.GetCost().Total,
+                        costValue = asset.GetCost().AssetCost,
                     });
                 }
 

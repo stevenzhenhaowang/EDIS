@@ -36,26 +36,16 @@ namespace EDISAngular.APIControllers
             {
                 List<GroupAccount> groupAccounts = edisRepo.getAllClientGroupAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
                 List<ClientAccount> clientAccounts = edisRepo.getAllClientAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
+                List<AssetBase> assets = new List<AssetBase>();
                 double totalCost = 0;
                 double totalMarketValue = 0;
-                foreach (var account in groupAccounts)
-                {
-                    List<AssetBase> assets = account.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList();
-                    
-                    foreach (var asset in assets)
-                    {
-                        totalCost += asset.GetCost().Total;
-                        totalMarketValue += asset.GetTotalMarketValue();
-                    }
-                }
-                foreach (var account in clientAccounts)
-                {
-                    List<AssetBase> assets = account.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList();
-                    foreach (var asset in assets)
-                    {
-                        totalCost += asset.GetCost().Total;
-                        totalMarketValue += asset.GetTotalMarketValue();
-                    }
+
+                groupAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
+
+                foreach (var asset in assets) {
+                    totalCost += asset.GetCost().Total;
+                    totalMarketValue += asset.GetTotalMarketValue();
                 }
                 SummaryGeneralInfo summary = new SummaryGeneralInfo
                 {
@@ -78,16 +68,10 @@ namespace EDISAngular.APIControllers
 
                 double totalCost = 0;
                 double totalMarketValue = 0;
-                foreach (var account in accounts)
-                {
-                    assets.AddRange(account.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList());
 
-                }
-                foreach (var account in clientAccounts)
-                {
-                    assets.AddRange(account.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList());
+                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
 
-                }
                 foreach (var asset in assets)
                 {
                     totalCost += asset.GetCost().Total;
@@ -900,21 +884,16 @@ namespace EDISAngular.APIControllers
         {
             if (string.IsNullOrEmpty(clientGroupId))
             {
-
                 List<GroupAccount> groupAccounts = edisRepo.getAllClientGroupAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
                 List<ClientAccount> clientAccounts = edisRepo.getAllClientAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
 
                 List<EquityCompanyProfileItemModel> itemList = new List<EquityCompanyProfileItemModel>();
 
                 List<AssetBase> assets = new List<AssetBase>();
-                foreach (var account in groupAccounts)
-                {
-                    assets.AddRange(account.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList());
-                }
-                foreach (var account in clientAccounts)
-                {
-                    assets.AddRange(account.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList());
-                }
+
+                groupAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
+
                 var australianAssets = assets.OfType<AustralianEquity>();
 
                 var ratios = assets.GetAverageRatiosFor<AustralianEquity>();
@@ -936,7 +915,12 @@ namespace EDISAngular.APIControllers
                         priceEarningsRatio = ratios.PriceEarningRatio,
                         quickRatio = ratios.QuickRatio,
                         returnOnAsset = ratios.ReturnOnAsset,
-                        returnOnEquity = ratios.ReturnOnEquity
+                        returnOnEquity = ratios.ReturnOnEquity,
+                        marketPrice = asset.LatestPrice,
+                        marketValue = asset.GetTotalMarketValue(),
+                        totalCostValue = asset.GetCost().Total,
+                        costValue = asset.GetCost().AssetCost,
+                        companySuitabilityToInvestor = asset.GetRating().TotalScore,
                     });
                 }
 
@@ -950,7 +934,6 @@ namespace EDISAngular.APIControllers
             }
             else
             {
-
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
                 List<ClientAccount> clientAccounts = new List<ClientAccount>();
@@ -966,10 +949,8 @@ namespace EDISAngular.APIControllers
 
                 var ratios = assets.GetAverageRatiosFor<AustralianEquity>();
 
-                foreach (var asset in australianAssets)
-                {
-                    itemList.Add(new EquityCompanyProfileItemModel
-                    {
+                foreach (var asset in australianAssets) {
+                    itemList.Add(new EquityCompanyProfileItemModel {
                         asx = asset.Ticker,
                         beta = ratios.Beta,
                         company = asset.Name,
@@ -985,20 +966,22 @@ namespace EDISAngular.APIControllers
                         priceEarningsRatio = ratios.PriceEarningRatio,
                         quickRatio = ratios.QuickRatio,
                         returnOnAsset = ratios.ReturnOnAsset,
-                        returnOnEquity = ratios.ReturnOnEquity
+                        returnOnEquity = ratios.ReturnOnEquity,
+                        marketPrice = asset.LatestPrice,
+                        marketValue = asset.GetTotalMarketValue(),
+                        totalCostValue = asset.GetCost().Total,
+                        costValue = asset.GetCost().AssetCost,
+                        companySuitabilityToInvestor = asset.GetRating().TotalScore
                     });
                 }
 
-                EquityCompanyProfileModel model = new EquityCompanyProfileModel
-                {
+                EquityCompanyProfileModel model = new EquityCompanyProfileModel {
                     data = itemList,
                     totalCostInvestment = assets.GetTotalCost().Total,
                     totalMarketValue = assets.GetTotalMarketValue()
                 };
                 return model;
-
             }
-
         }
         [HttpGet, Route("api/Client/AustralianEquityPortfolio/CompanyProfiles")]
         public EquityCompanyProfileModel GetCompanyProfiles_Client()
@@ -1025,10 +1008,8 @@ namespace EDISAngular.APIControllers
 
                 var ratios = assets.GetAverageRatiosFor<AustralianEquity>();
 
-                foreach (var asset in australianAssets)
-                {
-                    itemList.Add(new EquityCompanyProfileItemModel
-                    {
+                foreach (var asset in australianAssets) {
+                    itemList.Add(new EquityCompanyProfileItemModel {
                         asx = asset.Ticker,
                         beta = ratios.Beta,
                         company = asset.Name,
@@ -1044,7 +1025,12 @@ namespace EDISAngular.APIControllers
                         priceEarningsRatio = ratios.PriceEarningRatio,
                         quickRatio = ratios.QuickRatio,
                         returnOnAsset = ratios.ReturnOnAsset,
-                        returnOnEquity = ratios.ReturnOnEquity
+                        returnOnEquity = ratios.ReturnOnEquity,
+                        marketPrice = asset.LatestPrice,
+                        marketValue = asset.GetTotalMarketValue(),
+                        totalCostValue = asset.GetCost().Total,
+                        costValue = asset.GetCost().AssetCost,
+                        companySuitabilityToInvestor = asset.GetRating().TotalScore
                     });
                 }
 
@@ -1071,10 +1057,8 @@ namespace EDISAngular.APIControllers
 
                 var ratios = assets.GetAverageRatiosFor<AustralianEquity>();
 
-                foreach (var asset in australianAssets)
-                {
-                    itemList.Add(new EquityCompanyProfileItemModel
-                    {
+                foreach (var asset in australianAssets) {
+                    itemList.Add(new EquityCompanyProfileItemModel {
                         asx = asset.Ticker,
                         beta = ratios.Beta,
                         company = asset.Name,
@@ -1090,7 +1074,12 @@ namespace EDISAngular.APIControllers
                         priceEarningsRatio = ratios.PriceEarningRatio,
                         quickRatio = ratios.QuickRatio,
                         returnOnAsset = ratios.ReturnOnAsset,
-                        returnOnEquity = ratios.ReturnOnEquity
+                        returnOnEquity = ratios.ReturnOnEquity,
+                        marketPrice = asset.LatestPrice,
+                        marketValue = asset.GetTotalMarketValue(),
+                        totalCostValue = asset.GetCost().Total,
+                        costValue = asset.GetCost().AssetCost,
+                        companySuitabilityToInvestor = asset.GetRating().TotalScore
                     });
                 }
 
@@ -1149,31 +1138,34 @@ namespace EDISAngular.APIControllers
                 double assetsSuitability = 0;
                 double percentage = 0;
 
-                foreach (var account in groupAccounts)
-                {
-                    var equityWithResearchValues = account.GetAssetsSync().OfType<AustralianEquity>().ToList();
+                List<Equity> equityWithResearchValues = new List<Equity>();
 
-                    assetsSuitability += equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings().Sum(w => w.Percentage * ((AustralianEquity)w.Weightable).GetRating().TotalScore);
+                groupAccounts.ForEach(a => equityWithResearchValues.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().ToList()));
+                clientAccounts.ForEach(a => equityWithResearchValues.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().ToList()));
 
-                    percentage += equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
-                        / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
-                }
+                var weightings = equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings();
 
-                foreach (var account in clientAccounts)
-                {
-                    var equityWithResearchValues = account.GetAssetsSync().OfType<AustralianEquity>().ToList();
+                assetsSuitability += weightings.Sum(w => w.Percentage * ((AustralianEquity)w.Weightable).GetRating().TotalScore);
 
-                    assetsSuitability += equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings().Sum(w => w.Percentage * ((AustralianEquity)w.Weightable).GetRating().TotalScore);
-
-                    percentage += equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
-                        / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
-                }
+                percentage += equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
+                    / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
 
                 PortfolioRatingModel model = new PortfolioRatingModel
                 {
                     suitability = assetsSuitability,
-                    notSuited = percentage
+                    notSuited = percentage,
+                    data = new List<PortfolioRatingItemModel>()
                 };
+
+                foreach (var weighting in weightings) {
+                    Equity equity = (Equity)weighting.Weightable;
+                    model.data.Add(new PortfolioRatingItemModel {
+                        name = equity.Ticker,
+                        weighting = weighting.Percentage,
+                        score = equity.GetRating().TotalScore
+                    });
+                }
+
 
                 return model;
             }
@@ -1186,30 +1178,33 @@ namespace EDISAngular.APIControllers
 
                 double assetsSuitability = 0;
                 double percentage = 0;
-                foreach (var account in accounts) {
-                    var equityWithResearchValues = account.GetAssetsSync().OfType<AustralianEquity>().ToList();
 
-                    assetsSuitability += equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings().Sum(w => w.Percentage * ((AustralianEquity)w.Weightable).GetRating().TotalScore);
+                List<Equity> equityWithResearchValues = new List<Equity>();
 
-                    percentage += equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
-                        / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
-                }
+                accounts.ForEach(a => equityWithResearchValues.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().ToList()));
+                clientAccounts.ForEach(a => equityWithResearchValues.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().ToList()));
 
-                foreach (var account in clientAccounts)
-                {
-                    var equityWithResearchValues = account.GetAssetsSync().OfType<AustralianEquity>().ToList();
+                var weightings = equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings();
 
-                    assetsSuitability += equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings().Sum(w => w.Percentage * ((AustralianEquity)w.Weightable).GetRating().TotalScore);
+                assetsSuitability += weightings.Sum(w => w.Percentage * ((AustralianEquity)w.Weightable).GetRating().TotalScore);
 
-                    percentage += equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
-                        / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
-                }
+                percentage += equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
+                    / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
 
-                PortfolioRatingModel model = new PortfolioRatingModel
-                {
+                PortfolioRatingModel model = new PortfolioRatingModel {
                     suitability = assetsSuitability,
-                    notSuited = percentage
+                    notSuited = percentage,
+                    data = new List<PortfolioRatingItemModel>()
                 };
+
+                foreach (var weighting in weightings) {
+                    Equity equity = (Equity)weighting.Weightable;
+                    model.data.Add(new PortfolioRatingItemModel {
+                        name = equity.Name,
+                        weighting = weighting.Percentage,
+                        score = equity.GetRating().TotalScore
+                    });
+                }
 
                 return model;
             }

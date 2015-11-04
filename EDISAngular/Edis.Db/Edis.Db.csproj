@@ -64,7 +64,6 @@
     <Compile Include="BondType.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="ClientGroup.cs" />
-    <Compile Include="CorporateAction\ReturnOfCapitalAction.cs" />
     <Compile Include="EdisContext.cs" />
     <Compile Include="Enums\TransactionType.cs" />
     <Compile Include="ExpenseRecords\ConsultancyExpense.cs" />
@@ -80,6 +79,30 @@
     <Compile Include="Liabilities\MarginLendingTransaction.cs" />
     <Compile Include="Liabilities\MortgageHomeLoanTransaction.cs" />
     <Compile Include="Markers\IAsset.cs" />
+    <Compile Include="Migrations\201510230358287_add_cliengGroupId.cs" />
+    <Compile Include="Migrations\201510230358287_add_cliengGroupId.Designer.cs">
+      <DependentUpon>201510230358287_add_cliengGroupId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510230431096_23.cs" />
+    <Compile Include="Migrations\201510230431096_23.Designer.cs">
+      <DependentUpon>201510230431096_23.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511012248191_riskprofile.cs" />
+    <Compile Include="Migrations\201511012248191_riskprofile.Designer.cs">
+      <DependentUpon>201511012248191_riskprofile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511012249487_riskprofile1.cs" />
+    <Compile Include="Migrations\201511012249487_riskprofile1.Designer.cs">
+      <DependentUpon>201511012249487_riskprofile1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511012251015_riskprofile2.cs" />
+    <Compile Include="Migrations\201511012251015_riskprofile2.Designer.cs">
+      <DependentUpon>201511012251015_riskprofile2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511012304541_update-riskprofile.cs" />
+    <Compile Include="Migrations\201511012304541_update-riskprofile.Designer.cs">
+      <DependentUpon>201511012304541_update-riskprofile.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NoteLinks.cs" />
     <Compile Include="Notes.cs" />
@@ -90,6 +113,7 @@
     <Compile Include="RepaymentRecord.cs" />
     <Compile Include="ResearchValue.cs" />
     <Compile Include="ResourcesReferences.cs" />
+    <Compile Include="RiskProfile.cs" />
     <Compile Include="Sector.cs" />
     <Compile Include="Transactions\BondTransaction.cs" />
     <Compile Include="Transactions\CashTransaction.cs" />
@@ -107,6 +131,26 @@
       <Project>{e5bc73b2-7418-4fee-a5b9-a268e9501523}</Project>
       <Name>Shared</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201510230358287_add_cliengGroupId.resx">
+      <DependentUpon>201510230358287_add_cliengGroupId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510230431096_23.resx">
+      <DependentUpon>201510230431096_23.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511012248191_riskprofile.resx">
+      <DependentUpon>201511012248191_riskprofile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511012249487_riskprofile1.resx">
+      <DependentUpon>201511012249487_riskprofile1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511012251015_riskprofile2.resx">
+      <DependentUpon>201511012251015_riskprofile2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511012304541_update-riskprofile.resx">
+      <DependentUpon>201511012304541_update-riskprofile.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

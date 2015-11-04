@@ -154,8 +154,8 @@
                                     </div>
 
 
-
                                 </div>
+
                                 <div class="row">
                                     <div class="col-md-4 form-group">
                                         <label>Please select from existing group</label>
@@ -167,7 +167,7 @@
 
                             </div>
 
-                            <!--<div ng-if="collection.accountType">
+                            <div ng-if="collection.accountType">
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <div class="checkbox-inline">
@@ -177,8 +177,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>-->
-                            <!--<div ng-if="collection.completeRiskProfile">
+                            </div>
+                            <div ng-if="collection.completeRiskProfile">
                                 <div class="row" ng-repeat="question in collection.riskProfile.questions">
                                     <div class="col-md-12 form-group">
                                         <label>{{question.question}}</label>
@@ -186,7 +186,18 @@
                                         <div class="error" ng-show="form.question_{{$index}}.$error.required&&form.question_{{$index}}.$touched">Please complete this question</div>
                                     </div>
                                 </div>
-                            </div>-->
+
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label>Risk Level</label>
+                                        <select class="form-control" name="riskLevel" ng-model="collection.riskProfile.level.id" ng-options="level.id as level.name for level in collection.riskProfile.levels" required></select>
+                                        <span class="error" ng-show="form.riskLevel.$error.required && form.riskLevel.$touched">Please select a risk level</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+
 
                             <div class="row">
                                 <div class="col-md-12 text-right">

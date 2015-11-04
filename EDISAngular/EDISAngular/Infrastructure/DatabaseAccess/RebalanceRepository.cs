@@ -192,7 +192,7 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
                     marketValue=RandomWeighting(),
                     currentValue=RandomWeighting(),
                     currentWeighting=RandomWeighting(),
-                    identityMetaKey=new List<string>{"STOCK"}
+                    //identityMetaKey=new List<string>{"STOCK"}
                 },
                 new TemplateDetailsItemParameter{
                     groupId=new List<string>{"asset00", "asset01", "europe00", "europe01"},
@@ -201,7 +201,7 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
                     marketValue=RandomWeighting(),
                     currentValue=RandomWeighting(),
                     currentWeighting=RandomWeighting(),
-                    identityMetaKey=new List<string>{"STOCK"}
+                    //identityMetaKey=new List<string>{"STOCK"}
                 }
             };
         }
@@ -215,25 +215,25 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
                         new FilterGroupFilter{
                             groupId="group 1",
                             groupName="Non-investable Asset",
-                            identityMetaKey= new List<string>{"ASSET#NONINVESTABLE"},
+                            //identityMetaKey= new List<string>{"ASSET#NONINVESTABLE"},
                             currentWeighting=RandomWeighting(),
                             groupType="Asset"
                         },new FilterGroupFilter{
                             groupId="group 2",
                             groupName="Australian Equity",
-                            identityMetaKey= new List<string>{"ASSET#NONINVESTABLE"},
+                            //identityMetaKey= new List<string>{"ASSET#NONINVESTABLE"},
                             currentWeighting=RandomWeighting(),
                             groupType="Asset"
                         },new FilterGroupFilter{
                             groupId="group 3",
                             groupName="International Equity",
-                            identityMetaKey= new List<string>{"ASSET#NONINVESTABLE"},
+                            //identityMetaKey= new List<string>{"ASSET#NONINVESTABLE"},
                             currentWeighting=RandomWeighting(),
                             groupType="Asset"
                         },new FilterGroupFilter{
                             groupId="group 4",
                             groupName="Mortgate & Investment Home Loan",
-                            identityMetaKey= new List<string>{"ASSET#NONINVESTABLE"},
+                            //identityMetaKey= new List<string>{"ASSET#NONINVESTABLE"},
                             currentWeighting=RandomWeighting(),
                             groupType="Asset"
                         },
@@ -245,25 +245,25 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
                         new FilterGroupFilter{
                             groupId="group 1",
                             groupName="Non-investable Asset",
-                            identityMetaKey= new List<string>{"ASSET#NONINVESTABLE"},
+                            //identityMetaKey= new List<string>{"ASSET#NONINVESTABLE"},
                             currentWeighting=RandomWeighting(),
                             groupType="Asset"
                         },new FilterGroupFilter{
                             groupId="group 2",
                             groupName="Australian Equity",
-                            identityMetaKey= new List<string>{"ASSET#NONINVESTABLE"},
+                            //identityMetaKey= new List<string>{"ASSET#NONINVESTABLE"},
                             currentWeighting=RandomWeighting(),
                             groupType="Asset"
                         },new FilterGroupFilter{
                             groupId="group 3",
                             groupName="International Equity",
-                            identityMetaKey= new List<string>{"ASSET#NONINVESTABLE"},
+                            //identityMetaKey= new List<string>{"ASSET#NONINVESTABLE"},
                             currentWeighting=RandomWeighting(),
                             groupType="Asset"
                         },new FilterGroupFilter{
                             groupId="group 4",
                             groupName="Mortgate & Investment Home Loan",
-                            identityMetaKey= new List<string>{"ASSET#NONINVESTABLE"},
+                            //identityMetaKey= new List<string>{"ASSET#NONINVESTABLE"},
                             currentWeighting=RandomWeighting(),
                             groupType="Asset"
                         },
@@ -1004,7 +1004,7 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
                         marketValue=RandomWeighting(),
                         currentValue=RandomWeighting(),
                         currentWeighting=RandomWeighting(),
-                        identityMetaKey=new List<string>{"STOCK"}
+                        //identityMetaKey=new List<string>{"STOCK"}
                     }, new TemplateDetailsItemParameter{
                         groupId=new List<string>{"asset00", "asset01", "africa01", "africa00"},
                         itemName="Asset Item 2",
@@ -1012,7 +1012,7 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
                         marketValue=RandomWeighting(),
                         currentValue=RandomWeighting(),
                         currentWeighting=RandomWeighting(),
-                        identityMetaKey=new List<string>{"STOCK"}
+                        //identityMetaKey=new List<string>{"STOCK"}
                     }
                 }
 

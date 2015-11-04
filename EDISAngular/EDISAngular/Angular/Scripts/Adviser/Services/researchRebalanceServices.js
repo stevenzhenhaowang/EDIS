@@ -22,7 +22,7 @@ angular.module("EDIS")
             }
         }
         if (!found) {
-            $resource(AppStrings.EDIS_IP + "api/adviser/model").get({ modelId: modelId }, function (data) {
+            $resource(AppStrings.EDIS_IP + "api/adviser/model/details").get({ modelId: modelId}, function (data) {
                 currentModels.push(data)
                 deferred.resolve(data);
             })

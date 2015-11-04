@@ -11,6 +11,7 @@ namespace EDISAngular.Models.ServiceModels.RebalanceModels
     {
         public string modelId { get; set; }
         public string modelName { get; set; }
+        public string clientGroupId { get; set; }
         public ModelProfile profile { get; set; }
 
         public List<DiversificationDatas> diversificationData { get; set; }
@@ -27,5 +28,6 @@ namespace EDISAngular.Models.ServiceModels.RebalanceModels
         public List<TransactionCostData> transactionCost { get; set; }
         public List<ComplianceData> compliance { get; set; }
         public TemplateDetails templateDetails { get; set; }
+        public List<TemplateDetailsItemParameter> itemParameters { get; set; }  //added
     }
 }

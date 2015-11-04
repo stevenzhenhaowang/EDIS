@@ -21,7 +21,7 @@ namespace EDISAngular.Models.ServiceModels.RebalanceModels
     {
         public string groupName { get; set; }
         public string groupId { get; set; }//used to retrieve relevant parameters
-        public List<string> identityMetaKey { get; set; }
+        public string identityMetaKey { get; set; }
         public double currentWeighting { get; set; }
         public string groupType { get; set; }
     }

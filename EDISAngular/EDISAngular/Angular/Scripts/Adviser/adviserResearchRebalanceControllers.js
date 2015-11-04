@@ -103,6 +103,7 @@ app.controller("addNewModelController", function ($scope, $modalInstance, rebala
         var modelId = "";
         if ($scope.createModeOn) {
             var model = {
+                modelId: $scope.newModel.existingModelId,
                 profileId: $scope.newModel.profileId,
                 name: $scope.newModel.modelName,
                 clientGroupId:$scope.newModel.clientGroupId,
@@ -130,16 +131,17 @@ app.controller("addNewModelController", function ($scope, $modalInstance, rebala
             && $scope.newModel.existingModelId !== "") {
 
 
-            rebalanceService.getModelProfile().get({ modelId: $scope.newModel.existingModelId }, function (data) {
+            rebalanceService.getModelProfile().get({ modelId: $scope.newModel.existingModelId}, function (data) {
                 var existingModel = data;
                 $scope.newModel = {};
                 $scope.newModel.selectedParameters = [];
                 $scope.newModel.existingModelId = data.modelId;
                 $scope.newModel.profileId = existingModel.profile.profileId;
                 $scope.newModel.modelName = existingModel.modelName;
+                $scope.newModel.clientGroupId = existingModel.clientGroupId;
 
-                for (var i = 0; i < existingModel.templateDetails.itemParameters.length; i++) {
-                    var record = existingModel.templateDetails.itemParameters[i];
+                for (var i = 0; i < existingModel.itemParameters.length; i++) {
+                    var record = existingModel.itemParameters[i];
                     var item = {
                         parameterName: record.itemName,
                         parameterId: record.id,
@@ -164,7 +166,7 @@ app.controller("addNewModelController", function ($scope, $modalInstance, rebala
         return false;
     }
     $scope.parameterGroupChanged = function () {
-        rebalanceService.getParameters().query({ groupId: $scope.newModel.parameterGroup.groupId, clientGroupId: $scope.newModel.clientGroupId }, function (data) {
+        rebalanceService.getParameters().query({ groupId: $scope.newModel.parameterGroup.groupId }, function (data) {        //, clientGroupId: $scope.newModel.clientGroupId 
             $scope.newModel.parameters = data;
         });
     }
@@ -188,6 +190,17 @@ app.controller("addNewModelController", function ($scope, $modalInstance, rebala
             $scope.newModel.selectedParameters.push(item);
         }
     }
+
+    $scope.addGroupPrameter = function () {
+        var item = {
+            parameterName: $scope.newModel.parameterGroup.groupName,
+            parameterId: $scope.newModel.parameterGroup.groupId,
+            weighting: $scope.newModel.parameterGroup.currentWeighting,
+            identityMetaKey: $scope.newModel.parameterGroup.identityMetaKey
+        };
+        $scope.newModel.selectedParameters.push(item);
+    }
+
     $scope.removeSelectedParameter = function (item) {
         $scope.newModel.selectedParameters.splice($scope.newModel.selectedParameters.indexOf(item), 1);
     }
