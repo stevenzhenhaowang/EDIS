@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDISAngular", "EDISAngular\EDISAngular.csproj", "{A19822D0-48C2-40C5-BF33-1C6D48B5A310}"
 EndProject
@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlRepository", "SqlReposit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportRunner", "ImportRunner\ImportRunner.csproj", "{8229828E-E00B-4FB7-B1C7-B049A37B02CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testForTrans", "testForTrans\testForTrans.csproj", "{13915E95-77FD-44E5-AC60-EA8569027D1D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{A19822D0-48C2-40C5-BF33-1C6D48B5A310}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A19822D0-48C2-40C5-BF33-1C6D48B5A310}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A19822D0-48C2-40C5-BF33-1C6D48B5A310}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC344F77-1458-42D4-8D2E-890A74D30FC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC344F77-1458-42D4-8D2E-890A74D30FC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC344F77-1458-42D4-8D2E-890A74D30FC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC344F77-1458-42D4-8D2E-890A74D30FC0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{58E1C65E-241A-48D4-8711-A8418BD1E3BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{58E1C65E-241A-48D4-8711-A8418BD1E3BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58E1C65E-241A-48D4-8711-A8418BD1E3BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -66,6 +72,10 @@ Global
 		{8229828E-E00B-4FB7-B1C7-B049A37B02CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8229828E-E00B-4FB7-B1C7-B049A37B02CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8229828E-E00B-4FB7-B1C7-B049A37B02CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13915E95-77FD-44E5-AC60-EA8569027D1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13915E95-77FD-44E5-AC60-EA8569027D1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13915E95-77FD-44E5-AC60-EA8569027D1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13915E95-77FD-44E5-AC60-EA8569027D1D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,6 +6,8 @@ namespace Domain.Portfolio.AggregateRoots.Accounts
     {
         public GroupAccount(IRepository repo) : base(repo)
         {
+           
+    
         }
     }
 }

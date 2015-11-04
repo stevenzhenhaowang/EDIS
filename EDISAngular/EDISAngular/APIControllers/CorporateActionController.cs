@@ -9,8 +9,7 @@ using EDISAngular.Models.ServiceModels.CorporateActions;
 using EDISAngular.Models.ServiceModels;
 using Microsoft.AspNet.Identity;
 using SqlRepository;
-
-
+using Domain.Portfolio.CorporateActions;
 
 namespace EDISAngular.APIControllers
 {
@@ -18,6 +17,7 @@ namespace EDISAngular.APIControllers
     {
         private EdisRepository repo = new EdisRepository();
         private CommonReferenceDataRepository comRepo = new CommonReferenceDataRepository();
+     
         [HttpGet, Route("api/Adviser/CorporateAction/IPO")]
         public List<IPOActionData> GetAllIpoActionsForAdviser()
         {
@@ -123,6 +123,36 @@ namespace EDISAngular.APIControllers
             }
             return BadRequest();
         }
+        [HttpPost, Route("api/Adviser/CorprateAction/newReturnCapital")]
+        public IHttpActionResult CreateNewReturnCapital(ReturnOfCapitalActionCreationModel model)
+        {
+            Console.WriteLine("create new return of captial Check");
+            if (model != null && ModelState.IsValid)
+            {
+                ReturnOfCapitalCreationModel repoModel = new ReturnOfCapitalCreationModel();
+                repoModel.EquityId = model.equityId;
+                repoModel.ReturnOfCapitalAmount = model.returnAmount;
+                repoModel.ShareMount = model.shareAmount;
+                repoModel.AdjustmentDate = model.returnDate;
+
+                repo.CreateNewReturnOfCapitalAction(repoModel);
+
+
+                return Ok();
+            }
+            return BadRequest();
+
+        }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -135,7 +165,7 @@ namespace EDISAngular.APIControllers
         [HttpGet, Route("api/Adviser/CorprateAction/Ticker")]
         public List<TickerBriefModel> GetAllTickers()
         {
-            return comRepo.GetAllTIckers();
+            return comRepo.GetAllTIckers().OrderBy(t => t.tickerName).ToList();
         }
         [HttpPost, Route("api/Adviser/CorporateAction/IPO/Allocation")]
         public IHttpActionResult AllocateIPO(IPOActionData model)
@@ -146,6 +176,10 @@ namespace EDISAngular.APIControllers
             }
             return BadRequest();
         }
+
+
+
+
 
 
     }

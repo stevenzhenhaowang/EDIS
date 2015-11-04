@@ -35,7 +35,7 @@
         $routeProvider.when("/adviserCreateClientGroupAccount", { templateUrl: "/Angular/Templates/Adviser/adviserCreateClientGroupAccount.html" })
 
         $routeProvider.when("/insertAssetsData", { templateUrl: "/Angular/Templates/Adviser/InsertAssetsData.html" })
-        
+        $routeProvider.when("/Transactions", { templateUrl: "/Angular/Templates/Adviser/adviserMakeEquityTransForClient.html" })
 
         $routeProvider.otherwise({ templateUrl: "/Angular/Templates/Adviser/home.html" });
     });
@@ -212,6 +212,39 @@
         }
     }]);
 
+    app.directive("tickerSelector", ["$route", "tickerSelectionService", function ($route, tickerSelectionService) {
+        return {
+            restrict: 'E',
+            template: '<select class="form-control" style="max-width:250px" ng-model="selectedTicker" ng-change="selectTicker(item)"  ng-options="item as item.name for item in tickerList" required></select>',
+            controller: ["$scope", "$resource", "AppStrings", function ($scope, $resource, AppStrings) {
+                $resource(AppStrings.EDIS_IP + "api/adviser/tickerList").query(function (data) {
+                    var found = false;
+                    $scope.tickerList = data;
+                    for (var i = 0; i < $scope.tickerList.length; i++) {
+                        if ($scope.tickerList[i].id === tickerSelectionService.getCurrentCompanyId()) {
+                            $scope.selectedTicker = $scope.tickerList[i];
+                            found = true;
+                        }
+                    }
+                    var allTickers = { id: -1, name: "Select a Ticker..." };
+                    $scope.tickerList.unshift(allTickers);
+                    if (!found) {
+                        $scope.selectedTicker = allTickers;
+                    }
+                })
+                $scope.selectTicker = function () {
+                    if ($scope.selectedTicker.id === -1) {
+                       tickerSelectionService.resetSelection();
+                    } else {
+                       tickerSelectionService.selectTicker($scope.selectedTicker.id, $scope.selectedTicker.name);
+                    }
+
+                }
+
+            }]
+        }
+    }]);
+
     app.directive("periodSelector", ["$route", "periodSelectionService", function ($route, periodSelectionService) {
         return {
             restrict: 'E',
@@ -348,6 +381,46 @@
         }
     })
 
+    app.factory("tickerSelectionService", function ($http, $resource, AppStrings) {
+        var currentTickerId = "";
+        var currentTickerName = "";
+        function selectTicker(tickerId, tickerName) {
+            currentTickerId = tickerId;
+            currentTickerName = tickerName;
+        }
+        function getCurrentTickerId() {
+            return currentTickerId;
+        }
+        function hasTickerSelected() {
+            return currentTickerId !== "";
+        }
+        function resetSelection() {
+            currentTickerId = "";
+            currentTickerName = "";
+        }
+        function getTickerIdQueryString() {
+            if (currentTickerId !== "") {
+                return "?tickerId=" + currentTickerId;
+            } else {
+                return "";
+            }
+        }
+        function getTickerName() {
+            return currentTickerName;
+        }
+
+
+        return {
+            selectTicker: selectTicker,
+            getCurrentTickerId: getCurrentTickerId,
+            hasTickerSelected: hasTickerSelected,
+            resetSelection: resetSelection,
+            getTickerIdQueryString: getTickerIdQueryString,
+            getTickerName: getTickerName
+        }
+    })
+
+
 
     app.factory("periodSelectionService", function ($http, $resource, AppStrings) {
         var currentPeriodId = "";
@@ -450,8 +523,9 @@
     });
     app.factory("dateParser", function () {
         return function (dateString) {
+            console.log(dateString)
             var dates = dateString.split("/");
-            return new Date(parseInt(dates[2]), parseInt(dates[1]), parseInt(dates[0]));
+            return new Date(Date.UTC(parseInt(dates[2]), parseInt(dates[1]-1), parseInt(dates[0])));
         };
     })
     app.factory("AdivserProfileDBService", function ($http, $resource, AppStrings, $q) {

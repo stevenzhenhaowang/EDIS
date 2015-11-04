@@ -10,7 +10,6 @@ namespace Edis.Db.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            CommandTimeout = int.MaxValue;
         }
 
         protected override void Seed(Edis.Db.EdisContext context)

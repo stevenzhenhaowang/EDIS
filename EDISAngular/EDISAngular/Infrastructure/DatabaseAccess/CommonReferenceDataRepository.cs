@@ -17,15 +17,19 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
 {
     public class CommonReferenceDataRepository : BaseRepository
     {
-        private edisDbEntities db;
+        //private edisDbEntities db;
+        private SqlRepository.EdisRepository repo;
+        
         public CommonReferenceDataRepository()
         {
-            db = new edisDbEntities();
+            repo = new SqlRepository.EdisRepository();
+            //db = new edisDbEntities();
         }
-        public CommonReferenceDataRepository(edisDbEntities database)
-        {
-            db = database;
-        }
+        //public CommonReferenceDataRepository(edisDbEntities database)
+        //{
+            
+        //   // db = database;
+        //}
 
         //public List<SubService> GetSubServices_Filtered(Func<SubService, bool> filter)
         //{
@@ -228,13 +232,12 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
         }
         public List<TickerBriefModel> GetAllTIckers()
         {
-            return new List<TickerBriefModel>
-            {
-                new TickerBriefModel{ tickerName="Ticker 01", tickerNumber="001"},
-                new TickerBriefModel{ tickerName="Ticker 02", tickerNumber="002"},
-                new TickerBriefModel{ tickerName="Ticker 03", tickerNumber="003"},
-                new TickerBriefModel{ tickerName="Ticker 04", tickerNumber="004"},
-            };
+            var equities = repo.GetAllEquities();
+            var result = new List<TickerBriefModel>();
+            foreach (var equity in equities) {
+                result.Add(new TickerBriefModel { tickerName = equity.Ticker, tickerNumber = equity.Ticker });
+            }
+            return result;
         }
 
         #endregion

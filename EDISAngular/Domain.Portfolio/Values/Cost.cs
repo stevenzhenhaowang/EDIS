@@ -13,5 +13,10 @@ namespace Domain.Portfolio.Values
         public double AssetCost { get; set; }
 
         public double Expense { get; set; }
+
+
+        //here we added a capital gain field
+
+        public double  CapitalGain { get; set; }
     }
 }

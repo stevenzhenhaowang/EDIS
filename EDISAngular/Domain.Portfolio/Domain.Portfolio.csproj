@@ -68,6 +68,7 @@
     <Compile Include="AggregateRoots\Accounts\AccountBase.cs" />
     <Compile Include="AggregateRoots\Accounts\ClientAccount.cs" />
     <Compile Include="AggregateRoots\Accounts\GroupAccount.cs" />
+    <Compile Include="CorporateActions\ReturnOfCapitalCreationModel.cs" />
     <Compile Include="Correspondence\Correspondence.cs" />
     <Compile Include="Correspondence\CorrespondenceFollowup.cs" />
     <Compile Include="Correspondence\Message.cs" />
@@ -148,6 +149,7 @@
     <Compile Include="SuitabilityLookupTables\Tables\ParameterModel\MIForecastParameter.cs" />
     <Compile Include="SuitabilityLookupTables\Tables\ParameterModel\PParameter.cs" />
     <Compile Include="SuitabilityLookupTables\Tables\PropertySuitabilityParameters.cs" />
+    <Compile Include="TransactionModels\EquityTransactionModel.cs" />
     <Compile Include="Values\AssetSuitability.cs" />
     <Compile Include="Values\BondDetails.cs" />
     <Compile Include="Values\Cashflow\EquityCashflow.cs" />
@@ -173,6 +175,10 @@
     <Folder Include="Policies\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Edis.Db\Edis.Db.csproj">
+      <Project>{601c87fb-067d-4b38-b1c2-da9cc6c6d43d}</Project>
+      <Name>Edis.Db</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Shared\Shared.csproj">
       <Project>{e5bc73b2-7418-4fee-a5b9-a268e9501523}</Project>
       <Name>Shared</Name>

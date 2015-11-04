@@ -11,18 +11,18 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
     public class RebalanceRepository : IDisposable
     {
         private edisDbEntities db;
-        private CommonReferenceDataRepository comRepo;
+        //private CommonReferenceDataRepository comRepo;
         private Random rdm = new Random();
 
         public RebalanceRepository(edisDbEntities database)
         {
             db = database;
-            comRepo = new CommonReferenceDataRepository(db);
+            //comRepo = new CommonReferenceDataRepository(db);
         }
         public RebalanceRepository()
         {
             db = new edisDbEntities();
-            comRepo = new CommonReferenceDataRepository(db);
+           // comRepo = new CommonReferenceDataRepository(db);
         }
 
 

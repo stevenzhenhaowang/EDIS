@@ -11,7 +11,8 @@ using Edis.Db.IncomeRecords;
 using Edis.Db.Liabilities;
 using Edis.Db.Transactions;
 using Shared;
-
+using Edis.Db.Rebalance;
+using Edis.Db.CorporateAction;
 
 namespace Edis.Db
 {
@@ -52,10 +53,16 @@ namespace Edis.Db
         public DbSet<ResearchValue> ResearchValues { get; set; }
 
 
+        public DbSet<RebalanceModel> RebalanceModels { get; set; }
+        public DbSet<TemplateDetailsItemParameter> TemplateDetailsItemParameters { get; set; }
+
+        public DbSet<ReturnOfCapitalAction> ReturnOfCapitalActions { get; set; }
+
+
 
 
         public EdisContext()
-            : base("EDIS")
+            : base("name=EDIS")
         {            
         }
 

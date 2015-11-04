@@ -67,13 +67,15 @@ namespace Domain.Portfolio.AggregateRoots
                     .ToList()
                     .CalculateCurrentTransactionHoldings<TTransactionType>();
             var assetCost = position.Buys.Sum(t => t.NumberOfUnitsLeft * t.Price);
-
+            
             var expense = GetActivitiesSync().Sum(a => a.Expenses.Sum(e => e.Amount));
             return new Cost
             {
                 AssetCost = assetCost,
                 Expense = expense,
-                Total = assetCost + expense
+                Total = assetCost + expense,
+                CapitalGain = position.CapitalGain
+                //this need to be implemented
             };
         }
     }

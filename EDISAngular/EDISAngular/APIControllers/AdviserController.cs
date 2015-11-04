@@ -23,6 +23,8 @@ using Domain.Portfolio.AggregateRoots.Accounts;
 using EDISAngular.Models.ServiceModels;
 using Domain.Portfolio.AggregateRoots.Liability;
 using Domain.Portfolio.AggregateRoots.Asset;
+using Domain.Portfolio.TransactionModels;
+using Domain.Portfolio.Entities.CreationModels.Transaction;
 
 namespace EDISAngular.APIControllers
 {
@@ -42,6 +44,34 @@ namespace EDISAngular.APIControllers
             var userid = User.Identity.GetUserId();
             return edisRepo.GetAdviserSync(userid, DateTime.Now).AdviserNumber;
 
+        }
+
+
+        [HttpPost, Route("api/adviser/getAllAccountForGroup")]
+        public List<AccountView> getAllCertainGroupAllAssociatedAccount(ClientAccountCreationBindingModel ClientGroupID) {
+            var ClientGroupId = ClientGroupID.clientGroup;
+            List<AccountView> result = new List<AccountView>();
+            //Here we retrieve the group account then add to the result
+            List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupByIdSync(ClientGroupId, DateTime.Now);
+            foreach (var groupAccount in accounts) {
+                result.Add(new AccountView {
+                    id = groupAccount.Id,
+                    name = groupAccount.AccountNameOrInfo
+                });
+            }
+            //then we get all the clients' accounts
+            ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(ClientGroupId);
+            List<ClientAccount> clientAccounts = new List<ClientAccount>();
+            clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
+            //add to the result
+            foreach (var clientAccount in clientAccounts) {
+                result.Add(new AccountView {
+                        id = clientAccount.Id,
+                        name = clientAccount.AccountNameOrInfo
+                });
+            }
+            return result;
+          
         }
 
         //#region added actions 13/05/2015
@@ -92,6 +122,15 @@ namespace EDISAngular.APIControllers
             return "success";
 
         }
+         
+
+        [HttpPost, Route("api/adviser/makeEquityTransactions")]
+        public string adviserMakeEquityTransactions(EquityTransactionModel model, string clientId="") {
+            edisRepo.AdviserMakeEquityTransactions(model);    
+            return "ok zhong de ok ";
+        }
+
+
 
         [HttpPost, Route("api/adviser/getAllClientGroups")]
         [Authorize(Roles = AuthorizationRoles.Role_Adviser)]

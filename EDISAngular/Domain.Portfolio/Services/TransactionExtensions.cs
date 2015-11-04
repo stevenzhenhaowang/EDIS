@@ -39,7 +39,7 @@ namespace Domain.Portfolio.Services
                         "A sell transaction is selling more assets than the quantity of assets currently owned. " +
                         "Please check if you have properly retrieved correct collection of assets.");
                 }
-                var numberOfUnitsNeedsTobeSold = sell.NumberOfUnitsNeedToSell;
+                var numberOfUnitsNeedsTobeSold = Math.Abs(sell.NumberOfUnitsNeedToSell);
                 foreach (var priorBuy in priorBuys)
                 {
                     if (priorBuy.NumberOfUnitsLeft >= numberOfUnitsNeedsTobeSold)
@@ -66,6 +66,8 @@ namespace Domain.Portfolio.Services
                 Sells = sells,
                 Buys = buys,
                 CapitalGain = result
+
+                //needs to be implemented
             };
         }
     }

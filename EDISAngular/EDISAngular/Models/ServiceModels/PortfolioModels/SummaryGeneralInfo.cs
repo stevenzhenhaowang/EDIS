@@ -25,6 +25,8 @@ namespace EDISAngular.Models.ServiceModels.PortfolioModels
         public double marketValue { get; set; }
         public double pl { get; set; }//profit/loss
         public double plp { get; set; }//profit/loss percentage
+        public double capitalGain { get; set; }
+
     }
 
 }

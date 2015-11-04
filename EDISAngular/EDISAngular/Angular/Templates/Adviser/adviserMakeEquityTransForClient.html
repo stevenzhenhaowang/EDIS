@@ -1,0 +1,160 @@
+﻿
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+            <li>Data Input</li>
+            <li class="active">Make Transaction</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="main-header">
+        <h2>Make Transactions</h2>
+
+    </div>
+    <div class="main-content">
+
+        <div class="row">
+            <div class="col-md-4">
+                <form novalidate name="form" ng-controller="adviserMakeTransactions">
+                    <div class="row">
+                        <div class="col-sm-12 form-group">
+                            <label>Select Client Group</label>
+                            <select required class="form-control" name="clientGroup" ng-change="loadAccounts()" ng-model="clientGroup" ng-options="group.id as group.name for group in groups"></select>
+                            <span class="error" ng-show="form.clientGroup.$error.required && form.clientGroup.$touched">Please select client group.</span>
+                        </div>
+                    </div>
+
+                    <!--loadClients
+                    <div class="row">
+                        <div class="col-sm-12 form-group">
+                            <label>Select Client</label>
+                            <select required class="form-control" name="clientName" ng-model="collection.selectedClient" ng-options="client.id as client.name for client in clients"></select>
+                            <span class="error" ng-show="form.clientGroup.$error.required && form.clientGroup.$touched">Please select client group.</span>
+                        </div>
+                    </div>
+                        -->
+                    <div class="row">
+                        <div class="col-sm-12 form-group">
+                            <label>Select Account</label>
+                            <select required class="form-control" name="accountName" ng-model="collection.selectedAccount" ng-options="account.id as account.name for account in accounts"></select>
+                            <span class="error" ng-show="form.accountName.$error.required && form.accountName.$touched">Please select which account to make transactions.</span>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-md-3 form-group">
+                            <label>Transaction Type</label>
+                            <div class="radio">
+                                <label>
+                                    Equity
+                                    <input type="radio" ng-model="collection.transactionType" ng-change="loadAllTickers()" value="Equity" ng-required="!collection.transactionType" />
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    Bond
+                                    <input type="radio" ng-model="collection.transactionType" value="Bond" ng-required="!collection.transactionType" />
+                                </label>
+                            </div>
+
+                            <div class="radio">
+                                <label>
+                                    Property
+                                    <input type="radio" ng-model="collection.transactionType" value="Property" ng-required="!collection.transactionType" />
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    Insurance
+                                    <input type="radio" ng-model="collection.transactionType" value="Insurance" ng-required="!collection.transactionType" />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div ng-if="collection.transactionType==='Equity'">
+                        <div class="row">
+                            <label>Equity Transaction</label><br /><br /><br />
+                            <div class="col-md-4 form-group">
+                                <!--Here need to implement a drop down to sell or to buy equity and the drop down to get all tickers-->
+                                <label>Ticker</label>
+                                <select class="form-control" ng-model="collection.equityTrans.Ticker" name="ticker" required ng-options="item.tickerNumber as item.tickerName for item in allTickers">
+                                    <option value="">Please select.....</option>
+                                </select>
+                                <div class="error" ng-show="form.ticker.$error.required&&form.ticker.$touched">Please select ticker</div>
+                            </div>
+                           
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label>Number of Units</label>
+                                    <input type="text" ng-model="collection.equityTrans.NumberOfUnits" class="form-control" required name="NumberOfUnits" />
+                                    <div class="error" ng-show="form.NumberOfUnits.$error.required&&form.NumberOfUnits.$touched">Please Enter Number Of Units</div>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Price</label>
+                                    <input type="text" ng-model="collection.equityTrans.Price" class="form-control" required name="Price" />
+                                    <div class="error" ng-show="form.Price.$error.required&&form.Price.$touched">Please Enter Price</div>
+                                </div>
+                            </div>
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label>Transaction Date</label>
+                                <input class="form-control" edis-datepicker ng-model="collection.equityTrans.TransactionDate" required />
+                                <div class="error" ng-show="form.TransactionDate.$error.required&&form.TransactionDate.$touched">Please select a transaction date</div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                    <div ng-if="collection.transactionType==='Bond'">
+                        <div class="row">
+                            <label>Bond Transaction</label>
+                        </div>
+                        <label>Bond Transaction Need Data in order to be implemented</label>
+
+
+                    </div>
+
+
+                    <div ng-if="collection.transactionType==='Property'">
+                        <div class="row">
+                            <label>Property Transaction</label>
+                        </div>
+                        <label>Property Transaction Need Data in order to be implemented</label>
+                    </div>
+
+
+                    <div ng-if="collection.transactionType==='Insurance'">
+                        <div class="row">
+                            <label>Insurance Transaction</label>
+                        </div>
+                        <label>Insurance Transaction Need Data in order to be implemented</label>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 form-group">
+                            <button class="btn btn-default" ng-disabled="!form.$valid" ng-click="save()">Create</button>
+                        </div>
+                    </div>
+
+
+
+                </form>
+
+
+
+            </div>
+        </div>
+
+
+
+    </div>
+</div>

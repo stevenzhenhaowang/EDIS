@@ -14,8 +14,7 @@ using System.Net.Http;
 using System.Net;
 using System.Net.Http.Headers;
 using EDISAngular.Infrastructure.Authorization;
-using EDIS_DOMAIN;
-using EDIS_DOMAIN.Enum.Enums;
+
 using EDISAngular.Infrastructure.DatabaseAccess;
 using EDISAngular.Infrastructure.DbFirst;
 using SqlRepository;
@@ -32,7 +31,7 @@ namespace EDISAngular.APIControllers
     public class CorrespondenceController : ApiController
     {
         private EdisRepository edisRepo;
-        private CommonReferenceDataRepository comRepo;
+        //private CommonReferenceDataRepository comRepo;
         private CorrespondenceRepository corresRepo;
         //private AdviserRepository advRepo;
         private edisDbEntities db;
@@ -40,7 +39,7 @@ namespace EDISAngular.APIControllers
         public CorrespondenceController()
         {
             edisDbEntities db = new edisDbEntities();
-            comRepo = new CommonReferenceDataRepository(db);
+            //comRepo = new CommonReferenceDataRepository(db);
             corresRepo = new CorrespondenceRepository(db);
             //advRepo = new AdviserRepository(db);
             edisRepo = new EdisRepository();

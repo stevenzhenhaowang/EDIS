@@ -666,6 +666,7 @@ namespace EDISAngular.APIControllers
                 List<ClientAccount> clientAccounts = edisRepo.getAllClientAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
                 double totalCost = 0;
                 double totalMarketValue = 0;
+                double capitalGain = 0;
                 foreach (var account in groupAccounts)
                 {
                     List<AssetBase> assets = account.GetAssetsSync();
@@ -674,6 +675,7 @@ namespace EDISAngular.APIControllers
                     {
                         totalCost += asset.GetCost().Total;
                         totalMarketValue += asset.GetTotalMarketValue();
+                        capitalGain += asset.GetCost().CapitalGain;
                     }
                 }
                 foreach (var account in clientAccounts)
@@ -683,6 +685,7 @@ namespace EDISAngular.APIControllers
                     {
                         totalCost += asset.GetCost().Total;
                         totalMarketValue += asset.GetTotalMarketValue();
+                        capitalGain += asset.GetCost().CapitalGain;
                     }
                 }
                 SummaryGeneralInfo summary = new SummaryGeneralInfo
@@ -690,7 +693,9 @@ namespace EDISAngular.APIControllers
                     cost = totalCost,
                     marketValue = totalMarketValue,
                     pl = totalMarketValue - totalCost,
-                    plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100
+                    plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100,
+                    capitalGain = capitalGain
+                    
                 };
 
                 return summary;
@@ -703,6 +708,7 @@ namespace EDISAngular.APIControllers
                 clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
                 double totalCost = 0;
                 double totalMarketValue = 0;
+                double capitalGain = 0;
                 List<AssetBase> assets = new List<AssetBase>();
                 
                 accounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
@@ -711,13 +717,16 @@ namespace EDISAngular.APIControllers
                 {
                     totalCost += asset.GetCost().Total;
                     totalMarketValue += asset.GetTotalMarketValue();
+                    capitalGain += asset.GetCost().CapitalGain;
                 }
                 SummaryGeneralInfo summary = new SummaryGeneralInfo
                 {
                     cost = totalCost,
                     marketValue = totalMarketValue,
                     pl = totalMarketValue - totalCost,
-                    plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100
+                    plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100,
+                    capitalGain = capitalGain
+                    
                 };
 
                 return summary;

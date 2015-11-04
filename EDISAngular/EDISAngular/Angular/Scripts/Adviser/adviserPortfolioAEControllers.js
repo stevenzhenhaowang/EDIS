@@ -87,7 +87,7 @@
             $scope.dataSource = new kendo.data.DataSource({
                 data: $scope.data.data,
                 sort: {
-                    field: "date",
+                    field: " ",
                     dir: "asc"
                 }
             });
@@ -301,7 +301,7 @@
  app.controller("adviserPortfolioSectorDiversificationController", ["$scope", "adviserPortfolioGetSectorInfo", function ($scope, DBContext) {
      DBContext.getData().get(function (data) {
          $scope.data = data;
-         console.log(data.data);
+        // console.log(data.data);
         /* $scope.barOptions = {
              title: {
                  text: "Sectorial Bar Chart"
@@ -353,7 +353,7 @@
             $scope.data = data;
             $scope.barOptions = {
                 title: {
-                    text: "Sectorial Bar Chart555"
+                    text: "Sectorial Bar Chart"
                 },
                 legend: {
                     visible: false

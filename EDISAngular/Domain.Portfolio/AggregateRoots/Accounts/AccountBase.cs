@@ -23,6 +23,9 @@ namespace Domain.Portfolio.AggregateRoots.Accounts
         public string AccountNumber { get; set; }
         public AccountType AccountType { get; set; }
 
+        public string AccountNameOrInfo { get; set; }
+
+
 
         public List<AssetBase> GetAssets(DateTime? beforeDate = null)
         {

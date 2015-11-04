@@ -44,6 +44,8 @@ using AssetPrice = Edis.Db.Assets.AssetPrice;
 using Domain.Portfolio.Correspondence;
 using System.Reflection;
 using System.ComponentModel;
+using Domain.Portfolio.CorporateActions;
+using Domain.Portfolio.TransactionModels;
 
 namespace SqlRepository
 {
@@ -93,6 +95,102 @@ namespace SqlRepository
 
             _db.SaveChanges();
         }
+
+
+
+        public void AdviserMakeEquityTransactions(EquityTransactionModel model) {
+
+            //to do front end will pass in a what ever the number is 
+            //then we get this client's account number then make an equity transaction
+            var account = _db.Accounts.Where(a => a.AccountId == model.AccountId).FirstOrDefault();
+            var accountToMakeTrans = GetClientAccountSync(account.AccountNumber, DateTime.Now);
+            var equity = getEquityByTicker(model.Ticker);
+
+
+            accountToMakeTrans.MakeTransactionSync(new EquityTransactionCreation()
+            {
+                //EquityType = EquityTypes.ManagedInvestments,
+                //FeesRecords = new List<TransactionFeeRecordCreation>() {
+                //     new TransactionFeeRecordCreation()
+                //    {
+                //        Amount = 100,
+                //        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
+                //    }
+                //},
+                FeesRecords = new List<TransactionFeeRecordCreation>(),
+                Name = equity.Name,
+                NumberOfUnits = model.NumberOfUnits,
+                Price = model.Price,
+                Sector = equity.Sector,
+                Ticker = equity.Ticker,
+                TransactionDate = model.TransactionDate
+            });
+
+
+
+
+            //accountToMakeTrans.MakeTransactionSync(new CashTransaction() {
+            //    Amount = model.Price * model.NumberOfUnits,
+            //    CashAccount
+
+            //});
+            accountToMakeTrans.MakeTransactionSync(new CashAccountTransactionAccountCreation()
+            {
+                Amount = model.Price * model.NumberOfUnits,
+                AnnualInterestSoFar = 0,
+                Bsb = "123456",
+                CashAccountName = accountToMakeTrans.AccountNameOrInfo,
+                CashAccountNumber = accountToMakeTrans.AccountNumber,
+                CashAccountType = CashAccountType.TermDeposit,
+                CurrencyType = CurrencyType.AustralianDollar,
+                Frequency = Frequency.Annually,
+                InterestRate = 0,
+                MaturityDate = DateTime.Now.AddYears(1),
+                TermsInMonths = 0,
+                TransactionDate = DateTime.Now,
+                TransactionFeeRecords = new List<TransactionFeeRecordCreation>()
+                {
+                    new TransactionFeeRecordCreation()
+                    {
+                        Amount = 0,
+                        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
+                    }
+                }
+
+            });
+
+
+
+            //accountToMakeTrans.MakeTransactionSync(new CashAccountTransactionAccountCreation() {
+
+
+
+
+            //});
+            _db.SaveChanges();
+            //var account = GetClientAccountSync(model.ClientId, DateTime.Now);
+            //var equity = getEquityByTicker(model.Ticker);
+            //account.MakeTransactionSync(new EquityTransactionCreation() {
+            //    EquityType = EquityTypes.ManagedInvestments,
+            //    FeesRecords = new List<TransactionFeeRecordCreation>(),
+            //    Name = "Test Stock",
+            //    NumberOfUnits = model.NumberOfUnits,
+            //    Price = model.Price,
+            //    Sector = model.Sector,
+            //    Ticker = model.Ticker,
+            //    TransactionDate = new DateTime(2015, 3, 1, 12, 32, 30),
+
+
+            //});
+
+            //equityType is an emum
+
+
+        }
+
+
+
+
 
         public void insertData3()
         {
@@ -2532,8 +2630,9 @@ namespace SqlRepository
                 DirectPropertyPayments = new List<Rental>(),
                 AccountType = accountType,
                 AccountInfo = notes
+                
             });
-            _db.SaveChangesAsync();
+            _db.SaveChanges();
 
             return GetClientAccountSync(accountNumber, DateTime.Now);
         }
@@ -3043,6 +3142,24 @@ namespace SqlRepository
             foreach (var groupAccount in group.GroupAccounts)
             {
                 result.Add(GetClientGroupAccountSync(groupAccount.AccountNumber, toDate));
+            }
+            return result;
+        }
+
+        public List<GroupAccount> GetAccountsForClientGroupByIdSync(string clientGroupId, DateTime toDate)         //added
+        {
+            var group = _db.ClientGroups.Local
+                        .FirstOrDefault(g => g.ClientGroupId == clientGroupId && g.CreatedOn.HasValue && g.CreatedOn.Value <= toDate) ??
+                    _db.ClientGroups.Where(
+                        g =>
+                            g.ClientGroupId == clientGroupId && g.CreatedOn.HasValue && g.CreatedOn.Value <= toDate)
+                        .Include(c => c.GroupAccounts)
+                        .FirstOrDefault();
+            var result = new List<GroupAccount>();
+            foreach (var groupAccount in group.GroupAccounts)
+            {
+                result.Add(GetClientGroupAccountSync(groupAccount.AccountNumber, toDate));
+               // result.Add(GetClientGroupAccountSync());
             }
             return result;
         }
@@ -6688,7 +6805,8 @@ namespace SqlRepository
             {
                 Id = accountId,
                 AccountNumber = dbAccount.AccountNumber,
-                ConsultancyActivities = new List<ConsultancyActivity>()
+                ConsultancyActivities = new List<ConsultancyActivity>(),
+                AccountNameOrInfo = dbAccount.AccountInfo
             };
 
             return clientAccount;
@@ -6719,7 +6837,8 @@ namespace SqlRepository
             {
                 Id = accountId,
                 AccountNumber = dbAccount.AccountNumber,
-                ConsultancyActivities = new List<ConsultancyActivity>()
+                ConsultancyActivities = new List<ConsultancyActivity>(),
+                AccountNameOrInfo = dbAccount.AccountInfo
             };
             return groupAccount;
         }
@@ -7638,6 +7757,19 @@ namespace SqlRepository
             _db.SaveChanges();
         }
 
+
+
+        public Equity getEquityByTicker(string ticker)
+        {
+            Equity equity = _db.Equities.SingleOrDefault(e => e.Ticker == ticker);
+            return equity;
+            //return new Equity
+            //{
+            //    AssetId = equity.AssetId
+            //};
+        }
+
+
         public Equity getEquityByTicker(string ticker, EquityTypes type) {
             Equity equity = _db.Equities.SingleOrDefault(e => e.Ticker == ticker && e.EquityType == type);
 
@@ -7928,10 +8060,35 @@ namespace SqlRepository
             
         }
 
-        
 
 
 
+        public void CreateNewReturnOfCapitalAction(ReturnOfCapitalCreationModel model) {
+            //to do 
+            //get all clients and associated Equity to deduct the share amount increase the capital 
+
+            var equityToAction = getEquityById(model.EquityId);
+
+            var accountToAction = getAllClientAccountsForAdviser("",DateTime.Now);
+            foreach (var account in accountToAction) {
+
+                account.MakeTransactionSync( new EquityTransactionCreation() { 
+                    EquityType = equityToAction.EquityType,
+                    FeesRecords = new List<TransactionFeeRecordCreation>(),
+                    Name = equityToAction.Name,
+                    NumberOfUnits = Convert.ToInt32 (model.ShareMount),
+                    Price = equityToAction.LatestPrice,
+                    Sector = equityToAction.Sector,
+                    Ticker = equityToAction.Ticker,
+                    TransactionDate = DateTime.Now,
+                });
+           
+          
+                
+                
+            }
+
+        }
 
 
 

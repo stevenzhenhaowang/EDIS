@@ -35,7 +35,7 @@
     app.controller("adviserPortfolioStockDataController", ["$scope", "AdviserPortfolioSummaryDBService", function ($scope, DBContext) {
         DBContext.recentStockData().query(function (data) {
             $scope.data = data;
-            console.log(data);
+          
             $scope.dataSource = new kendo.data.DataSource({
                 //data: $scope.data,
                 data:data,  

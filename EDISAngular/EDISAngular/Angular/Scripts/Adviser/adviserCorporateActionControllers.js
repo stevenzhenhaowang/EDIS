@@ -1,5 +1,5 @@
 ﻿angular.module("EDIS")
-.controller("corporateActionController", ["$scope", "corporateActionServices", "$modal", function ($scope, service, $modal) {
+.controller("corporateActionController", ["$scope", "corporateActionServices", "$modal", "adviserGetId", function ($scope, service, $modal, $http) {
     service.existingIPOActions().query(function (data) {
         $scope.existingIPOActions = data;
     })
@@ -57,7 +57,7 @@
         $scope.selectedOtherCorporateAction = action;
     }
    
-    //new return of capital action
+    //new return of capital action popups 
     $scope.newReturnOfCapital = function () {
         var modalInstance = $modal.open({
             templateUrl: "existingReturnOfCapitals",
@@ -92,7 +92,7 @@
             $scope.selectModel(result.reason);
         });
     }
-    //
+   
     $scope.newReinvestment = function () {
         var modalInstance = $modal.open({
             templateUrl: "exsistingReinvestment",
@@ -313,7 +313,7 @@
 
 
   .controller("newReturnOfCapitalActionController",
-["$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", function ($scope, service, $modalInstance, dateParser, adviserGetId) {
+["$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", function ($scope,  service, $modalInstance, dateParser, adviserGetId, AppStrings, $http) {
     //service.allCompanies().query(function (data) {
     //    $scope.allCompanies = data;
     //})
@@ -328,16 +328,16 @@
             corporateActionName: $scope.actionName,
             equityId: $scope.equityId,
             shareAmount: $scope.shareAmount,
-            adviserUserId: adviserId,
+            //adviserUserId: adviserId,
             returnAmount: $scope.returnAmount,
             returnDate: dateParser($scope.returnDate),
           
-            participants: []
+            //participants: []
         };
         //this corperate action is mandatory all clients should participate which needs to be implemented
-        var allClients = service.allClients().query(function (data) {
-            data.participants = data;
-        })
+        //var allClients = service.allClients().query(function (data) {
+        //    data.participants = data;
+        //})
 
 
         //for (var i = 0; i < $scope.allClients.length; i++) {
@@ -346,10 +346,11 @@
         //    }
         //}
 
-        service.addReturnOfCapitalAction().save(data, function () {
+        service.newReturnOfCapital(data, function () {
             $modalInstance.close({ reason: "success" });
-
         })
+
+       // $http.post(AppStrings.EDIS_IP)
 
 
 
