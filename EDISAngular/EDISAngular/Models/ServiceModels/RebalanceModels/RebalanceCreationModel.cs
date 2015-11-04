@@ -9,6 +9,8 @@ namespace EDISAngular.Models.ServiceModels.RebalanceModels
 {
     public class RebalanceCreationModel
     {
+        public string modelId { get; set; }
+
         [Required]
         public string name { get; set; }
 
@@ -32,8 +34,8 @@ namespace EDISAngular.Models.ServiceModels.RebalanceModels
         public string parameterId { get; set; }
         [Required]
         public double? weighting { get; set; }
-        [Required]
-        public List<string> identityMetaKey { get; set; }
+        
+        public string identityMetaKey { get; set; }
     }
 
 }

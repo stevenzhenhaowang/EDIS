@@ -11,6 +11,7 @@ using Edis.Db.IncomeRecords;
 using Edis.Db.Liabilities;
 using Edis.Db.Transactions;
 using Shared;
+using Edis.Db.Rebalance;
 
 
 namespace Edis.Db
@@ -51,6 +52,11 @@ namespace Edis.Db
         public DbSet<Attachments> Attachments { get; set; }
         public DbSet<ResearchValue> ResearchValues { get; set; }
 
+        public DbSet<RebalanceModel> RebalanceModels { get; set; }
+        public DbSet<TemplateDetailsItemParameter> TemplateDetailsItemParameters { get; set; }
+        
+        public DbSet<RiskProfile> RiskProfiles { get; set; }
+
 
 
 
@@ -76,6 +82,16 @@ namespace Edis.Db
                 .WithOptional(r=>r.MarginLending).WillCascadeOnDelete(false);
 
 
+            modelBuilder.Entity<RebalanceModel>()
+                .HasMany<TemplateDetailsItemParameter>(t => t.TemplateDetailsItemParameters).WithOptional(c => c.Model)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<RebalanceModel>()
+                .HasRequired<Adviser>(m => m.Adviser);
+
+
+            modelBuilder.Entity<RebalanceModel>()
+                .HasRequired<ClientGroup>(m => m.ClientGroup);
 
             modelBuilder.Entity<MarginLendingTransaction>().HasMany(m => m.LoanValueRatios);
             modelBuilder.Entity<Account>().HasMany(ac=>ac.Insurances)

@@ -3,7 +3,7 @@ namespace Edis.Db.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class init : DbMigration
+    public partial class riskprofile : DbMigration
     {
         public override void Up()
         {
@@ -11,8 +11,6 @@ namespace Edis.Db.Migrations
         
         public override void Down()
         {
-
-            DropColumn("dbo.ResearchValues", "Value");
         }
     }
 }

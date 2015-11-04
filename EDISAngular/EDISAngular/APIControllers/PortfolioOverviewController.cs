@@ -817,60 +817,60 @@ namespace EDISAngular.APIControllers
                 List<AssetBase> ieAssets = assets.OfType<InternationalEquity>().Cast<AssetBase>().ToList();
                 List<AssetBase> miAssets = assets.OfType<ManagedInvestment>().Cast<AssetBase>().ToList();
 
-                model.data.Add(new PortfolioStasticsItem
-                {
+                var aeRatios = aeAssets.GetAverageRatiosFor<AustralianEquity>();
+                var ieRatios = ieAssets.GetAverageRatiosFor<InternationalEquity>();
+                var miRatios = miAssets.GetAverageRatiosFor<ManagedInvestment>();
+
+                model.data.Add(new PortfolioStasticsItem {
                     assetClass = "Australian Equity",
                     costInvestment = aeAssets.Sum(a => a.GetCost().Total),
                     marketValue = aeAssets.Sum(a => a.GetTotalMarketValue()),
                     suitability = aeAssets.GetAssetWeightings().Sum(w => w.Percentage * ((AustralianEquity)w.Weightable).GetRating().TotalScore),
-                    oneYearReturn = assets.GetAverageRatiosFor<AustralianEquity>().OneYearReturn,
-                    threeYearReturn = assets.GetAverageRatiosFor<AustralianEquity>().ThreeYearReturn,
-                    fiveYearReturn = assets.GetAverageRatiosFor<AustralianEquity>().FiveYearReturn,
-                    earningsPerShare = assets.GetAverageRatiosFor<AustralianEquity>().EarningsStability,
-                    dividend = assets.GetAverageRatiosFor<AustralianEquity>().DividendYield,
-                    beta = assets.GetAverageRatiosFor<AustralianEquity>().Beta.ToString(),
-                    returnOnAsset = assets.GetAverageRatiosFor<AustralianEquity>().ReturnOnAsset,
-                    returnOnEquity = assets.GetAverageRatiosFor<AustralianEquity>().ReturnOnEquity,
-                    priceEarningsRatio = assets.GetAverageRatiosFor<AustralianEquity>().PriceEarningRatio,
-                    avMarketCap = assets.GetAverageRatiosFor<AustralianEquity>().Capitalisation.ToString()
+                    oneYearReturn = aeRatios.OneYearReturn,
+                    threeYearReturn = aeRatios.ThreeYearReturn,
+                    fiveYearReturn = aeRatios.FiveYearReturn,
+                    earningsPerShare = aeRatios.EarningsStability,
+                    dividend = aeRatios.DividendYield,
+                    beta = aeRatios.Beta.ToString(),
+                    returnOnAsset = aeRatios.ReturnOnAsset,
+                    returnOnEquity = aeRatios.ReturnOnEquity,
+                    priceEarningsRatio = aeRatios.PriceEarningRatio,
+                    avMarketCap = aeRatios.Capitalisation.ToString()
                 });
 
-                model.data.Add(new PortfolioStasticsItem
-                {
+                model.data.Add(new PortfolioStasticsItem {
                     assetClass = "International Equity",
                     costInvestment = ieAssets.Sum(a => a.GetCost().Total),
                     marketValue = ieAssets.Sum(a => a.GetTotalMarketValue()),
                     suitability = ieAssets.GetAssetWeightings().Sum(w => w.Percentage * ((InternationalEquity)w.Weightable).GetRating().TotalScore),
-                    oneYearReturn = ieAssets.GetAverageRatiosFor<InternationalEquity>().OneYearReturn,
-                    threeYearReturn = ieAssets.GetAverageRatiosFor<InternationalEquity>().ThreeYearReturn,
-                    fiveYearReturn = ieAssets.GetAverageRatiosFor<InternationalEquity>().FiveYearReturn,
-                    earningsPerShare = ieAssets.GetAverageRatiosFor<InternationalEquity>().EarningsStability,
-                    dividend = ieAssets.GetAverageRatiosFor<InternationalEquity>().DividendYield,
-                    beta = ieAssets.GetAverageRatiosFor<InternationalEquity>().Beta.ToString(),
-                    returnOnAsset = ieAssets.GetAverageRatiosFor<InternationalEquity>().ReturnOnAsset,
-                    returnOnEquity = ieAssets.GetAverageRatiosFor<InternationalEquity>().ReturnOnEquity,
-                    priceEarningsRatio = ieAssets.GetAverageRatiosFor<InternationalEquity>().PriceEarningRatio,
-                    avMarketCap = ieAssets.GetAverageRatiosFor<InternationalEquity>().Capitalisation.ToString()
+                    oneYearReturn = ieRatios.OneYearReturn,
+                    threeYearReturn = ieRatios.ThreeYearReturn,
+                    //fiveYearReturn = ieRatios.FiveYearReturn,
+                    earningsPerShare = ieRatios.EarningsStability,
+                    dividend = ieRatios.DividendYield,
+                    beta = ieRatios.Beta.ToString(),
+                    returnOnAsset = ieRatios.ReturnOnAsset,
+                    returnOnEquity = ieRatios.ReturnOnEquity,
+                    priceEarningsRatio = ieRatios.PriceEarningRatio,
+                    avMarketCap = ieRatios.Capitalisation.ToString()
                 });
 
-                model.data.Add(new PortfolioStasticsItem
-                {
+                model.data.Add(new PortfolioStasticsItem {
                     assetClass = "Managed Investment",
                     costInvestment = miAssets.Sum(a => a.GetCost().Total),
                     marketValue = miAssets.Sum(a => a.GetTotalMarketValue()),
                     suitability = miAssets.GetAssetWeightings().Sum(w => w.Percentage * ((ManagedInvestment)w.Weightable).GetRating().TotalScore),
-                    oneYearReturn = miAssets.GetAverageRatiosFor<ManagedInvestment>().OneYearReturn,
-                    threeYearReturn = miAssets.GetAverageRatiosFor<ManagedInvestment>().ThreeYearReturn,
-                    fiveYearReturn = miAssets.GetAverageRatiosFor<ManagedInvestment>().FiveYearReturn,
-                    earningsPerShare = miAssets.GetAverageRatiosFor<ManagedInvestment>().EarningsStability,
-                    dividend = miAssets.GetAverageRatiosFor<ManagedInvestment>().DividendYield,
-                    beta = miAssets.GetAverageRatiosFor<ManagedInvestment>().Beta.ToString(),
-                    returnOnAsset = miAssets.GetAverageRatiosFor<ManagedInvestment>().ReturnOnAsset,
-                    returnOnEquity = miAssets.GetAverageRatiosFor<ManagedInvestment>().ReturnOnEquity,
-                    priceEarningsRatio = miAssets.GetAverageRatiosFor<ManagedInvestment>().PriceEarningRatio,
-                    avMarketCap = miAssets.GetAverageRatiosFor<ManagedInvestment>().Capitalisation.ToString()
+                    oneYearReturn = miRatios.OneYearReturn,
+                    threeYearReturn = miRatios.ThreeYearReturn,
+                    fiveYearReturn = miRatios.FiveYearReturn,
+                    earningsPerShare = miRatios.EarningsStability,
+                    dividend = miRatios.DividendYield,
+                    beta = miRatios.Beta.ToString(),
+                    returnOnAsset = miRatios.ReturnOnAsset,
+                    returnOnEquity = miRatios.ReturnOnEquity,
+                    priceEarningsRatio = miRatios.PriceEarningRatio,
+                    avMarketCap = miRatios.Capitalisation.ToString()
                 });
-
 
                 foreach (var item in model.data)
                 {
@@ -900,57 +900,59 @@ namespace EDISAngular.APIControllers
                 List<AssetBase> ieAssets = assets.OfType<InternationalEquity>().Cast<AssetBase>().ToList();
                 List<AssetBase> miAssets = assets.OfType<ManagedInvestment>().Cast<AssetBase>().ToList();
 
-                model.data.Add(new PortfolioStasticsItem { 
+                var aeRatios = aeAssets.GetAverageRatiosFor<AustralianEquity>();
+                var ieRatios = ieAssets.GetAverageRatiosFor<InternationalEquity>();
+                var miRatios = miAssets.GetAverageRatiosFor<ManagedInvestment>();
+
+                model.data.Add(new PortfolioStasticsItem {
                     assetClass = "Australian Equity",
                     costInvestment = aeAssets.Sum(a => a.GetCost().Total),
                     marketValue = aeAssets.Sum(a => a.GetTotalMarketValue()),
                     suitability = aeAssets.GetAssetWeightings().Sum(w => w.Percentage * ((AustralianEquity)w.Weightable).GetRating().TotalScore),
-                    oneYearReturn = assets.GetAverageRatiosFor<AustralianEquity>().OneYearReturn,
-                    threeYearReturn = assets.GetAverageRatiosFor<AustralianEquity>().ThreeYearReturn,
-                    fiveYearReturn = assets.GetAverageRatiosFor<AustralianEquity>().FiveYearReturn,
-                    earningsPerShare = assets.GetAverageRatiosFor<AustralianEquity>().EarningsStability,
-                    dividend = assets.GetAverageRatiosFor<AustralianEquity>().DividendYield,
-                    beta = assets.GetAverageRatiosFor<AustralianEquity>().Beta.ToString(),
-                    returnOnAsset = assets.GetAverageRatiosFor<AustralianEquity>().ReturnOnAsset,
-                    returnOnEquity = assets.GetAverageRatiosFor<AustralianEquity>().ReturnOnEquity,
-                    priceEarningsRatio = assets.GetAverageRatiosFor<AustralianEquity>().PriceEarningRatio,
-                    avMarketCap = assets.GetAverageRatiosFor<AustralianEquity>().Capitalisation.ToString()
+                    oneYearReturn = aeRatios.OneYearReturn,
+                    threeYearReturn = aeRatios.ThreeYearReturn,
+                    fiveYearReturn = aeRatios.FiveYearReturn,
+                    earningsPerShare = aeRatios.EarningsStability,
+                    dividend = aeRatios.DividendYield,
+                    beta = aeRatios.Beta.ToString(),
+                    returnOnAsset = aeRatios.ReturnOnAsset,
+                    returnOnEquity = aeRatios.ReturnOnEquity,
+                    priceEarningsRatio = aeRatios.PriceEarningRatio,
+                    avMarketCap = aeRatios.Capitalisation.ToString()
                 });
 
-                model.data.Add(new PortfolioStasticsItem
-                {
+                model.data.Add(new PortfolioStasticsItem {
                     assetClass = "International Equity",
                     costInvestment = ieAssets.Sum(a => a.GetCost().Total),
                     marketValue = ieAssets.Sum(a => a.GetTotalMarketValue()),
                     suitability = ieAssets.GetAssetWeightings().Sum(w => w.Percentage * ((InternationalEquity)w.Weightable).GetRating().TotalScore),
-                    oneYearReturn = ieAssets.GetAverageRatiosFor<InternationalEquity>().OneYearReturn,
-                    threeYearReturn = ieAssets.GetAverageRatiosFor<InternationalEquity>().ThreeYearReturn,
-                    fiveYearReturn = ieAssets.GetAverageRatiosFor<InternationalEquity>().FiveYearReturn,
-                    earningsPerShare = ieAssets.GetAverageRatiosFor<InternationalEquity>().EarningsStability,
-                    dividend = ieAssets.GetAverageRatiosFor<InternationalEquity>().DividendYield,
-                    beta = ieAssets.GetAverageRatiosFor<InternationalEquity>().Beta.ToString(),
-                    returnOnAsset = ieAssets.GetAverageRatiosFor<InternationalEquity>().ReturnOnAsset,
-                    returnOnEquity = ieAssets.GetAverageRatiosFor<InternationalEquity>().ReturnOnEquity,
-                    priceEarningsRatio = ieAssets.GetAverageRatiosFor<InternationalEquity>().PriceEarningRatio,
-                    avMarketCap = ieAssets.GetAverageRatiosFor<InternationalEquity>().Capitalisation.ToString()
+                    oneYearReturn = ieRatios.OneYearReturn,
+                    threeYearReturn = ieRatios.ThreeYearReturn,
+                    //fiveYearReturn = ieRatios.FiveYearReturn,
+                    earningsPerShare = ieRatios.EarningsStability,
+                    dividend = ieRatios.DividendYield,
+                    beta = ieRatios.Beta.ToString(),
+                    returnOnAsset = ieRatios.ReturnOnAsset,
+                    returnOnEquity = ieRatios.ReturnOnEquity,
+                    priceEarningsRatio = ieRatios.PriceEarningRatio,
+                    avMarketCap = ieRatios.Capitalisation.ToString()
                 });
 
-                model.data.Add(new PortfolioStasticsItem
-                {
+                model.data.Add(new PortfolioStasticsItem {
                     assetClass = "Managed Investment",
                     costInvestment = miAssets.Sum(a => a.GetCost().Total),
                     marketValue = miAssets.Sum(a => a.GetTotalMarketValue()),
                     suitability = miAssets.GetAssetWeightings().Sum(w => w.Percentage * ((ManagedInvestment)w.Weightable).GetRating().TotalScore),
-                    oneYearReturn = miAssets.GetAverageRatiosFor<ManagedInvestment>().OneYearReturn,
-                    threeYearReturn = miAssets.GetAverageRatiosFor<ManagedInvestment>().ThreeYearReturn,
-                    fiveYearReturn = miAssets.GetAverageRatiosFor<ManagedInvestment>().FiveYearReturn,
-                    earningsPerShare = miAssets.GetAverageRatiosFor<ManagedInvestment>().EarningsStability,
-                    dividend = miAssets.GetAverageRatiosFor<ManagedInvestment>().DividendYield,
-                    beta = miAssets.GetAverageRatiosFor<ManagedInvestment>().Beta.ToString(),
-                    returnOnAsset = miAssets.GetAverageRatiosFor<ManagedInvestment>().ReturnOnAsset,
-                    returnOnEquity = miAssets.GetAverageRatiosFor<ManagedInvestment>().ReturnOnEquity,
-                    priceEarningsRatio = miAssets.GetAverageRatiosFor<ManagedInvestment>().PriceEarningRatio,
-                    avMarketCap = miAssets.GetAverageRatiosFor<ManagedInvestment>().Capitalisation.ToString()
+                    oneYearReturn = miRatios.OneYearReturn,
+                    threeYearReturn = miRatios.ThreeYearReturn,
+                    fiveYearReturn = miRatios.FiveYearReturn,
+                    earningsPerShare = miRatios.EarningsStability,
+                    dividend = miRatios.DividendYield,
+                    beta = miRatios.Beta.ToString(),
+                    returnOnAsset = miRatios.ReturnOnAsset,
+                    returnOnEquity = miRatios.ReturnOnEquity,
+                    priceEarningsRatio = miRatios.PriceEarningRatio,
+                    avMarketCap = miRatios.Capitalisation.ToString()
                 });
                 
 
@@ -993,58 +995,59 @@ namespace EDISAngular.APIControllers
                 List<AssetBase> ieAssets = assets.OfType<InternationalEquity>().Cast<AssetBase>().ToList();
                 List<AssetBase> miAssets = assets.OfType<ManagedInvestment>().Cast<AssetBase>().ToList();
 
-                model.data.Add(new PortfolioStasticsItem
-                {
+                var aeRatios = aeAssets.GetAverageRatiosFor<AustralianEquity>();
+                var ieRatios = ieAssets.GetAverageRatiosFor<InternationalEquity>();
+                var miRatios = miAssets.GetAverageRatiosFor<ManagedInvestment>();
+
+                model.data.Add(new PortfolioStasticsItem {
                     assetClass = "Australian Equity",
                     costInvestment = aeAssets.Sum(a => a.GetCost().Total),
                     marketValue = aeAssets.Sum(a => a.GetTotalMarketValue()),
                     suitability = aeAssets.GetAssetWeightings().Sum(w => w.Percentage * ((AustralianEquity)w.Weightable).GetRating().TotalScore),
-                    oneYearReturn = assets.GetAverageRatiosFor<AustralianEquity>().OneYearReturn,
-                    threeYearReturn = assets.GetAverageRatiosFor<AustralianEquity>().ThreeYearReturn,
-                    fiveYearReturn = assets.GetAverageRatiosFor<AustralianEquity>().FiveYearReturn,
-                    earningsPerShare = assets.GetAverageRatiosFor<AustralianEquity>().EarningsStability,
-                    dividend = assets.GetAverageRatiosFor<AustralianEquity>().DividendYield,
-                    beta = assets.GetAverageRatiosFor<AustralianEquity>().Beta.ToString(),
-                    returnOnAsset = assets.GetAverageRatiosFor<AustralianEquity>().ReturnOnAsset,
-                    returnOnEquity = assets.GetAverageRatiosFor<AustralianEquity>().ReturnOnEquity,
-                    priceEarningsRatio = assets.GetAverageRatiosFor<AustralianEquity>().PriceEarningRatio,
-                    avMarketCap = assets.GetAverageRatiosFor<AustralianEquity>().Capitalisation.ToString()
+                    oneYearReturn = aeRatios.OneYearReturn,
+                    threeYearReturn = aeRatios.ThreeYearReturn,
+                    fiveYearReturn = aeRatios.FiveYearReturn,
+                    earningsPerShare = aeRatios.EarningsStability,
+                    dividend = aeRatios.DividendYield,
+                    beta = aeRatios.Beta.ToString(),
+                    returnOnAsset = aeRatios.ReturnOnAsset,
+                    returnOnEquity = aeRatios.ReturnOnEquity,
+                    priceEarningsRatio = aeRatios.PriceEarningRatio,
+                    avMarketCap = aeRatios.Capitalisation.ToString()
                 });
 
-                model.data.Add(new PortfolioStasticsItem
-                {
+                model.data.Add(new PortfolioStasticsItem {
                     assetClass = "International Equity",
                     costInvestment = ieAssets.Sum(a => a.GetCost().Total),
                     marketValue = ieAssets.Sum(a => a.GetTotalMarketValue()),
                     suitability = ieAssets.GetAssetWeightings().Sum(w => w.Percentage * ((InternationalEquity)w.Weightable).GetRating().TotalScore),
-                    oneYearReturn = ieAssets.GetAverageRatiosFor<InternationalEquity>().OneYearReturn,
-                    threeYearReturn = ieAssets.GetAverageRatiosFor<InternationalEquity>().ThreeYearReturn,
-                    fiveYearReturn = ieAssets.GetAverageRatiosFor<InternationalEquity>().FiveYearReturn,
-                    earningsPerShare = ieAssets.GetAverageRatiosFor<InternationalEquity>().EarningsStability,
-                    dividend = ieAssets.GetAverageRatiosFor<InternationalEquity>().DividendYield,
-                    beta = ieAssets.GetAverageRatiosFor<InternationalEquity>().Beta.ToString(),
-                    returnOnAsset = ieAssets.GetAverageRatiosFor<InternationalEquity>().ReturnOnAsset,
-                    returnOnEquity = ieAssets.GetAverageRatiosFor<InternationalEquity>().ReturnOnEquity,
-                    priceEarningsRatio = ieAssets.GetAverageRatiosFor<InternationalEquity>().PriceEarningRatio,
-                    avMarketCap = ieAssets.GetAverageRatiosFor<InternationalEquity>().Capitalisation.ToString()
+                    oneYearReturn = ieRatios.OneYearReturn,
+                    threeYearReturn = ieRatios.ThreeYearReturn,
+                    //fiveYearReturn = ieRatios.FiveYearReturn,
+                    earningsPerShare = ieRatios.EarningsStability,
+                    dividend = ieRatios.DividendYield,
+                    beta = ieRatios.Beta.ToString(),
+                    returnOnAsset = ieRatios.ReturnOnAsset,
+                    returnOnEquity = ieRatios.ReturnOnEquity,
+                    priceEarningsRatio = ieRatios.PriceEarningRatio,
+                    avMarketCap = ieRatios.Capitalisation.ToString()
                 });
 
-                model.data.Add(new PortfolioStasticsItem
-                {
+                model.data.Add(new PortfolioStasticsItem {
                     assetClass = "Managed Investment",
                     costInvestment = miAssets.Sum(a => a.GetCost().Total),
                     marketValue = miAssets.Sum(a => a.GetTotalMarketValue()),
                     suitability = miAssets.GetAssetWeightings().Sum(w => w.Percentage * ((ManagedInvestment)w.Weightable).GetRating().TotalScore),
-                    oneYearReturn = miAssets.GetAverageRatiosFor<ManagedInvestment>().OneYearReturn,
-                    threeYearReturn = miAssets.GetAverageRatiosFor<ManagedInvestment>().ThreeYearReturn,
-                    fiveYearReturn = miAssets.GetAverageRatiosFor<ManagedInvestment>().FiveYearReturn,
-                    earningsPerShare = miAssets.GetAverageRatiosFor<ManagedInvestment>().EarningsStability,
-                    dividend = miAssets.GetAverageRatiosFor<ManagedInvestment>().DividendYield,
-                    beta = miAssets.GetAverageRatiosFor<ManagedInvestment>().Beta.ToString(),
-                    returnOnAsset = miAssets.GetAverageRatiosFor<ManagedInvestment>().ReturnOnAsset,
-                    returnOnEquity = miAssets.GetAverageRatiosFor<ManagedInvestment>().ReturnOnEquity,
-                    priceEarningsRatio = miAssets.GetAverageRatiosFor<ManagedInvestment>().PriceEarningRatio,
-                    avMarketCap = miAssets.GetAverageRatiosFor<ManagedInvestment>().Capitalisation.ToString()
+                    oneYearReturn = miRatios.OneYearReturn,
+                    threeYearReturn = miRatios.ThreeYearReturn,
+                    fiveYearReturn = miRatios.FiveYearReturn,
+                    earningsPerShare = miRatios.EarningsStability,
+                    dividend = miRatios.DividendYield,
+                    beta = miRatios.Beta.ToString(),
+                    returnOnAsset = miRatios.ReturnOnAsset,
+                    returnOnEquity = miRatios.ReturnOnEquity,
+                    priceEarningsRatio = miRatios.PriceEarningRatio,
+                    avMarketCap = miRatios.Capitalisation.ToString()
                 });
 
 
@@ -1074,22 +1077,26 @@ namespace EDISAngular.APIControllers
                 List<AssetBase> ieAssets = assets.OfType<InternationalEquity>().Cast<AssetBase>().ToList();
                 List<AssetBase> miAssets = assets.OfType<ManagedInvestment>().Cast<AssetBase>().ToList();
 
+                var aeRatios = aeAssets.GetAverageRatiosFor<AustralianEquity>();
+                var ieRatios = ieAssets.GetAverageRatiosFor<InternationalEquity>();
+                var miRatios = miAssets.GetAverageRatiosFor<ManagedInvestment>();
+
                 model.data.Add(new PortfolioStasticsItem
                 {
                     assetClass = "Australian Equity",
                     costInvestment = aeAssets.Sum(a => a.GetCost().Total),
                     marketValue = aeAssets.Sum(a => a.GetTotalMarketValue()),
                     suitability = aeAssets.GetAssetWeightings().Sum(w => w.Percentage * ((AustralianEquity)w.Weightable).GetRating().TotalScore),
-                    oneYearReturn = assets.GetAverageRatiosFor<AustralianEquity>().OneYearReturn,
-                    threeYearReturn = assets.GetAverageRatiosFor<AustralianEquity>().ThreeYearReturn,
-                    fiveYearReturn = assets.GetAverageRatiosFor<AustralianEquity>().FiveYearReturn,
-                    earningsPerShare = assets.GetAverageRatiosFor<AustralianEquity>().EarningsStability,
-                    dividend = assets.GetAverageRatiosFor<AustralianEquity>().DividendYield,
-                    beta = assets.GetAverageRatiosFor<AustralianEquity>().Beta.ToString(),
-                    returnOnAsset = assets.GetAverageRatiosFor<AustralianEquity>().ReturnOnAsset,
-                    returnOnEquity = assets.GetAverageRatiosFor<AustralianEquity>().ReturnOnEquity,
-                    priceEarningsRatio = assets.GetAverageRatiosFor<AustralianEquity>().PriceEarningRatio,
-                    avMarketCap = assets.GetAverageRatiosFor<AustralianEquity>().Capitalisation.ToString()
+                    oneYearReturn = aeRatios.OneYearReturn,
+                    threeYearReturn = aeRatios.ThreeYearReturn,
+                    fiveYearReturn = aeRatios.FiveYearReturn,
+                    earningsPerShare = aeRatios.EarningsStability,
+                    dividend = aeRatios.DividendYield,
+                    beta = aeRatios.Beta.ToString(),
+                    returnOnAsset = aeRatios.ReturnOnAsset,
+                    returnOnEquity = aeRatios.ReturnOnEquity,
+                    priceEarningsRatio = aeRatios.PriceEarningRatio,
+                    avMarketCap = aeRatios.Capitalisation.ToString()
                 });
 
                 model.data.Add(new PortfolioStasticsItem
@@ -1098,16 +1105,16 @@ namespace EDISAngular.APIControllers
                     costInvestment = ieAssets.Sum(a => a.GetCost().Total),
                     marketValue = ieAssets.Sum(a => a.GetTotalMarketValue()),
                     suitability = ieAssets.GetAssetWeightings().Sum(w => w.Percentage * ((InternationalEquity)w.Weightable).GetRating().TotalScore),
-                    oneYearReturn = ieAssets.GetAverageRatiosFor<InternationalEquity>().OneYearReturn,
-                    threeYearReturn = ieAssets.GetAverageRatiosFor<InternationalEquity>().ThreeYearReturn,
-                    fiveYearReturn = ieAssets.GetAverageRatiosFor<InternationalEquity>().FiveYearReturn,
-                    earningsPerShare = ieAssets.GetAverageRatiosFor<InternationalEquity>().EarningsStability,
-                    dividend = ieAssets.GetAverageRatiosFor<InternationalEquity>().DividendYield,
-                    beta = ieAssets.GetAverageRatiosFor<InternationalEquity>().Beta.ToString(),
-                    returnOnAsset = ieAssets.GetAverageRatiosFor<InternationalEquity>().ReturnOnAsset,
-                    returnOnEquity = ieAssets.GetAverageRatiosFor<InternationalEquity>().ReturnOnEquity,
-                    priceEarningsRatio = ieAssets.GetAverageRatiosFor<InternationalEquity>().PriceEarningRatio,
-                    avMarketCap = ieAssets.GetAverageRatiosFor<InternationalEquity>().Capitalisation.ToString()
+                    oneYearReturn = ieRatios.OneYearReturn,
+                    threeYearReturn = ieRatios.ThreeYearReturn,
+                    //fiveYearReturn = ieRatios.FiveYearReturn,
+                    earningsPerShare = ieRatios.EarningsStability,
+                    dividend = ieRatios.DividendYield,
+                    beta = ieRatios.Beta.ToString(),
+                    returnOnAsset = ieRatios.ReturnOnAsset,
+                    returnOnEquity = ieRatios.ReturnOnEquity,
+                    priceEarningsRatio = ieRatios.PriceEarningRatio,
+                    avMarketCap = ieRatios.Capitalisation.ToString()
                 });
 
                 model.data.Add(new PortfolioStasticsItem
@@ -1116,16 +1123,16 @@ namespace EDISAngular.APIControllers
                     costInvestment = miAssets.Sum(a => a.GetCost().Total),
                     marketValue = miAssets.Sum(a => a.GetTotalMarketValue()),
                     suitability = miAssets.GetAssetWeightings().Sum(w => w.Percentage * ((ManagedInvestment)w.Weightable).GetRating().TotalScore),
-                    oneYearReturn = miAssets.GetAverageRatiosFor<ManagedInvestment>().OneYearReturn,
-                    threeYearReturn = miAssets.GetAverageRatiosFor<ManagedInvestment>().ThreeYearReturn,
-                    fiveYearReturn = miAssets.GetAverageRatiosFor<ManagedInvestment>().FiveYearReturn,
-                    earningsPerShare = miAssets.GetAverageRatiosFor<ManagedInvestment>().EarningsStability,
-                    dividend = miAssets.GetAverageRatiosFor<ManagedInvestment>().DividendYield,
-                    beta = miAssets.GetAverageRatiosFor<ManagedInvestment>().Beta.ToString(),
-                    returnOnAsset = miAssets.GetAverageRatiosFor<ManagedInvestment>().ReturnOnAsset,
-                    returnOnEquity = miAssets.GetAverageRatiosFor<ManagedInvestment>().ReturnOnEquity,
-                    priceEarningsRatio = miAssets.GetAverageRatiosFor<ManagedInvestment>().PriceEarningRatio,
-                    avMarketCap = miAssets.GetAverageRatiosFor<ManagedInvestment>().Capitalisation.ToString()
+                    oneYearReturn = miRatios.OneYearReturn,
+                    threeYearReturn = miRatios.ThreeYearReturn,
+                    fiveYearReturn = miRatios.FiveYearReturn,
+                    earningsPerShare = miRatios.EarningsStability,
+                    dividend = miRatios.DividendYield,
+                    beta = miRatios.Beta.ToString(),
+                    returnOnAsset = miRatios.ReturnOnAsset,
+                    returnOnEquity = miRatios.ReturnOnEquity,
+                    priceEarningsRatio = miRatios.PriceEarningRatio,
+                    avMarketCap = miRatios.Capitalisation.ToString()
                 });
 
 
@@ -1575,53 +1582,28 @@ namespace EDISAngular.APIControllers
                 List<GroupAccount> groupAccounts = edisRepo.getAllClientGroupAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
                 List<ClientAccount> clientAccounts = edisRepo.getAllClientAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
 
-                var allAectors = edisRepo.GetAllSectorsSync();
+                var allSectors = edisRepo.GetAllSectorsSync();
                 List<SectorItem> sectorItems = new List<SectorItem>();
-
-                foreach (var sector in allAectors)
-                {
-                    sectorItems.Add(new SectorItem
-                    {
-                        sector = sector
-                    });
-                }
+                allSectors.ForEach(s => sectorItems.Add(new SectorItem { sector = s}));
 
                 double totalValue = 0;
 
+                List<AssetBase> assets = new List<AssetBase>();
+                groupAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
 
-                foreach (var account in groupAccounts)
-                {
-                    var assets = account.GetAssetsSync();
-                    var dictionary = AssetsExtensions.GetAssetSectorialDiversificationSync<AustralianEquity>(assets, edisRepo);
-
-                    foreach (var item in dictionary)
-                    {
-                        totalValue += item.Value;
-                        sectorItems.FirstOrDefault(s => s.sector == item.Key).value += item.Value;
-                    }
+                var dictionary = assets.GetAssetSectorialDiversificationSync<AustralianEquity>(edisRepo);
+                foreach (var item in dictionary) {
+                    totalValue += item.Value;
+                    sectorItems.FirstOrDefault(s => s.sector == item.Key).value += item.Value;
                 }
-                foreach (var account in clientAccounts)
-                {
-                    var assets = account.GetAssetsSync();
-                    var dictionary = AssetsExtensions.GetAssetSectorialDiversificationSync<AustralianEquity>(assets, edisRepo);
-
-                    foreach (var item in dictionary)
-                    {
-                        totalValue += item.Value;
-                        sectorItems.FirstOrDefault(s => s.sector == item.Key).value += item.Value;
-                    }
-                }
-
-                foreach (var sectorItem in sectorItems) {
-                    sectorItem.percentage = sectorItem.value / totalValue;
-                }
+                sectorItems.ForEach(s => s.percentage = s.value / totalValue);
 
                 SectorialPortfolioModel model = new SectorialPortfolioModel{
                     data = sectorItems,
                     total = totalValue,
                     percentage = 1
                 };
-
 
                 return model;
                 //return repo.Overview_GetSectorialSummary_Adviser(User.Identity.GetUserId());
@@ -1633,47 +1615,31 @@ namespace EDISAngular.APIControllers
                 List<ClientAccount> clientAccounts = new List<ClientAccount>();
                 clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
 
-                var allAectors = edisRepo.GetAllSectorsSync();
+                var allSectors = edisRepo.GetAllSectorsSync();
                 List<SectorItem> sectorItems = new List<SectorItem>();
-
-                foreach (var sector in allAectors) {
-                    sectorItems.Add(new SectorItem { 
-                        sector = sector
-                    });
-                }
+                allSectors.ForEach(s => sectorItems.Add(new SectorItem { sector = s }));
 
                 double totalValue = 0;
-                foreach (var account in accounts) {
-                    var assets = account.GetAssetsSync();
-                    var dictionary = AssetsExtensions.GetAssetSectorialDiversificationSync<AustralianEquity>(assets, edisRepo);
 
-                    foreach (var item in dictionary) {
-                        totalValue += item.Value;
-                        sectorItems.FirstOrDefault(s => s.sector == item.Key).value += item.Value;
-                    }
-                }
-                foreach (var account in clientAccounts)
-                {
-                    var assets = account.GetAssetsSync();
-                    var dictionary = AssetsExtensions.GetAssetSectorialDiversificationSync<AustralianEquity>(assets, edisRepo);
+                List<AssetBase> assets = new List<AssetBase>();
+                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
 
-                    foreach (var item in dictionary)
-                    {
-                        totalValue += item.Value;
-                        sectorItems.FirstOrDefault(s => s.sector == item.Key).value += item.Value;
-                    }
+
+                var dictionary = assets.GetAssetSectorialDiversificationSync<AustralianEquity>(edisRepo);
+
+                foreach (var item in dictionary) {
+                    totalValue += item.Value;
+                    sectorItems.FirstOrDefault(s => s.sector == item.Key).value += item.Value;
                 }
 
-                foreach (var sectorItem in sectorItems) {
-                    sectorItem.percentage = sectorItem.value / totalValue;
-                }
+                sectorItems.ForEach(s => s.percentage = s.value / totalValue);
 
                 SectorialPortfolioModel model = new SectorialPortfolioModel {
                     data = sectorItems,
                     total = totalValue,
                     percentage = 1
                 };
-                
 
                 return model;
                 //return repo.Overview_GetSectorialSummary_Client(clientUserId);

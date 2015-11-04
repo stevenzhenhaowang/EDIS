@@ -79,30 +79,41 @@
     <Compile Include="Liabilities\MarginLendingTransaction.cs" />
     <Compile Include="Liabilities\MortgageHomeLoanTransaction.cs" />
     <Compile Include="Markers\IAsset.cs" />
-    <Compile Include="Migrations\201510192358190_init.cs" />
-    <Compile Include="Migrations\201510192358190_init.Designer.cs">
-      <DependentUpon>201510192358190_init.cs</DependentUpon>
+    <Compile Include="Migrations\201510230358287_add_cliengGroupId.cs" />
+    <Compile Include="Migrations\201510230358287_add_cliengGroupId.Designer.cs">
+      <DependentUpon>201510230358287_add_cliengGroupId.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201510200002242_init1.cs" />
-    <Compile Include="Migrations\201510200002242_init1.Designer.cs">
-      <DependentUpon>201510200002242_init1.cs</DependentUpon>
+    <Compile Include="Migrations\201510230431096_23.cs" />
+    <Compile Include="Migrations\201510230431096_23.Designer.cs">
+      <DependentUpon>201510230431096_23.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201510200221257_init2.cs" />
-    <Compile Include="Migrations\201510200221257_init2.Designer.cs">
-      <DependentUpon>201510200221257_init2.cs</DependentUpon>
+    <Compile Include="Migrations\201511012248191_riskprofile.cs" />
+    <Compile Include="Migrations\201511012248191_riskprofile.Designer.cs">
+      <DependentUpon>201511012248191_riskprofile.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201510200450108_addedIndexForAssetPrice.cs" />
-    <Compile Include="Migrations\201510200450108_addedIndexForAssetPrice.Designer.cs">
-      <DependentUpon>201510200450108_addedIndexForAssetPrice.cs</DependentUpon>
+    <Compile Include="Migrations\201511012249487_riskprofile1.cs" />
+    <Compile Include="Migrations\201511012249487_riskprofile1.Designer.cs">
+      <DependentUpon>201511012249487_riskprofile1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511012251015_riskprofile2.cs" />
+    <Compile Include="Migrations\201511012251015_riskprofile2.Designer.cs">
+      <DependentUpon>201511012251015_riskprofile2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511012304541_update-riskprofile.cs" />
+    <Compile Include="Migrations\201511012304541_update-riskprofile.Designer.cs">
+      <DependentUpon>201511012304541_update-riskprofile.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NoteLinks.cs" />
     <Compile Include="Notes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyType.cs" />
+    <Compile Include="Rebalance\RebalanceModel.cs" />
+    <Compile Include="Rebalance\TemplateDetailsItemParameter.cs" />
     <Compile Include="RepaymentRecord.cs" />
     <Compile Include="ResearchValue.cs" />
     <Compile Include="ResourcesReferences.cs" />
+    <Compile Include="RiskProfile.cs" />
     <Compile Include="Sector.cs" />
     <Compile Include="Transactions\BondTransaction.cs" />
     <Compile Include="Transactions\CashTransaction.cs" />
@@ -122,17 +133,23 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201510192358190_init.resx">
-      <DependentUpon>201510192358190_init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201510230358287_add_cliengGroupId.resx">
+      <DependentUpon>201510230358287_add_cliengGroupId.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510200002242_init1.resx">
-      <DependentUpon>201510200002242_init1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201510230431096_23.resx">
+      <DependentUpon>201510230431096_23.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510200221257_init2.resx">
-      <DependentUpon>201510200221257_init2.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201511012248191_riskprofile.resx">
+      <DependentUpon>201511012248191_riskprofile.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510200450108_addedIndexForAssetPrice.resx">
-      <DependentUpon>201510200450108_addedIndexForAssetPrice.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201511012249487_riskprofile1.resx">
+      <DependentUpon>201511012249487_riskprofile1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511012251015_riskprofile2.resx">
+      <DependentUpon>201511012251015_riskprofile2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511012304541_update-riskprofile.resx">
+      <DependentUpon>201511012304541_update-riskprofile.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

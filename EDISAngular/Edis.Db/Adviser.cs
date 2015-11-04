@@ -114,10 +114,6 @@ namespace Edis.Db
         public int TotalAssetLevelId { get; set; }
         public string TotalAssetLevel { get; set; }
 
-
-
-
-
         public virtual ICollection<TransactionExpense> TransactionExpenses { get; set; }
         public virtual ICollection<ConsultancyExpense> ConsultancyExpenses { get; set; }
 

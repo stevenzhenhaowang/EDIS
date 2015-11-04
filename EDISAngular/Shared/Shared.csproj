@@ -70,6 +70,7 @@
     <Compile Include="PolicyType.cs" />
     <Compile Include="ProductTypes.cs" />
     <Compile Include="PropertyType.cs" />
+    <Compile Include="RiskLevels.cs" />
     <Compile Include="TransactionExpenseType.cs" />
     <Compile Include="AssetTypes.cs" />
     <Compile Include="CashAccountType.cs" />

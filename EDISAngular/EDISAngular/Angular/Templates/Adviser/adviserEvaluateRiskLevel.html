@@ -1,0 +1,70 @@
+﻿
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+            <li>Client Admin</li>
+            <li class="active">Evaluate Risk Level</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="main-header">
+        <h2>Evaluate Risk Level</h2>
+
+    </div>
+    <div class="main-content">
+        
+
+
+
+        <div class="row" style="padding-top:50px;">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="widget widget-table">
+                    <div class="widget-header"><h3><i class="fa fa-table"></i> All Pending Clients</h3></div>
+                    <form novalidate name="form" ng-controller="adviserCreateNewClientGroupAccountController">
+                        <div class="widget-content">
+                            <table class="table table-hover">
+                                <tr>
+                                    <th>
+                                        Client Name
+                                    </th>
+                                    <th>
+                                        Email
+                                    </th>
+                                    <th>
+                                        Contact Phone
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                
+                                <tr ng-repeat="client in clients">
+
+                                    <td>
+                                        {{client.name}}
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AcnAbn)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Suburb)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("View", "AdviserDetails", new { id = item.AdviserId }) |
+                                        @Html.ActionLink("Approve", "AdviserApprove", new { id = item.AdviserId }) |
+                                        @Html.ActionLink("Block", "AdviserBlock", new { id = item.AdviserId })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+</div>

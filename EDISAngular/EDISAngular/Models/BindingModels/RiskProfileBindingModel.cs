@@ -98,5 +98,6 @@ namespace EDISAngular.Models.BindingModels
         [DisplayName("Investment Profile")]
         public string investmentProfile { get; set; }
 
+        public string riskLevel { get; set; }
     }
 }

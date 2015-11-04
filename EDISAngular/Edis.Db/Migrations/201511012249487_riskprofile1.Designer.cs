@@ -7,13 +7,13 @@ namespace Edis.Db.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class init2 : IMigrationMetadata
+    public sealed partial class riskprofile1 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(init2));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(riskprofile1));
         
         string IMigrationMetadata.Id
         {
-            get { return "201510200221257_init2"; }
+            get { return "201511012249487_riskprofile1"; }
         }
         
         string IMigrationMetadata.Source

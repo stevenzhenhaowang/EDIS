@@ -16,7 +16,6 @@ namespace EDISAngular.Models.ServiceModels.RebalanceModels
 
     }
 
-
     public class BalanceSheetAgainstModelData 
     {
         public string groupName { get; set; }//asset/liability?
@@ -28,7 +27,6 @@ namespace EDISAngular.Models.ServiceModels.RebalanceModels
         public List<BalanceSheetAgainstModelItem> items { get; set; }
     }
 
-
     public class BalanceSheetAgainstModelItem
     {
         public string itemName { get; set; }//asset type name: Australian equity, International equity, etc.
@@ -39,8 +37,4 @@ namespace EDISAngular.Models.ServiceModels.RebalanceModels
         public double difference { get; set; }
 
     }
-
-
-
-
 }

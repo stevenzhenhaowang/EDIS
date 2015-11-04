@@ -139,9 +139,7 @@ namespace EDISAngular.APIControllers
                 });
 
             return clients;
-
         }
-
 
 
         [HttpPost, Route("api/adviser/createClientAccount")]
