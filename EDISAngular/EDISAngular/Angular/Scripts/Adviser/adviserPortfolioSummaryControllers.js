@@ -81,10 +81,7 @@
             $scope.data = data;
             $scope.dataSource = new kendo.data.DataSource({
                 data: $scope.data.data,
-                sort: {
-                    field: "date",
-                    dir: "asc"
-                }
+                
             });
         })
 

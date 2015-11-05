@@ -39,20 +39,22 @@ namespace EDISAngular.APIControllers
                 List<AssetBase> assets = new List<AssetBase>();
                 double totalCost = 0;
                 double totalMarketValue = 0;
-
+                double capitalGain = 0;
                 groupAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
                 clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
 
                 foreach (var asset in assets) {
                     totalCost += asset.GetCost().Total;
                     totalMarketValue += asset.GetTotalMarketValue();
+                    capitalGain += asset.GetCost().CapitalGain;
                 }
                 SummaryGeneralInfo summary = new SummaryGeneralInfo
                 {
                     cost = totalCost,
                     marketValue = totalMarketValue,
                     pl = totalMarketValue - totalCost,
-                    plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100
+                    plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100,
+                    capitalGain = capitalGain
                 };
 
                 return summary;
@@ -68,7 +70,7 @@ namespace EDISAngular.APIControllers
 
                 double totalCost = 0;
                 double totalMarketValue = 0;
-
+                double capitalGain = 0;
                 accounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
                 clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
 
@@ -76,13 +78,15 @@ namespace EDISAngular.APIControllers
                 {
                     totalCost += asset.GetCost().Total;
                     totalMarketValue += asset.GetTotalMarketValue();
+                    capitalGain += asset.GetCost().CapitalGain;
                 }
                 SummaryGeneralInfo summary = new SummaryGeneralInfo
                 {
                     cost = totalCost,
                     marketValue = totalMarketValue,
                     pl = totalMarketValue - totalCost,
-                    plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100
+                    plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100,
+                    capitalGain = capitalGain
                 };
 
                 return summary;
@@ -100,6 +104,7 @@ namespace EDISAngular.APIControllers
 
                 double totalCost = 0;
                 double totalMarketValue = 0;
+                double capitalGain = 0;
                 foreach (var account in groupAccounts)
                 {
                     List<AssetBase> assets = account.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList();
@@ -108,6 +113,7 @@ namespace EDISAngular.APIControllers
                     {
                         totalCost += asset.GetCost().Total;
                         totalMarketValue += asset.GetTotalMarketValue();
+                        capitalGain += asset.GetCost().CapitalGain;
                     }
                 }
                 foreach (var account in clientAccounts)
@@ -117,6 +123,7 @@ namespace EDISAngular.APIControllers
                     {
                         totalCost += asset.GetCost().Total;
                         totalMarketValue += asset.GetTotalMarketValue();
+                        capitalGain += asset.GetCost().CapitalGain;
                     }
                 }
                 SummaryGeneralInfo summary = new SummaryGeneralInfo
@@ -124,8 +131,9 @@ namespace EDISAngular.APIControllers
                     cost = totalCost,
                     marketValue = totalMarketValue,
                     pl = totalMarketValue - totalCost,
-                    plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100
-                };
+                    plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100,
+                    capitalGain = capitalGain
+            };
 
                 return summary;
 
@@ -137,6 +145,7 @@ namespace EDISAngular.APIControllers
 
                 double totalCost = 0;
                 double totalMarketValue = 0;
+                double capitalGain = 0;
                 foreach (var account in accounts)
                 {
                     List<AssetBase> assets = account.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList();
@@ -144,6 +153,7 @@ namespace EDISAngular.APIControllers
                     {
                         totalCost += asset.GetCost().Total;
                         totalMarketValue += asset.GetTotalMarketValue();
+                        capitalGain += asset.GetCost().CapitalGain;
                     }
                 }
                 SummaryGeneralInfo summary = new SummaryGeneralInfo
@@ -151,7 +161,8 @@ namespace EDISAngular.APIControllers
                     cost = totalCost,
                     marketValue = totalMarketValue,
                     pl = totalMarketValue - totalCost,
-                    plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100
+                    plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100,
+                    capitalGain = capitalGain
                 };
 
                 return summary;
@@ -178,80 +189,48 @@ namespace EDISAngular.APIControllers
                 EvaluationModel model8 = new EvaluationModel { title = "Price Earning Ratio" };
                 EvaluationModel model9 = new EvaluationModel { title = "Return On Asset" };
                 EvaluationModel model10 = new EvaluationModel { title = "Return On Equity" };
-                foreach (var account in groupAccounts)
-                {
-                    List<AssetBase> assets = account.GetAssetsSync();
+                EvaluationModel model12 = new EvaluationModel { title = "Beta" };
+                EvaluationModel model15 = new EvaluationModel { title = "Payout Ratio" };
+                EvaluationModel model16 = new EvaluationModel { title = "Earnings Stability" };
 
-                    Ratios ratios = assets.GetAverageRatiosFor<AustralianEquity>();
-                    Recommendation expected = assets.GetAverageExpectedFor<AustralianEquity>();
 
-                    model1.actual += ratios.OneYearReturn;
-                    model1.expected += expected.OneYearReturn == null ? 0 : (double)expected.OneYearReturn;
+                List<AssetBase> assets = new List<AssetBase>();
+                groupAccounts.ForEach(g => assets.AddRange(g.GetAssetsSync()));
+                clientAccounts.ForEach(g => assets.AddRange(g.GetAssetsSync()));
 
-                    model2.actual += ratios.FiveYearReturn;
-                    model2.expected += expected.FiveYearTotalReturn == null ? 0 : (double)expected.FiveYearTotalReturn;
+                Ratios ratios = assets.GetAverageRatiosFor<AustralianEquity>();
+                Recommendation expected = assets.GetAverageExpectedFor<AustralianEquity>();
 
-                    model3.actual += ratios.DebtEquityRatio;
-                    model3.expected += expected.DebtEquityRatio;
+                model1.actual += ratios.OneYearReturn;
+                model1.expected += expected.OneYearReturn == null ? 0 : (double)expected.OneYearReturn;
 
-                    model4.actual += ratios.EpsGrowth;
-                    model4.expected += expected.EpsGrowth;
+                model2.actual += ratios.FiveYearReturn;
+                model2.expected += expected.FiveYearTotalReturn == null ? 0 : (double)expected.FiveYearTotalReturn;
 
-                    model5.actual += ratios.DividendYield;
-                    model5.expected += expected.DividendYield;
+                model3.actual += ratios.DebtEquityRatio;
+                model3.expected += expected.DebtEquityRatio;
 
-                    model6.actual += ratios.Frank;
-                    model6.expected += expected.Frank;
+                model4.actual += ratios.EpsGrowth;
+                model4.expected += expected.EpsGrowth;
 
-                    model7.actual += ratios.InterestCover;
-                    model7.expected += expected.InterestCover;
+                model5.actual += ratios.DividendYield;
+                model5.expected += expected.DividendYield;
 
-                    model8.actual += ratios.PriceEarningRatio;
-                    model8.expected += expected.PriceEarningRatio;
+                model6.actual += ratios.Frank;
+                model6.expected += expected.Frank;
 
-                    model9.actual += ratios.ReturnOnAsset;
-                    model9.expected += expected.ReturnOnAsset;
+                model7.actual += ratios.InterestCover;
+                model7.expected += expected.InterestCover;
 
-                    model10.actual += ratios.ReturnOnEquity;
-                    model10.expected += expected.ReturnOnEquity;
-                }
-                foreach (var account in clientAccounts)
-                {
-                    List<AssetBase> assets = account.GetAssetsSync();
+                model8.actual += ratios.PriceEarningRatio;
+                model8.expected += expected.PriceEarningRatio;
 
-                    Ratios ratios = assets.GetAverageRatiosFor<AustralianEquity>();
-                    Recommendation expected = assets.GetAverageExpectedFor<AustralianEquity>();
+                model9.actual += ratios.ReturnOnAsset;
+                model9.expected += expected.ReturnOnAsset;
 
-                    model1.actual += ratios.OneYearReturn;
-                    model1.expected += expected.OneYearReturn == null ? 0 : (double)expected.OneYearReturn;
+                model10.actual += ratios.ReturnOnEquity;
+                model10.expected += expected.ReturnOnEquity;
 
-                    model2.actual += ratios.FiveYearReturn;
-                    model2.expected += expected.FiveYearTotalReturn == null ? 0 : (double)expected.FiveYearTotalReturn;
-
-                    model3.actual += ratios.DebtEquityRatio;
-                    model3.expected += expected.DebtEquityRatio;
-
-                    model4.actual += ratios.EpsGrowth;
-                    model4.expected += expected.EpsGrowth;
-
-                    model5.actual += ratios.DividendYield;
-                    model5.expected += expected.DividendYield;
-
-                    model6.actual += ratios.Frank;
-                    model6.expected += expected.Frank;
-
-                    model7.actual += ratios.InterestCover;
-                    model7.expected += expected.InterestCover;
-
-                    model8.actual += ratios.PriceEarningRatio;
-                    model8.expected += expected.PriceEarningRatio;
-
-                    model9.actual += ratios.ReturnOnAsset;
-                    model9.expected += expected.ReturnOnAsset;
-
-                    model10.actual += ratios.ReturnOnEquity;
-                    model10.expected += expected.ReturnOnEquity;
-                }
 
                 List<EvaluationModel> models = new List<EvaluationModel>();
                 models.Add(model1);
@@ -546,61 +525,36 @@ namespace EDISAngular.APIControllers
                 CashFlowBriefItem nov = new CashFlowBriefItem { month = "Nov" };
                 CashFlowBriefItem dec = new CashFlowBriefItem { month = "Dec" };
 
+                List<Cashflow> cashFlows = new List<Cashflow>();
 
-                foreach (var account in groupAccounts)
+                groupAccounts.ForEach(a => cashFlows.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList().GetMonthlyCashflows()));
+                clientAccounts.ForEach(a => cashFlows.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList().GetMonthlyCashflows()));
+
+
+                //groupAccounts.ForEach(a => cashFlows.AddRange(a.GetAssetsSync().GetMonthlyCashflows()));
+                //clientAccounts.ForEach(a => cashFlows.AddRange(a.GetAssetsSync().GetMonthlyCashflows()));
+
+                foreach (var cashflow in cashFlows)
                 {
-
-                    List<Cashflow> cashFlows = account.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList().GetMonthlyCashflows();
-
-                    foreach (var cashflow in cashFlows)
+                    switch (cashflow.Month)
                     {
-                        switch (cashflow.Month)
-                        {
-                            case "Jan": jan.date = DateTime.Now; jan.expense += cashflow.Expenses; jan.income += cashflow.Income; break;
-                            case "Feb": feb.date = DateTime.Now; feb.expense += cashflow.Expenses; feb.income += cashflow.Income; break;
-                            case "Mar": mar.date = DateTime.Now; mar.expense += cashflow.Expenses; mar.income += cashflow.Income; break;
-                            case "Apr": apr.date = DateTime.Now; apr.expense += cashflow.Expenses; apr.income += cashflow.Income; break;
-                            case "May": may.date = DateTime.Now; may.expense += cashflow.Expenses; may.income += cashflow.Income; break;
-                            case "Jun": jun.date = DateTime.Now; jun.expense += cashflow.Expenses; jun.income += cashflow.Income; break;
-                            case "Jul": jul.date = DateTime.Now; jul.expense += cashflow.Expenses; jul.income += cashflow.Income; break;
-                            case "Aug": aug.date = DateTime.Now; aug.expense += cashflow.Expenses; aug.income += cashflow.Income; break;
-                            case "Sep": sep.date = DateTime.Now; sep.expense += cashflow.Expenses; sep.income += cashflow.Income; break;
-                            case "Oct": oct.date = DateTime.Now; oct.expense += cashflow.Expenses; oct.income += cashflow.Income; break;
-                            case "Nov": nov.date = DateTime.Now; nov.expense += cashflow.Expenses; nov.income += cashflow.Income; break;
-                            case "Dec": dec.date = DateTime.Now; dec.expense += cashflow.Expenses; dec.income += cashflow.Income; break;
-                            default: break;
-                        }
-                        totalExpenseInAssets += cashflow.Expenses;
-                        totalIncomeInAssets += cashflow.Income;
+                        case "Jan": jan.date = DateTime.Now; jan.expense += cashflow.Expenses; jan.income += cashflow.Income; break;
+                        case "Feb": feb.date = DateTime.Now; feb.expense += cashflow.Expenses; feb.income += cashflow.Income; break;
+                        case "Mar": mar.date = DateTime.Now; mar.expense += cashflow.Expenses; mar.income += cashflow.Income; break;
+                        case "Apr": apr.date = DateTime.Now; apr.expense += cashflow.Expenses; apr.income += cashflow.Income; break;
+                        case "May": may.date = DateTime.Now; may.expense += cashflow.Expenses; may.income += cashflow.Income; break;
+                        case "Jun": jun.date = DateTime.Now; jun.expense += cashflow.Expenses; jun.income += cashflow.Income; break;
+                        case "Jul": jul.date = DateTime.Now; jul.expense += cashflow.Expenses; jul.income += cashflow.Income; break;
+                        case "Aug": aug.date = DateTime.Now; aug.expense += cashflow.Expenses; aug.income += cashflow.Income; break;
+                        case "Sep": sep.date = DateTime.Now; sep.expense += cashflow.Expenses; sep.income += cashflow.Income; break;
+                        case "Oct": oct.date = DateTime.Now; oct.expense += cashflow.Expenses; oct.income += cashflow.Income; break;
+                        case "Nov": nov.date = DateTime.Now; nov.expense += cashflow.Expenses; nov.income += cashflow.Income; break;
+                        case "Dec": dec.date = DateTime.Now; dec.expense += cashflow.Expenses; dec.income += cashflow.Income; break;
+                        default: break;
                     }
+                    totalExpenseInAssets += cashflow.Expenses;
+                    totalIncomeInAssets += cashflow.Income;
                 }
-                foreach (var account in clientAccounts)
-                {
-                    List<Cashflow> cashFlows = account.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList().GetMonthlyCashflows();
-
-                    foreach (var cashflow in cashFlows)
-                    {
-                        switch (cashflow.Month)
-                        {
-                            case "Jan": jan.date = DateTime.Now; jan.expense += cashflow.Expenses; jan.income += cashflow.Income; break;
-                            case "Feb": feb.date = DateTime.Now; feb.expense += cashflow.Expenses; feb.income += cashflow.Income; break;
-                            case "Mar": mar.date = DateTime.Now; mar.expense += cashflow.Expenses; mar.income += cashflow.Income; break;
-                            case "Apr": apr.date = DateTime.Now; apr.expense += cashflow.Expenses; apr.income += cashflow.Income; break;
-                            case "May": may.date = DateTime.Now; may.expense += cashflow.Expenses; may.income += cashflow.Income; break;
-                            case "Jun": jun.date = DateTime.Now; jun.expense += cashflow.Expenses; jun.income += cashflow.Income; break;
-                            case "Jul": jul.date = DateTime.Now; jul.expense += cashflow.Expenses; jul.income += cashflow.Income; break;
-                            case "Aug": aug.date = DateTime.Now; aug.expense += cashflow.Expenses; aug.income += cashflow.Income; break;
-                            case "Sep": sep.date = DateTime.Now; sep.expense += cashflow.Expenses; sep.income += cashflow.Income; break;
-                            case "Oct": oct.date = DateTime.Now; oct.expense += cashflow.Expenses; oct.income += cashflow.Income; break;
-                            case "Nov": nov.date = DateTime.Now; nov.expense += cashflow.Expenses; nov.income += cashflow.Income; break;
-                            case "Dec": dec.date = DateTime.Now; dec.expense += cashflow.Expenses; dec.income += cashflow.Income; break;
-                            default: break;
-                        }
-                        totalExpenseInAssets += cashflow.Expenses;
-                        totalIncomeInAssets += cashflow.Income;
-                    }
-                }
-
 
                 items.Add(jan);
                 items.Add(feb);
@@ -649,9 +603,13 @@ namespace EDISAngular.APIControllers
                 CashFlowBriefItem oct = new CashFlowBriefItem { month = "Oct" };
                 CashFlowBriefItem nov = new CashFlowBriefItem { month = "Nov" };
                 CashFlowBriefItem dec = new CashFlowBriefItem { month = "Dec" };
-                
+
                 accounts.ForEach(a => cashFlows.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList().GetMonthlyCashflows()));
                 clientAccounts.ForEach(a => cashFlows.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList().GetMonthlyCashflows()));
+
+                //accounts.ForEach(a => cashFlows.AddRange(a.GetAssetsSync().GetMonthlyCashflows()));
+                //clientAccounts.ForEach(a => cashFlows.AddRange(a.GetAssetsSync().GetMonthlyCashflows()));
+
 
                 foreach (var cashflow in cashFlows)
                 {
@@ -898,30 +856,51 @@ namespace EDISAngular.APIControllers
 
                 var ratios = assets.GetAverageRatiosFor<AustralianEquity>();
 
-                foreach(var asset in australianAssets){
-                    itemList.Add(new EquityCompanyProfileItemModel{
-                        asx = asset.Ticker,
-                        beta = ratios.Beta,
-                        company = asset.Name,
-                        currentRatio = ratios.CurrentRatio,
-                        debtEquityRatio = ratios.DebtEquityRatio,
-                        earningsStability = ratios.EarningsStability,
-                        fiveYearReturn = ratios.FiveYearReturn,
-                        threeYearReturn = ratios.ThreeYearReturn,
-                        oneYearReturn = ratios.OneYearReturn,
-                        franking = ratios.Frank,
-                        interestCover = ratios.InterestCover,
-                        payoutRatio = ratios.PayoutRatio,
-                        priceEarningsRatio = ratios.PriceEarningRatio,
-                        quickRatio = ratios.QuickRatio,
-                        returnOnAsset = ratios.ReturnOnAsset,
-                        returnOnEquity = ratios.ReturnOnEquity,
-                        marketPrice = asset.LatestPrice,
-                        marketValue = asset.GetTotalMarketValue(),
-                        totalCostValue = asset.GetCost().Total,
-                        costValue = asset.GetCost().AssetCost,
-                        companySuitabilityToInvestor = asset.GetRating().TotalScore,
-                    });
+                foreach (var asset in australianAssets)
+                {
+                    bool isExist = false;
+                    int index = 0;
+                    for (int i = 0; i < itemList.Count; i++)
+                    {
+                        if (itemList[i].asx == asset.Ticker)
+                        {
+                            isExist = true;
+                            index = i;
+                        }
+                    }
+                    if (isExist == false) {
+                        itemList.Add(new EquityCompanyProfileItemModel
+                        {
+                            asx = asset.Ticker,
+                            beta = asset.F0Ratios.Beta,
+                            company = asset.Name,
+                            currentRatio = asset.F0Ratios.CurrentRatio,
+                            debtEquityRatio = asset.F0Ratios.DebtEquityRatio,
+                            earningsStability = asset.F0Ratios.EarningsStability,
+                            fiveYearReturn = asset.F0Ratios.FiveYearReturn,
+                            threeYearReturn = asset.F0Ratios.ThreeYearReturn,
+                            oneYearReturn = asset.F0Ratios.OneYearReturn,
+                            franking = asset.F0Ratios.Frank,
+                            interestCover = asset.F0Ratios.InterestCover,
+                            payoutRatio = asset.F0Ratios.PayoutRatio,
+                            priceEarningsRatio = asset.F0Ratios.PriceEarningRatio,
+                            quickRatio = asset.F0Ratios.QuickRatio,
+                            returnOnAsset = asset.F0Ratios.ReturnOnAsset,
+                            returnOnEquity = asset.F0Ratios.ReturnOnEquity,
+                            marketPrice = asset.LatestPrice,
+                            marketValue = asset.GetTotalMarketValue(),
+                            totalCostValue = asset.GetCost().Total,
+                            costValue = asset.GetCost().AssetCost,
+                            companySuitabilityToInvestor = asset.GetRating().TotalScore
+                        });
+                    }
+                    else
+                    {
+                        itemList[index].marketValue += asset.GetTotalMarketValue();
+                        itemList[index].totalCostValue += asset.GetCost().Total;
+                        itemList[index].costValue += asset.GetCost().AssetCost;
+                    }
+
                 }
 
                 EquityCompanyProfileModel model = new EquityCompanyProfileModel
@@ -949,30 +928,52 @@ namespace EDISAngular.APIControllers
 
                 var ratios = assets.GetAverageRatiosFor<AustralianEquity>();
 
-                foreach (var asset in australianAssets) {
-                    itemList.Add(new EquityCompanyProfileItemModel {
-                        asx = asset.Ticker,
-                        beta = ratios.Beta,
-                        company = asset.Name,
-                        currentRatio = ratios.CurrentRatio,
-                        debtEquityRatio = ratios.DebtEquityRatio,
-                        earningsStability = ratios.EarningsStability,
-                        fiveYearReturn = ratios.FiveYearReturn,
-                        threeYearReturn = ratios.ThreeYearReturn,
-                        oneYearReturn = ratios.OneYearReturn,
-                        franking = ratios.Frank,
-                        interestCover = ratios.InterestCover,
-                        payoutRatio = ratios.PayoutRatio,
-                        priceEarningsRatio = ratios.PriceEarningRatio,
-                        quickRatio = ratios.QuickRatio,
-                        returnOnAsset = ratios.ReturnOnAsset,
-                        returnOnEquity = ratios.ReturnOnEquity,
-                        marketPrice = asset.LatestPrice,
-                        marketValue = asset.GetTotalMarketValue(),
-                        totalCostValue = asset.GetCost().Total,
-                        costValue = asset.GetCost().AssetCost,
-                        companySuitabilityToInvestor = asset.GetRating().TotalScore
-                    });
+                foreach (var asset in australianAssets)
+                {
+                    bool isExist = false;
+                    int index = 0;
+                    for (int i = 0; i < itemList.Count; i++)
+                    {
+                        if (itemList[i].asx == asset.Ticker)
+                        {
+                            isExist = true;
+                            index = i;
+                        }
+                    }
+                    if (isExist == false)
+                    {
+                        itemList.Add(new EquityCompanyProfileItemModel
+                        {
+                            asx = asset.Ticker,
+                            beta = asset.F0Ratios.Beta,
+                            company = asset.Name,
+                            currentRatio = asset.F0Ratios.CurrentRatio,
+                            debtEquityRatio = asset.F0Ratios.DebtEquityRatio,
+                            earningsStability = asset.F0Ratios.EarningsStability,
+                            fiveYearReturn = asset.F0Ratios.FiveYearReturn,
+                            threeYearReturn = asset.F0Ratios.ThreeYearReturn,
+                            oneYearReturn = asset.F0Ratios.OneYearReturn,
+                            franking = asset.F0Ratios.Frank,
+                            interestCover = asset.F0Ratios.InterestCover,
+                            payoutRatio = asset.F0Ratios.PayoutRatio,
+                            priceEarningsRatio = asset.F0Ratios.PriceEarningRatio,
+                            quickRatio = asset.F0Ratios.QuickRatio,
+                            returnOnAsset = asset.F0Ratios.ReturnOnAsset,
+                            returnOnEquity = asset.F0Ratios.ReturnOnEquity,
+                            marketPrice = asset.LatestPrice,
+                            marketValue = asset.GetTotalMarketValue(),
+                            totalCostValue = asset.GetCost().Total,
+                            costValue = asset.GetCost().AssetCost,
+                            companySuitabilityToInvestor = asset.GetRating().TotalScore
+                        });
+                    }
+                    else
+                    {
+                        itemList[index].marketValue += asset.GetTotalMarketValue();
+                        itemList[index].totalCostValue += asset.GetCost().Total;
+                        itemList[index].costValue += asset.GetCost().AssetCost;
+                    }
+
                 }
 
                 EquityCompanyProfileModel model = new EquityCompanyProfileModel {
@@ -1008,30 +1009,52 @@ namespace EDISAngular.APIControllers
 
                 var ratios = assets.GetAverageRatiosFor<AustralianEquity>();
 
-                foreach (var asset in australianAssets) {
-                    itemList.Add(new EquityCompanyProfileItemModel {
-                        asx = asset.Ticker,
-                        beta = ratios.Beta,
-                        company = asset.Name,
-                        currentRatio = ratios.CurrentRatio,
-                        debtEquityRatio = ratios.DebtEquityRatio,
-                        earningsStability = ratios.EarningsStability,
-                        fiveYearReturn = ratios.FiveYearReturn,
-                        threeYearReturn = ratios.ThreeYearReturn,
-                        oneYearReturn = ratios.OneYearReturn,
-                        franking = ratios.Frank,
-                        interestCover = ratios.InterestCover,
-                        payoutRatio = ratios.PayoutRatio,
-                        priceEarningsRatio = ratios.PriceEarningRatio,
-                        quickRatio = ratios.QuickRatio,
-                        returnOnAsset = ratios.ReturnOnAsset,
-                        returnOnEquity = ratios.ReturnOnEquity,
-                        marketPrice = asset.LatestPrice,
-                        marketValue = asset.GetTotalMarketValue(),
-                        totalCostValue = asset.GetCost().Total,
-                        costValue = asset.GetCost().AssetCost,
-                        companySuitabilityToInvestor = asset.GetRating().TotalScore
-                    });
+                foreach (var asset in australianAssets)
+                {
+                    bool isExist = false;
+                    int index = 0;
+                    for (int i = 0; i < itemList.Count; i++)
+                    {
+                        if (itemList[i].asx == asset.Ticker)
+                        {
+                            isExist = true;
+                            index = i;
+                        }
+                    }
+                    if (isExist == false)
+                    {
+                        itemList.Add(new EquityCompanyProfileItemModel
+                        {
+                            asx = asset.Ticker,
+                            beta = asset.F0Ratios.Beta,
+                            company = asset.Name,
+                            currentRatio = asset.F0Ratios.CurrentRatio,
+                            debtEquityRatio = asset.F0Ratios.DebtEquityRatio,
+                            earningsStability = asset.F0Ratios.EarningsStability,
+                            fiveYearReturn = asset.F0Ratios.FiveYearReturn,
+                            threeYearReturn = asset.F0Ratios.ThreeYearReturn,
+                            oneYearReturn = asset.F0Ratios.OneYearReturn,
+                            franking = asset.F0Ratios.Frank,
+                            interestCover = asset.F0Ratios.InterestCover,
+                            payoutRatio = asset.F0Ratios.PayoutRatio,
+                            priceEarningsRatio = asset.F0Ratios.PriceEarningRatio,
+                            quickRatio = asset.F0Ratios.QuickRatio,
+                            returnOnAsset = asset.F0Ratios.ReturnOnAsset,
+                            returnOnEquity = asset.F0Ratios.ReturnOnEquity,
+                            marketPrice = asset.LatestPrice,
+                            marketValue = asset.GetTotalMarketValue(),
+                            totalCostValue = asset.GetCost().Total,
+                            costValue = asset.GetCost().AssetCost,
+                            companySuitabilityToInvestor = asset.GetRating().TotalScore
+                        });
+                    }
+                    else
+                    {
+                        itemList[index].marketValue += asset.GetTotalMarketValue();
+                        itemList[index].totalCostValue += asset.GetCost().Total;
+                        itemList[index].costValue += asset.GetCost().AssetCost;
+                    }
+
                 }
 
                 EquityCompanyProfileModel model = new EquityCompanyProfileModel
@@ -1058,29 +1081,49 @@ namespace EDISAngular.APIControllers
                 var ratios = assets.GetAverageRatiosFor<AustralianEquity>();
 
                 foreach (var asset in australianAssets) {
-                    itemList.Add(new EquityCompanyProfileItemModel {
-                        asx = asset.Ticker,
-                        beta = ratios.Beta,
-                        company = asset.Name,
-                        currentRatio = ratios.CurrentRatio,
-                        debtEquityRatio = ratios.DebtEquityRatio,
-                        earningsStability = ratios.EarningsStability,
-                        fiveYearReturn = ratios.FiveYearReturn,
-                        threeYearReturn = ratios.ThreeYearReturn,
-                        oneYearReturn = ratios.OneYearReturn,
-                        franking = ratios.Frank,
-                        interestCover = ratios.InterestCover,
-                        payoutRatio = ratios.PayoutRatio,
-                        priceEarningsRatio = ratios.PriceEarningRatio,
-                        quickRatio = ratios.QuickRatio,
-                        returnOnAsset = ratios.ReturnOnAsset,
-                        returnOnEquity = ratios.ReturnOnEquity,
-                        marketPrice = asset.LatestPrice,
-                        marketValue = asset.GetTotalMarketValue(),
-                        totalCostValue = asset.GetCost().Total,
-                        costValue = asset.GetCost().AssetCost,
-                        companySuitabilityToInvestor = asset.GetRating().TotalScore
-                    });
+                    bool isExist = false;
+                    int index = 0;
+                    for (int i = 0; i < itemList.Count; i++)
+                    {
+                        if (itemList[i].asx == asset.Ticker)
+                        {
+                            isExist = true;
+                            index = i;
+                        }
+                    }
+                    if (isExist == false)
+                    {
+                        itemList.Add(new EquityCompanyProfileItemModel
+                        {
+                            asx = asset.Ticker,
+                            beta = asset.F0Ratios.Beta,
+                            company = asset.Name,
+                            currentRatio = asset.F0Ratios.CurrentRatio,
+                            debtEquityRatio = asset.F0Ratios.DebtEquityRatio,
+                            earningsStability = asset.F0Ratios.EarningsStability,
+                            fiveYearReturn = asset.F0Ratios.FiveYearReturn,
+                            threeYearReturn = asset.F0Ratios.ThreeYearReturn,
+                            oneYearReturn = asset.F0Ratios.OneYearReturn,
+                            franking = asset.F0Ratios.Frank,
+                            interestCover = asset.F0Ratios.InterestCover,
+                            payoutRatio = asset.F0Ratios.PayoutRatio,
+                            priceEarningsRatio = asset.F0Ratios.PriceEarningRatio,
+                            quickRatio = asset.F0Ratios.QuickRatio,
+                            returnOnAsset = asset.F0Ratios.ReturnOnAsset,
+                            returnOnEquity = asset.F0Ratios.ReturnOnEquity,
+                            marketPrice = asset.LatestPrice,
+                            marketValue = asset.GetTotalMarketValue(),
+                            totalCostValue = asset.GetCost().Total,
+                            costValue = asset.GetCost().AssetCost,
+                            companySuitabilityToInvestor = asset.GetRating().TotalScore
+                        });
+                    }
+                    else {
+                        itemList[index].marketValue += asset.GetTotalMarketValue();
+                        itemList[index].totalCostValue += asset.GetCost().Total;
+                        itemList[index].costValue += asset.GetCost().AssetCost;
+                    }
+
                 }
 
                 EquityCompanyProfileModel model = new EquityCompanyProfileModel
@@ -1159,14 +1202,21 @@ namespace EDISAngular.APIControllers
 
                 foreach (var weighting in weightings) {
                     Equity equity = (Equity)weighting.Weightable;
-                    model.data.Add(new PortfolioRatingItemModel {
-                        name = equity.Ticker,
-                        weighting = weighting.Percentage,
-                        score = equity.GetRating().TotalScore
-                    });
+                    bool isExist = false;
+                    for(int i = 0; i< model.data.Count; i++) {
+                        if (equity.Ticker == model.data[i].name) {
+                            isExist = true;
+                        }
+                    }
+                    if (isExist == false) {
+                        model.data.Add(new PortfolioRatingItemModel
+                        {
+                            name = equity.Ticker,
+                            weighting = weighting.Percentage,
+                            score = equity.GetRating().TotalScore
+                        });
+                    }
                 }
-
-
                 return model;
             }
             else

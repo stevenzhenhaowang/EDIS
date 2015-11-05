@@ -135,7 +135,7 @@ namespace EDISAngular.APIControllers
                 repoModel.ShareMount = model.shareAmount;
                 repoModel.AdjustmentDate = model.returnDate;
 
-                repo.CreateNewReturnOfCapitalAction(repoModel);
+               // repo.CreateNewReturnOfCapitalAction(repoModel);
 
 
                 return Ok();

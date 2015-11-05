@@ -11,14 +11,14 @@
         };
         return DBContext;
     });
-    app.factory("adviserPortfolioGetSectorInfo", function ($http, $resource, AppStrings) {
+    app.factory("adviserPortfolioGetSectorInfo", ["clientSelectionService", "$http", "$resource", "AppStrings", function (clientSelector, $http, $resource, AppStrings) {
         var DBContext = {
             getData: function () {
-                return $resource(AppStrings.EDIS_IP + "api/Adviser/PortfolioOverview/SectorialExposure");
+                return $resource(AppStrings.EDIS_IP + "api/Adviser/PortfolioOverview/SectorialExposure" + clientSelector.getClientIdQueryString());
             }
         };
         return DBContext;
-    });
+    }]);
     app.factory("adviserPortfolioSummaryGetCashflowInfo", function ($http, $resource, AppStrings) {
         var DBContext = function () {
             return $resource(AppStrings.EDIS_IP + "api/Adviser/PortfolioOverview/CashflowDetail");

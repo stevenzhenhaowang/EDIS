@@ -39,8 +39,8 @@
                                                             <div id="secondary-stat-item1" class="secondary-stat-item big-number-stat clearfix">
                                                                 <div class="data">
                                                                     <span class="col-left big-number">{{data.cost | currency}}</span>
-                                                                    <span class="col-left big-number">{{data.capitalGain | currency}}</span>
-                                                                    <span class="col-right"><em>Cost Value</em>/<em>Capital Gain Value</em></span>
+                                                                   
+                                                                    <span class="col-right"><em>Cost Value</em></span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -67,8 +67,8 @@
                                                         <div class="col-md-6">
                                                             <div id="secondary-stat-item4" class="secondary-stat-item big-number-stat clearfix">
                                                                 <div class="data">
-                                                                    <span class="col-left big-number">{{data.plp | currency}}</span>
-                                                                    <span class="col-right"><em>Profit/Loss (%)</em></span>
+                                                                    <span class="col-left big-number">{{data.capitalGain | currency}}</span>
+                                                                    <span class="col-right"><em>Capital Gain Value</em></span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -132,17 +132,21 @@
 
                                                 </div>
                                                 <div class="widget-content">
+                                                  
                                                     <div kendo-chart
                                                          k-legend="{ position: 'bottom' }"
-                                                         k-series-defaults="{ type: 'column' }"
                                                          k-category-axis="{field : 'month' , name : 'Month' , labels : { rotation : -45 }}"
                                                          k-value-axis="{ labels : { format : 'c2' } }"
                                                          k-series="[
-                                 { field: 'income', name: 'Income', categoryField : 'month' },
-                                 { field: 'expense', name: 'Expense', categoryField : 'month' }
-                             ]" k-rebind="data"
-                                                         k-tooltip=" { visible: true, color: 'white', template: '#= category # - #= kendo.format(\'{0:c2}\',value) #' }" k-data-source="dataSource"></div>
+                                                                        { field: 'income', name: 'Income', categoryField : 'month' },
+                                                                        { field: 'expense', name: 'Expense', categoryField : 'month' }
+                                                                    ]"
+                                                         k-rebind="data"
+                                                         k-tooltip="{ visible: true, color: 'white', template: '#= category # - #= kendo.format(\'{0:c2}\',value) #' }" 
+                                                         k-data-source="dataSource"
+                                                         ></div>
 
+                                                    
                                                 </div>
                                             </div>
 

@@ -3159,10 +3159,14 @@ namespace SqlRepository
                 ProfileCannotBefound(clientNumber, toDate, "Client");
             }
             var result = new List<ClientAccount>();
-            foreach (var account in client.Accounts.Where(acc => acc.AccountType == accountType))
-            {
+            //foreach (var account in client.Accounts.Where(acc => acc.AccountType == accountType))                                 //..........................................Account Type changed
+            //{
+            //    result.Add(GetClientAccountSync(account.AccountNumber, toDate));
+            //}
+            foreach (var account in client.Accounts) {
                 result.Add(GetClientAccountSync(account.AccountNumber, toDate));
             }
+
             return result;
         }
 
@@ -3228,10 +3232,16 @@ namespace SqlRepository
                         .Include(c => c.GroupAccounts)
                         .FirstOrDefault();
             var result = new List<GroupAccount>();
-            foreach (var groupAccount in group.GroupAccounts.Where(acc => acc.AccountType == accountType))
+            //foreach (var groupAccount in group.GroupAccounts.Where(acc => acc.AccountType == accountType))
+            //{
+            //    result.Add(GetClientGroupAccountSync(groupAccount.AccountNumber, toDate));
+            //}
+            foreach (var account in group.GroupAccounts)
             {
-                result.Add(GetClientGroupAccountSync(groupAccount.AccountNumber, toDate));
+                result.Add(GetClientGroupAccountSync(account.AccountNumber, toDate));
             }
+
+
             return result;
         }
 
@@ -8332,54 +8342,36 @@ namespace SqlRepository
 
             List<RebalanceModel> results = new List<RebalanceModel>();
 
-            foreach (var model in models) {
+            foreach (var model in models)
+            {
                 List<TemplateDetailsItemParameter> parameters = new List<TemplateDetailsItemParameter>();
-                foreach(var parameter in model.TemplateDetailsItemParameters){
-        
+                foreach (var parameter in model.TemplateDetailsItemParameters)
+                {
+
                     parameters.Add(new TemplateDetailsItemParameter
                     {
                         CurrentWeighting = parameter.CurrentWeighting,
                         EquityId = parameter.EquityId,
                         ItemName = parameter.ItemName,
-                    });  
+                    });
                 };
 
-                results.Add(new RebalanceModel { 
+                results.Add(new RebalanceModel
+                {
                     ProfileId = model.ProfileId,
                     ModelId = model.ModelId,
                     ModelName = model.ModelName,
                     TemplateDetailsItemParameters = parameters
                 });
-            };
-
-        public void CreateNewReturnOfCapitalAction(ReturnOfCapitalCreationModel model) {
-            //to do 
-            //get all clients and associated Equity to deduct the share amount increase the capital 
-
-            var equityToAction = getEquityById(model.EquityId);
-
-            var accountToAction = getAllClientAccountsForAdviser("",DateTime.Now);
-            foreach (var account in accountToAction) {
-
-                account.MakeTransactionSync( new EquityTransactionCreation() { 
-                    EquityType = equityToAction.EquityType,
-                    FeesRecords = new List<TransactionFeeRecordCreation>(),
-                    Name = equityToAction.Name,
-                    NumberOfUnits = Convert.ToInt32 (model.ShareMount),
-                    Price = equityToAction.LatestPrice,
-                    Sector = equityToAction.Sector,
-                    Ticker = equityToAction.Ticker,
-                    TransactionDate = DateTime.Now,
-                });
-           
-          
-                
-                
             }
+
+            return results;
+
+        }
 
         public RebalanceModel GetRebalanceModelByModelId(string modelId) {
             var savedMode = _db.RebalanceModels.SingleOrDefault(r => r.ModelId == modelId);
-        }
+       
 
             List<TemplateDetailsItemParameter> parameters = new List<TemplateDetailsItemParameter>();
 
@@ -8418,4 +8410,35 @@ namespace SqlRepository
                 return value.ToString();
         }
     }
+
+
+    //public void CreateNewReturnOfCapitalAction(ReturnOfCapitalCreationModel model)
+    //{
+    //    //to do 
+    //    //get all clients and associated Equity to deduct the share amount increase the capital 
+
+    //    var equityToAction = getEquityById(model.EquityId);
+
+    //    var accountToAction = getAllClientAccountsForAdviser("", DateTime.Now);
+    //    foreach (var account in accountToAction)
+    //    {
+
+    //        account.MakeTransactionSync(new EquityTransactionCreation()
+    //        {
+    //            EquityType = equityToAction.EquityType,
+    //            FeesRecords = new List<TransactionFeeRecordCreation>(),
+    //            Name = equityToAction.Name,
+    //            NumberOfUnits = Convert.ToInt32(model.ShareMount),
+    //            Price = equityToAction.LatestPrice,
+    //            Sector = equityToAction.Sector,
+    //            Ticker = equityToAction.Ticker,
+    //            TransactionDate = DateTime.Now,
+    //        });
+    //    }
+    //    }
+
+    //public Equity getEquityById(string equityId)
+    //{
+    //    throw new NotImplementedException();
+    //}
 }

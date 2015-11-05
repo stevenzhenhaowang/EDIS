@@ -49,27 +49,35 @@ namespace EDISAngular.APIControllers
 
         [HttpPost, Route("api/adviser/getAllAccountForGroup")]
         public List<AccountView> getAllCertainGroupAllAssociatedAccount(ClientAccountCreationBindingModel ClientGroupID) {
-            var ClientGroupId = ClientGroupID.clientGroup;
-            List<AccountView> result = new List<AccountView>();
-            //Here we retrieve the group account then add to the result
-            List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupByIdSync(ClientGroupId, DateTime.Now);
-            foreach (var groupAccount in accounts) {
-                result.Add(new AccountView {
-                    id = groupAccount.Id,
-                    name = groupAccount.AccountNameOrInfo
-                });
-            }
-            //then we get all the clients' accounts
-            ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(ClientGroupId);
+            ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(ClientGroupID.clientGroup);
+            List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
             List<ClientAccount> clientAccounts = new List<ClientAccount>();
             clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
-            //add to the result
-            foreach (var clientAccount in clientAccounts) {
-                result.Add(new AccountView {
-                        id = clientAccount.Id,
-                        name = clientAccount.AccountNameOrInfo
-                });
-            }
+
+            List<AccountView> result = new List<AccountView>();
+            accounts.ForEach(a => result.Add(new AccountView { id = a.Id, name = a.AccountNameOrInfo}));
+            clientAccounts.ForEach(a => result.Add(new AccountView { id = a.Id, name = a.AccountNameOrInfo }));
+
+            //var ClientGroupId = ClientGroupID.clientGroup;
+            ////Here we retrieve the group account then add to the result
+            //List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupByIdSync(ClientGroupId, DateTime.Now);
+            //foreach (var groupAccount in accounts) {
+            //    result.Add(new AccountView {
+            //        id = groupAccount.Id,
+            //        name = groupAccount.AccountNameOrInfo
+            //    });
+            //}
+            ////then we get all the clients' accounts
+            //ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(ClientGroupId);
+            //List<ClientAccount> clientAccounts = new List<ClientAccount>();
+            //clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
+            ////add to the result
+            //foreach (var clientAccount in clientAccounts) {
+            //    result.Add(new AccountView {
+            //            id = clientAccount.Id,
+            //            name = clientAccount.AccountNameOrInfo
+            //    });
+            //}
             return result;
           
         }
