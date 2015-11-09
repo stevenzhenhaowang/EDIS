@@ -64,6 +64,7 @@
     <Compile Include="BondType.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="ClientGroup.cs" />
+    <Compile Include="CorperateActions\ReturnOfCapital.cs" />
     <Compile Include="EdisContext.cs" />
     <Compile Include="Enums\TransactionType.cs" />
     <Compile Include="ExpenseRecords\ConsultancyExpense.cs" />

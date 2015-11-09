@@ -55,6 +55,8 @@ namespace EDISAngular.APIControllers
             };
         }
 
+
+        //to do get all return of capital 
         [HttpGet, Route("api/Adviser/CorprateAction/ReturnOfCapital")]
         public List<ReturnOfCapitalData> GetAllReturnOfCapitalActionForAdviser() {
             Console.WriteLine("get all return of capital action check");
@@ -126,6 +128,7 @@ namespace EDISAngular.APIControllers
         [HttpPost, Route("api/Adviser/CorprateAction/newReturnCapital")]
         public IHttpActionResult CreateNewReturnCapital(ReturnOfCapitalActionCreationModel model)
         {
+            var userid = User.Identity.GetUserId();
             Console.WriteLine("create new return of captial Check");
             if (model != null && ModelState.IsValid)
             {
@@ -134,14 +137,20 @@ namespace EDISAngular.APIControllers
                 repoModel.ReturnOfCapitalAmount = model.returnAmount;
                 repoModel.ShareMount = model.shareAmount;
                 repoModel.AdjustmentDate = model.returnDate;
-
-               // repo.CreateNewReturnOfCapitalAction(repoModel);
+                repoModel.AdviserId = userid;
+                repo.CreateNewReturnOfCapitalAction(repoModel);
 
 
                 return Ok();
             }
             return BadRequest();
 
+        }
+
+        [HttpPost, Route("api/Adviser/CorprateAction/newReinvestment")]
+        public IHttpActionResult CreateNewReinvestment(ReinvestmentPlanCreationModel model) {
+            //repo
+            return Ok();
         }
 
 

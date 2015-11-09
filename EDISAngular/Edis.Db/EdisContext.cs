@@ -12,7 +12,7 @@ using Edis.Db.Liabilities;
 using Edis.Db.Transactions;
 using Shared;
 using Edis.Db.Rebalance;
-
+using Edis.Db.CorperateActions;
 
 namespace Edis.Db
 {
@@ -56,6 +56,11 @@ namespace Edis.Db
         public DbSet<TemplateDetailsItemParameter> TemplateDetailsItemParameters { get; set; }
         
         public DbSet<RiskProfile> RiskProfiles { get; set; }
+
+
+
+        public DbSet<ReturnOfCapital> ReturnOfCapitals { get; set; }
+
 
 
 

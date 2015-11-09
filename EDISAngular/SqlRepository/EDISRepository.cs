@@ -8409,33 +8409,75 @@ namespace SqlRepository
             else
                 return value.ToString();
         }
+
+
+
+        public void aaaaa(ReturnOfCapitalCreationModel model)
+        {
+            //to do 
+            //get all clients and associated Equity to deduct the share amount increase the capital 
+
+           
+            var equity = getEquityByTicker(model.EquityId);
+            var equityToAction = getEquityById(equity.AssetId);
+            var accountToAction = getAllClientAccountsForAdviser(model.AdviserId, DateTime.Now);
+            foreach (var account in accountToAction)
+            {
+
+                account.MakeTransactionSync(new EquityTransactionCreation()
+                {
+                    EquityType = equityToAction.EquityType,
+                    FeesRecords = new List<TransactionFeeRecordCreation>(),
+                    Name = equityToAction.Name,
+                    NumberOfUnits = Convert.ToInt32(model.ShareMount),
+                    Price = equityToAction.LatestPrice,
+                    Sector = equityToAction.Sector,
+                    Ticker = equityToAction.Ticker,
+                    TransactionDate = DateTime.Now,
+                });
+            }
+            _db.SaveChanges();
+        }
+
+
+          public void CreateNewReturnOfCapitalAction(ReturnOfCapitalCreationModel model)
+        {
+            //to do 
+            //get all clients and associated Equity to deduct the share amount increase the capital 
+
+           
+            var equity = getEquityByTicker(model.EquityId);
+            var equityToAction = getEquityById(equity.AssetId);
+            var accountToAction = getAllClientAccountsForAdviser(model.AdviserId, DateTime.Now);
+            foreach (var account in accountToAction)
+            {
+
+                account.MakeTransactionSync(new EquityTransactionCreation()
+                {
+                    EquityType = equityToAction.EquityType,
+                    FeesRecords = new List<TransactionFeeRecordCreation>(),
+                    Name = equityToAction.Name,
+                    NumberOfUnits = 00000000000000,
+                    Price = equityToAction.LatestPrice,
+                    Sector = equityToAction.Sector,
+                    Ticker = equityToAction.Ticker,
+                    TransactionDate = DateTime.Now,
+                });
+            }
+            _db.SaveChanges();
+        }
+
+
+        public void CreateNewReinvestmentAdviserInital()
+        {
+            
+
+
+        }
+
     }
 
-
-    //public void CreateNewReturnOfCapitalAction(ReturnOfCapitalCreationModel model)
-    //{
-    //    //to do 
-    //    //get all clients and associated Equity to deduct the share amount increase the capital 
-
-    //    var equityToAction = getEquityById(model.EquityId);
-
-    //    var accountToAction = getAllClientAccountsForAdviser("", DateTime.Now);
-    //    foreach (var account in accountToAction)
-    //    {
-
-    //        account.MakeTransactionSync(new EquityTransactionCreation()
-    //        {
-    //            EquityType = equityToAction.EquityType,
-    //            FeesRecords = new List<TransactionFeeRecordCreation>(),
-    //            Name = equityToAction.Name,
-    //            NumberOfUnits = Convert.ToInt32(model.ShareMount),
-    //            Price = equityToAction.LatestPrice,
-    //            Sector = equityToAction.Sector,
-    //            Ticker = equityToAction.Ticker,
-    //            TransactionDate = DateTime.Now,
-    //        });
-    //    }
-    //    }
+  
 
     //public Equity getEquityById(string equityId)
     //{

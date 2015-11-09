@@ -20,7 +20,6 @@ using EDISAngular.Infrastructure.DbFirst;
 using SqlRepository;
 using Domain.Portfolio.Correspondence;
 
-using SqlRepository;
 using System.Reflection;
 using System.ComponentModel;
 
@@ -35,7 +34,7 @@ namespace EDISAngular.APIControllers
         private CorrespondenceRepository corresRepo;
         //private AdviserRepository advRepo;
         private edisDbEntities db;
-        private EdisRepository repo;
+      //  private EdisRepository repo;
         public CorrespondenceController()
         {
             edisDbEntities db = new edisDbEntities();

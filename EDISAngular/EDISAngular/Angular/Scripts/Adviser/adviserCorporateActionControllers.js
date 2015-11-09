@@ -322,11 +322,15 @@
     adviserGetId().then(function (data) {
         adviserId = data;
     })
+
+    service.allTickers().query(function (data) {
+        $scope.allTickers = data;
+    })
   
     $scope.add = function () {
         var data = {
             corporateActionName: $scope.actionName,
-            equityId: $scope.equityId,
+            equityId: $scope.tickerNumber,
             shareAmount: $scope.shareAmount,
             //adviserUserId: adviserId,
             returnAmount: $scope.returnAmount,
@@ -376,13 +380,15 @@
     })
 
 
+    service.allTickers().query(function (data) {
+        $scope.allTickers = data;
+    })
+
     $scope.add = function () {
         var data = {
-            corporateActionName: $scope.actionName,
-            equityId: $scope.equityId,
-
-            adviserUserId: adviserId,
-            reinvestmentShareAmount: $scope.reinvestmentShareAmount,
+            ActionName: $scope.actionName,
+            ticker: $scope.tickerNumber,
+            ShareMount: $scope.reinvestmentShareAmount,
             reinvestmentDate: dateParser($scope.reinvestmentDate),
 
             participants: []
@@ -398,9 +404,8 @@
                 var client = $scope.allClients[i];
                 data.participants.push({
                     edisAccountNumber: client.edisAccountNumber,
-                  
-                    type: client.type,
-                    name: client.name,
+                    //type: client.type,
+                    //name: client.name,
                     //investedAmount: client.investedAmount,
                     //numberOfUnits: 0,
                     //unitPrice: 0,
@@ -428,12 +433,15 @@
             }
         }
 
-        service.addnewReinvestmentAction().save(data, function () {
+        //service.addnewReinvestmentAction().save(data, function () {
+        //    $modalInstance.close({ reason: "success" });
+
+        //})
+
+
+        service.addnewReinvestmentAction(data, function () {
             $modalInstance.close({ reason: "success" });
-
         })
-
-
 
     }
 }])
@@ -450,9 +458,14 @@
         adviserId = data;
     })
 
+    service.allTickers().query(function (data) {
+        $scope.allTickers = data;
+    })
+
     service.allClients().query(function (data) {
         $scope.allClients = data;
     })
+
 
     $scope.add = function () {
         var data = {
@@ -480,6 +493,26 @@
 
 
     }
+       $scope.hasClientsSelected = function () {
+            if ($scope.allClients === undefined || $scope.allClients === null || $scope.allClients.length === 0) {
+                return false;
+            } else {
+                var numberOfSelected = 0;
+                for (var i = 0; i < $scope.allClients.length; i++) {
+                    if ($scope.allClients[i].selected) {
+                        numberOfSelected++;
+                    }
+                }
+                if (numberOfSelected > 0) {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+
+
+
 }])
 
 
