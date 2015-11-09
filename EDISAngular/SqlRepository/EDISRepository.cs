@@ -2356,6 +2356,7 @@ namespace SqlRepository
             _db.CashAccounts.Add(new CashAccount {
                 Id = Guid.NewGuid().ToString(),
                 AccountNumber = group.GroupNumber,
+                AccountName = group.GroupName,
                 CashTransactions = new List<CashTransaction>(),
                 FaceValue = Double.Parse(group.GroupAmount),
                 CurrencyType = CurrencyType.AustralianDollar,
