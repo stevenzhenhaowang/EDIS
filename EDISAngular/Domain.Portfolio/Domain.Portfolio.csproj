@@ -54,6 +54,7 @@
     <Compile Include="AggregateRoots\Asset\AssetPrice.cs" />
     <Compile Include="AggregateRoots\Asset\AustralianEquity.cs" />
     <Compile Include="AggregateRoots\Asset\InternationalEquity.cs" />
+    <Compile Include="AggregateRoots\CashAccount.cs" />
     <Compile Include="AggregateRoots\Client.cs" />
     <Compile Include="AggregateRoots\ClientGroup.cs" />
     <Compile Include="AggregateRoots\LiabilityBase.cs" />

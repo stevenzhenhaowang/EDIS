@@ -35,10 +35,10 @@ namespace EDISAngular.Infrastructure.DbFirst
         public string NoteSerial { get; set; }
         public string Body { get; set; }
         public string FollowupActions { get; set; }
-        public System.DateTime DateDue { get; set; }
-        public System.DateTime FollowupDate { get; set; }
+        public Nullable<System.DateTime> DateDue { get; set; }
+        public Nullable<System.DateTime> FollowupDate { get; set; }
         public System.DateTime DateCompleted { get; set; }
-        public System.DateTime ReminderDate { get; set; }
+        public Nullable<System.DateTime> ReminderDate { get; set; }
         public string Status { get; set; }
         public bool Reminder { get; set; }
         public bool IsAccepted { get; set; }

@@ -59,11 +59,14 @@ namespace EDISAngular.Infrastructure.DbFirst
         public virtual DbSet<Property> Properties { get; set; }
         public virtual DbSet<PropertyTransaction> PropertyTransactions { get; set; }
         public virtual DbSet<PropertyType> PropertyTypes { get; set; }
+        public virtual DbSet<RebalanceModel> RebalanceModels { get; set; }
         public virtual DbSet<Rental> Rentals { get; set; }
         public virtual DbSet<RepaymentRecord> RepaymentRecords { get; set; }
         public virtual DbSet<ResearchValue> ResearchValues { get; set; }
         public virtual DbSet<ResourcesReference> ResourcesReferences { get; set; }
+        public virtual DbSet<RiskProfile> RiskProfiles { get; set; }
         public virtual DbSet<Sector> Sectors { get; set; }
+        public virtual DbSet<TemplateDetailsItemParameter> TemplateDetailsItemParameters { get; set; }
         public virtual DbSet<TransactionExpens> TransactionExpenses { get; set; }
     }
 }

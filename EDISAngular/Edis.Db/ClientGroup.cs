@@ -24,7 +24,7 @@ namespace Edis.Db
         public string GroupNumber { get; set; }
 
         public string GroupName { get; set; }
-        public string GroupAlias { get; set; }
+        public string GroupAmount { get; set; }
 
         public virtual ICollection<Account> GroupAccounts { get; set; }
 

@@ -19,6 +19,7 @@ namespace EDISAngular.Infrastructure.DbFirst
         {
             this.ClientGroups = new HashSet<ClientGroup>();
             this.ConsultancyExpenses = new HashSet<ConsultancyExpens>();
+            this.RebalanceModels = new HashSet<RebalanceModel>();
             this.TransactionExpenses = new HashSet<TransactionExpens>();
         }
     
@@ -101,6 +102,8 @@ namespace EDISAngular.Infrastructure.DbFirst
         public virtual ICollection<ClientGroup> ClientGroups { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ConsultancyExpens> ConsultancyExpenses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RebalanceModel> RebalanceModels { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TransactionExpens> TransactionExpenses { get; set; }
     }

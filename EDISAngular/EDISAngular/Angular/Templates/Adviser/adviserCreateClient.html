@@ -98,9 +98,9 @@
                                         <div class="error" ng-show="form.groupName.$error.required&&form.groupName.$touched">Please provide group account name</div>
                                     </div>
                                     <div class="col-md-4 form-group">
-                                        <label>Group Account Alias</label>
-                                        <input type="text" ng-model="collection.personProfile.groupAlias" name="groupAlias" required class="form-control" />
-                                        <div class="error" ng-show="form.groupAlias.$error.required&&form.groupAlias.$touched">Please provide group account alias</div>
+                                        <label>Group Account Cash Amount</label>
+                                        <input type="number" ng-model="collection.personProfile.groupAmount" name="groupAmount" required class="form-control" />
+                                        <div class="error" ng-show="form.groupAmount.$error.required&&form.groupAmount.$touched">Please provide group account cash amount</div>
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label>Adviser ID</label>
@@ -167,6 +167,9 @@
 
                             </div>
 
+
+
+
                             <div ng-if="collection.accountType">
                                 <div class="row">
                                     <div class="col-md-6 form-group">
@@ -182,7 +185,7 @@
                                 <div class="row" ng-repeat="question in collection.riskProfile.questions">
                                     <div class="col-md-12 form-group">
                                         <label>{{question.question}}</label>
-                                        <textarea class="form-control" ng-model="question.answer" name="question_{{$index}}" required></textarea>
+                                        <textarea class="form-control" ng-model="question.answer" name="question_{{$index}}"></textarea>
                                         <div class="error" ng-show="form.question_{{$index}}.$error.required&&form.question_{{$index}}.$touched">Please complete this question</div>
                                     </div>
                                 </div>
@@ -190,7 +193,7 @@
                                 <div class="row">
                                     <div class="col-md-4 form-group">
                                         <label>Risk Level</label>
-                                        <select class="form-control" name="riskLevel" ng-model="collection.riskProfile.level.id" ng-options="level.id as level.name for level in collection.riskProfile.levels" required></select>
+                                        <select class="form-control" name="riskLevel" ng-model="collection.riskProfile.levels.id" ng-options="level.id as level.name for level in collection.riskProfile.levels"></select>
                                         <span class="error" ng-show="form.riskLevel.$error.required && form.riskLevel.$touched">Please select a risk level</span>
                                     </div>
                                 </div>

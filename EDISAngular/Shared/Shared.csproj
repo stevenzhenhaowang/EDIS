@@ -59,10 +59,12 @@
     <Compile Include="ClientDocInfo.cs" />
     <Compile Include="ConsultancyExpenseType.cs" />
     <Compile Include="CreditCardType.cs" />
+    <Compile Include="EvaluationInfo.cs" />
     <Compile Include="Frequency.cs" />
     <Compile Include="InsuranceType.cs" />
     <Compile Include="LiabilityTransactionType.cs" />
     <Compile Include="LoanRepaymentType.cs" />
+    <Compile Include="Months.cs" />
     <Compile Include="RebalanceClassificationType.cs" />
     <Compile Include="RebalanceModelProfile.cs" />
     <Compile Include="NoteTypes.cs" />

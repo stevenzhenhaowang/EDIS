@@ -44,6 +44,7 @@ using AssetPrice = Edis.Db.Assets.AssetPrice;
 using RebalanceModel = Domain.Portfolio.Rebalance.RebalanceModel;
 using TemplateDetailsItemParameter = Domain.Portfolio.Rebalance.TemplateDetailsItemParameter;
 using RiskProfile = Domain.Portfolio.EdisDatabase.RiskProfile;
+using CashAccount = Edis.Db.Assets.CashAccount;
 using Domain.Portfolio.Correspondence;
 using System.Reflection;
 using System.ComponentModel;
@@ -2284,7 +2285,7 @@ namespace SqlRepository
                 ClientGroupId = Guid.NewGuid().ToString(),
                 CreatedOn = DateTime.Now,
                 GroupNumber = GenerateUniqueClientGroupNumber(),
-                GroupAlias = clientGroup.GroupAlias,
+                GroupAmount = clientGroup.GroupAmount,
                 GroupName = clientGroup.GroupName,
                 GroupAccounts = new List<Account>()
             };
@@ -2326,7 +2327,7 @@ namespace SqlRepository
                 ClientGroupId = Guid.NewGuid().ToString(),
                 CreatedOn = DateTime.Now,
                 GroupNumber = GenerateUniqueClientGroupNumber(),
-                GroupAlias = clientGroup.GroupAlias,
+                GroupAmount = clientGroup.GroupAmount,
                 GroupName = clientGroup.GroupName,
                 GroupAccounts = new List<Account>()
             };
@@ -2351,6 +2352,18 @@ namespace SqlRepository
                 ClientGroupId = group.ClientGroupId,
                 ClientGroup = group
             };
+
+            _db.CashAccounts.Add(new CashAccount {
+                Id = Guid.NewGuid().ToString(),
+                AccountNumber = group.GroupNumber,
+                AccountName = group.GroupName,
+                CashTransactions = new List<CashTransaction>(),
+                FaceValue = Double.Parse(group.GroupAmount),
+                CurrencyType = CurrencyType.AustralianDollar,
+                CashAccountType = CashAccountType.CashManagementAccount,
+                Frequency = Frequency.Annually
+            });
+
             group.MainClientId = client.ClientId;
             _db.Clients.Add(client);
             //group.MainClient = client;
@@ -3215,7 +3228,7 @@ namespace SqlRepository
                 Id = group.ClientGroupId,
                 ClientGroupNumber = group.GroupNumber,
                 CreatedOn = group.CreatedOn,
-                GroupAlias = group.GroupAlias,
+                GroupAmount = group.GroupAmount,
                 GroupName = group.GroupName,
                 MainClientId = group.MainClientId
             };

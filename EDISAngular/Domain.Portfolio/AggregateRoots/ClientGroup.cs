@@ -17,7 +17,7 @@ namespace Domain.Portfolio.AggregateRoots
         public DateTime? CreatedOn { get; set; }
         public string MainClientId { get; set; }
         public string GroupName { get; set; }
-        public string GroupAlias { get; set; }
+        public string GroupAmount { get; set; }
         public string ClientGroupNumber { get; set; }
 
 

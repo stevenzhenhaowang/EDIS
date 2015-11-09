@@ -266,7 +266,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Infrastructure\DatabaseAccess\PortfolioRepository.cs" />
-    <Compile Include="Infrastructure\DatabaseAccess\RebalanceRepository.cs" />
     <Compile Include="Infrastructure\DbFirst\Account.cs">
       <DependentUpon>EFModels.tt</DependentUpon>
     </Compile>
@@ -384,6 +383,9 @@
     <Compile Include="Infrastructure\DbFirst\PropertyType.cs">
       <DependentUpon>EFModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\DbFirst\RebalanceModel.cs">
+      <DependentUpon>EFModels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Infrastructure\DbFirst\Rental.cs">
       <DependentUpon>EFModels.tt</DependentUpon>
     </Compile>
@@ -396,7 +398,13 @@
     <Compile Include="Infrastructure\DbFirst\ResourcesReference.cs">
       <DependentUpon>EFModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\DbFirst\RiskProfile.cs">
+      <DependentUpon>EFModels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Infrastructure\DbFirst\Sector.cs">
+      <DependentUpon>EFModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Infrastructure\DbFirst\TemplateDetailsItemParameter.cs">
       <DependentUpon>EFModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\DbFirst\TransactionExpens.cs">
@@ -2240,6 +2248,7 @@
     <Content Include="Scripts\angular-touch.min.js.map" />
     <Content Include="Scripts\angular.min.js.map" />
     <Content Include="Scripts\errors.json" />
+    <Content Include="Scripts\angular-message-format.min.js.map" />
     <EntityDeploy Include="Infrastructure\DbFirst\EFModels.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>EFModels.Designer.cs</LastGenOutput>
@@ -2257,7 +2266,6 @@
       <DependentUpon>EFModels.edmx</DependentUpon>
       <LastGenOutput>EFModels.cs</LastGenOutput>
     </Content>
-    <Content Include="Scripts\angular-message-format.min.js.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\globalize\cultures\globalize.culture.af-ZA.js" />
     <Content Include="Scripts\globalize\cultures\globalize.culture.af.js" />

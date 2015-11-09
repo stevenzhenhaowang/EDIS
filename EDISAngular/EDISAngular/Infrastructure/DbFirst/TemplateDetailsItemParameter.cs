@@ -12,19 +12,18 @@ namespace EDISAngular.Infrastructure.DbFirst
     using System;
     using System.Collections.Generic;
     
-    public partial class AssetPrice
+    public partial class TemplateDetailsItemParameter
     {
         public string Id { get; set; }
-        public double Price { get; set; }
-        public System.DateTime CreatedOn { get; set; }
-        public string CorrespondingAssetKey { get; set; }
-        public int AssetType { get; set; }
-        public string Bond_BondId { get; set; }
-        public string Property_PropertyId { get; set; }
-        public string Equity_AssetId { get; set; }
+        public string EquityId { get; set; }
+        public string ItemName { get; set; }
+        public Nullable<double> MarketValue { get; set; }
+        public Nullable<double> CurrentValue { get; set; }
+        public Nullable<double> CurrentWeighting { get; set; }
+        public string Model_ModelId { get; set; }
+        public string identityMetaKey { get; set; }
     
-        public virtual Bond Bond { get; set; }
-        public virtual Equity Equity { get; set; }
-        public virtual Property Property { get; set; }
+        public virtual RebalanceModel RebalanceModel { get; set; }
+        public virtual RebalanceModel RebalanceModel1 { get; set; }
     }
 }

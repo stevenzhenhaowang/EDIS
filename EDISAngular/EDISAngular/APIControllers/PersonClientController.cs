@@ -27,7 +27,7 @@ using SqlRepository;
 using Novacode;
 using Shared;
 using Domain.Portfolio.EdisDatabase;
-
+using RiskProfile = Domain.Portfolio.EdisDatabase.RiskProfile;
 
 
 
@@ -85,13 +85,14 @@ namespace EDISAngular.APIControllers
                     ClientGroupRegistration group = new ClientGroupRegistration
                     {
 //#warning adviser number needs replacement
-                        AdviserNumber = adviserNumber,                            
-                        GroupAlias = model.newGroupAlias,
+                        AdviserNumber = adviserNumber,
+                        GroupAmount = model.newGroupAmount,
                         GroupName = model.newGroupAccountName,
                         CreateOn = DateTime.Now,
                         client = client,
                     };
                     edisRepo.CreateNewClientGroupSync(group);
+
                 }
                 else
                 {
