@@ -16,15 +16,12 @@ namespace Edis.Db.Assets
         [Key]
         public string Id { get; set; }
 
-        [Required]
         public string Bsb { get; set; }
 
-        [Required]
         public string AccountName { get; set; }
         [Required]
         public string AccountNumber { get; set; }
 
-        [Required]
         public CashAccountType CashAccountType { get; set; }
 
         public DateTime? MaturityDate { get; set; }

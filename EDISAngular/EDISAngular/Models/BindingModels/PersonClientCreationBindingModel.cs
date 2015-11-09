@@ -32,9 +32,10 @@ namespace EDISAngular.Models.BindingModels
         [DisplayName("New Group Account Name")]
         [RequiredIfBoolTrue("isGroupLeader",ErrorMessage="{0} is required if this client is a group leader")]
         public string newGroupAccountName { get; set; }
-        [DisplayName("New Group Alias")]
+        [DisplayName("Group Amount")]
+        [Range(0, int.MaxValue, ErrorMessage = "Please enter a valid amount")]
         [RequiredIfBoolTrue("isGroupLeader", ErrorMessage = "{0} is required if this client is a group leader")]
-        public string newGroupAlias { get; set; }
+        public string newGroupAmount { get; set; }
         [DisplayName("New Group Adviser")]
         [RequiredIfBoolTrue("isGroupLeader", ErrorMessage = "{0} is required if this client is a group leader")]
         [AdviserAccountNumberMustExisting(ErrorMessage="Cannot locate corresponding adviser for this person client item")]

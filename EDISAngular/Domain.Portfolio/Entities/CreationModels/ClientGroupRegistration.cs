@@ -18,7 +18,7 @@ namespace Domain.Portfolio.Entities.CreationModels
         //public string MainClientID { get; set; }
         public DateTime? CreateOn { get; set; }
         public string GroupName { get; set; }
-        public string GroupAlias { get; set; }
+        public string GroupAmount { get; set; }
         public string AdviserNumber { get; set; }
     }
 }

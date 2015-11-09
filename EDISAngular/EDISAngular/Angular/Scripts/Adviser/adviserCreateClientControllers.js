@@ -26,7 +26,38 @@
 
         $scope.save = function () {
             var data = {};
+            var riskProfile = {};
+
+            if ($scope.collection.completeRiskProfile) {
+                riskProfile = {
+                    shortTermGoal1: $scope.collection.riskProfile.questions[0].answer,
+                    medTermGoal1: $scope.collection.riskProfile.questions[1].answer,
+                    longTermGoal1: $scope.collection.riskProfile.questions[2].answer,
+                    comments: $scope.collection.riskProfile.questions[3].answer,
+                    retirementAge: $scope.collection.riskProfile.questions[4].answer,
+                    retirementIncome: $scope.collection.riskProfile.questions[5].answer,
+                    incomeSource: $scope.collection.riskProfile.questions[6].answer,
+                    investmentProfile: $scope.collection.riskProfile.questions[7].answer,
+                    investmentObjective1: $scope.collection.riskProfile.questions[8].answer,
+                    investmentObjective2: $scope.collection.riskProfile.questions[9].answer,
+                    investmentObjective3: $scope.collection.riskProfile.questions[10].answer,
+                    investmentTimeHorizon: $scope.collection.riskProfile.questions[11].answer,
+                    investmentKnowledge: $scope.collection.riskProfile.questions[12].answer,
+                    riskAttitude: $scope.collection.riskProfile.questions[13].answer,
+                    capitalLossAttitude: $scope.collection.riskProfile.questions[14].answer,
+                    shortTermTrading: $scope.collection.riskProfile.questions[15].answer,
+                    shortTermAssetPercent: $scope.collection.riskProfile.questions[16].answer,
+                    shortTermEquityPercent: $scope.collection.riskProfile.questions[17].answer,
+                    riskLevel: $scope.collection.riskProfile.levels.id
+                }
+            }
+            else {
+                riskProfile = null;
+            }
+
             if ($scope.collection.accountType === "Person") {
+
+                
                 
                 data = {
                     firstName: $scope.collection.personProfile.firstName,
@@ -36,31 +67,10 @@
                     contactPhone: $scope.collection.personProfile.phone,
                     isGroupLeader: $scope.collection.personProfile.isGroupLeader === "true",
                     newGroupAccountName: $scope.collection.personProfile.groupName,
-                    newGroupAlias: $scope.collection.personProfile.groupAlias,
+                    newGroupAmount: $scope.collection.personProfile.groupAmount,
                     newGroupAdviserNumber: $scope.adviserId,
                     existingGroupId: $scope.collection.personProfile.isGroupLeader === "true" ? "" : $scope.collection.personProfile.group.id,
-                    riskProfile: {
-                        shortTermGoal1: $scope.collection.riskProfile.questions[0].answer,
-                        medTermGoal1: $scope.collection.riskProfile.questions[1].answer,
-                        longTermGoal1: $scope.collection.riskProfile.questions[2].answer,
-                        comments: $scope.collection.riskProfile.questions[3].answer,
-                        retirementAge: $scope.collection.riskProfile.questions[4].answer,
-                        retirementIncome: $scope.collection.riskProfile.questions[5].answer,
-                        incomeSource: $scope.collection.riskProfile.questions[6].answer,
-                        investmentProfile: $scope.collection.riskProfile.questions[7].answer,
-                        investmentObjective1: $scope.collection.riskProfile.questions[8].answer,
-                        investmentObjective2: $scope.collection.riskProfile.questions[9].answer,
-                        investmentObjective3: $scope.collection.riskProfile.questions[10].answer,
-                        investmentTimeHorizon: $scope.collection.riskProfile.questions[11].answer,
-                        investmentKnowledge: $scope.collection.riskProfile.questions[12].answer,
-                        riskAttitude: $scope.collection.riskProfile.questions[13].answer,
-                        capitalLossAttitude: $scope.collection.riskProfile.questions[14].answer,
-                        shortTermTrading: $scope.collection.riskProfile.questions[15].answer,
-                        shortTermAssetPercent: $scope.collection.riskProfile.questions[16].answer,
-                        shortTermEquityPercent: $scope.collection.riskProfile.questions[17].answer,
-                        riskLevel: $scope.collection.riskProfile.level.id
-
-                    }
+                    riskProfile: riskProfile
                 };
 
                 $http.post(AppStrings.EDIS_IP + "api/Personclient/Create", data).success(function () {
@@ -77,27 +87,7 @@
                     contactPhone: $scope.collection.entityProfile.phone,
                     email: $scope.collection.entityProfile.email,
                     existingGroupId: $scope.collection.entityProfile.group.id,
-                    riskProfile: {
-                        shortTermGoal1: $scope.collection.riskProfile.questions[0].answer,
-                        medTermGoal1: $scope.collection.riskProfile.questions[1].answer,
-                        longTermGoal1: $scope.collection.riskProfile.questions[2].answer,
-                        comments: $scope.collection.riskProfile.questions[3].answer,
-                        retirementAge: $scope.collection.riskProfile.questions[4].answer,
-                        retirementIncome: $scope.collection.riskProfile.questions[5].answer,
-                        incomeSource: $scope.collection.riskProfile.questions[6].answer,
-                        investmentProfile: $scope.collection.riskProfile.questions[7].answer,
-                        investmentObjective1: $scope.collection.riskProfile.questions[8].answer,
-                        investmentObjective2: $scope.collection.riskProfile.questions[9].answer,
-                        investmentObjective3: $scope.collection.riskProfile.questions[10].answer,
-                        investmentTimeHorizon: $scope.collection.riskProfile.questions[11].answer,
-                        investmentKnowledge: $scope.collection.riskProfile.questions[12].answer,
-                        riskAttitude: $scope.collection.riskProfile.questions[13].answer,
-                        capitalLossAttitude: $scope.collection.riskProfile.questions[14].answer,
-                        shortTermTrading: $scope.collection.riskProfile.questions[15].answer,
-                        shortTermAssetPercent: $scope.collection.riskProfile.questions[16].answer,
-                        shortTermEquityPercent: $scope.collection.riskProfile.questions[17].answer,
-                        riskLevel: $scope.collection.riskProfile.level.id
-                    }
+                    riskProfile: riskProfile
                 };
                 $http.post(AppStrings.EDIS_IP + "api/Entityclient/Create", data).success(function () {
                     alert("success");

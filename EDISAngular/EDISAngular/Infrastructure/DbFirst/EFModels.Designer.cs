@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\ahksysuser06\Desktop\oldVersion\8.14\EDISAngular\EDISAngular\Infrastructure\DbFirst\EFModels.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\ahksysuser06\Desktop\EDIS\EDISAngular\EDISAngular\Infrastructure\DbFirst\EFModels.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

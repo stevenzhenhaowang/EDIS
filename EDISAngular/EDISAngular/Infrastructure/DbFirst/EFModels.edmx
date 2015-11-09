@@ -164,8 +164,8 @@
           <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Price" Type="float" Nullable="false" />
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CorrespondingAssetKey" Type="nvarchar" MaxLength="300" Nullable="false" />
           <Property Name="AssetType" Type="int" Nullable="false" />
-          <Property Name="CorrespondingAssetKey" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Bond_BondId" Type="nvarchar" MaxLength="128" />
           <Property Name="Property_PropertyId" Type="nvarchar" MaxLength="128" />
           <Property Name="Equity_AssetId" Type="nvarchar" MaxLength="128" />
@@ -258,8 +258,8 @@
           <Property Name="MainClientId" Type="nvarchar(max)" Nullable="false" />
           <Property Name="GroupNumber" Type="nvarchar(max)" Nullable="false" />
           <Property Name="GroupName" Type="nvarchar(max)" />
-          <Property Name="GroupAlias" Type="nvarchar(max)" />
           <Property Name="Adviser_AdviserId" Type="nvarchar" MaxLength="128" />
+          <Property Name="GroupAmount" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Clients">
           <Key>
@@ -466,10 +466,10 @@
           <Property Name="NoteSerial" Type="nvarchar(max)" />
           <Property Name="Body" Type="nvarchar(max)" />
           <Property Name="FollowupActions" Type="nvarchar(max)" />
-          <Property Name="DateDue" Type="datetime" Nullable="false" />
-          <Property Name="FollowupDate" Type="datetime" Nullable="false" />
+          <Property Name="DateDue" Type="datetime" />
+          <Property Name="FollowupDate" Type="datetime" />
           <Property Name="DateCompleted" Type="datetime" Nullable="false" />
-          <Property Name="ReminderDate" Type="datetime" Nullable="false" />
+          <Property Name="ReminderDate" Type="datetime" />
           <Property Name="Status" Type="nvarchar(max)" />
           <Property Name="Reminder" Type="bit" Nullable="false" />
           <Property Name="IsAccepted" Type="bit" Nullable="false" />
@@ -513,6 +513,16 @@
           <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="TypeName" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
+        <EntityType Name="RebalanceModels">
+          <Key>
+            <PropertyRef Name="ModelId" />
+          </Key>
+          <Property Name="ModelId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ModelName" Type="nvarchar(max)" />
+          <Property Name="Adviser_AdviserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProfileId" Type="int" Nullable="false" />
+          <Property Name="ClientGroup_ClientGroupId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
         <EntityType Name="Rentals">
           <Key>
             <PropertyRef Name="Id" />
@@ -543,12 +553,13 @@
           </Key>
           <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Key" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Value" Type="float" Nullable="false" />
+          <Property Name="Value" Type="float" />
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
           <Property Name="Issuer" Type="nvarchar(max)" />
           <Property Name="Bond_BondId" Type="nvarchar" MaxLength="128" />
           <Property Name="Property_PropertyId" Type="nvarchar" MaxLength="128" />
           <Property Name="Equity_AssetId" Type="nvarchar" MaxLength="128" />
+          <Property Name="StringValue" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="ResourcesReferences">
           <Key>
@@ -560,6 +571,40 @@
           <Property Name="ResourceUrl" Type="nvarchar(max)" />
           <Property Name="UserId" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="RiskProfiles">
+          <Key>
+            <PropertyRef Name="RiskProfileID" />
+          </Key>
+          <Property Name="RiskProfileID" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ClientID" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CapitalLossAttitude" Type="nvarchar(max)" />
+          <Property Name="Comments" Type="nvarchar(max)" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="DateModified" Type="datetime" />
+          <Property Name="IncomeSource" Type="nvarchar(max)" />
+          <Property Name="InvestmentKnowledge" Type="nvarchar(max)" />
+          <Property Name="InvestmentObjective1" Type="nvarchar(max)" />
+          <Property Name="InvestmentObjective2" Type="nvarchar(max)" />
+          <Property Name="InvestmentObjective3" Type="nvarchar(max)" />
+          <Property Name="InvestmentProfile" Type="nvarchar(max)" />
+          <Property Name="InvestmentTimeHorizon" Type="int" />
+          <Property Name="LongTermGoal1" Type="nvarchar(max)" />
+          <Property Name="LongTermGoal2" Type="nvarchar(max)" />
+          <Property Name="LongTermGoal3" Type="nvarchar(max)" />
+          <Property Name="MedTermGoal1" Type="nvarchar(max)" />
+          <Property Name="MedTermGoal2" Type="nvarchar(max)" />
+          <Property Name="MedTermGoal3" Type="nvarchar(max)" />
+          <Property Name="RetirementAge" Type="int" />
+          <Property Name="RetirementIncome" Type="float" />
+          <Property Name="RiskAttitude" Type="nvarchar(max)" />
+          <Property Name="ShortTermAssetPercent" Type="float" />
+          <Property Name="ShortTermEquityPercent" Type="float" />
+          <Property Name="ShortTermGoal1" Type="nvarchar(max)" />
+          <Property Name="ShortTermGoal2" Type="nvarchar(max)" />
+          <Property Name="ShortTermGoal3" Type="nvarchar(max)" />
+          <Property Name="ShortTermTrading" Type="nvarchar(max)" />
+          <Property Name="riskLevel" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Sectors">
           <Key>
             <PropertyRef Name="Id" />
@@ -567,6 +612,19 @@
           <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="SectorName" Type="nvarchar(max)" Nullable="false" />
           <Property Name="SectorGroup" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="TemplateDetailsItemParameters">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="EquityId" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ItemName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="MarketValue" Type="float" />
+          <Property Name="CurrentValue" Type="float" />
+          <Property Name="CurrentWeighting" Type="float" />
+          <Property Name="Model_ModelId" Type="nvarchar" MaxLength="128" />
+          <Property Name="identityMetaKey" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="TransactionExpenses">
           <Key>
@@ -1053,6 +1111,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_dbo_RebalanceModels_dbo_Advisers_AdviserId">
+          <End Role="Advisers" Type="Self.Advisers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="RebalanceModels" Type="Self.RebalanceModels" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Advisers">
+              <PropertyRef Name="AdviserId" />
+            </Principal>
+            <Dependent Role="RebalanceModels">
+              <PropertyRef Name="Adviser_AdviserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_RebalanceModels_dbo_ClientGroups_ClientGroup_ClientGroupId">
+          <End Role="ClientGroups" Type="Self.ClientGroups" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="RebalanceModels" Type="Self.RebalanceModels" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientGroups">
+              <PropertyRef Name="ClientGroupId" />
+            </Principal>
+            <Dependent Role="RebalanceModels">
+              <PropertyRef Name="ClientGroup_ClientGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_Rentals_dbo_Accounts_Account_AccountId">
           <End Role="Accounts" Type="Self.Accounts" Multiplicity="0..1" />
           <End Role="Rentals" Type="Self.Rentals" Multiplicity="*" />
@@ -1127,6 +1213,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_dbo_TemplateDetailsItemParameters_dbo_RebalanceModels_Model_ModelId">
+          <End Role="RebalanceModels" Type="Self.RebalanceModels" Multiplicity="0..1" />
+          <End Role="TemplateDetailsItemParameters" Type="Self.TemplateDetailsItemParameters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RebalanceModels">
+              <PropertyRef Name="ModelId" />
+            </Principal>
+            <Dependent Role="TemplateDetailsItemParameters">
+              <PropertyRef Name="Model_ModelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_TemplateDetailsItemParameters_dbo_RebalanceModels_ModelId">
+          <End Role="RebalanceModels" Type="Self.RebalanceModels" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TemplateDetailsItemParameters" Type="Self.TemplateDetailsItemParameters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RebalanceModels">
+              <PropertyRef Name="ModelId" />
+            </Principal>
+            <Dependent Role="TemplateDetailsItemParameters">
+              <PropertyRef Name="Model_ModelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_TransactionExpenses_dbo_Advisers_AdviserId">
           <End Role="Advisers" Type="Self.Advisers" Multiplicity="0..1" />
           <End Role="TransactionExpenses" Type="Self.TransactionExpenses" Multiplicity="*" />
@@ -1175,11 +1287,14 @@
           <EntitySet Name="Properties" EntityType="Self.Properties" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PropertyTransactions" EntityType="Self.PropertyTransactions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PropertyTypes" EntityType="Self.PropertyTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RebalanceModels" EntityType="Self.RebalanceModels" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rentals" EntityType="Self.Rentals" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RepaymentRecords" EntityType="Self.RepaymentRecords" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResearchValues" EntityType="Self.ResearchValues" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResourcesReferences" EntityType="Self.ResourcesReferences" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RiskProfiles" EntityType="Self.RiskProfiles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sectors" EntityType="Self.Sectors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TemplateDetailsItemParameters" EntityType="Self.TemplateDetailsItemParameters" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransactionExpenses" EntityType="Self.TransactionExpenses" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_dbo_Accounts_dbo_ClientGroups_ClientGroup_ClientGroupId" Association="Self.FK_dbo_Accounts_dbo_ClientGroups_ClientGroup_ClientGroupId">
             <End Role="ClientGroups" EntitySet="ClientGroups" />
@@ -1325,6 +1440,14 @@
             <End Role="Properties" EntitySet="Properties" />
             <End Role="PropertyTransactions" EntitySet="PropertyTransactions" />
           </AssociationSet>
+          <AssociationSet Name="FK_dbo_RebalanceModels_dbo_Advisers_AdviserId" Association="Self.FK_dbo_RebalanceModels_dbo_Advisers_AdviserId">
+            <End Role="Advisers" EntitySet="Advisers" />
+            <End Role="RebalanceModels" EntitySet="RebalanceModels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_RebalanceModels_dbo_ClientGroups_ClientGroup_ClientGroupId" Association="Self.FK_dbo_RebalanceModels_dbo_ClientGroups_ClientGroup_ClientGroupId">
+            <End Role="ClientGroups" EntitySet="ClientGroups" />
+            <End Role="RebalanceModels" EntitySet="RebalanceModels" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_Rentals_dbo_Accounts_Account_AccountId" Association="Self.FK_dbo_Rentals_dbo_Accounts_Account_AccountId">
             <End Role="Accounts" EntitySet="Accounts" />
             <End Role="Rentals" EntitySet="Rentals" />
@@ -1348,6 +1471,14 @@
           <AssociationSet Name="FK_dbo_ResearchValues_dbo_Properties_Property_PropertyId" Association="Self.FK_dbo_ResearchValues_dbo_Properties_Property_PropertyId">
             <End Role="Properties" EntitySet="Properties" />
             <End Role="ResearchValues" EntitySet="ResearchValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TemplateDetailsItemParameters_dbo_RebalanceModels_Model_ModelId" Association="Self.FK_dbo_TemplateDetailsItemParameters_dbo_RebalanceModels_Model_ModelId">
+            <End Role="RebalanceModels" EntitySet="RebalanceModels" />
+            <End Role="TemplateDetailsItemParameters" EntitySet="TemplateDetailsItemParameters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TemplateDetailsItemParameters_dbo_RebalanceModels_ModelId" Association="Self.FK_dbo_TemplateDetailsItemParameters_dbo_RebalanceModels_ModelId">
+            <End Role="RebalanceModels" EntitySet="RebalanceModels" />
+            <End Role="TemplateDetailsItemParameters" EntitySet="TemplateDetailsItemParameters" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_TransactionExpenses_dbo_Advisers_AdviserId" Association="Self.FK_dbo_TransactionExpenses_dbo_Advisers_AdviserId">
             <End Role="Advisers" EntitySet="Advisers" />
@@ -1476,6 +1607,7 @@
           <Property Name="TotalAssetLevel" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ClientGroups" Relationship="Self.FK_dbo_ClientGroups_dbo_Advisers_Adviser_AdviserId" FromRole="Advisers" ToRole="ClientGroups" />
           <NavigationProperty Name="ConsultancyExpenses" Relationship="Self.FK_dbo_ConsultancyExpenses_dbo_Advisers_AdviserId" FromRole="Advisers" ToRole="ConsultancyExpenses" />
+          <NavigationProperty Name="RebalanceModels" Relationship="Self.FK_dbo_RebalanceModels_dbo_Advisers_AdviserId" FromRole="Advisers" ToRole="RebalanceModels" />
           <NavigationProperty Name="TransactionExpenses" Relationship="Self.FK_dbo_TransactionExpenses_dbo_Advisers_AdviserId" FromRole="Advisers" ToRole="TransactionExpenses" />
         </EntityType>
         <EntityType Name="AspNetRole">
@@ -1534,8 +1666,8 @@
           <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Price" Type="Double" Nullable="false" />
           <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CorrespondingAssetKey" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="AssetType" Type="Int32" Nullable="false" />
-          <Property Name="CorrespondingAssetKey" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Bond_BondId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Property_PropertyId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Equity_AssetId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
@@ -1642,11 +1774,12 @@
           <Property Name="MainClientId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="GroupNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="GroupName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="GroupAlias" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Adviser_AdviserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="GroupAmount" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Accounts" Relationship="Self.FK_dbo_Accounts_dbo_ClientGroups_ClientGroup_ClientGroupId" FromRole="ClientGroups" ToRole="Accounts" />
           <NavigationProperty Name="Adviser" Relationship="Self.FK_dbo_ClientGroups_dbo_Advisers_Adviser_AdviserId" FromRole="ClientGroups" ToRole="Advisers" />
           <NavigationProperty Name="Clients" Relationship="Self.FK_dbo_Clients_dbo_ClientGroups_ClientGroupId" FromRole="ClientGroups" ToRole="Clients" />
+          <NavigationProperty Name="RebalanceModels" Relationship="Self.FK_dbo_RebalanceModels_dbo_ClientGroups_ClientGroup_ClientGroupId" FromRole="ClientGroups" ToRole="RebalanceModels" />
         </EntityType>
         <EntityType Name="Client">
           <Key>
@@ -1880,10 +2013,10 @@
           <Property Name="NoteSerial" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="FollowupActions" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DateDue" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="FollowupDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateDue" Type="DateTime" Precision="3" />
+          <Property Name="FollowupDate" Type="DateTime" Precision="3" />
           <Property Name="DateCompleted" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ReminderDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ReminderDate" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Reminder" Type="Boolean" Nullable="false" />
           <Property Name="IsAccepted" Type="Boolean" Nullable="false" />
@@ -1936,6 +2069,20 @@
           <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="TypeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
         </EntityType>
+        <EntityType Name="RebalanceModel">
+          <Key>
+            <PropertyRef Name="ModelId" />
+          </Key>
+          <Property Name="ModelId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ModelName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Adviser_AdviserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProfileId" Type="Int32" Nullable="false" />
+          <Property Name="ClientGroup_ClientGroupId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Adviser" Relationship="Self.FK_dbo_RebalanceModels_dbo_Advisers_AdviserId" FromRole="RebalanceModels" ToRole="Advisers" />
+          <NavigationProperty Name="ClientGroup" Relationship="Self.FK_dbo_RebalanceModels_dbo_ClientGroups_ClientGroup_ClientGroupId" FromRole="RebalanceModels" ToRole="ClientGroups" />
+          <NavigationProperty Name="TemplateDetailsItemParameters" Relationship="Self.FK_dbo_TemplateDetailsItemParameters_dbo_RebalanceModels_Model_ModelId" FromRole="RebalanceModels" ToRole="TemplateDetailsItemParameters" />
+          <NavigationProperty Name="TemplateDetailsItemParameters1" Relationship="Self.FK_dbo_TemplateDetailsItemParameters_dbo_RebalanceModels_ModelId" FromRole="RebalanceModels" ToRole="TemplateDetailsItemParameters" />
+        </EntityType>
         <EntityType Name="Rental">
           <Key>
             <PropertyRef Name="Id" />
@@ -1969,12 +2116,13 @@
           </Key>
           <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Key" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Value" Type="Double" Nullable="false" />
+          <Property Name="Value" Type="Double" />
           <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Issuer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Bond_BondId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Property_PropertyId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Equity_AssetId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="StringValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Bond" Relationship="Self.FK_dbo_ResearchValues_dbo_Bonds_Bond_BondId" FromRole="ResearchValues" ToRole="Bonds" />
           <NavigationProperty Name="Equity" Relationship="Self.FK_dbo_ResearchValues_dbo_Equities_Equity_AssetId" FromRole="ResearchValues" ToRole="Equities" />
           <NavigationProperty Name="Property" Relationship="Self.FK_dbo_ResearchValues_dbo_Properties_Property_PropertyId" FromRole="ResearchValues" ToRole="Properties" />
@@ -1989,6 +2137,40 @@
           <Property Name="ResourceUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UserId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="RiskProfile">
+          <Key>
+            <PropertyRef Name="RiskProfileID" />
+          </Key>
+          <Property Name="RiskProfileID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ClientID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CapitalLossAttitude" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Precision="3" />
+          <Property Name="IncomeSource" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InvestmentKnowledge" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InvestmentObjective1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InvestmentObjective2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InvestmentObjective3" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InvestmentProfile" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InvestmentTimeHorizon" Type="Int32" />
+          <Property Name="LongTermGoal1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LongTermGoal2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LongTermGoal3" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MedTermGoal1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MedTermGoal2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MedTermGoal3" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RetirementAge" Type="Int32" />
+          <Property Name="RetirementIncome" Type="Double" />
+          <Property Name="RiskAttitude" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShortTermAssetPercent" Type="Double" />
+          <Property Name="ShortTermEquityPercent" Type="Double" />
+          <Property Name="ShortTermGoal1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShortTermGoal2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShortTermGoal3" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShortTermTrading" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="riskLevel" Type="Int32" Nullable="false" />
+        </EntityType>
         <EntityType Name="Sector">
           <Key>
             <PropertyRef Name="Id" />
@@ -1996,6 +2178,21 @@
           <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="SectorName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="SectorGroup" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TemplateDetailsItemParameter">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EquityId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ItemName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MarketValue" Type="Double" />
+          <Property Name="CurrentValue" Type="Double" />
+          <Property Name="CurrentWeighting" Type="Double" />
+          <Property Name="Model_ModelId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="identityMetaKey" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="RebalanceModel" Relationship="Self.FK_dbo_TemplateDetailsItemParameters_dbo_RebalanceModels_Model_ModelId" FromRole="TemplateDetailsItemParameters" ToRole="RebalanceModels" />
+          <NavigationProperty Name="RebalanceModel1" Relationship="Self.FK_dbo_TemplateDetailsItemParameters_dbo_RebalanceModels_ModelId" FromRole="TemplateDetailsItemParameters" ToRole="RebalanceModels" />
         </EntityType>
         <EntityType Name="TransactionExpens">
           <Key>
@@ -2225,6 +2422,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_dbo_RebalanceModels_dbo_Advisers_AdviserId">
+          <End Role="Advisers" Type="Self.Adviser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="RebalanceModels" Type="Self.RebalanceModel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Advisers">
+              <PropertyRef Name="AdviserId" />
+            </Principal>
+            <Dependent Role="RebalanceModels">
+              <PropertyRef Name="Adviser_AdviserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_TransactionExpenses_dbo_Advisers_AdviserId">
           <End Role="Advisers" Type="Self.Adviser" Multiplicity="0..1" />
           <End Role="TransactionExpenses" Type="Self.TransactionExpens" Multiplicity="*" />
@@ -2397,6 +2608,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_dbo_RebalanceModels_dbo_ClientGroups_ClientGroup_ClientGroupId">
+          <End Role="ClientGroups" Type="Self.ClientGroup" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="RebalanceModels" Type="Self.RebalanceModel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientGroups">
+              <PropertyRef Name="ClientGroupId" />
+            </Principal>
+            <Dependent Role="RebalanceModels">
+              <PropertyRef Name="ClientGroup_ClientGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_Notes_dbo_Clients_ClientId">
           <End Role="Clients" Type="Self.Client" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -2541,6 +2766,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_dbo_TemplateDetailsItemParameters_dbo_RebalanceModels_Model_ModelId">
+          <End Role="RebalanceModels" Type="Self.RebalanceModel" Multiplicity="0..1" />
+          <End Role="TemplateDetailsItemParameters" Type="Self.TemplateDetailsItemParameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RebalanceModels">
+              <PropertyRef Name="ModelId" />
+            </Principal>
+            <Dependent Role="TemplateDetailsItemParameters">
+              <PropertyRef Name="Model_ModelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_TemplateDetailsItemParameters_dbo_RebalanceModels_ModelId">
+          <End Role="RebalanceModels" Type="Self.RebalanceModel" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TemplateDetailsItemParameters" Type="Self.TemplateDetailsItemParameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RebalanceModels">
+              <PropertyRef Name="ModelId" />
+            </Principal>
+            <Dependent Role="TemplateDetailsItemParameters">
+              <PropertyRef Name="Model_ModelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="AspNetUserRoles">
           <End Role="AspNetRoles" Type="Self.AspNetRole" Multiplicity="*" />
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="*" />
@@ -2580,11 +2831,14 @@
           <EntitySet Name="Properties" EntityType="Self.Property" />
           <EntitySet Name="PropertyTransactions" EntityType="Self.PropertyTransaction" />
           <EntitySet Name="PropertyTypes" EntityType="Self.PropertyType" />
+          <EntitySet Name="RebalanceModels" EntityType="Self.RebalanceModel" />
           <EntitySet Name="Rentals" EntityType="Self.Rental" />
           <EntitySet Name="RepaymentRecords" EntityType="Self.RepaymentRecord" />
           <EntitySet Name="ResearchValues" EntityType="Self.ResearchValue" />
           <EntitySet Name="ResourcesReferences" EntityType="Self.ResourcesReference" />
+          <EntitySet Name="RiskProfiles" EntityType="Self.RiskProfile" />
           <EntitySet Name="Sectors" EntityType="Self.Sector" />
+          <EntitySet Name="TemplateDetailsItemParameters" EntityType="Self.TemplateDetailsItemParameter" />
           <EntitySet Name="TransactionExpenses" EntityType="Self.TransactionExpens" />
           <AssociationSet Name="FK_dbo_Accounts_dbo_ClientGroups_ClientGroup_ClientGroupId" Association="Self.FK_dbo_Accounts_dbo_ClientGroups_ClientGroup_ClientGroupId">
             <End Role="ClientGroups" EntitySet="ClientGroups" />
@@ -2654,6 +2908,10 @@
             <End Role="Advisers" EntitySet="Advisers" />
             <End Role="ConsultancyExpenses" EntitySet="ConsultancyExpenses" />
           </AssociationSet>
+          <AssociationSet Name="FK_dbo_RebalanceModels_dbo_Advisers_AdviserId" Association="Self.FK_dbo_RebalanceModels_dbo_Advisers_AdviserId">
+            <End Role="Advisers" EntitySet="Advisers" />
+            <End Role="RebalanceModels" EntitySet="RebalanceModels" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_TransactionExpenses_dbo_Advisers_AdviserId" Association="Self.FK_dbo_TransactionExpenses_dbo_Advisers_AdviserId">
             <End Role="Advisers" EntitySet="Advisers" />
             <End Role="TransactionExpenses" EntitySet="TransactionExpenses" />
@@ -2706,6 +2964,10 @@
             <End Role="ClientGroups" EntitySet="ClientGroups" />
             <End Role="Clients" EntitySet="Clients" />
           </AssociationSet>
+          <AssociationSet Name="FK_dbo_RebalanceModels_dbo_ClientGroups_ClientGroup_ClientGroupId" Association="Self.FK_dbo_RebalanceModels_dbo_ClientGroups_ClientGroup_ClientGroupId">
+            <End Role="ClientGroups" EntitySet="ClientGroups" />
+            <End Role="RebalanceModels" EntitySet="RebalanceModels" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_Notes_dbo_Clients_ClientId" Association="Self.FK_dbo_Notes_dbo_Clients_ClientId">
             <End Role="Clients" EntitySet="Clients" />
             <End Role="Notes" EntitySet="Notes" />
@@ -2749,6 +3011,14 @@
           <AssociationSet Name="FK_dbo_ResearchValues_dbo_Properties_Property_PropertyId" Association="Self.FK_dbo_ResearchValues_dbo_Properties_Property_PropertyId">
             <End Role="Properties" EntitySet="Properties" />
             <End Role="ResearchValues" EntitySet="ResearchValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TemplateDetailsItemParameters_dbo_RebalanceModels_Model_ModelId" Association="Self.FK_dbo_TemplateDetailsItemParameters_dbo_RebalanceModels_Model_ModelId">
+            <End Role="RebalanceModels" EntitySet="RebalanceModels" />
+            <End Role="TemplateDetailsItemParameters" EntitySet="TemplateDetailsItemParameters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TemplateDetailsItemParameters_dbo_RebalanceModels_ModelId" Association="Self.FK_dbo_TemplateDetailsItemParameters_dbo_RebalanceModels_ModelId">
+            <End Role="RebalanceModels" EntitySet="RebalanceModels" />
+            <End Role="TemplateDetailsItemParameters" EntitySet="TemplateDetailsItemParameters" />
           </AssociationSet>
           <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
@@ -2915,8 +3185,8 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="AssetType" ColumnName="AssetType" />
                 <ScalarProperty Name="CorrespondingAssetKey" ColumnName="CorrespondingAssetKey" />
+                <ScalarProperty Name="AssetType" ColumnName="AssetType" />
                 <ScalarProperty Name="Bond_BondId" ColumnName="Bond_BondId" />
                 <ScalarProperty Name="Property_PropertyId" ColumnName="Property_PropertyId" />
                 <ScalarProperty Name="Equity_AssetId" ColumnName="Equity_AssetId" />
@@ -3017,8 +3287,8 @@
                 <ScalarProperty Name="MainClientId" ColumnName="MainClientId" />
                 <ScalarProperty Name="GroupNumber" ColumnName="GroupNumber" />
                 <ScalarProperty Name="GroupName" ColumnName="GroupName" />
-                <ScalarProperty Name="GroupAlias" ColumnName="GroupAlias" />
                 <ScalarProperty Name="Adviser_AdviserId" ColumnName="Adviser_AdviserId" />
+                <ScalarProperty Name="GroupAmount" ColumnName="GroupAmount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3292,6 +3562,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="RebalanceModels">
+            <EntityTypeMapping TypeName="edisDbModel.RebalanceModel">
+              <MappingFragment StoreEntitySet="RebalanceModels">
+                <ScalarProperty Name="ModelId" ColumnName="ModelId" />
+                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
+                <ScalarProperty Name="Adviser_AdviserId" ColumnName="Adviser_AdviserId" />
+                <ScalarProperty Name="ProfileId" ColumnName="ProfileId" />
+                <ScalarProperty Name="ClientGroup_ClientGroupId" ColumnName="ClientGroup_ClientGroupId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Rentals">
             <EntityTypeMapping TypeName="edisDbModel.Rental">
               <MappingFragment StoreEntitySet="Rentals">
@@ -3329,6 +3610,7 @@
                 <ScalarProperty Name="Bond_BondId" ColumnName="Bond_BondId" />
                 <ScalarProperty Name="Property_PropertyId" ColumnName="Property_PropertyId" />
                 <ScalarProperty Name="Equity_AssetId" ColumnName="Equity_AssetId" />
+                <ScalarProperty Name="StringValue" ColumnName="StringValue" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3343,12 +3625,61 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="RiskProfiles">
+            <EntityTypeMapping TypeName="edisDbModel.RiskProfile">
+              <MappingFragment StoreEntitySet="RiskProfiles">
+                <ScalarProperty Name="RiskProfileID" ColumnName="RiskProfileID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="CapitalLossAttitude" ColumnName="CapitalLossAttitude" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="IncomeSource" ColumnName="IncomeSource" />
+                <ScalarProperty Name="InvestmentKnowledge" ColumnName="InvestmentKnowledge" />
+                <ScalarProperty Name="InvestmentObjective1" ColumnName="InvestmentObjective1" />
+                <ScalarProperty Name="InvestmentObjective2" ColumnName="InvestmentObjective2" />
+                <ScalarProperty Name="InvestmentObjective3" ColumnName="InvestmentObjective3" />
+                <ScalarProperty Name="InvestmentProfile" ColumnName="InvestmentProfile" />
+                <ScalarProperty Name="InvestmentTimeHorizon" ColumnName="InvestmentTimeHorizon" />
+                <ScalarProperty Name="LongTermGoal1" ColumnName="LongTermGoal1" />
+                <ScalarProperty Name="LongTermGoal2" ColumnName="LongTermGoal2" />
+                <ScalarProperty Name="LongTermGoal3" ColumnName="LongTermGoal3" />
+                <ScalarProperty Name="MedTermGoal1" ColumnName="MedTermGoal1" />
+                <ScalarProperty Name="MedTermGoal2" ColumnName="MedTermGoal2" />
+                <ScalarProperty Name="MedTermGoal3" ColumnName="MedTermGoal3" />
+                <ScalarProperty Name="RetirementAge" ColumnName="RetirementAge" />
+                <ScalarProperty Name="RetirementIncome" ColumnName="RetirementIncome" />
+                <ScalarProperty Name="RiskAttitude" ColumnName="RiskAttitude" />
+                <ScalarProperty Name="ShortTermAssetPercent" ColumnName="ShortTermAssetPercent" />
+                <ScalarProperty Name="ShortTermEquityPercent" ColumnName="ShortTermEquityPercent" />
+                <ScalarProperty Name="ShortTermGoal1" ColumnName="ShortTermGoal1" />
+                <ScalarProperty Name="ShortTermGoal2" ColumnName="ShortTermGoal2" />
+                <ScalarProperty Name="ShortTermGoal3" ColumnName="ShortTermGoal3" />
+                <ScalarProperty Name="ShortTermTrading" ColumnName="ShortTermTrading" />
+                <ScalarProperty Name="riskLevel" ColumnName="riskLevel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Sectors">
             <EntityTypeMapping TypeName="edisDbModel.Sector">
               <MappingFragment StoreEntitySet="Sectors">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="SectorName" ColumnName="SectorName" />
                 <ScalarProperty Name="SectorGroup" ColumnName="SectorGroup" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TemplateDetailsItemParameters">
+            <EntityTypeMapping TypeName="edisDbModel.TemplateDetailsItemParameter">
+              <MappingFragment StoreEntitySet="TemplateDetailsItemParameters">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EquityId" ColumnName="EquityId" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="MarketValue" ColumnName="MarketValue" />
+                <ScalarProperty Name="CurrentValue" ColumnName="CurrentValue" />
+                <ScalarProperty Name="CurrentWeighting" ColumnName="CurrentWeighting" />
+                <ScalarProperty Name="Model_ModelId" ColumnName="Model_ModelId" />
+                <ScalarProperty Name="identityMetaKey" ColumnName="identityMetaKey" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -22,11 +22,11 @@ namespace EDISAngular.APIControllers
     public class RebalanceController : ApiController
     {
         private EdisRepository edisRepo;
-        private RebalanceRepository rebRepo;
+        //private RebalanceRepository rebRepo;
 
         public RebalanceController()
         {
-            rebRepo = new RebalanceRepository();
+            //rebRepo = new RebalanceRepository();
             edisRepo = new EdisRepository();
         }
 
@@ -59,11 +59,11 @@ namespace EDISAngular.APIControllers
             //return rebRepo.GetAllModelsForAdviser(User.Identity.GetUserId());
         }
 
-        [HttpGet, Route("api/client/models")]
-        public List<RebalanceModel> GetAllModelsForClient()
-        {
-            return rebRepo.GetAllModelsForClient(User.Identity.GetUserId());
-        }
+        //[HttpGet, Route("api/client/models")]
+        //public List<RebalanceModel> GetAllModelsForClient()
+        //{
+        //    return rebRepo.GetAllModelsForClient(User.Identity.GetUserId());
+        //}
 
         [HttpGet, Route("api/adviser/model")]
         public RebalanceModel GetModelForId(string modelId)

@@ -12,30 +12,26 @@ namespace EDISAngular.Infrastructure.DbFirst
     using System;
     using System.Collections.Generic;
     
-    public partial class ClientGroup
+    public partial class RebalanceModel
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ClientGroup()
+        public RebalanceModel()
         {
-            this.Accounts = new HashSet<Account>();
-            this.Clients = new HashSet<Client>();
-            this.RebalanceModels = new HashSet<RebalanceModel>();
+            this.TemplateDetailsItemParameters = new HashSet<TemplateDetailsItemParameter>();
+            this.TemplateDetailsItemParameters1 = new HashSet<TemplateDetailsItemParameter>();
         }
     
-        public string ClientGroupId { get; set; }
-        public System.DateTime CreatedOn { get; set; }
-        public string MainClientId { get; set; }
-        public string GroupNumber { get; set; }
-        public string GroupName { get; set; }
+        public string ModelId { get; set; }
+        public string ModelName { get; set; }
         public string Adviser_AdviserId { get; set; }
-        public string GroupAmount { get; set; }
+        public int ProfileId { get; set; }
+        public string ClientGroup_ClientGroupId { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Account> Accounts { get; set; }
         public virtual Adviser Adviser { get; set; }
+        public virtual ClientGroup ClientGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Client> Clients { get; set; }
+        public virtual ICollection<TemplateDetailsItemParameter> TemplateDetailsItemParameters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RebalanceModel> RebalanceModels { get; set; }
+        public virtual ICollection<TemplateDetailsItemParameter> TemplateDetailsItemParameters1 { get; set; }
     }
 }

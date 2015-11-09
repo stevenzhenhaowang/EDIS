@@ -79,6 +79,17 @@
     <Compile Include="Liabilities\MarginLendingTransaction.cs" />
     <Compile Include="Liabilities\MortgageHomeLoanTransaction.cs" />
     <Compile Include="Markers\IAsset.cs" />
+    <Compile Include="Migrations\201510230358287_add_cliengGroupId.Designer.cs" />
+    <Compile Include="Migrations\201510230431096_23.cs" />
+    <Compile Include="Migrations\201511090026009_groupamount.cs" />
+    <Compile Include="Migrations\201511090026009_groupamount.Designer.cs">
+      <DependentUpon>201511090026009_groupamount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511090334255_changeType.cs" />
+    <Compile Include="Migrations\201511090334255_changeType.Designer.cs">
+      <DependentUpon>201511090334255_changeType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NoteLinks.cs" />
     <Compile Include="Notes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -106,6 +117,14 @@
       <Project>{e5bc73b2-7418-4fee-a5b9-a268e9501523}</Project>
       <Name>Shared</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201511090026009_groupamount.resx">
+      <DependentUpon>201511090026009_groupamount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511090334255_changeType.resx">
+      <DependentUpon>201511090334255_changeType.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

@@ -24,6 +24,7 @@ using SqlRepository;
 using System.Web;
 using Domain.Portfolio.EdisDatabase;
 using Shared;
+using RiskProfile = Domain.Portfolio.EdisDatabase.RiskProfile;
 
 namespace EDISAngular.APIControllers
 {
