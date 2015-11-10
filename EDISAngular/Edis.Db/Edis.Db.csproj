@@ -80,15 +80,9 @@
     <Compile Include="Liabilities\MarginLendingTransaction.cs" />
     <Compile Include="Liabilities\MortgageHomeLoanTransaction.cs" />
     <Compile Include="Markers\IAsset.cs" />
-    <Compile Include="Migrations\201510230358287_add_cliengGroupId.Designer.cs" />
-    <Compile Include="Migrations\201510230431096_23.cs" />
-    <Compile Include="Migrations\201511090026009_groupamount.cs" />
-    <Compile Include="Migrations\201511090026009_groupamount.Designer.cs">
-      <DependentUpon>201511090026009_groupamount.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511090334255_changeType.cs" />
-    <Compile Include="Migrations\201511090334255_changeType.Designer.cs">
-      <DependentUpon>201511090334255_changeType.cs</DependentUpon>
+    <Compile Include="Migrations\201511100230122_itsanewdayitsanewlife.cs" />
+    <Compile Include="Migrations\201511100230122_itsanewdayitsanewlife.Designer.cs">
+      <DependentUpon>201511100230122_itsanewdayitsanewlife.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201511100242368_new.cs" />
     <Compile Include="Migrations\201511100242368_new.Designer.cs">
@@ -124,11 +118,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201511090026009_groupamount.resx">
-      <DependentUpon>201511090026009_groupamount.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511090334255_changeType.resx">
-      <DependentUpon>201511090334255_changeType.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201511100230122_itsanewdayitsanewlife.resx">
+      <DependentUpon>201511100230122_itsanewdayitsanewlife.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201511100242368_new.resx">
       <DependentUpon>201511100242368_new.cs</DependentUpon>

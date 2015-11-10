@@ -66,7 +66,7 @@ namespace Edis.Db
 
 
         public EdisContext()
-            : base("EDIS")
+            : base("name=EDIS")
         {            
         }
 

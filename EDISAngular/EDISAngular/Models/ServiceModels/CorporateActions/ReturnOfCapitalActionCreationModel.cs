@@ -8,7 +8,7 @@ namespace EDISAngular.Models.ServiceModels.CorporateActions
 {
     public class ReturnOfCapitalActionCreationModel
     {
-        public string actionId { get; set; }
+      // public string actionId { get; set; }
         
         public string actionName { get; set; }
         [Required]
