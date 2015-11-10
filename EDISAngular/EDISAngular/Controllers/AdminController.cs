@@ -28,7 +28,7 @@ namespace EDISAngular.Controllers
         private edisDbEntities db;
         private EdisRepository edisRepo;
 
-        private ApplicationSignInManager _signInManager;
+        //private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
         public AdminController()

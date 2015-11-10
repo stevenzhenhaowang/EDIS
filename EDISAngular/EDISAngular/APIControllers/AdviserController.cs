@@ -349,7 +349,7 @@ namespace EDISAngular.APIControllers
 
             return model;
 
-            return advisorRepo.GetInsuranceStatisticsData(User.Identity.GetUserId());
+            //return advisorRepo.GetInsuranceStatisticsData(User.Identity.GetUserId());
         }
 
 

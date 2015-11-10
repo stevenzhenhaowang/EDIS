@@ -11,11 +11,25 @@ namespace EDISAngular.Models.ServiceModels.CorporateActions
         [Required]
         public string actionName { get; set; }
         [Required]
-        public string actionCode { get; set; }
+        public string Ticker { get; set; }
         [Required]
         public string reinvestmentShareAmount { get; set; }
         [Required]
         [DataType(DataType.Date)]
         public DateTime? reinvestmentDate { get; set; }
+
+
+        public List<ReinvestmentPlanParticipants> Participants { get; set; }
+        
+
+
+    }
+
+
+
+    public class ReinvestmentPlanParticipants {
+        public string AccountNumber { get; set; }
+
+
     }
 }

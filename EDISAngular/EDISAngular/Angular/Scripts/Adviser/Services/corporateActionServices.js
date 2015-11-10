@@ -40,6 +40,18 @@
 
         },
 
+
+        addnewReinvestmentAction: function (data) {
+            $http.post(AppStrings.EDIS_IP + "api/Adviser/CorprateAction/newReinvestment", data).success(function () {
+                alert("success");
+            }).error(function (data) {
+                alert("failed:" + data);
+            })
+        },
+
+
+
+
         //  $http.post(AppStrings.EDIS_IP + "api/Personclient/Create", data).success(function () {
                 //    alert("success");
                 //}).error(function (data) {

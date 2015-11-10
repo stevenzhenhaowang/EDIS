@@ -1194,11 +1194,11 @@
                     <div class="error" ng-show="newReturnOfCapital.actionName.$error.required&&newReturnOfCapital.actionName.$touched">Please enter corporate action name</div>
                 </div>
                 <div class="col-md-6 form-group">
-                    <label>
-                        Equity ID
-                    </label>
-                    <input class="form-control" name="equityId" ng-model="equityId" required />
-                    <div class="error" ng-show="newReturnOfCapital.equityId.$error.required&&newReturnOfCapital.equityId.$touched">Please enter the related equityId</div>
+                    <label>Ticker</label>
+                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerName for item in allTickers">
+                        <option value="">Please select.....</option>
+                    </select>
+                    <div class="error" ng-show="newReturnOfCapital.ticker.$error.required&&newReturnOfCapital.ticker.$touched">Please select ticker</div>
                 </div>
             </div>
             <div class="row">
@@ -1206,8 +1206,9 @@
                     <label>
                         Share Amount
                     </label>
-                    <input class="form-control" name="shareAmount" ng-model="shareAmount" required />
+                    <input class="form-control" type="number" name="shareAmount" ng-model="shareAmount" required  />
                     <div class="error" ng-show="newReturnOfCapital.shareAmount.$error.required&&newReturnOfCapital.shareAmount.$touched">Please enter the share amount</div>
+                    <div class="error" ng-show="newReturnOfCapital.shareAmount.$error.number&&newReturnOfCapital.shareAmount.$touched">Please enter the share amount</div>
                 </div>
 
 
@@ -1286,11 +1287,11 @@
                     <div class="error" ng-show="newReinvestmentAction.actionName.$error.required&&newReinvestmentAction.actionName.$touched">Please enter corporate action name</div>
                 </div>
                 <div class="col-md-6 form-group">
-                    <label>
-                        Equity ID
-                    </label>
-                    <input class="form-control" name="euqityId" ng-model="euqityId" required />
-                    <div class="error" ng-show="newReinvestmentAction.euqityId.$error.required&&newReinvestmentAction.euqityId.$touched">Please enter the related euqity ID</div>
+                    <label>Ticker</label>
+                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerName for item in allTickers">
+                        <option value="">Please select.....</option>
+                    </select>
+                    <div class="error" ng-show="newReinvestmentAction.ticker.$error.required&&newReinvestmentAction.ticker.$touched">Please select ticker</div>
                 </div>
             </div>
             <div class="row">
@@ -1307,7 +1308,7 @@
                     <div class="error" ng-show="newReinvestmentAction.reinvestmentDate.$error.required&&newReinvestmentAction.reinvestmentDate.$touched">Please enter record date</div>
                 </div>
             </div>
-    
+
             <div class="row">
                 <div class="col-md-12 parameters-view" style="overflow:auto">
                     <table class="table table-bordered table-hover">
@@ -1325,26 +1326,28 @@
                                 <td>{{item.edisAccountNumber}}</td>
                                 <td>{{item.type}}</td>
                                 <td>{{item.name}}</td>
-                           <!--     <td style="display:inline-block;width:150px;height:100%">
+                                <!--
+                                <td style="display:inline-block;width:150px;height:100%">
                                     <div ng-if="item.selected">
                                         <input type="number" class="form-control" min="0" name="invested_{{$index}}" ng-model="item.investedAmount" required />
                                         <span class="error" ng-show="newReinvestmentAction.invested_{{$index}}.$error.required&&newReinvestmentAction.invested_{{$index}}.$touched">Please enter invested amount</span>
                                         <span class="error" ng-show="newReinvestmentAction.invested_{{$index}}.$error.number&&newReinvestmentAction.invested_{{$index}}.$touched">Please enter numeric value</span>
                                         <span class="error" ng-show="newReinvestmentAction.invested_{{$index}}.$error.min&&newReinvestmentAction.invested_{{$index}}.$touched">minimum input is 0</span>
                                     </div>
-                                    <div ng-if="!item.selected">
+                                    <!-- <div ng-if="!item.selected">
 
-                                    </div>
+                                 </div>
                                 </td>-->
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-          
+
             <div class="row">
                 <div class="col-md-12 text-right">
-                    <button class="btn btn-success" ng-click="add()" ng-disabled="!newReinvestmentAction.$valid||!hasClientsSelected()">Save</button>
+                    <button class="btn btn-success" ng-click="add()" ng-disabled="!newReinvestmentAction.$valid">Save</button>
+                    <!--!newReinvestmentAction.$valid||!hasClientsSelected()-->
                 </div>
             </div>
 
