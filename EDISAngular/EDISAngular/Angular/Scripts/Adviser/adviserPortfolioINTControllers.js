@@ -17,6 +17,16 @@
             $scope.data = data;
         })
     }]);
+
+    app.controller("adviserPortfolioINTSectorDiversificationController", ["$scope", "adviserPortfolioINTGetSectorInfo", function ($scope, DBContext) {
+        DBContext.getData().get(function (data) {
+            $scope.data = data;
+            $scope.pieSource = {
+                data: $scope.data.data
+            }
+        })
+    }]);
+
     app.controller("adviserPortfolioINTEvaluationController", ["$scope", "adviserPortfolioINTEvaluationAgainstModel", function ($scope, DBContext) {
         DBContext().query(function (data) {
             $scope.data = data;

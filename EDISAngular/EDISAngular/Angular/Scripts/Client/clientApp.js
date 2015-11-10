@@ -555,6 +555,24 @@
 
         return DBContext;
     });
+
+    app.factory("ClientDashboardDetailsDBService", function (AppStrings, $resource) {
+        var GetTotalAmountFromDataCollection = function (collection) {
+            var i = 0;
+            angular.forEach(collection, function (value, key) {
+                i = i + value.amount;
+            });
+            return i;
+        }
+        var DBContext = {
+            GetInvestmentPorfolioData: function () {
+                //ws call to retrieve investment portfolio data
+                return $resource(AppStrings.EDIS_IP + "api/Client/PortfolioOverview/InvestmentPortfolio");
+            },
+        };
+        return DBContext;
+    });
+
     app.factory("CorrespondenceTokenGetter", function ($http, $q, AppStrings) {
 
         function getTokenPromise() {

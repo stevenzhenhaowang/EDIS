@@ -98,27 +98,29 @@ namespace EDISAngular.APIControllers
             if (clientGroup.MainClientId == client.Id) {
                 List<GroupAccount> groupAccounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
                 List<ClientAccount> clientAccounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
-
-
             } else {
                 List<ClientAccount> accounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
-
-
             }
             return null;
         }
 
+        [HttpGet, Route("api/Adviser/AustralianEquityPortfolio/SectorialExposure")]             //.....
+        public SectorialPortfolioModel GetSectorialExposureSummary_Adviser(string clientGroupId = null) {
+            return GenerateSectorialModel(getAustralianAssetForAdviser(clientGroupId));
+        }
+        [HttpGet, Route("api/Client/AustralianEquityPortfolio/SectorialExposure")]
+        public SectorialPortfolioModel GetSectorialExposureSummary_Client() {
+            return GenerateSectorialModel(getAustralianAssetForClient());
+        }
+        
         public List<AssetBase> getAustralianAssetForAdviser(string clientGroupId) {
             List<AssetBase> assets = new List<AssetBase>();
 
             if (string.IsNullOrEmpty(clientGroupId)) {
-
                 List<GroupAccount> groupAccounts = edisRepo.getAllClientGroupAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
                 List<ClientAccount> clientAccounts = edisRepo.getAllClientAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
                 groupAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
                 clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
-
-                return assets;
             } else {
                 ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
                 List<GroupAccount> accounts = clientGroup.GetAccountsSync(DateTime.Now);
@@ -127,9 +129,8 @@ namespace EDISAngular.APIControllers
 
                 accounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
                 clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
-
-                return assets;
             }
+            return assets;
         }
 
         public List<AssetBase> getAustralianAssetForClient() {
@@ -138,8 +139,6 @@ namespace EDISAngular.APIControllers
             Client client = edisRepo.GetClientSync(User.Identity.GetUserId(), DateTime.Now);
             ClientGroup clientGroup = edisRepo.GetClientGroupSync(client.ClientGroupId, DateTime.Now);
             if (clientGroup.MainClientId == client.Id) {
-                clientGroup.GetAccountsSync();
-
                 List<GroupAccount> groupAccounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
                 List<ClientAccount> clientAccounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
                 groupAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
@@ -150,6 +149,29 @@ namespace EDISAngular.APIControllers
             }
 
             return assets;
+        }
+
+        public SectorialPortfolioModel GenerateSectorialModel(List<AssetBase> assets) {
+            
+            var allSectors = edisRepo.GetAllSectorsSync();
+            List<SectorItem> sectorItems = new List<SectorItem>();
+            allSectors.ForEach(s => sectorItems.Add(new SectorItem { sector = s }));
+
+            double totalValue = 0;
+
+            foreach (var item in assets.GetAssetSectorialDiversificationSync<AustralianEquity>(edisRepo)) {
+                totalValue += item.Value;
+                sectorItems.FirstOrDefault(s => s.sector == item.Key).value += item.Value;
+            }
+            sectorItems.ForEach(s => s.percentage = s.value / totalValue);
+
+            SectorialPortfolioModel model = new SectorialPortfolioModel {
+                data = sectorItems,
+                total = totalValue,
+                percentage = 1
+            };
+
+            return model;
         }
 
         public SummaryGeneralInfo GenerateGeneralInforModel(List<AssetBase> assets) {
