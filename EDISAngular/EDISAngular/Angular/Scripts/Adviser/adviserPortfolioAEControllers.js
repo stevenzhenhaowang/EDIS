@@ -206,49 +206,7 @@
     app.controller("adviserPortfolioAERatingController", ["$scope", "adviserPortfolioAERatingInfo", function ($scope, DBContext) {
         DBContext().get(function (data) {
             $scope.data = data;
-
-
-
-            //$scope.options = {
-            //    title: {
-            //        text: "Portfolio Rating"
-            //    },
-            //    legend: {
-            //        position: "top"
-            //    },
-            //    seriesDefaults: {
-            //        type: "column"
-            //    },
-            //    series: [{
-            //        name: "Risk",
-            //        data: [$scope.data.risk]
-            //    }, {
-            //        name: "Suitability",
-            //        data: [$scope.data.suitability]
-            //    }, {
-            //        name: "% of Asset Not Suited",
-            //        data: [$scope.data.notSuited]
-            //    }],
-            //    valueAxis: {
-            //        labels: {
-            //            format: "{0}"
-            //        },
-            //        line: {
-            //            visible: false
-            //        },
-            //        axisCrossingValue: 0
-            //    },
-            //    tooltip: {
-            //        visible: true,
-            //        format: "{0}",
-            //        template: "#= series.name # rating is #= value #"
-            //    }
-            //};
-
-
-
-
-
+            
             $scope.suitability = data.suitability;
             $scope.suitabilityDesc = data.SuitabilityDesc;
             
@@ -295,53 +253,14 @@
 
 
     //inject here
- app.controller("adviserPortfolioSectorDiversificationController", ["$scope", "adviserPortfolioGetSectorInfo", function ($scope, DBContext) {
-     DBContext.getData().get(function (data) {
-         $scope.data = data;
-        // console.log(data.data);
-        /* $scope.barOptions = {
-             title: {
-                 text: "Sectorial Bar Chart"
-             },
-             legend: {
-                 visible: false
-             },
-             seriesDefaults: {
-                 type: "column"
-             },
-             series: [{ field: "value", name: "Value", spacing: 8 }],
-             dataSource: {
-                 data: $scope.data.data
-             },
-             categoryAxis: {
-                 field: "sector",
-                 name: "Sector",
-                 labels: {
-                     rotation: -45
-                 }
-             },
-             valueAxis: {
-                 labels: {
-                     format: "c2",
-
-                 }
-             },
-             tooltip: {
-                 visible: true,
-                 format: "{0}",
-                 template: " $#= value #"
-             }
-         };*/
-         $scope.pieSource = {
-             data: $scope.data.data
-         }
-
-
-     })
-
-
-
- }]);
+    app.controller("adviserPortfolioAESectorDiversificationController", ["$scope", "adviserPortfolioAEGetSectorInfo", function ($scope, DBContext) {
+        DBContext.getData().get(function (data) {
+            $scope.data = data;
+            $scope.pieSource = {
+                data: $scope.data.data
+            }
+        })
+    }]);
     
     
 

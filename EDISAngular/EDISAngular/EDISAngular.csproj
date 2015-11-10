@@ -212,6 +212,7 @@
     <Compile Include="APIControllers\PortfolioInsuranceController.cs" />
     <Compile Include="APIControllers\PortfolioInternationalEquityController.cs" />
     <Compile Include="APIControllers\PortfolioManagedInvestmentController.cs" />
+    <Compile Include="APIControllers\PortfolioMarginLendingController.cs" />
     <Compile Include="APIControllers\PortfolioMortgageInvestmentController.cs" />
     <Compile Include="APIControllers\PortfolioOverviewController.cs" />
     <Compile Include="APIControllers\RebalanceController.cs" />
@@ -587,6 +588,7 @@
     <Content Include="Angular\Scripts\Adviser\adviserCreateClientControllers.js" />
     <Content Include="Angular\Scripts\Adviser\Services\makeTransactionsControllers.js" />
     <Content Include="Angular\Scripts\Client\clientCorrespondenceViewControllers.js" />
+    <Content Include="Angular\Scripts\Client\clientOverviewController.js" />
     <Content Include="Angular\Scripts\Client\clientPortfolioCCController.js" />
     <Content Include="Angular\Scripts\Client\clientPortfolioCTDControllers.js" />
     <Content Include="Angular\Scripts\Client\clientPortfolioDPControllers.js" />

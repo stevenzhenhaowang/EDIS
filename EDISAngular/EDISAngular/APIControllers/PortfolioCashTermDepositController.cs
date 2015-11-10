@@ -26,140 +26,12 @@ namespace EDISAngular.APIControllers
         [HttpGet, Route("api/Adviser/CashTermDepositPortfolio/General")]
         public CashTermDepositGeneralInfoModel GetGeneralInfo_Adviser(string clientGroupId = null)
         {
-            if (string.IsNullOrEmpty(clientGroupId))
-            {
-
-                List<GroupAccount> groupAccounts = edisRepo.getAllClientGroupAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
-                List<ClientAccount> clientAccounts = edisRepo.getAllClientAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
-                List<AssetBase> assets = new List<AssetBase>();
-                CashTermDepositGeneralInfoModel model = new CashTermDepositGeneralInfoModel
-                {
-                    annualInterest = 0,
-                    annualYield = 0,
-                    cashAtMaturity = 0,
-                    cashDeposit = 0,
-                    consumerPriceIndex = 0,
-                    rbaRate = 0
-                };
-
-                foreach (var account in groupAccounts)
-                {
-                    assets.AddRange(account.GetAssetsSync());
-                }
-                foreach (var account in clientAccounts)
-                {
-                    assets.AddRange(account.GetAssetsSync());
-                }
-
-                var cashes = assets.OfType<Cash>();
-                foreach (var cash in cashes)
-                {
-                    model.annualInterest += cash.AnnualInterest == 0 ? 0 : (double)cash.AnnualInterest;
-                    model.consumerPriceIndex += cash.LatestPrice;
-                }
-
-                return model;
-                //return repo.TermDeposit_GetGeneral_Adviser(User.Identity.GetUserId());
-            }
-            else
-            {
-                ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
-                List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
-                List<ClientAccount> clientAccounts = new List<ClientAccount>();
-                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
-
-                List<AssetBase> assets = new List<AssetBase>();
-                CashTermDepositGeneralInfoModel model = new CashTermDepositGeneralInfoModel { 
-                    annualInterest = 0,
-                    annualYield = 0,
-                    cashAtMaturity = 0,
-                    cashDeposit = 0,
-                    consumerPriceIndex = 0,
-                    rbaRate = 0
-                };
-
-                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
-                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
-
-                var cashes = assets.OfType<Cash>();
-                foreach (var cash in cashes) {
-                    model.annualInterest += cash.AnnualInterest == 0 ? 0 : (double)cash.AnnualInterest;
-                    model.consumerPriceIndex += cash.LatestPrice;
-                }
-
-                return model;
-
-                //return repo.TermDeposit_GetGeneral_Client(clientGroupId);
-            }
-
+            return GenerateGeneralInfo(getCashAssetForAdviser(clientGroupId));
         }
         [HttpGet, Route("api/Client/CashTermDepositPortfolio/General")]
         public CashTermDepositGeneralInfoModel GetGeneralInfo_Client()
         {
-            Client client = edisRepo.GetClientSync(User.Identity.GetUserId(), DateTime.Now);
-            ClientGroup clientGroup = edisRepo.GetClientGroupSync(client.ClientGroupId, DateTime.Now);
-            if (clientGroup.MainClientId == client.Id)
-            {
-                List<GroupAccount> groupAccounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
-                List<ClientAccount> clientAccounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
-
-                List<AssetBase> assets = new List<AssetBase>();
-                CashTermDepositGeneralInfoModel model = new CashTermDepositGeneralInfoModel
-                {
-                    annualInterest = 0,
-                    annualYield = 0,
-                    cashAtMaturity = 0,
-                    cashDeposit = 0,
-                    consumerPriceIndex = 0,
-                    rbaRate = 0
-                };
-
-                foreach (var account in groupAccounts)
-                {
-                    assets.AddRange(account.GetAssetsSync());
-                }
-                foreach (var account in clientAccounts)
-                {
-                    assets.AddRange(account.GetAssetsSync());
-                }
-
-                var cashes = assets.OfType<Cash>();
-                foreach (var cash in cashes)
-                {
-                    model.annualInterest += cash.AnnualInterest == 0 ? 0 : (double)cash.AnnualInterest;
-                    model.consumerPriceIndex += cash.LatestPrice;
-                }
-
-                return model;
-            }
-            else
-            {
-                List<ClientAccount> accounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
-                List<AssetBase> assets = new List<AssetBase>();
-                CashTermDepositGeneralInfoModel model = new CashTermDepositGeneralInfoModel
-                {
-                    annualInterest = 0,
-                    annualYield = 0,
-                    cashAtMaturity = 0,
-                    cashDeposit = 0,
-                    consumerPriceIndex = 0,
-                    rbaRate = 0
-                };
-
-                foreach (var account in accounts)
-                {
-                    assets.AddRange(account.GetAssetsSync());
-                }
-
-                var cashes = assets.OfType<Cash>();
-                foreach (var cash in cashes)
-                {
-                    model.annualInterest += cash.AnnualInterest == 0 ? 0 : (double)cash.AnnualInterest;
-                    model.consumerPriceIndex += cash.LatestPrice;
-                }
-
-                return model;
-            }
+            return GenerateGeneralInfo(getCashAssetForClient());
         }
 
         [HttpGet, Route("api/Adviser/CashTermDepositPortfolio/Rating")]
@@ -196,522 +68,23 @@ namespace EDISAngular.APIControllers
         [HttpGet, Route("api/Adviser/CashTermDepositPortfolio/Cashflow")]
         public CashflowBriefModel GetCashflowSummary_Adviser(string clientGroupId = "")
         {
-            if (string.IsNullOrEmpty(clientGroupId))
-            {
-                List<GroupAccount> groupAccounts = edisRepo.getAllClientGroupAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
-                List<ClientAccount> clientAccounts = edisRepo.getAllClientAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
-
-                double totalExpenseInAssets = 0;
-                double totalIncomeInAssets = 0;
-
-                List<CashFlowBriefItem> items = new List<CashFlowBriefItem>();
-
-                CashFlowBriefItem jan = new CashFlowBriefItem { month = "Jan" };
-                CashFlowBriefItem feb = new CashFlowBriefItem { month = "Feb" };
-                CashFlowBriefItem mar = new CashFlowBriefItem { month = "Mar" };
-                CashFlowBriefItem apr = new CashFlowBriefItem { month = "Apr" };
-                CashFlowBriefItem may = new CashFlowBriefItem { month = "May" };
-                CashFlowBriefItem jun = new CashFlowBriefItem { month = "Jun" };
-                CashFlowBriefItem jul = new CashFlowBriefItem { month = "Jul" };
-                CashFlowBriefItem aug = new CashFlowBriefItem { month = "Aug" };
-                CashFlowBriefItem sep = new CashFlowBriefItem { month = "Sep" };
-                CashFlowBriefItem oct = new CashFlowBriefItem { month = "Oct" };
-                CashFlowBriefItem nov = new CashFlowBriefItem { month = "Nov" };
-                CashFlowBriefItem dec = new CashFlowBriefItem { month = "Dec" };
-
-
-                foreach (var account in groupAccounts)
-                {
-                    List<Cashflow> cashFlows = account.GetAssetsSync().OfType<Cash>().Cast<AssetBase>().ToList().GetMonthlyCashflows();
-
-                    foreach (var cashflow in cashFlows)
-                    {
-                        switch (cashflow.Month)
-                        {
-                            case "Jan": jan.date = DateTime.Now; jan.expense += cashflow.Expenses; jan.income += cashflow.Income; break;
-                            case "Feb": feb.date = DateTime.Now; feb.expense += cashflow.Expenses; feb.income += cashflow.Income; break;
-                            case "Mar": mar.date = DateTime.Now; mar.expense += cashflow.Expenses; mar.income += cashflow.Income; break;
-                            case "Apr": apr.date = DateTime.Now; apr.expense += cashflow.Expenses; apr.income += cashflow.Income; break;
-                            case "May": may.date = DateTime.Now; may.expense += cashflow.Expenses; may.income += cashflow.Income; break;
-                            case "Jun": jun.date = DateTime.Now; jun.expense += cashflow.Expenses; jun.income += cashflow.Income; break;
-                            case "Jul": jul.date = DateTime.Now; jul.expense += cashflow.Expenses; jul.income += cashflow.Income; break;
-                            case "Aug": aug.date = DateTime.Now; aug.expense += cashflow.Expenses; aug.income += cashflow.Income; break;
-                            case "Sep": sep.date = DateTime.Now; sep.expense += cashflow.Expenses; sep.income += cashflow.Income; break;
-                            case "Oct": oct.date = DateTime.Now; oct.expense += cashflow.Expenses; oct.income += cashflow.Income; break;
-                            case "Nov": nov.date = DateTime.Now; nov.expense += cashflow.Expenses; nov.income += cashflow.Income; break;
-                            case "Dec": dec.date = DateTime.Now; dec.expense += cashflow.Expenses; dec.income += cashflow.Income; break;
-                            default: break;
-                        }
-                        totalExpenseInAssets += cashflow.Expenses;
-                        totalIncomeInAssets += cashflow.Income;
-                    }
-                }
-                foreach (var account in clientAccounts)
-                {
-                    List<Cashflow> cashFlows = account.GetAssetsSync().OfType<Cash>().Cast<AssetBase>().ToList().GetMonthlyCashflows();
-
-                    foreach (var cashflow in cashFlows)
-                    {
-                        switch (cashflow.Month)
-                        {
-                            case "Jan": jan.date = DateTime.Now; jan.expense += cashflow.Expenses; jan.income += cashflow.Income; break;
-                            case "Feb": feb.date = DateTime.Now; feb.expense += cashflow.Expenses; feb.income += cashflow.Income; break;
-                            case "Mar": mar.date = DateTime.Now; mar.expense += cashflow.Expenses; mar.income += cashflow.Income; break;
-                            case "Apr": apr.date = DateTime.Now; apr.expense += cashflow.Expenses; apr.income += cashflow.Income; break;
-                            case "May": may.date = DateTime.Now; may.expense += cashflow.Expenses; may.income += cashflow.Income; break;
-                            case "Jun": jun.date = DateTime.Now; jun.expense += cashflow.Expenses; jun.income += cashflow.Income; break;
-                            case "Jul": jul.date = DateTime.Now; jul.expense += cashflow.Expenses; jul.income += cashflow.Income; break;
-                            case "Aug": aug.date = DateTime.Now; aug.expense += cashflow.Expenses; aug.income += cashflow.Income; break;
-                            case "Sep": sep.date = DateTime.Now; sep.expense += cashflow.Expenses; sep.income += cashflow.Income; break;
-                            case "Oct": oct.date = DateTime.Now; oct.expense += cashflow.Expenses; oct.income += cashflow.Income; break;
-                            case "Nov": nov.date = DateTime.Now; nov.expense += cashflow.Expenses; nov.income += cashflow.Income; break;
-                            case "Dec": dec.date = DateTime.Now; dec.expense += cashflow.Expenses; dec.income += cashflow.Income; break;
-                            default: break;
-                        }
-                        totalExpenseInAssets += cashflow.Expenses;
-                        totalIncomeInAssets += cashflow.Income;
-                    }
-                }
-
-
-                items.Add(jan);
-                items.Add(feb);
-                items.Add(mar);
-                items.Add(apr);
-                items.Add(may);
-                items.Add(jun);
-                items.Add(jul);
-                items.Add(aug);
-                items.Add(sep);
-                items.Add(oct);
-                items.Add(nov);
-                items.Add(dec);
-
-
-                CashflowBriefModel model = new CashflowBriefModel
-                {
-                    totalExpense = totalExpenseInAssets,
-                    totalIncome = totalIncomeInAssets,
-                    data = items
-                };
-                return model;
-
-                //return repo.AustralianEquity_GetCashflowSummary_Adviser(User.Identity.GetUserId());
-            }
-            else
-            {
-                ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
-                List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
-                List<ClientAccount> clientAccounts = new List<ClientAccount>();
-                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
-
-                List<Cashflow> cashFlows = new List<Cashflow>();
-
-                double totalExpenseInAssets = 0;
-                double totalIncomeInAssets = 0;
-
-                List<CashFlowBriefItem> items = new List<CashFlowBriefItem>();
-
-                CashFlowBriefItem jan = new CashFlowBriefItem { month = "Jan" };
-                CashFlowBriefItem feb = new CashFlowBriefItem { month = "Feb" };
-                CashFlowBriefItem mar = new CashFlowBriefItem { month = "Mar" };
-                CashFlowBriefItem apr = new CashFlowBriefItem { month = "Apr" };
-                CashFlowBriefItem may = new CashFlowBriefItem { month = "May" };
-                CashFlowBriefItem jun = new CashFlowBriefItem { month = "Jun" };
-                CashFlowBriefItem jul = new CashFlowBriefItem { month = "Jul" };
-                CashFlowBriefItem aug = new CashFlowBriefItem { month = "Aug" };
-                CashFlowBriefItem sep = new CashFlowBriefItem { month = "Sep" };
-                CashFlowBriefItem oct = new CashFlowBriefItem { month = "Oct" };
-                CashFlowBriefItem nov = new CashFlowBriefItem { month = "Nov" };
-                CashFlowBriefItem dec = new CashFlowBriefItem { month = "Dec" };
-
-                accounts.ForEach(a => cashFlows.AddRange(a.GetAssetsSync().OfType<Cash>().Cast<AssetBase>().ToList().GetMonthlyCashflows()));
-                clientAccounts.ForEach(a => cashFlows.AddRange(a.GetAssetsSync().OfType<Cash>().Cast<AssetBase>().ToList().GetMonthlyCashflows()));
-
-                foreach (var cashflow in cashFlows)
-                {
-                    switch (cashflow.Month)
-                    {
-                        case "Jan": jan.date = DateTime.Now; jan.expense += cashflow.Expenses; jan.income += cashflow.Income; break;
-                        case "Feb": feb.date = DateTime.Now; feb.expense += cashflow.Expenses; feb.income += cashflow.Income; break;
-                        case "Mar": mar.date = DateTime.Now; mar.expense += cashflow.Expenses; mar.income += cashflow.Income; break;
-                        case "Apr": apr.date = DateTime.Now; apr.expense += cashflow.Expenses; apr.income += cashflow.Income; break;
-                        case "May": may.date = DateTime.Now; may.expense += cashflow.Expenses; may.income += cashflow.Income; break;
-                        case "Jun": jun.date = DateTime.Now; jun.expense += cashflow.Expenses; jun.income += cashflow.Income; break;
-                        case "Jul": jul.date = DateTime.Now; jul.expense += cashflow.Expenses; jul.income += cashflow.Income; break;
-                        case "Aug": aug.date = DateTime.Now; aug.expense += cashflow.Expenses; aug.income += cashflow.Income; break;
-                        case "Sep": sep.date = DateTime.Now; sep.expense += cashflow.Expenses; sep.income += cashflow.Income; break;
-                        case "Oct": oct.date = DateTime.Now; oct.expense += cashflow.Expenses; oct.income += cashflow.Income; break;
-                        case "Nov": nov.date = DateTime.Now; nov.expense += cashflow.Expenses; nov.income += cashflow.Income; break;
-                        case "Dec": dec.date = DateTime.Now; dec.expense += cashflow.Expenses; dec.income += cashflow.Income; break;
-                        default: break;
-                    }
-                    totalExpenseInAssets += cashflow.Expenses;
-                    totalIncomeInAssets += cashflow.Income;
-                }
-
-                items.Add(jan);
-                items.Add(feb);
-                items.Add(mar);
-                items.Add(apr);
-                items.Add(may);
-                items.Add(jun);
-                items.Add(jul);
-                items.Add(aug);
-                items.Add(sep);
-                items.Add(oct);
-                items.Add(nov);
-                items.Add(dec);
-
-
-                CashflowBriefModel model = new CashflowBriefModel
-                {
-                    totalExpense = totalExpenseInAssets,
-                    totalIncome = totalIncomeInAssets,
-                    data = items
-                };
-                return model;
-
-
-                //return repo.AustralianEquity_GetCashflowSummary_Client(clientUserId);
-            }
+            return GenerateCashflowSummaryModel(getCashAssetForAdviser(clientGroupId).GetMonthlyCashflows());
         }
         [HttpGet, Route("api/Client/CashTermDepositPortfolio/Cashflow")]
         public CashflowBriefModel GetCashflowSummary_Client()
         {
-            Client client = edisRepo.GetClientSync(User.Identity.GetUserId(), DateTime.Now);
-            ClientGroup clientGroup = edisRepo.GetClientGroupSync(client.ClientGroupId, DateTime.Now);
-            if (clientGroup.MainClientId == client.Id)
-            {
-                List<GroupAccount> groupAccounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
-                List<ClientAccount> clientAccounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
-
-
-                double totalExpenseInAssets = 0;
-                double totalIncomeInAssets = 0;
-
-                List<CashFlowBriefItem> items = new List<CashFlowBriefItem>();
-
-                CashFlowBriefItem jan = new CashFlowBriefItem { month = "Jan" };
-                CashFlowBriefItem feb = new CashFlowBriefItem { month = "Feb" };
-                CashFlowBriefItem mar = new CashFlowBriefItem { month = "Mar" };
-                CashFlowBriefItem apr = new CashFlowBriefItem { month = "Apr" };
-                CashFlowBriefItem may = new CashFlowBriefItem { month = "May" };
-                CashFlowBriefItem jun = new CashFlowBriefItem { month = "Jun" };
-                CashFlowBriefItem jul = new CashFlowBriefItem { month = "Jul" };
-                CashFlowBriefItem aug = new CashFlowBriefItem { month = "Aug" };
-                CashFlowBriefItem sep = new CashFlowBriefItem { month = "Sep" };
-                CashFlowBriefItem oct = new CashFlowBriefItem { month = "Oct" };
-                CashFlowBriefItem nov = new CashFlowBriefItem { month = "Nov" };
-                CashFlowBriefItem dec = new CashFlowBriefItem { month = "Dec" };
-
-
-                foreach (var account in groupAccounts)
-                {
-                    List<Cashflow> cashFlows = account.GetAssetsSync().OfType<Cash>().Cast<AssetBase>().ToList().GetMonthlyCashflows();
-
-                    foreach (var cashflow in cashFlows)
-                    {
-                        switch (cashflow.Month)
-                        {
-                            case "Jan": jan.date = DateTime.Now; jan.expense += cashflow.Expenses; jan.income += cashflow.Income; break;
-                            case "Feb": feb.date = DateTime.Now; feb.expense += cashflow.Expenses; feb.income += cashflow.Income; break;
-                            case "Mar": mar.date = DateTime.Now; mar.expense += cashflow.Expenses; mar.income += cashflow.Income; break;
-                            case "Apr": apr.date = DateTime.Now; apr.expense += cashflow.Expenses; apr.income += cashflow.Income; break;
-                            case "May": may.date = DateTime.Now; may.expense += cashflow.Expenses; may.income += cashflow.Income; break;
-                            case "Jun": jun.date = DateTime.Now; jun.expense += cashflow.Expenses; jun.income += cashflow.Income; break;
-                            case "Jul": jul.date = DateTime.Now; jul.expense += cashflow.Expenses; jul.income += cashflow.Income; break;
-                            case "Aug": aug.date = DateTime.Now; aug.expense += cashflow.Expenses; aug.income += cashflow.Income; break;
-                            case "Sep": sep.date = DateTime.Now; sep.expense += cashflow.Expenses; sep.income += cashflow.Income; break;
-                            case "Oct": oct.date = DateTime.Now; oct.expense += cashflow.Expenses; oct.income += cashflow.Income; break;
-                            case "Nov": nov.date = DateTime.Now; nov.expense += cashflow.Expenses; nov.income += cashflow.Income; break;
-                            case "Dec": dec.date = DateTime.Now; dec.expense += cashflow.Expenses; dec.income += cashflow.Income; break;
-                            default: break;
-                        }
-                        totalExpenseInAssets += cashflow.Expenses;
-                        totalIncomeInAssets += cashflow.Income;
-                    }
-                }
-                foreach (var account in clientAccounts)
-                {
-                    List<Cashflow> cashFlows = account.GetAssetsSync().OfType<Cash>().Cast<AssetBase>().ToList().GetMonthlyCashflows();
-
-                    foreach (var cashflow in cashFlows)
-                    {
-                        switch (cashflow.Month)
-                        {
-                            case "Jan": jan.date = DateTime.Now; jan.expense += cashflow.Expenses; jan.income += cashflow.Income; break;
-                            case "Feb": feb.date = DateTime.Now; feb.expense += cashflow.Expenses; feb.income += cashflow.Income; break;
-                            case "Mar": mar.date = DateTime.Now; mar.expense += cashflow.Expenses; mar.income += cashflow.Income; break;
-                            case "Apr": apr.date = DateTime.Now; apr.expense += cashflow.Expenses; apr.income += cashflow.Income; break;
-                            case "May": may.date = DateTime.Now; may.expense += cashflow.Expenses; may.income += cashflow.Income; break;
-                            case "Jun": jun.date = DateTime.Now; jun.expense += cashflow.Expenses; jun.income += cashflow.Income; break;
-                            case "Jul": jul.date = DateTime.Now; jul.expense += cashflow.Expenses; jul.income += cashflow.Income; break;
-                            case "Aug": aug.date = DateTime.Now; aug.expense += cashflow.Expenses; aug.income += cashflow.Income; break;
-                            case "Sep": sep.date = DateTime.Now; sep.expense += cashflow.Expenses; sep.income += cashflow.Income; break;
-                            case "Oct": oct.date = DateTime.Now; oct.expense += cashflow.Expenses; oct.income += cashflow.Income; break;
-                            case "Nov": nov.date = DateTime.Now; nov.expense += cashflow.Expenses; nov.income += cashflow.Income; break;
-                            case "Dec": dec.date = DateTime.Now; dec.expense += cashflow.Expenses; dec.income += cashflow.Income; break;
-                            default: break;
-                        }
-                        totalExpenseInAssets += cashflow.Expenses;
-                        totalIncomeInAssets += cashflow.Income;
-                    }
-                }
-
-
-                items.Add(jan);
-                items.Add(feb);
-                items.Add(mar);
-                items.Add(apr);
-                items.Add(may);
-                items.Add(jun);
-                items.Add(jul);
-                items.Add(aug);
-                items.Add(sep);
-                items.Add(oct);
-                items.Add(nov);
-                items.Add(dec);
-
-
-                CashflowBriefModel model = new CashflowBriefModel
-                {
-                    totalExpense = totalExpenseInAssets,
-                    totalIncome = totalIncomeInAssets,
-                    data = items
-                };
-                return model;
-            }
-            else
-            {
-                List<ClientAccount> accounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
-
-                double totalExpenseInAssets = 0;
-                double totalIncomeInAssets = 0;
-
-                List<CashFlowBriefItem> items = new List<CashFlowBriefItem>();
-
-                CashFlowBriefItem jan = new CashFlowBriefItem { month = "Jan" };
-                CashFlowBriefItem feb = new CashFlowBriefItem { month = "Feb" };
-                CashFlowBriefItem mar = new CashFlowBriefItem { month = "Mar" };
-                CashFlowBriefItem apr = new CashFlowBriefItem { month = "Apr" };
-                CashFlowBriefItem may = new CashFlowBriefItem { month = "May" };
-                CashFlowBriefItem jun = new CashFlowBriefItem { month = "Jun" };
-                CashFlowBriefItem jul = new CashFlowBriefItem { month = "Jul" };
-                CashFlowBriefItem aug = new CashFlowBriefItem { month = "Aug" };
-                CashFlowBriefItem sep = new CashFlowBriefItem { month = "Sep" };
-                CashFlowBriefItem oct = new CashFlowBriefItem { month = "Oct" };
-                CashFlowBriefItem nov = new CashFlowBriefItem { month = "Nov" };
-                CashFlowBriefItem dec = new CashFlowBriefItem { month = "Dec" };
-
-                foreach (var account in accounts)
-                {
-                    List<Cashflow> cashFlows = account.GetAssetsSync().OfType<Cash>().Cast<AssetBase>().ToList().GetMonthlyCashflows();
-
-                    foreach (var cashflow in cashFlows)
-                    {
-                        switch (cashflow.Month)
-                        {
-                            case "Jan": jan.date = DateTime.Now; jan.expense += cashflow.Expenses; jan.income += cashflow.Income; break;
-                            case "Feb": feb.date = DateTime.Now; feb.expense += cashflow.Expenses; feb.income += cashflow.Income; break;
-                            case "Mar": mar.date = DateTime.Now; mar.expense += cashflow.Expenses; mar.income += cashflow.Income; break;
-                            case "Apr": apr.date = DateTime.Now; apr.expense += cashflow.Expenses; apr.income += cashflow.Income; break;
-                            case "May": may.date = DateTime.Now; may.expense += cashflow.Expenses; may.income += cashflow.Income; break;
-                            case "Jun": jun.date = DateTime.Now; jun.expense += cashflow.Expenses; jun.income += cashflow.Income; break;
-                            case "Jul": jul.date = DateTime.Now; jul.expense += cashflow.Expenses; jul.income += cashflow.Income; break;
-                            case "Aug": aug.date = DateTime.Now; aug.expense += cashflow.Expenses; aug.income += cashflow.Income; break;
-                            case "Sep": sep.date = DateTime.Now; sep.expense += cashflow.Expenses; sep.income += cashflow.Income; break;
-                            case "Oct": oct.date = DateTime.Now; oct.expense += cashflow.Expenses; oct.income += cashflow.Income; break;
-                            case "Nov": nov.date = DateTime.Now; nov.expense += cashflow.Expenses; nov.income += cashflow.Income; break;
-                            case "Dec": dec.date = DateTime.Now; dec.expense += cashflow.Expenses; dec.income += cashflow.Income; break;
-                            default: break;
-                        }
-                        totalExpenseInAssets += cashflow.Expenses;
-                        totalIncomeInAssets += cashflow.Income;
-                    }
-                }
-
-                items.Add(jan);
-                items.Add(feb);
-                items.Add(mar);
-                items.Add(apr);
-                items.Add(may);
-                items.Add(jun);
-                items.Add(jul);
-                items.Add(aug);
-                items.Add(sep);
-                items.Add(oct);
-                items.Add(nov);
-                items.Add(dec);
-
-
-                CashflowBriefModel model = new CashflowBriefModel
-                {
-                    totalExpense = totalExpenseInAssets,
-                    totalIncome = totalIncomeInAssets,
-                    data = items
-                };
-                return model;
-
-            }
+            return GenerateCashflowSummaryModel(getCashAssetForClient().GetMonthlyCashflows());
         }
 
         [HttpGet, Route("api/Adviser/CashTermDepositPortfolio/Profiles")]
         public CashTermDepositProfileModel GetProfiles_Adviser(string clientGroupId = null)
         {
-            if (string.IsNullOrEmpty(clientGroupId))
-            {
-                List<GroupAccount> groupAccounts = edisRepo.getAllClientGroupAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
-                List<ClientAccount> clientAccounts = edisRepo.getAllClientAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
-
-                CashTermDepositProfileModel model = new CashTermDepositProfileModel { data = new List<CashTermDepositProfileItem>() };
-
-                List<AssetBase> assets = new List<AssetBase>();
-                foreach (var account in groupAccounts)
-                {
-                    assets.AddRange(account.GetAssetsSync());
-                }
-                foreach (var account in clientAccounts)
-                {
-                    assets.AddRange(account.GetAssetsSync());
-                }
-                var cashes = assets.OfType<Cash>();
-                foreach (var cash in cashes)
-                {
-                    CashTermDepositProfileItem item = new CashTermDepositProfileItem
-                    {
-                        accountName = cash.CashAccountName,
-                        accountNumber = cash.CashAccountNumber,
-                        accountType = cash.CashAccountType.ToString(),
-                        accruedInterest = cash.InterestRate == null ? 0 : (double)cash.InterestRate,
-                        annualInterest = cash.AnnualInterest == null ? 0 : (double)cash.AnnualInterest,
-                        faceValue = cash.FaceValue,
-                        interestFrequency = cash.InterestFrequency.ToString(),
-                        bsb = cash.Bsb,
-                        maturityDate = cash.MaturityDate == null ? DateTime.Now : (DateTime)cash.MaturityDate,
-                        termOfRates = cash.TermOfRatesMonth.ToString(),
-                        interestRate = cash.InterestRate == null ? 0 : (double)cash.InterestRate
-                    };
-                    model.data.Add(item);
-                }
-
-                return model;
-                //return repo.TermDeposit_GetProfiles_Adviser(User.Identity.GetUserId());
-            }
-            else
-            {
-                ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
-                List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
-                List<ClientAccount> clientAccounts = new List<ClientAccount>();
-                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
-                CashTermDepositProfileModel model = new CashTermDepositProfileModel { data = new List<CashTermDepositProfileItem>() };
-
-                List<AssetBase> assets = new List<AssetBase>();
-
-                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
-                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
-
-                var cashes = assets.OfType<Cash>();
-                foreach (var cash in cashes)
-                {
-                    CashTermDepositProfileItem item = new CashTermDepositProfileItem
-                    {
-                        accountName = cash.CashAccountName,
-                        accountNumber = cash.CashAccountNumber,
-                        accountType = cash.CashAccountType.ToString(),
-                        accruedInterest = cash.InterestRate == null ? 0 : (double)cash.InterestRate,
-                        annualInterest = cash.AnnualInterest == null ? 0 : (double)cash.AnnualInterest,
-                        faceValue = cash.FaceValue,
-                        interestFrequency = cash.InterestFrequency.ToString(),
-                        bsb = cash.Bsb,
-                        maturityDate = cash.MaturityDate == null ? DateTime.Now : (DateTime)cash.MaturityDate,
-                        termOfRates = cash.TermOfRatesMonth.ToString(),
-                        interestRate = cash.InterestRate == null ? 0 : (double)cash.InterestRate
-                    };
-                    model.data.Add(item);
-                }
-
-                return model;
-                //return repo.TermDeposit_GetProfiles_Client(clientGroupId);
-            }
-
+            return GenerateProfiles(getCashAssetForAdviser(clientGroupId));
         }
         [HttpGet, Route("api/Client/CashTermDepositPortfolio/Profiles")]
         public CashTermDepositProfileModel GetProfiles_Client()
         {
-            Client client = edisRepo.GetClientSync(User.Identity.GetUserId(), DateTime.Now);
-            ClientGroup clientGroup = edisRepo.GetClientGroupSync(client.ClientGroupId, DateTime.Now);
-            if (clientGroup.MainClientId == client.Id)
-            {
-                List<GroupAccount> groupAccounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
-                List<ClientAccount> clientAccounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
-
-
-                CashTermDepositProfileModel model = new CashTermDepositProfileModel { data = new List<CashTermDepositProfileItem>() };
-
-                List<AssetBase> assets = new List<AssetBase>();
-                foreach (var account in groupAccounts)
-                {
-                    assets.AddRange(account.GetAssetsSync());
-                }
-                foreach (var account in clientAccounts)
-                {
-                    assets.AddRange(account.GetAssetsSync());
-                }
-                var cashes = assets.OfType<Cash>();
-                foreach (var cash in cashes)
-                {
-                    CashTermDepositProfileItem item = new CashTermDepositProfileItem
-                    {
-                        accountName = cash.CashAccountName,
-                        accountNumber = cash.CashAccountNumber,
-                        accountType = cash.CashAccountType.ToString(),
-                        accruedInterest = cash.InterestRate == null ? 0 : (double)cash.InterestRate,
-                        annualInterest = cash.AnnualInterest == null ? 0 : (double)cash.AnnualInterest,
-                        faceValue = cash.FaceValue,
-                        interestFrequency = cash.InterestFrequency.ToString(),
-                        bsb = cash.Bsb,
-                        maturityDate = cash.MaturityDate == null ? DateTime.Now : (DateTime)cash.MaturityDate,
-                        termOfRates = cash.TermOfRatesMonth.ToString(),
-                        interestRate = cash.InterestRate == null ? 0 : (double)cash.InterestRate
-                    };
-                    model.data.Add(item);
-                }
-
-                return model;
-            }
-            else
-            {
-                List<ClientAccount> accounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
-                CashTermDepositProfileModel model = new CashTermDepositProfileModel { data = new List<CashTermDepositProfileItem>() };
-
-                List<AssetBase> assets = new List<AssetBase>();
-                foreach (var account in accounts)
-                {
-                    assets.AddRange(account.GetAssetsSync());
-                }
-                var cashes = assets.OfType<Cash>();
-                foreach (var cash in cashes)
-                {
-                    CashTermDepositProfileItem item = new CashTermDepositProfileItem
-                    {
-                        accountName = cash.CashAccountName,
-                        accountNumber = cash.CashAccountNumber,
-                        accountType = cash.CashAccountType.ToString(),
-                        accruedInterest = cash.InterestRate == null ? 0 : (double)cash.InterestRate,
-                        annualInterest = cash.AnnualInterest == null ? 0 : (double)cash.AnnualInterest,
-                        faceValue = cash.FaceValue,
-                        interestFrequency = cash.InterestFrequency.ToString(),
-                        bsb = cash.Bsb,
-                        maturityDate = cash.MaturityDate == null ? DateTime.Now : (DateTime)cash.MaturityDate,
-                        termOfRates = cash.TermOfRatesMonth.ToString(),
-                        interestRate = cash.InterestRate == null ? 0 : (double)cash.InterestRate
-                    };
-                    model.data.Add(item);
-                }
-
-                return model;
-            }
+            return GenerateProfiles(getCashAssetForClient());
         }
 
         [HttpGet, Route("api/Adviser/CashTermDepositPortfolio/Stats")]
@@ -770,5 +143,111 @@ namespace EDISAngular.APIControllers
             return repo.TermDeposit_GetCashflowDetails_Client(User.Identity.GetUserId());
         }
 
+        public List<AssetBase> getCashAssetForAdviser(string clientGroupId) {
+            List<AssetBase> assets = new List<AssetBase>();
+
+            if (string.IsNullOrEmpty(clientGroupId)) {
+                List<GroupAccount> groupAccounts = edisRepo.getAllClientGroupAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
+                List<ClientAccount> clientAccounts = edisRepo.getAllClientAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
+                groupAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<Cash>().Cast<AssetBase>().ToList()));
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<Cash>().Cast<AssetBase>().ToList()));
+
+                return assets;
+            } else {
+                ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
+                List<GroupAccount> accounts = clientGroup.GetAccountsSync(DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
+
+                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<Cash>().Cast<AssetBase>().ToList()));
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<Cash>().Cast<AssetBase>().ToList()));
+
+                return assets;
+            }
+        }
+
+        public List<AssetBase> getCashAssetForClient() {
+            List<AssetBase> assets = new List<AssetBase>();
+
+            Client client = edisRepo.GetClientSync(User.Identity.GetUserId(), DateTime.Now);
+            ClientGroup clientGroup = edisRepo.GetClientGroupSync(client.ClientGroupId, DateTime.Now);
+            if (clientGroup.MainClientId == client.Id) {
+                List<GroupAccount> groupAccounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
+                groupAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<Cash>().Cast<AssetBase>().ToList()));
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<Cash>().Cast<AssetBase>().ToList()));
+            } else {
+                List<ClientAccount> accounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
+                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<Cash>().Cast<AssetBase>().ToList()));
+            }
+
+            return assets;
+        }
+
+        public CashTermDepositGeneralInfoModel GenerateGeneralInfo(List<AssetBase> assets) {
+            double annualInterest = 0;
+            double consumerPriceIndex = 0;
+            
+            var cashes = assets.OfType<Cash>();
+            assets.OfType<Cash>().ToList().ForEach(c => { 
+                annualInterest += c.AnnualInterest == null? 0 : (double)c.AnnualInterest; 
+                consumerPriceIndex += c.LatestPrice; 
+            });
+
+            CashTermDepositGeneralInfoModel model = new CashTermDepositGeneralInfoModel{
+                annualInterest = annualInterest,
+                consumerPriceIndex = consumerPriceIndex
+            };
+            return model;
+        }
+
+        public CashflowBriefModel GenerateCashflowSummaryModel(List<Cashflow> cashFlows) {
+
+            List<CashFlowBriefItem> items = new List<CashFlowBriefItem>();
+
+            foreach (Months month in Enum.GetValues(typeof(Months))) {
+                string currentMonth = edisRepo.GetEnumDescription(month);
+
+                var currentFlows = cashFlows.Where(c => c.Month == currentMonth);
+
+                CashFlowBriefItem newItem = new CashFlowBriefItem {
+                    month = currentMonth,
+                    expense = currentFlows.Sum(c => c.Expenses),
+                    income = currentFlows.Sum(c => c.Income)
+                };
+
+                items.Add(newItem);
+            }
+
+            CashflowBriefModel model = new CashflowBriefModel {
+                totalExpense = items.Sum(i => i.expense),
+                totalIncome = items.Sum(i => i.income),
+                data = items
+            };
+            return model;
+        }
+
+        public CashTermDepositProfileModel GenerateProfiles(List<AssetBase> assets) {
+            CashTermDepositProfileModel model = new CashTermDepositProfileModel { data = new List<CashTermDepositProfileItem>() };
+            var cashes = assets.OfType<Cash>();
+            foreach (var cash in cashes) {
+                CashTermDepositProfileItem item = new CashTermDepositProfileItem {
+                    accountName = cash.CashAccountName,
+                    accountNumber = cash.CashAccountNumber,
+                    accountType = cash.CashAccountType.ToString(),
+                    accruedInterest = cash.InterestRate == null ? 0 : (double)cash.InterestRate,
+                    annualInterest = cash.AnnualInterest == null ? 0 : (double)cash.AnnualInterest,
+                    faceValue = cash.FaceValue,
+                    interestFrequency = cash.InterestFrequency.ToString(),
+                    bsb = cash.Bsb,
+                    maturityDate = cash.MaturityDate == null ? DateTime.Now : (DateTime)cash.MaturityDate,
+                    termOfRates = cash.TermOfRatesMonth.ToString(),
+                    interestRate = cash.InterestRate == null ? 0 : (double)cash.InterestRate
+                };
+                model.data.Add(item);
+            }
+
+            return model;
+        }
     }
 }

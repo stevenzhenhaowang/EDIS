@@ -189,16 +189,16 @@
                                                                     <td>Ticker</td>
                                                                     <td>Fixed Income Name</td>
                                                                     <td>Cost Value</td>
-                                                                    <td>Brokerage</td>
+                                                                    <!--<td>Brokerage</td>-->
                                                                     <td>Total Cost Value</td>
-                                                                    <td>Total Cost Value (AUD)</td>
-                                                                    <td>Total Cost Value Weighting</td>
-                                                                    <td>Total Cost Value Asset Allocation Weighting</td>
-                                                                    <td>Market Price</td>
+                                                                    <!--<td>Total Cost Value (AUD)</td>-->
+                                                                    <!--<td>Total Cost Value Weighting</td>-->
+                                                                    <!--<td>Total Cost Value Asset Allocation Weighting</td>-->
+                                                                    <!--<td>Market Price</td>-->
                                                                     <td>Market Value</td>
-                                                                    <td>Market Value (AUD)</td>
-                                                                    <td>Market Value Weighting (AUD)</td>
-                                                                    <td>Market Value Asset Allocation Weighting</td>
+                                                                    <!--<td>Market Value (AUD)</td>-->
+                                                                    <!--<td>Market Value Weighting (AUD)</td>-->
+                                                                    <!--<td>Market Value Asset Allocation Weighting</td>-->
                                                                     <td>Fixed Income Suitability to Investor Profile</td>
                                                                 </tr>
                                                             </thead>
@@ -207,16 +207,16 @@
                                                                     <td>{{item.ticker}}</td>
                                                                     <td>{{item.fixedIncomeName}}</td>
                                                                     <td>{{item.costValue | currency}}</td>
-                                                                    <td>{{item.brokerage | currency}}</td>
+                                                                    <!--<td>{{item.brokerage | currency}}</td>-->
                                                                     <td>{{item.totalCostValue | currency}}</td>
-                                                                    <td>{{item.totalCostValueAUD | currency}}</td>
-                                                                    <td>{{item.totalCostValueWeighting | number : 0}}%</td>
-                                                                    <td>{{item.totalCostValueAssetAllocationWeighting | number : 0}}</td>
-                                                                    <td>{{item.marketPrice | currency}}</td>
+                                                                    <!--<td>{{item.totalCostValueAUD | currency}}</td>-->
+                                                                    <!--<td>{{item.totalCostValueWeighting | number : 0}}%</td>-->
+                                                                    <!--<td>{{item.totalCostValueAssetAllocationWeighting | number : 0}}</td>-->
+                                                                    <!--<td>{{item.marketPrice | currency}}</td>-->
                                                                     <td>{{item.marketValue | currency}}</td>
-                                                                    <td>{{item.marketValueAUD | currency}}</td>
-                                                                    <td>{{item.marketValueWeighting | number : 0}}%</td>
-                                                                    <td>{{item.marketValueAssetAllocationWeighting | number : 0}}</td>
+                                                                    <!--<td>{{item.marketValueAUD | currency}}</td>-->
+                                                                    <!--<td>{{item.marketValueWeighting | number : 0}}%</td>-->
+                                                                    <!--<td>{{item.marketValueAssetAllocationWeighting | number : 0}}</td>-->
                                                                     <td>{{item.incomeSuitabilityToInvestor | number : 0}}</td>
                                                                 </tr>
                                                             </tbody>
@@ -226,15 +226,15 @@
                                                                 <tr class="summary-table-row">
                                                                     <td>Ticker</td>
                                                                     <td>Fixed Income Name</td>
-                                                                    <td>Instrument Type</td>
-                                                                    <td>Bond Term (Yrs)</td>
-                                                                    <td>Maturity Date</td>
+                                                                    <!--<td>Instrument Type</td>-->
+                                                                    <!--<td>Bond Term (Yrs)</td>-->
+                                                                    <!--<td>Maturity Date</td>-->
                                                                     <td>Face Value</td>
-                                                                    <td>Present Value</td>
-                                                                    <td>Yield to Maturity</td>
+                                                                    <!--<td>Present Value</td>-->
+                                                                    <!--<td>Yield to Maturity</td>-->
                                                                     <td>Coupon Rate</td>
                                                                     <td>Coupon Frequency</td>
-                                                                    <td>Interest Accrued</td>
+                                                                    <!--<td>Interest Accrued</td>-->
                                                                     <td>Bond Rating</td>
                                                                     <td>Rating Agency</td>
                                                                     <td>Priority</td>
@@ -246,15 +246,15 @@
                                                                 <tr ng-repeat="item in data.data">
                                                                     <td>{{item.ticker}}</td>
                                                                     <td>{{item.fixedIncomeName}}</td>
-                                                                    <td>{{item.instrumentType}}</td>
-                                                                    <td>{{item.bondTerm | number : 0}}</td>
-                                                                    <td>{{item.maturityDate | date}}</td>
+                                                                    <!--<td>{{item.instrumentType}}</td>-->
+                                                                    <!--<td>{{item.bondTerm | number : 0}}</td>-->
+                                                                    <!--<td>{{item.maturityDate | date}}</td>-->
                                                                     <td>{{item.faceValue | currency}}</td>
-                                                                    <td>{{item.presentValue | currency}}%</td>
-                                                                    <td>{{item.yieldToMaturity | currency}}</td>
+                                                                    <!--<td>{{item.presentValue | currency}}%</td>-->
+                                                                    <!--<td>{{item.yieldToMaturity | currency}}</td>-->
                                                                     <td>{{item.couponRate | number : 0}}</td>
                                                                     <td>{{item.couponFrequency}}</td>
-                                                                    <td>{{item.interestAccrued | currency}}</td>
+                                                                    <!--<td>{{item.interestAccrued | currency}}</td>-->
                                                                     <td>{{item.bondRating | number : 0}}%</td>
                                                                     <td>{{item.ratingAgency}}</td>
                                                                     <td>{{item.priority | number : 0}}</td>

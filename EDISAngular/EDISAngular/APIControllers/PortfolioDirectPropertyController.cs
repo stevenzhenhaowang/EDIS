@@ -27,306 +27,25 @@ namespace EDISAngular.APIControllers
         [HttpGet, Route("api/Adviser/DirectPropertyPortfolio/General")]
         public SummaryGeneralInfo GetGeneralInfo_Adviser(string clientGroupId = null)
         {
-            if (string.IsNullOrEmpty(clientGroupId))
-            {
-                List<GroupAccount> groupAccounts = edisRepo.getAllClientGroupAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
-                List<ClientAccount> clientAccounts = edisRepo.getAllClientAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
-                double totalCost = 0;
-                double totalMarketValue = 0;
-                foreach (var account in groupAccounts)
-                {
-                    List<AssetBase> assets = account.GetAssetsSync().OfType<DirectProperty>().Cast<AssetBase>().ToList();
-
-                    foreach (var asset in assets)
-                    {
-                        totalCost += asset.GetCost().Total;
-                        totalMarketValue += asset.GetTotalMarketValue();
-                    }
-                }
-                foreach (var account in clientAccounts)
-                {
-                    List<AssetBase> assets = account.GetAssetsSync().OfType<DirectProperty>().Cast<AssetBase>().ToList();
-                    foreach (var asset in assets)
-                    {
-                        totalCost += asset.GetCost().Total;
-                        totalMarketValue += asset.GetTotalMarketValue();
-                    }
-                }
-                SummaryGeneralInfo summary = new SummaryGeneralInfo
-                {
-                    cost = totalCost,
-                    marketValue = totalMarketValue,
-                    pl = totalMarketValue - totalCost,
-                    plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100
-                };
-
-                return summary;
-            }
-            else
-            {
-                ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
-                List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
-                List<ClientAccount> clientAccounts = new List<ClientAccount>();
-                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
-                List<AssetBase> assets = new List<AssetBase>();
-
-                double totalCost = 0;
-                double totalMarketValue = 0;
-
-                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<DirectProperty>().Cast<AssetBase>().ToList()));
-                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<DirectProperty>().Cast<AssetBase>().ToList()));
-
-                foreach (var asset in assets)
-                {
-                    totalCost += asset.GetCost().Total;
-                    totalMarketValue += asset.GetTotalMarketValue();
-                }
-                SummaryGeneralInfo summary = new SummaryGeneralInfo
-                {
-                    cost = totalCost,
-                    marketValue = totalMarketValue,
-                    pl = totalMarketValue - totalCost,
-                    plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100
-                };
-
-                return summary;
-            }
-
-            //return repo.DirectProperty_GetGeneral_Adviser(User.Identity.GetUserId());
+            return GenerateGeneralInforModel(getPropertyAssetForAdviser(clientGroupId));
         }
         [HttpGet, Route("api/Client/DirectPropertyPortfolio/General")]
         public SummaryGeneralInfo GetGeneralInfo_Client()
         {
-            Client client = edisRepo.GetClientSync(User.Identity.GetUserId(), DateTime.Now);
-            ClientGroup clientGroup = edisRepo.GetClientGroupSync(client.ClientGroupId, DateTime.Now);
-            if (clientGroup.MainClientId == client.Id)
-            {
-                List<GroupAccount> groupAccounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
-                List<ClientAccount> clientAccounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
-
-                double totalCost = 0;
-                double totalMarketValue = 0;
-                foreach (var account in groupAccounts)
-                {
-                    List<AssetBase> assets = account.GetAssetsSync().OfType<DirectProperty>().Cast<AssetBase>().ToList();
-
-                    foreach (var asset in assets)
-                    {
-                        totalCost += asset.GetCost().Total;
-                        totalMarketValue += asset.GetTotalMarketValue();
-                    }
-                }
-                foreach (var account in clientAccounts)
-                {
-                    List<AssetBase> assets = account.GetAssetsSync().OfType<DirectProperty>().Cast<AssetBase>().ToList();
-                    foreach (var asset in assets)
-                    {
-                        totalCost += asset.GetCost().Total;
-                        totalMarketValue += asset.GetTotalMarketValue();
-                    }
-                }
-                SummaryGeneralInfo summary = new SummaryGeneralInfo
-                {
-                    cost = totalCost,
-                    marketValue = totalMarketValue,
-                    pl = totalMarketValue - totalCost,
-                    plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100
-                };
-
-                return summary;
-            }
-            else
-            {
-                List<ClientAccount> accounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
-
-                double totalCost = 0;
-                double totalMarketValue = 0;
-                foreach (var account in accounts)
-                {
-                    List<AssetBase> assets = account.GetAssetsSync().OfType<DirectProperty>().Cast<AssetBase>().ToList();
-                    foreach (var asset in assets)
-                    {
-                        totalCost += asset.GetCost().Total;
-                        totalMarketValue += asset.GetTotalMarketValue();
-                    }
-                }
-                SummaryGeneralInfo summary = new SummaryGeneralInfo
-                {
-                    cost = totalCost,
-                    marketValue = totalMarketValue,
-                    pl = totalMarketValue - totalCost,
-                    plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100
-                };
-
-                return summary;
-            }
+            return GenerateGeneralInforModel(getPropertyAssetForClient());
         }
+        
         [HttpGet, Route("api/Adviser/DirectPropertyPortfolio/GeoInfo")]
         public DirectPropertyGeoModel GetGeoInfo_Adviser(string clientGroupId = null)
         {
-            if (string.IsNullOrEmpty(clientGroupId))
-            {
-
-                List<GroupAccount> groupAccounts = edisRepo.getAllClientGroupAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
-                List<ClientAccount> clientAccounts = edisRepo.getAllClientAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
-
-                List<DirectPropertyGeoItem> dataList = new List<DirectPropertyGeoItem>();
-
-                List<DirectProperty> properties = new List<DirectProperty>();
-                foreach (var account in groupAccounts)
-                {
-                    properties.AddRange(account.GetAssetsSync().OfType<DirectProperty>().ToList());
-                }
-                foreach (var account in clientAccounts)
-                {
-                    properties.AddRange(account.GetAssetsSync().OfType<DirectProperty>().ToList());
-                }
-
-                foreach (var property in properties)
-                {
-                    dataList.Add(new DirectPropertyGeoItem
-                    {
-                        id = property.Id,
-                        address = property.FullAddress,
-                        latitude = property.Latitude == null ? 0 : (double)property.Latitude,
-                        longitude = property.Longitude == null ? 0 : (double)property.Longitude,
-                        country = property.Country,
-                        state = property.State,
-                        type = property.PropertyType,
-                        value = property.GetTotalMarketValue()
-                    });
-                }
-
-
-                DirectPropertyGeoModel model = new DirectPropertyGeoModel
-                {
-                    data = dataList
-                };
-
-                return model;
-            }
-            else {
-                ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
-                List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
-                List<ClientAccount> clientAccounts = new List<ClientAccount>();
-                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
-
-                List<DirectPropertyGeoItem> dataList = new List<DirectPropertyGeoItem>();
-
-                List<DirectProperty> properties = new List<DirectProperty>();
-
-                clientAccounts.ForEach(a => properties.AddRange(a.GetAssetsSync().OfType<DirectProperty>().ToList()));
-                accounts.ForEach(a => properties.AddRange(a.GetAssetsSync().OfType<DirectProperty>().ToList()));
-
-                foreach (var property in properties)
-                {
-                    dataList.Add(new DirectPropertyGeoItem
-                    {
-                        id = property.Id,
-                        address = property.FullAddress,
-                        latitude = property.Latitude == null ? 0 : (double)property.Latitude,
-                        longitude = property.Longitude == null ? 0 : (double)property.Longitude,
-                        country = property.Country,
-                        state = property.State,
-                        type = property.PropertyType,
-                        value = property.GetTotalMarketValue()
-                    });
-                }
-
-
-                DirectPropertyGeoModel model = new DirectPropertyGeoModel
-                {
-                    data = dataList
-                };
-
-                return model;
-            }
-
-            //return repo.DirectProperty_GetGeoInfo_Adviser(User.Identity.GetUserId());
+            return GeneratePropertyGeoModel(getPropertyAssetForAdviser(clientGroupId));
         }
         [HttpGet, Route("api/Client/DirectPropertyPortfolio/GeoInfo")]
         public DirectPropertyGeoModel GetGeoInfo_Client()
         {
-            Client client = edisRepo.GetClientSync(User.Identity.GetUserId(), DateTime.Now);
-            ClientGroup clientGroup = edisRepo.GetClientGroupSync(client.ClientGroupId, DateTime.Now);
-            if (clientGroup.MainClientId == client.Id)
-            {
-                List<GroupAccount> groupAccounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
-                List<ClientAccount> clientAccounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
-
-
-                List<DirectPropertyGeoItem> dataList = new List<DirectPropertyGeoItem>();
-
-                List<DirectProperty> properties = new List<DirectProperty>();
-                foreach (var account in groupAccounts)
-                {
-                    properties.AddRange(account.GetAssetsSync().OfType<DirectProperty>().ToList());
-                }
-                foreach (var account in clientAccounts)
-                {
-                    properties.AddRange(account.GetAssetsSync().OfType<DirectProperty>().ToList());
-                }
-
-                foreach (var property in properties)
-                {
-                    dataList.Add(new DirectPropertyGeoItem
-                    {
-                        id = property.Id,
-                        address = property.FullAddress,
-                        latitude = property.Latitude == null ? 0 : (double)property.Latitude,
-                        longitude = property.Longitude == null ? 0 : (double)property.Longitude,
-                        country = property.Country,
-                        state = property.State,
-                        type = property.PropertyType,
-                        value = property.GetTotalMarketValue()
-                    });
-                }
-
-
-                DirectPropertyGeoModel model = new DirectPropertyGeoModel
-                {
-                    data = dataList
-                };
-
-                return model;
-            }
-            else
-            {
-                List<ClientAccount> accounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
-
-
-                List<DirectPropertyGeoItem> dataList = new List<DirectPropertyGeoItem>();
-
-                List<DirectProperty> properties = new List<DirectProperty>();
-                foreach (var account in accounts)
-                {
-                    properties.AddRange(account.GetAssetsSync().OfType<DirectProperty>().ToList());
-                }
-
-                foreach (var property in properties)
-                {
-                    dataList.Add(new DirectPropertyGeoItem
-                    {
-                        id = property.Id,
-                        address = property.FullAddress,
-                        latitude = property.Latitude == null ? 0 : (double)property.Latitude,
-                        longitude = property.Longitude == null ? 0 : (double)property.Longitude,
-                        country = property.Country,
-                        state = property.State,
-                        type = property.PropertyType,
-                        value = property.GetTotalMarketValue()
-                    });
-                }
-
-
-                DirectPropertyGeoModel model = new DirectPropertyGeoModel
-                {
-                    data = dataList
-                };
-
-                return model;
-            }
+            return GeneratePropertyGeoModel(getPropertyAssetForClient());
         }
+        
         [HttpGet, Route("api/Adviser/DirectPropertyPortfolio/QuickStats")]
         public IEnumerable<PortfolioQuickStatsModel> GetQuickStats_Adviser(string clientGroupId = null)
         {
@@ -337,173 +56,18 @@ namespace EDISAngular.APIControllers
         {
             return repo.DirectProperty_GetQuickStats_Client(User.Identity.GetUserId());
         }
+        
         [HttpGet, Route("api/Adviser/DirectPropertyPortfolio/Rating")]
         public PortfolioRatingModel GetRatings_Adviser(string clientGroupId = null)
         {
-            if (string.IsNullOrEmpty(clientGroupId))
-            {
-                List<GroupAccount> groupAccounts = edisRepo.getAllClientGroupAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
-                List<ClientAccount> clientAccounts = edisRepo.getAllClientAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
-
-                double assetsSuitability = 0;
-                double percentage = 0;
-
-                foreach (var account in groupAccounts)
-                {
-                    var equityWithResearchValues = account.GetAssetsSync().OfType<DirectProperty>().ToList();
-
-                    assetsSuitability += equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings().Sum(w => w.Percentage * ((DirectProperty)w.Weightable).GetRating().TotalScore);
-
-                    //var weigthings = equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings();
-
-                    //% of not suitable assets
-                    percentage += equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
-                        / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
-                }
-
-                foreach (var account in clientAccounts)
-                {
-                    var equityWithResearchValues = account.GetAssetsSync().OfType<DirectProperty>().ToList();
-
-                    assetsSuitability += equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings().Sum(w => w.Percentage * ((DirectProperty)w.Weightable).GetRating().TotalScore);
-
-                    //var weigthings = equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings();
-
-                    //% of not suitable assets
-                    percentage += equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
-                        / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
-                }
-
-                PortfolioRatingModel model = new PortfolioRatingModel
-                {
-                    suitability = assetsSuitability,
-                    notSuited = percentage
-                };
-
-                return model;
-            }
-            else
-            {
-                ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
-                List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
-                List<ClientAccount> clientAccounts = new List<ClientAccount>();
-                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
-
-                double assetsSuitability = 0;
-                double percentage = 0;
-                foreach (var account in accounts)
-                {
-                    var equityWithResearchValues = account.GetAssetsSync().OfType<DirectProperty>().ToList();
-
-                    assetsSuitability += equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings().Sum(w => w.Percentage * ((DirectProperty)w.Weightable).GetRating().TotalScore);
-
-                    //var weigthings = equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings();
-
-                    //% of not suitable assets
-                    percentage += equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
-                        / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
-                }
-                foreach (var account in clientAccounts)
-                {
-                    var equityWithResearchValues = account.GetAssetsSync().OfType<DirectProperty>().ToList();
-
-                    assetsSuitability += equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings().Sum(w => w.Percentage * ((DirectProperty)w.Weightable).GetRating().TotalScore);
-
-                    //var weigthings = equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings();
-
-                    //% of not suitable assets
-                    percentage += equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
-                        / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
-                }
-
-                PortfolioRatingModel model = new PortfolioRatingModel
-                {
-                    suitability = assetsSuitability,
-                    notSuited = percentage
-                };
-
-                return model;
-            }
-
-            //return repo.DirectProperty_GetPortfolioRating_Adviser(User.Identity.GetUserId());
+            return GenerateRatingsModel(getPropertyAssetForAdviser(clientGroupId));
         }
         [HttpGet, Route("api/Client/DirectPropertyPortfolio/Rating")]
         public PortfolioRatingModel GetRatings_Client()
         {
-            Client client = edisRepo.GetClientSync(User.Identity.GetUserId(), DateTime.Now);
-            ClientGroup clientGroup = edisRepo.GetClientGroupSync(client.ClientGroupId, DateTime.Now);
-            if (clientGroup.MainClientId == client.Id)
-            {
-                List<GroupAccount> groupAccounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
-                List<ClientAccount> clientAccounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
-
-
-                double assetsSuitability = 0;
-                double percentage = 0;
-
-                foreach (var account in groupAccounts)
-                {
-                    var equityWithResearchValues = account.GetAssetsSync().OfType<DirectProperty>().ToList();
-
-                    assetsSuitability += equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings().Sum(w => w.Percentage * ((DirectProperty)w.Weightable).GetRating().TotalScore);
-
-                    //var weigthings = equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings();
-
-                    //% of not suitable assets
-                    percentage += equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
-                        / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
-                }
-
-                foreach (var account in clientAccounts)
-                {
-                    var equityWithResearchValues = account.GetAssetsSync().OfType<DirectProperty>().ToList();
-
-                    assetsSuitability += equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings().Sum(w => w.Percentage * ((DirectProperty)w.Weightable).GetRating().TotalScore);
-
-                    //var weigthings = equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings();
-
-                    //% of not suitable assets
-                    percentage += equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
-                        / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
-                }
-
-                PortfolioRatingModel model = new PortfolioRatingModel
-                {
-                    suitability = assetsSuitability,
-                    notSuited = percentage
-                };
-
-                return model;
-            }
-            else
-            {
-                List<ClientAccount> accounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
-
-
-                double assetsSuitability = 0;
-                double percentage = 0;
-                foreach (var account in accounts)
-                {
-                    var equityWithResearchValues = account.GetAssetsSync().OfType<DirectProperty>().ToList();
-
-                    assetsSuitability += equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings().Sum(w => w.Percentage * ((DirectProperty)w.Weightable).GetRating().TotalScore);
-
-                    //var weigthings = equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings();
-
-                    //% of not suitable assets
-                    percentage += equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
-                        / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
-                }
-
-                PortfolioRatingModel model = new PortfolioRatingModel
-                {
-                    suitability = assetsSuitability,
-                    notSuited = percentage
-                };
-
-                return model;
-            }
+            return GenerateRatingsModel(getPropertyAssetForClient());
         }
+        
         [HttpGet, Route("api/Adviser/DirectPropertyPortfolio/CashflowDetail")]
         public CashflowBriefModel GetCashflowDetailed_Adviser(string clientGroupId = null)
         {
@@ -513,6 +77,119 @@ namespace EDISAngular.APIControllers
         public DirectPropertyCashflowDetailedModel GetCashflowDetailed_Client()
         {
             return repo.DirectProperty_GetSummaryCashflowDetailed_Client(User.Identity.GetUserId());
+        }
+
+
+        public List<AssetBase> getPropertyAssetForAdviser(string clientGroupId) {
+            List<AssetBase> assets = new List<AssetBase>();
+
+            if (string.IsNullOrEmpty(clientGroupId)) {
+
+                List<GroupAccount> groupAccounts = edisRepo.getAllClientGroupAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
+                List<ClientAccount> clientAccounts = edisRepo.getAllClientAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
+                groupAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<DirectProperty>().Cast<AssetBase>().ToList()));
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<DirectProperty>().Cast<AssetBase>().ToList()));
+
+                return assets;
+            } else {
+                ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(clientGroupId);
+                List<GroupAccount> accounts = clientGroup.GetAccountsSync(DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
+
+                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<DirectProperty>().Cast<AssetBase>().ToList()));
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<DirectProperty>().Cast<AssetBase>().ToList()));
+
+                return assets;
+            }
+        }
+
+        public List<AssetBase> getPropertyAssetForClient() {
+            List<AssetBase> assets = new List<AssetBase>();
+
+            Client client = edisRepo.GetClientSync(User.Identity.GetUserId(), DateTime.Now);
+            ClientGroup clientGroup = edisRepo.GetClientGroupSync(client.ClientGroupId, DateTime.Now);
+            if (clientGroup.MainClientId == client.Id) {
+                List<GroupAccount> groupAccounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
+                groupAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<DirectProperty>().Cast<AssetBase>().ToList()));
+                clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<DirectProperty>().Cast<AssetBase>().ToList()));
+            } else {
+                List<ClientAccount> accounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
+                accounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<DirectProperty>().Cast<AssetBase>().ToList()));
+            }
+
+            return assets;
+        }
+
+        public SummaryGeneralInfo GenerateGeneralInforModel(List<AssetBase> assets) {
+            double totalCost = 0;
+            double totalMarketValue = 0;
+            double capitalGain = 0;
+
+            foreach (var asset in assets) {
+                totalCost += asset.GetCost().Total;
+                totalMarketValue += asset.GetTotalMarketValue();
+                capitalGain += asset.GetCost().CapitalGain;
+            }
+            SummaryGeneralInfo summary = new SummaryGeneralInfo {
+                cost = totalCost,
+                marketValue = totalMarketValue,
+                pl = totalMarketValue - totalCost,
+                plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100,
+                capitalGain = capitalGain
+            };
+            return summary;
+        }
+
+        public DirectPropertyGeoModel GeneratePropertyGeoModel(List<AssetBase> assets) {
+            List<DirectPropertyGeoItem> dataList = new List<DirectPropertyGeoItem>();
+
+            foreach (var property in assets.OfType<DirectProperty>().ToList()) {
+                dataList.Add(new DirectPropertyGeoItem {
+                    id = property.Id,
+                    address = property.FullAddress,
+                    latitude = property.Latitude == null ? 0 : (double)property.Latitude,
+                    longitude = property.Longitude == null ? 0 : (double)property.Longitude,
+                    country = property.Country,
+                    state = property.State,
+                    type = property.PropertyType,
+                    value = property.GetTotalMarketValue()
+                });
+            }
+
+            DirectPropertyGeoModel model = new DirectPropertyGeoModel {
+                data = dataList
+            };
+
+            return model;
+        }
+
+        public PortfolioRatingModel GenerateRatingsModel(List<AssetBase> assets) {
+            List<DirectProperty> equityWithResearchValues = assets.OfType<DirectProperty>().ToList();
+            var weightings = equityWithResearchValues.Cast<AssetBase>().ToList().GetAssetWeightings();
+            double assetsSuitability = weightings.Sum(w => w.Percentage * ((DirectProperty)w.Weightable).GetRating().TotalScore);
+            double percentage = equityWithResearchValues.Where(a => a.GetRating().SuitabilityRating == SuitabilityRating.Danger).Sum(a => a.GetTotalMarketValue())
+                / equityWithResearchValues.Sum(a => a.GetTotalMarketValue());
+
+            PortfolioRatingModel model = new PortfolioRatingModel {
+                suitability = assetsSuitability,
+                notSuited = percentage,
+                data = new List<PortfolioRatingItemModel>()
+            };
+
+            foreach (var weighting in weightings) {
+                Equity equity = (Equity)weighting.Weightable;
+
+                if (model.data.Any(m => m.name == equity.Ticker) == false) {
+                    model.data.Add(new PortfolioRatingItemModel {
+                        name = equity.Ticker,
+                        weighting = weighting.Percentage,
+                        score = equity.GetRating().TotalScore
+                    });
+                }
+            }
+            return model;
         }
     }
 }

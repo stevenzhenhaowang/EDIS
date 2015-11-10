@@ -89,6 +89,14 @@
             return $resource(AppStrings.EDIS_IP + "api/Adviser/AustralianEquityPortfolio/QuickStats" + clientSelector.getClientIdQueryString());
         }
     }])
+    app.factory("adviserPortfolioAEGetSectorInfo", ["clientSelectionService", "$http", "$resource", "AppStrings", function (clientSelector, $http, $resource, AppStrings) {
+        var DBContext = {
+            getData: function () {
+                return $resource(AppStrings.EDIS_IP + "api/Adviser/AustralianEquityPortfolio/SectorialExposure" + clientSelector.getClientIdQueryString());
+            }
+        }
+        return DBContext;
+    }])
     //END OF AE SERVICES
 
     //START OF INT SERVICES
@@ -135,8 +143,16 @@
     }])
     app.factory("adviserPortfolioINTQuickStats", ["clientSelectionService", "$http", "$resource", "AppStrings", function (clientSelector, $http, $resource, AppStrings) {
         return function () {
-            return $resource(AppStrings.EDIS_IP + "api/Adviser/AustralianEquityPortfolio/QuickStats" + clientSelector.getClientIdQueryString());
+            return $resource(AppStrings.EDIS_IP + "api/Adviser/InternationalEquityPortfolio/QuickStats" + clientSelector.getClientIdQueryString());
         }
+    }])
+    app.factory("adviserPortfolioINTGetSectorInfo", ["clientSelectionService", "$http", "$resource", "AppStrings", function (clientSelector, $http, $resource, AppStrings) {
+        var DBContext = {
+            getData: function () {
+                return $resource(AppStrings.EDIS_IP + "api/Adviser/InternationalEquityPortfolio/SectorialExposure" + clientSelector.getClientIdQueryString());
+            }
+        }
+        return DBContext;
     }])
     //END OF INT SERVICES
 
