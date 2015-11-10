@@ -99,9 +99,10 @@
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label>Group Account Cash Amount</label>
-                                        <input type="number" ng-model="collection.personProfile.groupAmount" name="groupAmount" required class="form-control" />
+                                        <input type="number" ng-model="collection.personProfile.groupAmount" name="groupAmount" required class="form-control" min="0" max="10000000000" />
                                         <div class="error" ng-show="form.groupAmount.$error.required&&form.groupAmount.$touched">Please provide group account cash amount</div>
-                                    </div>
+                                        <div class="error" ng-show="form.groupAmount.$error.max&&form.groupAmount.$touched">The amount should be no more than 10000000000</div>
+</div>
                                     <div class="col-md-4 form-group">
                                         <label>Adviser ID</label>
                                         <input type="text" ng-model="adviserId" name="adviserId" required class="form-control" />

@@ -33,114 +33,7 @@ namespace EDISAngular.APIControllers
         [HttpGet, Route("api/Client/PortfolioOverview/Summary")]
         public PortfolioSummary GetPortfolioSummary_Client()
         {
-            Client client = edisRepo.GetClientSync(User.Identity.GetUserId(), DateTime.Now);
-            ClientGroup clientGroup = edisRepo.GetClientGroupSync(client.ClientGroupId, DateTime.Now);
-            if (clientGroup.MainClientId == client.Id)
-            {
-                List<GroupAccount> groupAccounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
-                List<ClientAccount> clientAccounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
-
-
-                List<AssetBase> assets = new List<AssetBase>();
-                List<LiabilityBase> liabilities = new List<LiabilityBase>();
-                foreach (var account in groupAccounts)
-                {
-                    assets.AddRange(account.GetAssetsSync());
-                    liabilities.AddRange(account.GetLiabilitiesSync());
-                }
-                foreach (var account in clientAccounts)
-                {
-                    assets.AddRange(account.GetAssetsSync());
-                    liabilities.AddRange(account.GetLiabilitiesSync());
-                }
-
-
-                PortfolioSummary summary = new PortfolioSummary
-                {
-                    investment = new SummaryItem
-                    {
-                        data = new List<DataNameAmountPair>
-                        {
-                            new DataNameAmountPair{ amount = assets.OfType<AustralianEquity>().Cast<AssetBase>().ToList().GetTotalMarketValue(), name="Australian Equity"},
-                            new DataNameAmountPair { amount =  assets.OfType<InternationalEquity>().Cast<AssetBase>().ToList().GetTotalMarketValue(), name="International Equity"},
-                            new DataNameAmountPair { amount =  assets.OfType<ManagedInvestment>().Cast<AssetBase>().ToList().GetTotalMarketValue(), name="Managed Investment"},
-                        },
-                    },
-                    liability = new SummaryItem
-                    {
-                        data = new List<DataNameAmountPair>
-                        {
-                            //new DataNameAmountPair{amount =  liabilities.OfType<MortgageAndHomeLiability>().Cast<LiabilityBase>().ToList(),name="Mortgage & Investment Loans"},
-                            //new DataNameAmountPair{amount=30000,name="Margin Loans"}
-                        },
-                        total = 60000
-                    },
-                    networth = new SummaryItem
-                    {
-                        data = new List<DataNameAmountPair>
-                        {
-                            //new DataNameAmountPair{amount=30000, name="Investor Equity"},
-                            //new DataNameAmountPair{amount=500000, name="Non-Investment Asset"}
-                        }
-                    }
-                };
-
-                summary.investment.total = summary.investment.data.Sum(d => d.amount);
-                summary.liability.total = summary.liability.data.Sum(d => d.amount);
-                summary.networth.total = summary.networth.data.Sum(d => d.amount);
-
-                return summary;
-            }
-            else
-            {
-                List<ClientAccount> accounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
-
-                List<AssetBase> assets = new List<AssetBase>();
-                List<LiabilityBase> liabilities = new List<LiabilityBase>();
-                foreach (var account in accounts)
-                {
-                    assets.AddRange(account.GetAssetsSync());
-                    liabilities.AddRange(account.GetLiabilitiesSync());
-                }
-
-
-                PortfolioSummary summary = new PortfolioSummary
-                {
-                    investment = new SummaryItem
-                    {
-                        data = new List<DataNameAmountPair>
-                        {
-                            new DataNameAmountPair{ amount = assets.OfType<AustralianEquity>().Cast<AssetBase>().ToList().GetTotalMarketValue(), name="Australian Equity"},
-                            new DataNameAmountPair { amount =  assets.OfType<InternationalEquity>().Cast<AssetBase>().ToList().GetTotalMarketValue(), name="International Equity"},
-                            new DataNameAmountPair { amount =  assets.OfType<ManagedInvestment>().Cast<AssetBase>().ToList().GetTotalMarketValue(), name="Managed Investment"},
-                        },
-                    },
-                    liability = new SummaryItem
-                    {
-                        data = new List<DataNameAmountPair>
-                        {
-                            //new DataNameAmountPair{amount =  liabilities.OfType<MortgageAndHomeLiability>().Cast<LiabilityBase>().ToList(),name="Mortgage & Investment Loans"},
-                            //new DataNameAmountPair{amount=30000,name="Margin Loans"}
-                        },
-                        total = 60000
-                    },
-                    networth = new SummaryItem
-                    {
-                        data = new List<DataNameAmountPair>
-                        {
-                            //new DataNameAmountPair{amount=30000, name="Investor Equity"},
-                            //new DataNameAmountPair{amount=500000, name="Non-Investment Asset"}
-                        }
-                    }
-                };
-
-                summary.investment.total = summary.investment.data.Sum(d => d.amount);
-                summary.liability.total = summary.investment.data.Sum(d => d.amount);
-                summary.networth.total = summary.investment.data.Sum(d => d.amount);
-
-                return summary;
-            }
-
+            return GenerateSummary(getAllAssetForClient(), getAllLiabilitiesForClient());
         }
         [HttpGet, Route("api/Adviser/PortfolioOverview/Cashflow")]
         public CashflowBriefModel GetCashflowSummary_Adviser(string clientGroupId = null)
@@ -1688,6 +1581,7 @@ namespace EDISAngular.APIControllers
                 accounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
                 clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync()));
             }
+
             return assets;
         }
 

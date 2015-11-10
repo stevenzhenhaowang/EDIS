@@ -75,35 +75,39 @@ namespace EDISAngular.Controllers
             var userId = User.Identity.GetUserId();
             var client = edisRopo.GetClientSync(userId, DateTime.Now);
             var riskProfile = edisRopo.getRiskProfileForClient(client.Id);
+            RiskProfileBindingModel riskModel = null;
 
-            RiskProfileBindingModel riskModel = new RiskProfileBindingModel {
-                capitalLossAttitude = riskProfile.CapitalLossAttitude,
-                clientId = riskProfile.ClientID,
-                comments = riskProfile.Comments,
-                incomeSource = riskProfile.IncomeSource,
-                retirementAge = riskProfile.RetirementAge.ToString(),
-                riskAttitude = riskProfile.RiskAttitude,
-                shortTermEquityPercent = riskProfile.ShortTermEquityPercent,
-                shortTermAssetPercent = riskProfile.ShortTermAssetPercent,
-                investmentKnowledge = riskProfile.InvestmentKnowledge,
-                investmentObjective1 = riskProfile.InvestmentObjective1,
-                investmentObjective2 = riskProfile.InvestmentObjective2,
-                investmentObjective3 = riskProfile.InvestmentObjective3,
-                investmentProfile = riskProfile.InvestmentProfile,
-                investmentTimeHorizon = riskProfile.InvestmentTimeHorizon,
-                longTermGoal1 = riskProfile.LongTermGoal1,
-                longTermGoal2 = riskProfile.LongTermGoal2,
-                longTermGoal3 = riskProfile.LongTermGoal3,
-                medTermGoal1 = riskProfile.MedTermGoal1,
-                medTermGoal2 = riskProfile.MedTermGoal2,
-                medTermGoal3 = riskProfile.MedTermGoal3,
-                profileId = riskProfile.RiskProfileID,
-                retirementIncome = riskProfile.RetirementIncome,
-                shortTermGoal1 = riskProfile.ShortTermGoal1,
-                shortTermGoal2 = riskProfile.ShortTermGoal2,
-                shortTermGoal3 = riskProfile.ShortTermGoal3,
-                shortTermTrading = riskProfile.ShortTermTrading
-            };
+            if (riskProfile != null) {
+                riskModel = new RiskProfileBindingModel {
+                    capitalLossAttitude = riskProfile.CapitalLossAttitude,
+                    clientId = riskProfile.ClientID,
+                    comments = riskProfile.Comments,
+                    incomeSource = riskProfile.IncomeSource,
+                    retirementAge = riskProfile.RetirementAge.ToString(),
+                    riskAttitude = riskProfile.RiskAttitude,
+                    shortTermEquityPercent = riskProfile.ShortTermEquityPercent,
+                    shortTermAssetPercent = riskProfile.ShortTermAssetPercent,
+                    investmentKnowledge = riskProfile.InvestmentKnowledge,
+                    investmentObjective1 = riskProfile.InvestmentObjective1,
+                    investmentObjective2 = riskProfile.InvestmentObjective2,
+                    investmentObjective3 = riskProfile.InvestmentObjective3,
+                    investmentProfile = riskProfile.InvestmentProfile,
+                    investmentTimeHorizon = riskProfile.InvestmentTimeHorizon,
+                    longTermGoal1 = riskProfile.LongTermGoal1,
+                    longTermGoal2 = riskProfile.LongTermGoal2,
+                    longTermGoal3 = riskProfile.LongTermGoal3,
+                    medTermGoal1 = riskProfile.MedTermGoal1,
+                    medTermGoal2 = riskProfile.MedTermGoal2,
+                    medTermGoal3 = riskProfile.MedTermGoal3,
+                    profileId = riskProfile.RiskProfileID,
+                    retirementIncome = riskProfile.RetirementIncome,
+                    shortTermGoal1 = riskProfile.ShortTermGoal1,
+                    shortTermGoal2 = riskProfile.ShortTermGoal2,
+                    shortTermGoal3 = riskProfile.ShortTermGoal3,
+                    shortTermTrading = riskProfile.ShortTermTrading
+                };
+            }
+            
             ClientPersonCompleteProfileBinding model = new ClientPersonCompleteProfileBinding { 
             
                 UserId = userId,
@@ -142,35 +146,38 @@ namespace EDISAngular.Controllers
             var userId = User.Identity.GetUserId();
             var client = edisRopo.GetClientSync(userId, DateTime.Now);
             var riskProfile = edisRopo.getRiskProfileForClient(client.Id);
+            RiskProfileBindingModel riskModel = null;
 
-            RiskProfileBindingModel riskModel = new RiskProfileBindingModel {
-                capitalLossAttitude = riskProfile.CapitalLossAttitude,
-                clientId = riskProfile.ClientID,
-                comments = riskProfile.Comments,
-                incomeSource = riskProfile.IncomeSource,
-                retirementAge = riskProfile.RetirementAge.ToString(),
-                riskAttitude = riskProfile.RiskAttitude,
-                shortTermEquityPercent = riskProfile.ShortTermEquityPercent,
-                shortTermAssetPercent = riskProfile.ShortTermAssetPercent,
-                investmentKnowledge = riskProfile.InvestmentKnowledge,
-                investmentObjective1 = riskProfile.InvestmentObjective1,
-                investmentObjective2 = riskProfile.InvestmentObjective2,
-                investmentObjective3 = riskProfile.InvestmentObjective3,
-                investmentProfile = riskProfile.InvestmentProfile,
-                investmentTimeHorizon = riskProfile.InvestmentTimeHorizon,
-                longTermGoal1 = riskProfile.LongTermGoal1,
-                longTermGoal2 = riskProfile.LongTermGoal2,
-                longTermGoal3 = riskProfile.LongTermGoal3,
-                medTermGoal1 = riskProfile.MedTermGoal1,
-                medTermGoal2 = riskProfile.MedTermGoal2,
-                medTermGoal3 = riskProfile.MedTermGoal3,
-                profileId = riskProfile.RiskProfileID,
-                retirementIncome = riskProfile.RetirementIncome,
-                shortTermGoal1 = riskProfile.ShortTermGoal1,
-                shortTermGoal2 = riskProfile.ShortTermGoal2,
-                shortTermGoal3 = riskProfile.ShortTermGoal3,
-                shortTermTrading = riskProfile.ShortTermTrading
-            };
+            if (riskProfile != null) {
+                riskModel = new RiskProfileBindingModel {
+                    capitalLossAttitude = riskProfile.CapitalLossAttitude,
+                    clientId = riskProfile.ClientID,
+                    comments = riskProfile.Comments,
+                    incomeSource = riskProfile.IncomeSource,
+                    retirementAge = riskProfile.RetirementAge.ToString(),
+                    riskAttitude = riskProfile.RiskAttitude,
+                    shortTermEquityPercent = riskProfile.ShortTermEquityPercent,
+                    shortTermAssetPercent = riskProfile.ShortTermAssetPercent,
+                    investmentKnowledge = riskProfile.InvestmentKnowledge,
+                    investmentObjective1 = riskProfile.InvestmentObjective1,
+                    investmentObjective2 = riskProfile.InvestmentObjective2,
+                    investmentObjective3 = riskProfile.InvestmentObjective3,
+                    investmentProfile = riskProfile.InvestmentProfile,
+                    investmentTimeHorizon = riskProfile.InvestmentTimeHorizon,
+                    longTermGoal1 = riskProfile.LongTermGoal1,
+                    longTermGoal2 = riskProfile.LongTermGoal2,
+                    longTermGoal3 = riskProfile.LongTermGoal3,
+                    medTermGoal1 = riskProfile.MedTermGoal1,
+                    medTermGoal2 = riskProfile.MedTermGoal2,
+                    medTermGoal3 = riskProfile.MedTermGoal3,
+                    profileId = riskProfile.RiskProfileID,
+                    retirementIncome = riskProfile.RetirementIncome,
+                    shortTermGoal1 = riskProfile.ShortTermGoal1,
+                    shortTermGoal2 = riskProfile.ShortTermGoal2,
+                    shortTermGoal3 = riskProfile.ShortTermGoal3,
+                    shortTermTrading = riskProfile.ShortTermTrading
+                };
+            }
 
             ClientEntityCompleteProfileBinding model = new ClientEntityCompleteProfileBinding { 
                 UserID = userId,
