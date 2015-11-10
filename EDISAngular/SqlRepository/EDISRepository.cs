@@ -8459,24 +8459,36 @@ namespace SqlRepository
             //get all clients and associated Equity to deduct the share amount increase the capital 
 
            
-            var equity = getEquityByTicker(model.EquityId);
-            var equityToAction = getEquityById(equity.AssetId);
+            //var equity = getEquityByTicker(model.EquityId);
+            //var equityToAction = getEquityById(equity.AssetId);
             var accountToAction = getAllClientAccountsForAdviser(model.AdviserId, DateTime.Now);
+            
             foreach (var account in accountToAction)
             {
-
-                account.MakeTransactionSync(new EquityTransactionCreation()
+                var cashAccount = GetCashAccountForAccount(account.Id);
+                CashTransaction cashTrans = new CashTransaction
                 {
-                    EquityType = equityToAction.EquityType,
-                    FeesRecords = new List<TransactionFeeRecordCreation>(),
-                    Name = equityToAction.Name,
-                    NumberOfUnits = 00000000000000,
-                    Price = equityToAction.LatestPrice,
-                    Sector = equityToAction.Sector,
-                    Ticker = equityToAction.Ticker,
-                    TransactionDate = DateTime.Now,
-                });
-            }
+                    Id = Guid.NewGuid().ToString(),
+                    CreatedOn = DateTime.Now,
+                    CashAccount = cashAccount,
+                    CashAccountId = cashAccount.Id,
+                    Amount =Convert.ToDouble(model.ReturnOfCapitalAmount),
+                    TransactionDate = DateTime.Now
+                };
+            };
+
+            //account.MakeTransactionSync(new EquityTransactionCreation()
+            //{
+            //    EquityType = equityToAction.EquityType,
+            //    FeesRecords = new List<TransactionFeeRecordCreation>(),
+            //    Name = equityToAction.Name,
+            //    NumberOfUnits = 00000000000000,
+            //    Price = equityToAction.LatestPrice,
+            //    Sector = equityToAction.Sector,
+            //    Ticker = equityToAction.Ticker,
+            //    TransactionDate = DateTime.Now,
+            //});
+       
             _db.SaveChanges();
         }
 
@@ -8486,6 +8498,13 @@ namespace SqlRepository
             
 
 
+        }
+
+
+
+        public CashAccount GetCashAccountForAccount(string accountNumber) {
+            var cashacc = _db.CashAccounts.Where(ca => ca.AccountNumber == accountNumber).SingleOrDefault();
+            return cashacc;
         }
 
     }

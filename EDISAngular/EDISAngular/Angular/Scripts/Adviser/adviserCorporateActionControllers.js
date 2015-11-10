@@ -329,7 +329,7 @@
   
     $scope.add = function () {
         var data = {
-            corporateActionName: $scope.actionName,
+            actionName: $scope.actionName,
             equityId: $scope.tickerNumber,
             shareAmount: $scope.shareAmount,
             //adviserUserId: adviserId,

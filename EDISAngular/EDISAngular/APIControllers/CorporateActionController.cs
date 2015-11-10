@@ -133,11 +133,12 @@ namespace EDISAngular.APIControllers
             if (model != null && ModelState.IsValid)
             {
                 ReturnOfCapitalCreationModel repoModel = new ReturnOfCapitalCreationModel();
-                repoModel.EquityId = model.equityId;
+                //repoModel.EquityId = model.equityId;
                 repoModel.ReturnOfCapitalAmount = model.returnAmount;
-                repoModel.ShareMount = model.shareAmount;
+                //repoModel.ShareMount = model.shareAmount;
                 repoModel.AdjustmentDate = model.returnDate;
                 repoModel.AdviserId = userid;
+                repoModel.ActionName = model.actionName;
                 repo.CreateNewReturnOfCapitalAction(repoModel);
 
 

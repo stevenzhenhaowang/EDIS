@@ -8,6 +8,7 @@ namespace Domain.Portfolio.CorporateActions
 {
     public class ReturnOfCapitalCreationModel
     {
+        public string ActionName { get; set; }
         public string EquityId { get; set; }
         public string AdviserId { get; set; }
         public string ShareMount { get; set; }
