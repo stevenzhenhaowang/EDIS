@@ -1,5 +1,5 @@
 ﻿var app = angular.module("EDIS");
-app.factory("clientPortfolioSummaryDBService", function ($http, $resource, $filter, AppStrings) {
+app.factory("clientPortfolioSummaryDBService", function ($http, $resource, $filter, AppStrings, companySelectionService, periodSelectionService) {
     var DBContext = {
         assetSummary: function () {
             return $resource(AppStrings.EDIS_IP + "api/Client/PortfolioOverview/Summary");
@@ -20,7 +20,7 @@ app.factory("clientPortfolioSummaryDBService", function ($http, $resource, $filt
             return $resource(AppStrings.EDIS_IP + "api/Client/PortfolioOverview/Stastics");
         },
         recentStockData: function () {
-            return $resource(AppStrings.EDIS_IP + "api/PortfolioOverview/RecentStock");
+            return $resource(AppStrings.EDIS_IP + "api/PortfolioOverview/RecentStock", { companyId: companySelectionService.getCurrentCompanyId(), periodId: periodSelectionService.getCurrentPeriodId() });
         },
         portfolioRating: function () {
             return $resource(AppStrings.EDIS_IP + "api/Client/PortfolioOverview/PortfolioRating");

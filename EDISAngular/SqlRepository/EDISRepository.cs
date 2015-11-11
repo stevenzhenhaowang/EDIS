@@ -7914,6 +7914,16 @@ namespace SqlRepository
             };
         }
 
+        public string GetCountryCodeByName(string countryName) {
+            var countryCode = _db.CountryCodes.FirstOrDefault(c => c.CountryName.Contains(countryName));
+            if (countryCode != null) {
+                return countryCode.Code;
+            }
+            else{
+                return null;
+            }
+        }
+
         public List<Domain.Portfolio.AggregateRoots.Asset.Equity> GetEquityForAccountSync(string equityId, ClientGroup clientGroup) {
 
             List<GroupAccount> GroupAccounts = GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
@@ -8018,7 +8028,7 @@ namespace SqlRepository
                     F1Recommendation = GetF1RatiosForEquitySync(equity.Ticker),
                     Sector = equity.Sector,
                     TotalNumberOfUnits = GetEquityUnitByEquityIdAndClientGroup(equityId, clientGroup),
-                    LatestPrice = latestPrice == null ? 0 : (double)latestPrice
+                    LatestPrice = latestPrice
                 };
             } else if (equity.EquityType == EquityTypes.InternationalEquity) {
                 return new Domain.Portfolio.AggregateRoots.Asset.InternationalEquity(this) {
@@ -8030,7 +8040,7 @@ namespace SqlRepository
                     F1Recommendation = GetF1RatiosForEquitySync(equity.Ticker),
                     Sector = equity.Sector,
                     TotalNumberOfUnits = GetEquityUnitByEquityIdAndClientGroup(equityId, clientGroup),
-                    LatestPrice = latestPrice == null ? 0 : (double)latestPrice
+                    LatestPrice = latestPrice
                 };
             } else if (equity.EquityType == EquityTypes.ManagedInvestments) {
                 return new Domain.Portfolio.AggregateRoots.Asset.ManagedInvestment(this) {
@@ -8042,7 +8052,7 @@ namespace SqlRepository
                     F1Recommendation = GetF1RatiosForEquitySync(equity.Ticker),
                     Sector = equity.Sector,
                     TotalNumberOfUnits = GetEquityUnitByEquityIdAndClientGroup(equityId, clientGroup),
-                    LatestPrice = latestPrice == null ? 0 : (double)latestPrice
+                    LatestPrice = latestPrice
                 };
             } else {
                 return null;

@@ -91,8 +91,9 @@ namespace Domain.Portfolio.AggregateRoots.Asset
             }
             else
             {
-                throw new Exception(
-                    "Fair value variation is not populated for current asset, which is of type International Equity");
+                //throw new Exception(
+                //    "Fair value variation is not populated for current asset, which is of type International Equity");
+                f1Score.FairValueVariation = 0;
             }
         }
 
@@ -187,8 +188,10 @@ namespace Domain.Portfolio.AggregateRoots.Asset
             }
             else
             {
-                throw new Exception(
-                    "One Year Revenue Growth is not populated for current asset, which is of type International Equity");
+                f1Score.OneYearRevenueGrowthF1 = 0;
+                //throw new Exception(
+                //    "One Year Revenue Growth is not populated for current asset, which is of type International Equity");
+
             }
         }
 
@@ -221,8 +224,9 @@ namespace Domain.Portfolio.AggregateRoots.Asset
             }
             else
             {
-                throw new Exception(
-                    "Financial Leverage is not populated for current asset, which is of type International Equity");
+                f1Score.FinancialLeverageF1 = 0;
+                //throw new Exception(
+                //    "Financial Leverage is not populated for current asset, which is of type International Equity");
             }
         }
 
@@ -347,8 +351,7 @@ namespace Domain.Portfolio.AggregateRoots.Asset
             var fiveYearTotalReturn = F1Recommendation.FiveYearTotalReturn;
             if (!fiveYearTotalReturn.HasValue)
             {
-                throw new Exception(
-                    "Five year total return is not populated for current asset, which is of type International Equity.");
+                fiveYearTotalReturn = 0;
             }
             if (fiveYearTotalReturn.Value >= table.Ief1Parameters.Defensive.FiveYearTotalReturn)
             {

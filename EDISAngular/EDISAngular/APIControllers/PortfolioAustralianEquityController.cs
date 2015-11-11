@@ -104,7 +104,7 @@ namespace EDISAngular.APIControllers
             return null;
         }
 
-        [HttpGet, Route("api/Adviser/AustralianEquityPortfolio/SectorialExposure")]             //.....
+        [HttpGet, Route("api/Adviser/AustralianEquityPortfolio/SectorialExposure")]          
         public SectorialPortfolioModel GetSectorialExposureSummary_Adviser(string clientGroupId = null) {
             return GenerateSectorialModel(getAustralianAssetForAdviser(clientGroupId));
         }

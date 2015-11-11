@@ -10,6 +10,7 @@ using Domain.Portfolio.Values;
 using Domain.Portfolio.Values.Cashflow;
 using Domain.Portfolio.Values.Ratios;
 using Domain.Portfolio.Values.Weighting;
+using Shared;
 
 namespace Domain.Portfolio.Services
 {

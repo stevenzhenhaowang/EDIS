@@ -9,5 +9,7 @@ namespace EDISAngular.Models.ServiceModels.PortfolioModels
     {
         public List<DataNameAmountPair> data { get; set; }
         public double total { get; set; }
+        public double totalReturn { get; set; }
+        public double totalPercentage { get; set; }
     }
 }

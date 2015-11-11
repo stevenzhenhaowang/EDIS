@@ -65,6 +65,7 @@
     <Compile Include="Client.cs" />
     <Compile Include="ClientGroup.cs" />
     <Compile Include="CorperateActions\ReturnOfCapital.cs" />
+    <Compile Include="CountryCode.cs" />
     <Compile Include="EdisContext.cs" />
     <Compile Include="Enums\TransactionType.cs" />
     <Compile Include="ExpenseRecords\ConsultancyExpense.cs" />
@@ -80,13 +81,13 @@
     <Compile Include="Liabilities\MarginLendingTransaction.cs" />
     <Compile Include="Liabilities\MortgageHomeLoanTransaction.cs" />
     <Compile Include="Markers\IAsset.cs" />
-    <Compile Include="Migrations\201511100230122_itsanewdayitsanewlife.cs" />
-    <Compile Include="Migrations\201511100230122_itsanewdayitsanewlife.Designer.cs">
-      <DependentUpon>201511100230122_itsanewdayitsanewlife.cs</DependentUpon>
+    <Compile Include="Migrations\201511110043484_countrycode.cs" />
+    <Compile Include="Migrations\201511110043484_countrycode.Designer.cs">
+      <DependentUpon>201511110043484_countrycode.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201511100242368_new.cs" />
-    <Compile Include="Migrations\201511100242368_new.Designer.cs">
-      <DependentUpon>201511100242368_new.cs</DependentUpon>
+    <Compile Include="Migrations\201511110044585_countrycode2.cs" />
+    <Compile Include="Migrations\201511110044585_countrycode2.Designer.cs">
+      <DependentUpon>201511110044585_countrycode2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NoteLinks.cs" />
@@ -118,11 +119,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201511100230122_itsanewdayitsanewlife.resx">
-      <DependentUpon>201511100230122_itsanewdayitsanewlife.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201511110043484_countrycode.resx">
+      <DependentUpon>201511110043484_countrycode.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511100242368_new.resx">
-      <DependentUpon>201511100242368_new.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201511110044585_countrycode2.resx">
+      <DependentUpon>201511110044585_countrycode2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

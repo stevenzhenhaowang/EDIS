@@ -179,13 +179,13 @@ namespace EDISAngular.APIControllers
             };
 
             foreach (var weighting in weightings) {
-                Equity equity = (Equity)weighting.Weightable;
+                DirectProperty property = (DirectProperty)weighting.Weightable;
 
-                if (model.data.Any(m => m.name == equity.Ticker) == false) {
+                if (model.data.Any(m => m.name == property.City) == false) {
                     model.data.Add(new PortfolioRatingItemModel {
-                        name = equity.Ticker,
+                        name = property.City,
                         weighting = weighting.Percentage,
-                        score = equity.GetRating().TotalScore
+                        score = property.GetRating().TotalScore
                     });
                 }
             }
