@@ -13,8 +13,8 @@ namespace Edis.Db.CorperateActions
         public int Id { get; set; }
         public string AdviserId { get; set; }
         public string CorperateActionName { get; set; }
-        public double ReturnCashAmount { get; set; }
+        public string ReturnCashAmount { get; set; }
+        public string  AssociatedAccountNumber { get; set; }
         public DateTime ReturnDate { get; set; }
-
     }
 }

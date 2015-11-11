@@ -17,7 +17,13 @@ namespace EDISAngular.APIControllers
     {
         private EdisRepository repo = new EdisRepository();
         private CommonReferenceDataRepository comRepo = new CommonReferenceDataRepository();
-     
+        private string userid;
+
+        public CorporateActionController()
+        {
+            userid = User.Identity.GetUserId();
+        }
+
         [HttpGet, Route("api/Adviser/CorporateAction/IPO")]
         public List<IPOActionData> GetAllIpoActionsForAdviser()
         {
@@ -59,13 +65,24 @@ namespace EDISAngular.APIControllers
         //to do get all return of capital 
         [HttpGet, Route("api/Adviser/CorprateAction/ReturnOfCapital")]
         public List<ReturnOfCapitalData> GetAllReturnOfCapitalActionForAdviser() {
-            Console.WriteLine("get all return of capital action check");
-            return new List<ReturnOfCapitalData> {
-                new ReturnOfCapitalData {
-                    actionId = "re1234", actionName = "whateverName", equityId = "equityID", returnDate = DateTime.Now, returnAmount = "888",
-                    shareAmount= "whatever", participants = new List<returnOfCapitalParticipant> { new returnOfCapitalParticipant { edisAccountNumber = "cartman"} }
-                }
-            };
+            var result = new List<ReturnOfCapitalData>();
+            var repoRetrival = repo.GetAllReturnOfCapitalRecord(userid);
+            foreach (var re in repoRetrival) {
+                var oneRecord = new ReturnOfCapitalData() {
+                    actionName = re.CorperateActionName,
+                    returnDate = re.ReturnDate,
+                    returnAmount = re.ReturnCashAmount,
+                    //?  do need to may be for display purpose its ok  accountName = re.AssociatedAccountNumber
+                };
+                result.Add(oneRecord);
+            }
+            return result;
+            //return new List<ReturnOfCapitalData> {
+            //    new ReturnOfCapitalData {
+            //        actionId = "re1234", actionName = "whateverName", equityId = "equityID", returnDate = DateTime.Now, returnAmount = "888",
+            //        shareAmount= "whatever", participants = new List<returnOfCapitalParticipant> { new returnOfCapitalParticipant { edisAccountNumber = "cartman"} }
+            //    }
+            //};
         }
         [HttpGet, Route("api/Adviser/CorporateAction/Reinvestment")]
         public List<ReinvestmentData> GetAllReinvestmentsActionForAdviser() {

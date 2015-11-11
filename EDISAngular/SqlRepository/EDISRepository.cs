@@ -50,6 +50,7 @@ using System.Reflection;
 using System.ComponentModel;
 using Domain.Portfolio.CorporateActions;
 using Domain.Portfolio.TransactionModels;
+using Edis.Db.CorperateActions;
 
 namespace SqlRepository
 {
@@ -8425,70 +8426,69 @@ namespace SqlRepository
 
 
 
-        public void aaaaa(ReturnOfCapitalCreationModel model)
-        {
-            //to do 
-            //get all clients and associated Equity to deduct the share amount increase the capital 
 
-           
-            var equity = getEquityByTicker(model.EquityId);
-            var equityToAction = getEquityById(equity.AssetId);
-            var accountToAction = getAllClientAccountsForAdviser(model.AdviserId, DateTime.Now);
-            foreach (var account in accountToAction)
-            {
-
-                account.MakeTransactionSync(new EquityTransactionCreation()
-                {
-                    EquityType = equityToAction.EquityType,
-                    FeesRecords = new List<TransactionFeeRecordCreation>(),
-                    Name = equityToAction.Name,
-                    NumberOfUnits = Convert.ToInt32(model.ShareMount),
-                    Price = equityToAction.LatestPrice,
-                    Sector = equityToAction.Sector,
-                    Ticker = equityToAction.Ticker,
-                    TransactionDate = DateTime.Now,
-                });
-            }
-            _db.SaveChanges();
-        }
 
 
           public void CreateNewReturnOfCapitalAction(ReturnOfCapitalCreationModel model)
         {
             //to do 
-            //get all clients and associated Equity to deduct the share amount increase the capital 
+            //get all associated cashAccounts to increase the capital 
 
-           
-            //var equity = getEquityByTicker(model.EquityId);
-            //var equityToAction = getEquityById(equity.AssetId);
-            var accountToAction = getAllClientAccountsForAdviser(model.AdviserId, DateTime.Now);
+            var accountToAction = GetAllClientGroupsForAdviserSync(model.AdviserId, DateTime.Now);
+
+            if (accountToAction != null){ 
+               foreach (var account in accountToAction)
+              {
+                    var clientGroup =  GetAccountsForClientGroupSync(account.ClientGroupNumber, DateTime.Now).FirstOrDefault();
+                    var amountToDeductOrIncrease = Convert.ToDouble(model.ReturnOfCapitalAmount);
+                    MakeCashTransactions(account.ClientGroupNumber, amountToDeductOrIncrease, clientGroup);
+                    recordReturnOfCapital(model.AdviserId, account.ClientGroupNumber, model.ReturnOfCapitalAmount, model.ActionName);
+              };
+            }
+            _db.SaveChanges();
+        }
+
+        public void MakeCashTransactions(string cashAccountNumber, double amount, GroupAccount clientGroup) {
+            var cashAccount =  _db.CashAccounts.Where(ca => ca.AccountNumber == cashAccountNumber).SingleOrDefault();
             
-            foreach (var account in accountToAction)
+            // RecordCashAccountTransactionSync(TransactionCreationBase transaction, Edis.Db.Adviser adviser,  Account account))
+            //account
+            //var passAccount = GetAccountsForClientGroupSync(account,DateTime.Now).FirstOrDefault();
+            //var account = _db.Accounts.Where(acc => acc.AccountNumber == cashAccountNumber).SingleOrDefault();
+            if (cashAccount.CashTransactions == null)
             {
-                var cashAccount = GetCashAccountForAccount(account.Id);
-                CashTransaction cashTrans = new CashTransaction
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    CreatedOn = DateTime.Now,
-                    CashAccount = cashAccount,
-                    CashAccountId = cashAccount.Id,
-                    Amount =Convert.ToDouble(model.ReturnOfCapitalAmount),
-                    TransactionDate = DateTime.Now
-                };
+                cashAccount.CashTransactions = new List<CashTransaction>();
+            }
+            CashTransaction cashTrans = new CashTransaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                CreatedOn = DateTime.Now,
+                CashAccount = cashAccount,
+                CashAccountId = cashAccount.Id,
+                Amount = amount,
+                TransactionDate = DateTime.Now,      
             };
+            var account = _db.Accounts.Where(acc => acc.AccountNumber == clientGroup.AccountNumber).FirstOrDefault();
 
-            //account.MakeTransactionSync(new EquityTransactionCreation()
-            //{
-            //    EquityType = equityToAction.EquityType,
-            //    FeesRecords = new List<TransactionFeeRecordCreation>(),
-            //    Name = equityToAction.Name,
-            //    NumberOfUnits = 00000000000000,
-            //    Price = equityToAction.LatestPrice,
-            //    Sector = equityToAction.Sector,
-            //    Ticker = equityToAction.Ticker,
-            //    TransactionDate = DateTime.Now,
-            //});
-       
+            //RecordCashAccountTransactionSync(cashTrans,adviser, );
+            cashAccount.FaceValue += amount;
+            cashAccount.CashTransactions.Add(cashTrans);
+            account.CashTransactions.Add(cashTrans);
+            _db.CashTransactions.Add(cashTrans);
+            _db.SaveChanges();
+        }
+
+
+
+        public void recordReturnOfCapital(string AdviseId, string ClientGroupNumber,string amount, string actionName) {
+            var newRecord = new ReturnOfCapital() {
+                AdviserId =  AdviseId,
+                AssociatedAccountNumber = ClientGroupNumber,
+                CorperateActionName = actionName,
+                ReturnDate = DateTime.Now,
+                ReturnCashAmount = amount
+            };
+            _db.ReturnOfCapitals.Add(newRecord);
             _db.SaveChanges();
         }
 
@@ -8503,16 +8503,13 @@ namespace SqlRepository
 
 
         public CashAccount GetCashAccountForAccount(string accountNumber) {
-            var cashacc = _db.CashAccounts.Where(ca => ca.AccountNumber == accountNumber).SingleOrDefault();
-            return cashacc;
+            return _db.CashAccounts.Where(ca => ca.AccountNumber == accountNumber).SingleOrDefault();
+        }
+
+
+        public List<ReturnOfCapital> GetAllReturnOfCapitalRecord(string AdviserId) {
+           return _db.ReturnOfCapitals.Where(re => re.AdviserId == AdviserId).ToList();
         }
 
     }
-
-  
-
-    //public Equity getEquityById(string equityId)
-    //{
-    //    throw new NotImplementedException();
-    //}
 }
