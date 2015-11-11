@@ -81,9 +81,21 @@
     <Compile Include="Liabilities\MarginLendingTransaction.cs" />
     <Compile Include="Liabilities\MortgageHomeLoanTransaction.cs" />
     <Compile Include="Markers\IAsset.cs" />
-    <Compile Include="Migrations\201511110043484_countrycode.cs" />
-    <Compile Include="Migrations\201511110043484_countrycode.Designer.cs">
-      <DependentUpon>201511110043484_countrycode.cs</DependentUpon>
+    <Compile Include="Migrations\201511100246407_itsanewdayitsanewlife.cs" />
+    <Compile Include="Migrations\201511100246407_itsanewdayitsanewlife.Designer.cs">
+      <DependentUpon>201511100246407_itsanewdayitsanewlife.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511100429111_addidToReturn.cs" />
+    <Compile Include="Migrations\201511100429111_addidToReturn.Designer.cs">
+      <DependentUpon>201511100429111_addidToReturn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511100435082_stringtype.cs" />
+    <Compile Include="Migrations\201511100435082_stringtype.Designer.cs">
+      <DependentUpon>201511100435082_stringtype.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511100443328_makeitBackToNumber.cs" />
+    <Compile Include="Migrations\201511100443328_makeitBackToNumber.Designer.cs">
+      <DependentUpon>201511100443328_makeitBackToNumber.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201511110044585_countrycode2.cs" />
     <Compile Include="Migrations\201511110044585_countrycode2.Designer.cs">
@@ -119,8 +131,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201511110043484_countrycode.resx">
-      <DependentUpon>201511110043484_countrycode.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201511100246407_itsanewdayitsanewlife.resx">
+      <DependentUpon>201511100246407_itsanewdayitsanewlife.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511100429111_addidToReturn.resx">
+      <DependentUpon>201511100429111_addidToReturn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511100435082_stringtype.resx">
+      <DependentUpon>201511100435082_stringtype.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511100443328_makeitBackToNumber.resx">
+      <DependentUpon>201511100443328_makeitBackToNumber.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201511110044585_countrycode2.resx">
       <DependentUpon>201511110044585_countrycode2.cs</DependentUpon>
