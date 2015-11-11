@@ -2210,6 +2210,9 @@ namespace SqlRepository
         public RiskProfile getRiskProfileForClient(string clientID) {
             var riskProfile = _db.RiskProfiles.SingleOrDefault(r => r.ClientID == clientID);
 
+            if(riskProfile == null){
+                return null;
+            }
             return new RiskProfile { 
                 ClientID = riskProfile.ClientID,
                 CapitalLossAttitude = riskProfile.CapitalLossAttitude,

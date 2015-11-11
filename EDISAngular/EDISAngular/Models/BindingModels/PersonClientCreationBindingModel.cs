@@ -33,7 +33,7 @@ namespace EDISAngular.Models.BindingModels
         [RequiredIfBoolTrue("isGroupLeader",ErrorMessage="{0} is required if this client is a group leader")]
         public string newGroupAccountName { get; set; }
         [DisplayName("Group Amount")]
-        [Range(0, int.MaxValue, ErrorMessage = "Please enter a valid amount")]
+        [Range(0, long.MaxValue, ErrorMessage = "Please enter a valid amount")]
         [RequiredIfBoolTrue("isGroupLeader", ErrorMessage = "{0} is required if this client is a group leader")]
         public string newGroupAmount { get; set; }
         [DisplayName("New Group Adviser")]
