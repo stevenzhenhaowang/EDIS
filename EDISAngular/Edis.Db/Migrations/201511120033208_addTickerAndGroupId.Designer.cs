@@ -7,13 +7,13 @@ namespace Edis.Db.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class makeitBackToNumber : IMigrationMetadata
+    public sealed partial class addTickerAndGroupId : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(makeitBackToNumber));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(addTickerAndGroupId));
         
         string IMigrationMetadata.Id
         {
-            get { return "201511100443328_makeitBackToNumber"; }
+            get { return "201511120033208_addTickerAndGroupId"; }
         }
         
         string IMigrationMetadata.Source

@@ -11,15 +11,16 @@ namespace EDISAngular.Models.ServiceModels.CorporateActions
       // public string actionId { get; set; }
         
         public string actionName { get; set; }
-        [Required]
-        public string equityId { get; set; }
-        [Required]
-        public string shareAmount { get; set; }
+        
+
         [Required]
         public string returnAmount { get; set; }
         [Required]
         [DataType(DataType.Date)]
         public DateTime? returnDate { get; set; }
 
+
+        public string equityId { get; set; }
+        public string shareAmount { get; set; }
     }
 }

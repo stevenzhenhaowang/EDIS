@@ -101,16 +101,18 @@
                                         <th>Date</th>
                                         <th>Status</th>
                                         <th>Choice</th>
+                                        <th>Submit</th>
                                     </tr>
-                                  <!---->  <tr ng-repeat="">
-                                               <td>{{ActionName}}</td>
-                                               <td>{{Ticker}}</td>
-                                               <td>{{ShareAmount}}</td>
-                                               <td>{{Price}}</td>
-                                               <td>{{CashAdjustments}}</td>
-                                               <td>{{Date}}</td>
-                                               <td>{{Status}}</td>
+                                  <!---->  <tr ng-repeat="pendingAction in allPendingAction">
+                                               <td>{{pendingAction.ActionName}}</td>
+                                               <td>{{pendingAction.Ticker}}</td>
+                                               <td>{{pendingAction.ShareAmount}}</td>
+                                               <td>{{pendingAction.Price}}</td>
+                                               <td>{{pendingAction.CashAdjustments}}</td>
+                                               <td>{{pendingAction.Date}}</td>
+                                               <td>{{pendingAction.Status}}</td>
                                                <td>checkBox</td>
+                                               <td>submit button</td>
 
 
                                     </tr>

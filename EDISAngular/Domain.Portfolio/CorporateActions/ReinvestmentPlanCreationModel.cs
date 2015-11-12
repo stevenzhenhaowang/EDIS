@@ -12,7 +12,8 @@ namespace Domain.Portfolio.CorporateActions
         public string AdviserId { get; set; }
         public string ShareMount { get; set; }
         public string ActionName  { get; set; }
-        public DateTime? ReinvestmentDate { get; set; }
+        public DateTime ReinvestmentDate { get; set; }
+        
         public List<ReinvestmentPlanParticipants> Participants { get; set; }
 
     }

@@ -3277,7 +3277,7 @@ namespace SqlRepository
             {
                 result.Add(GetClientGroupAccountSync(groupAccount.AccountNumber, toDate));
             }
-            return result;
+             return result;
         }
 
         public List<GroupAccount> GetAccountsForClientGroupByIdSync(string clientGroupId, DateTime toDate)         //added
@@ -8437,27 +8437,26 @@ namespace SqlRepository
             //to do 
             //get all associated cashAccounts to increase the capital 
 
-            var accountToAction = GetAllClientGroupsForAdviserSync(model.AdviserId, DateTime.Now);
+            var accountsToAction = GetAllClientGroupsForAdviserSync(model.AdviserId, DateTime.Now);
 
-            if (accountToAction != null){ 
-               foreach (var account in accountToAction)
+            if (accountsToAction != null){ 
+               foreach (var clientGroup in accountsToAction)
               {
-                    var clientGroup =  GetAccountsForClientGroupSync(account.ClientGroupNumber, DateTime.Now).FirstOrDefault();
+                    var GroupAccount =  GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now).FirstOrDefault();
+                   
                     var amountToDeductOrIncrease = Convert.ToDouble(model.ReturnOfCapitalAmount);
-                    MakeCashTransactions(account.ClientGroupNumber, amountToDeductOrIncrease, clientGroup);
-                    recordReturnOfCapital(model.AdviserId, account.ClientGroupNumber, model.ReturnOfCapitalAmount, model.ActionName);
+                    MakeCashTransactions(clientGroup.ClientGroupNumber, amountToDeductOrIncrease, GroupAccount);
+                    //recordReturnOfCapital(model.AdviserId, account.ClientGroupNumber, model.ReturnOfCapitalAmount, model.ActionName);
+                    recordReturnOfCapitalHistory(model.AdviserId, GroupAccount.Id, model.ReturnOfCapitalAmount, model.ActionName, clientGroup.Id);
               };
             }
             _db.SaveChanges();
         }
 
+
         public void MakeCashTransactions(string cashAccountNumber, double amount, GroupAccount clientGroup) {
             var cashAccount =  _db.CashAccounts.Where(ca => ca.AccountNumber == cashAccountNumber).SingleOrDefault();
-            
-            // RecordCashAccountTransactionSync(TransactionCreationBase transaction, Edis.Db.Adviser adviser,  Account account))
-            //account
-            //var passAccount = GetAccountsForClientGroupSync(account,DateTime.Now).FirstOrDefault();
-            //var account = _db.Accounts.Where(acc => acc.AccountNumber == cashAccountNumber).SingleOrDefault();
+          
             if (cashAccount.CashTransactions == null)
             {
                 cashAccount.CashTransactions = new List<CashTransaction>();
@@ -8471,9 +8470,20 @@ namespace SqlRepository
                 Amount = amount,
                 TransactionDate = DateTime.Now,      
             };
-            var account = _db.Accounts.Where(acc => acc.AccountNumber == clientGroup.AccountNumber).FirstOrDefault();
-
-            //RecordCashAccountTransactionSync(cashTrans,adviser, );
+            var account = new Account();
+            if (clientGroup == null)
+            {
+                //Because we could have a client has a group but this group does not have an account
+                //which makes the parma groupAccount can be null
+                //so we need to get this person's account through his group number->cash account number
+                //first get this group then get client then account
+                var group = _db.ClientGroups.Where(cg => cg.GroupNumber == cashAccountNumber).FirstOrDefault();
+                var client = _db.Clients.Where(c => c.ClientGroupId == group.ClientGroupId).FirstOrDefault();
+                 account = _db.Accounts.Where(acc => acc.AccountId == client.ClientId).FirstOrDefault();
+            }
+            else {
+                account = _db.Accounts.Where(acc => acc.AccountNumber == clientGroup.AccountNumber).FirstOrDefault();
+            }
             cashAccount.FaceValue += amount;
             cashAccount.CashTransactions.Add(cashTrans);
             account.CashTransactions.Add(cashTrans);
@@ -8483,26 +8493,68 @@ namespace SqlRepository
 
 
 
-        public void recordReturnOfCapital(string AdviseId, string ClientGroupNumber,string amount, string actionName) {
-            var newRecord = new ReturnOfCapital() {
-                AdviserId =  AdviseId,
-                AssociatedAccountNumber = ClientGroupNumber,
-                CorperateActionName = actionName,
-                ReturnDate = DateTime.Now,
-                ReturnCashAmount = amount
-            };
-            _db.ReturnOfCapitals.Add(newRecord);
-            _db.SaveChanges();
-        }
+        //public void recordReturnOfCapital(string AdviseId, string ClientGroupNumber,string amount, string actionName) {
+        //    var newRecord = new ReturnOfCapital() {
+        //        AdviserId =  AdviseId,
+        //        AssociatedAccountNumber = ClientGroupNumber,
+        //        CorperateActionName = actionName,
+        //        ReturnDate = DateTime.Now,
+        //        ReturnCashAmount = amount
+        //    };
+        //    _db.ReturnOfCapitals.Add(newRecord);
+        //    _db.SaveChanges();
+        //}
 
 
-        public void CreateNewReinvestmentAdviserInital()
+
+        private void recordReturnOfCapitalHistory(string AdviseId, string accountId, string amount, string actionName, string ClientGroupId)
         {
-            
-
+            var newRecord = new CorperateActionHistory()
+            {
+                ActionType = CorporateActionType.ReturnOfCapital,
+                AdviserId = AdviseId,
+                AssociatedAccountId = accountId,
+                CashAdjustmentAmount = amount,
+                CorperateActionDate = DateTime.Now,
+                CorperateActionName = actionName,
+                Status = CorporateActionStatus.Mandatory, 
+                Ticker = "",
+                StockAdjustmentShareAmount = "0",
+                ClientGroupId = ClientGroupId
+            };
+            _db.CorporateActions.Add(newRecord);
+            _db.SaveChanges();
 
         }
 
+        public void AdviserCreateNewReinvestmentAdviserInital(ReinvestmentPlanCreationModel model)
+        {
+            ////to do pass all notifications to the clients that in this model
+            //record this action as well 
+            //var allParticipants = model.Participants;
+            //foreach (var acc in allParticipants) {
+            //    var newRecord = new CorperateActionHistory() {
+            //        AdviserId = model.AdviserId,
+            //        ParticipantsAccount = acc.AccountId,
+            //        ReinvestmentDate = model.ReinvestmentDate,
+            //        ShareAmount = Convert.ToDouble( model.ShareMount),
+            //        Status = CorporateActionStatus.Pending,
+            //        Ticker = model.Ticker
+            //    };
+            //    _db.ReinvestmentPlanActions.Add(newRecord);
+            //}
+            //_db.SaveChanges();
+            ////then retieve this record at client side using account number
+            ////let the clients to decide whether this corperate action is gonna execute or not 
+        }
+
+
+
+
+        public void RetrieveReinvestmentForClientSide(string ClientId) {
+           
+
+        }
 
 
         public CashAccount GetCashAccountForAccount(string accountNumber) {

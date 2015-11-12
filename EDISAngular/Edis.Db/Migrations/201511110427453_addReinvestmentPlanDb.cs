@@ -3,19 +3,21 @@ namespace Edis.Db.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class _new : DbMigration
+    public partial class addReinvestmentPlanDb : DbMigration
     {
         public override void Up()
         {
             CreateTable(
-                "dbo.ReturnOfCapitals",
+                "dbo.ReinvestmentPlanActions",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
                         AdviserId = c.String(),
-                        CorperateActionName = c.String(),
-                        ReturnCashAmount = c.Double(nullable: false),
-                        ReturnDate = c.DateTime(nullable: false),
+                        Ticker = c.String(),
+                        ShareAmount = c.Double(nullable: false),
+                        ReinvestmentDate = c.DateTime(nullable: false),
+                        ParticipantsAccount = c.String(),
+                        Status = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -23,7 +25,7 @@ namespace Edis.Db.Migrations
         
         public override void Down()
         {
-            DropTable("dbo.ReturnOfCapitals");
+            DropTable("dbo.ReinvestmentPlanActions");
         }
     }
 }
