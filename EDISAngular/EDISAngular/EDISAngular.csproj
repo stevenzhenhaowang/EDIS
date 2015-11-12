@@ -517,6 +517,7 @@
     <Compile Include="Models\ServiceModels\PortfolioModels\CreditCardQuickStatsModel.cs" />
     <Compile Include="Models\ServiceModels\PortfolioModels\DirectPropertyCashflowDetailedModel.cs" />
     <Compile Include="Models\ServiceModels\PortfolioModels\DirectPropertyGeoModel.cs" />
+    <Compile Include="Models\ServiceModels\PortfolioModels\EquityLocationDetailsModel.cs" />
     <Compile Include="Models\ServiceModels\PortfolioModels\FixedIncomeCashflowDetailedModel.cs" />
     <Compile Include="Models\ServiceModels\PortfolioModels\FixedIncomeDiversificationModel.cs" />
     <Compile Include="Models\ServiceModels\PortfolioModels\FixedIncomeProfileModel.cs" />

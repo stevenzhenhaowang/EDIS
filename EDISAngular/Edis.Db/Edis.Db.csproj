@@ -67,6 +67,7 @@
     <Compile Include="CorperateActions\CorperateActionHistory.cs" />
     <Compile Include="CorperateActions\ReinvestmentPlanAction.cs" />
     <Compile Include="CorperateActions\ReturnOfCapital.cs" />
+    <Compile Include="CountryCode.cs" />
     <Compile Include="EdisContext.cs" />
     <Compile Include="Enums\TransactionType.cs" />
     <Compile Include="ExpenseRecords\ConsultancyExpense.cs" />
@@ -94,9 +95,13 @@
     <Compile Include="Migrations\201511112347584_numberToAccountId.Designer.cs">
       <DependentUpon>201511112347584_numberToAccountId.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201511120033208_addTickerAndGroupId.cs" />
-    <Compile Include="Migrations\201511120033208_addTickerAndGroupId.Designer.cs">
-      <DependentUpon>201511120033208_addTickerAndGroupId.cs</DependentUpon>
+    <Compile Include="Migrations\201511100443328_makeitBackToNumber.cs" />
+    <Compile Include="Migrations\201511100443328_makeitBackToNumber.Designer.cs">
+      <DependentUpon>201511100443328_makeitBackToNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511110044585_countrycode2.cs" />
+    <Compile Include="Migrations\201511110044585_countrycode2.Designer.cs">
+      <DependentUpon>201511110044585_countrycode2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NoteLinks.cs" />
@@ -137,8 +142,8 @@
     <EmbeddedResource Include="Migrations\201511112347584_numberToAccountId.resx">
       <DependentUpon>201511112347584_numberToAccountId.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511120033208_addTickerAndGroupId.resx">
-      <DependentUpon>201511120033208_addTickerAndGroupId.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201511110044585_countrycode2.resx">
+      <DependentUpon>201511110044585_countrycode2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

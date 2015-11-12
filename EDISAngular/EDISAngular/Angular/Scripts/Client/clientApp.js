@@ -136,6 +136,153 @@
 
     });
 
+    app.directive("companySelector", ["$route", "companySelectionService", function ($route, companySelectionService) {
+        return {
+            restrict: 'E',
+            template: '<select class="form-control" style="max-width:250px" ng-model="selectedCompany" ng-change="selectCompany(item)"  ng-options="item as item.name for item in companyList" required></select>',
+            controller: ["$scope", "$resource", "AppStrings", function ($scope, $resource, AppStrings) {
+                $resource(AppStrings.EDIS_IP + "api/adviser/companyList").query(function (data) {
+                    var found = false;
+                    $scope.companyList = data;
+                    for (var i = 0; i < $scope.companyList.length; i++) {
+                        if ($scope.companyList[i].id === companySelectionService.getCurrentCompanyId()) {
+                            $scope.selectedCompany = $scope.companyList[i];
+                            found = true;
+                        }
+                    }
+                    var allCompanies = { id: -1, name: "Select a Company..." };
+                    $scope.companyList.unshift(allCompanies);
+                    if (!found) {
+                        $scope.selectedCompany = allCompanies;
+                    }
+                })
+                $scope.selectCompany = function () {
+                    if ($scope.selectedCompany.id === -1) {
+                        companySelectionService.resetSelection();
+                    } else {
+                        companySelectionService.selectCompany($scope.selectedCompany.id, $scope.selectedCompany.name);
+                    }
+
+                    $route.reload();
+                }
+
+            }]
+        }
+    }]);
+
+    app.directive("periodSelector", ["$route", "periodSelectionService", function ($route, periodSelectionService) {
+        return {
+            restrict: 'E',
+            template: '<select class="form-control" style="max-width:150px" ng-model="selectedPeriod" ng-change="selectPeriod(item)"  ng-options="item as item.name for item in periodList" required></select>',
+            controller: ["$scope", "$resource", "AppStrings", function ($scope, $resource, AppStrings) {
+                $resource(AppStrings.EDIS_IP + "api/adviser/periodList").query(function (data) {
+                    var found = false;
+                    $scope.periodList = data;
+                    for (var i = 0; i < $scope.periodList.length; i++) {
+                        if ($scope.periodList[i].id === periodSelectionService.getCurrentPeriodId()) {
+                            $scope.selectedPeriod = $scope.periodList[i];
+                            found = true;
+                        }
+                    }
+                    var allPeriods = { id: -1, name: "Select a Period..." };
+                    $scope.periodList.unshift(allPeriods);
+                    if (!found) {
+                        $scope.selectedPeriod = allPeriods;
+                    }
+                })
+                $scope.selectPeriod = function () {
+                    if ($scope.selectedPeriod.id === -1) {
+                        periodSelectionService.resetSelection();
+                    } else {
+                        periodSelectionService.selectPeriod($scope.selectedPeriod.id, $scope.selectedPeriod.name);
+                    }
+
+                    $route.reload();
+                }
+
+            }]
+        }
+    }]);
+
+    app.factory("companySelectionService", function ($http, $resource, AppStrings) {
+        var currentCompanyId = "";
+        var currentCompanyName = "";
+        function selectCompany(companyId, companyName) {
+            currentCompanyId = companyId;
+            currentCompanyName = companyName;
+        }
+        function getCurrentCompanyId() {
+            return currentCompanyId;
+        }
+        function hasCompanySelected() {
+            return currentCompanyId !== "";
+        }
+        function resetSelection() {
+            currentCompanyId = "";
+            currentCompanyName = "";
+        }
+        function getCompanyIdQueryString() {
+            if (currentCompanyId !== "") {
+                return "?companyId=" + currentCompanyId;
+            } else {
+                return "";
+            }
+        }
+        function getCompanyName() {
+            return currentCompanyName;
+        }
+
+
+        return {
+            selectCompany: selectCompany,
+            getCurrentCompanyId: getCurrentCompanyId,
+            hasCompanySelected: hasCompanySelected,
+            resetSelection: resetSelection,
+            getCompanyIdQueryString: getCompanyIdQueryString,
+            getCompanyName: getCompanyName
+        }
+    })
+
+    app.factory("periodSelectionService", function ($http, $resource, AppStrings) {
+        var currentPeriodId = "";
+        var currentPeriodName = "";
+        function selectPeriod(periodId, periodName) {
+            currentPeriodId = periodId;
+            currentPeriodName = periodName;
+        }
+        function getCurrentPeriodId() {
+            return currentPeriodId;
+        }
+        function hasPeriodSelected() {
+            return currentPeriodId !== "";
+        }
+        function resetSelection() {
+            currentPeriodId = "";
+            currentPeriodName = "";
+        }
+        function getPeriodIdQueryString() {
+            if (currentPeriodId !== "") {
+                return "?periodId=" + currentPeriodId;
+            } else {
+                return "";
+            }
+        }
+        function getPeriodName() {
+            return currentPeriodName;
+        }
+
+
+        return {
+            selectPeriod: selectPeriod,
+            getCurrentPeriodId: getCurrentPeriodId,
+            hasPeriodSelected: hasPeriodSelected,
+            resetSelection: resetSelection,
+            getPeriodIdQueryString: getPeriodIdQueryString,
+            getPeriodName: getPeriodName
+        }
+    })
+
+
     app.factory("clientRemindersDBService", function ($http, $resource) {
         var DBContext = {
             data: {
@@ -569,7 +716,13 @@
                 //ws call to retrieve investment portfolio data
                 return $resource(AppStrings.EDIS_IP + "api/Client/PortfolioOverview/InvestmentPortfolio");
             },
+
+            GetEquityLocationData: function () {
+                return $resource(AppStrings.EDIS_IP + "api/Client/PortfolioOverview/EquityLocation")
+            }
         };
+
+
         return DBContext;
     });
 

@@ -10,5 +10,6 @@ namespace EDISAngular.Models.ServiceModels
         public string name { get; set; }
         public double amount { get; set; }
         public double percentage { get; set; }
+        public double returnValue { get; set; }
     }
 }

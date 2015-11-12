@@ -7,13 +7,13 @@ namespace Edis.Db.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class corpoActionHis : IMigrationMetadata
+    public sealed partial class countrycode2 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(corpoActionHis));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(countrycode2));
         
         string IMigrationMetadata.Id
         {
-            get { return "201511112320460_corpoActionHis"; }
+            get { return "201511110044585_countrycode2"; }
         }
         
         string IMigrationMetadata.Source
