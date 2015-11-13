@@ -58,9 +58,9 @@ namespace Edis.Db
         public DbSet<RiskProfile> RiskProfiles { get; set; }
         public DbSet<CountryCode> CountryCodes { get; set; }
 
-
+        public DbSet<CorperateActionHistory> CorporateActions { get; set; }
         public DbSet<ReturnOfCapital> ReturnOfCapitals { get; set; }
-
+        public DbSet<ReinvestmentPlanAction> ReinvestmentPlanActions { get; set; }
 
 
 

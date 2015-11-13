@@ -3,9 +3,9 @@
 
 (function () {
     var app = angular.module("EDIS");
-    app.controller("clientCorrespondenceViewController", ["$scope", "clientCorrespondenceDBService",
+    app.controller("clientCorrespondenceViewController", ["$http","$scope","$q", "clientCorrespondenceDBService",
         "$modal", "CorrespondenceTokenGetter", "assetClassesGetter", "productClassGetter", "clientGetAdviser", "clientGetNoteTypes",
-        "clientGetId", "AppStrings", function ($scope, DBContext,
+        "clientGetId", "AppStrings", function ($http, $scope, $q, DBContext,
            $modal, tokenService, assetClassesGetter, productClassGetter, clientGetAdviser, clientGetNoteTypes, clientGetId, AppStrings) {
             $scope.counter = 0;
             
@@ -136,6 +136,48 @@
                     }
                 });
             }
+
+
+
+
+
+            $scope.allPendingAction = function ($http, $q, AppStrings) {
+                //var deferred = $q.defer();
+                $http.get(AppStrings.EDIS_IP + "api/Client/CorperateAction/AllPendingActions").success(function (data) {
+                    // deferred.resolve(data);
+                    return data;
+                }).error(function (data) {
+                    //deferred.reject("Bad request");
+                })
+               // return deferred.promise;
+            }
+
+
+
+            /*
+             * 
+             *   app.factory("adviserGetClientGroups", function ($http, $q, AppStrings) {
+        function getClients() {
+            var deferred = $q.defer();
+            $http.get(AppStrings.EDIS_IP + "api/adviser/clientgroups")
+            .success(function (data) {
+                deferred.resolve(data);
+            }).error(function (data) {
+                deferred.reject("Bad request");
+            });
+            return deferred.promise;
+        }
+        return getClients
+    });
+             */
+
+
+
+
+
+
+
+
 
         }]);
     app.controller("clientCorrespondenceNewNoteController", function ($scope, $modalInstance, userdetails, $http,

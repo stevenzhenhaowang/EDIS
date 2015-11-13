@@ -58,6 +58,7 @@
     <Compile Include="BusinessLayerParameters.cs" />
     <Compile Include="ClientDocInfo.cs" />
     <Compile Include="ConsultancyExpenseType.cs" />
+    <Compile Include="CorporateActionType.cs" />
     <Compile Include="CreditCardType.cs" />
     <Compile Include="EvaluationInfo.cs" />
     <Compile Include="Frequency.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="PolicyType.cs" />
     <Compile Include="ProductTypes.cs" />
     <Compile Include="PropertyType.cs" />
+    <Compile Include="CorporateActionStatus.cs" />
     <Compile Include="RiskLevels.cs" />
     <Compile Include="TransactionExpenseType.cs" />
     <Compile Include="AssetTypes.cs" />

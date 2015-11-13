@@ -1191,31 +1191,36 @@
                     <input class="form-control" name="actionName" ng-model="actionName" required />
                     <div class="error" ng-show="newReturnOfCapital.actionName.$error.required&&newReturnOfCapital.actionName.$touched">Please enter corporate action name</div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6 form-group">
                     <label>Ticker</label>
-                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerName for item in allTickers">
+                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerName for item in allTickers" ng-change="loadAccounts()">
                         <option value="">Please select.....</option>
                     </select>
                     <div class="error" ng-show="newReturnOfCapital.ticker.$error.required&&newReturnOfCapital.ticker.$touched">Please select ticker</div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    <label>
-                        Share Amount
-                    </label>
-                    <input class="form-control" type="number" name="shareAmount" ng-model="shareAmount" required  />
-                    <div class="error" ng-show="newReturnOfCapital.shareAmount.$error.required&&newReturnOfCapital.shareAmount.$touched">Please enter the share amount</div>
-                    <div class="error" ng-show="newReturnOfCapital.shareAmount.$error.number&&newReturnOfCapital.shareAmount.$touched">Please enter the share amount</div>
-                </div>
 
-
+                <!--
+                         <div class="row">
+                             <div class="col-md-6 form-group">
+                                 <label>
+                                     Share Amount
+                                 </label>
+                                 <input class="form-control" type="number" name="shareAmount" ng-model="shareAmount" required  />
+                                 <div class="error" ng-show="newReturnOfCapital.shareAmount.$error.required&&newReturnOfCapital.shareAmount.$touched">Please enter the share amount</div>
+                                 <div class="error" ng-show="newReturnOfCapital.shareAmount.$error.number&&newReturnOfCapital.shareAmount.$touched">Please enter the share amount</div>
+                             </div>
+                             -->
+          <div class="row">
                 <div class="col-md-6 form-group">
                     <label>Return of Capital Amount</label>
-                    <input class="form-control" name="returnAmount" ng-model="returnAmount" required />
+                    <input class="form-control" type="number" name="returnAmount" ng-model="returnAmount" required max="88888888" />
                     <div class="error" ng-show="newReturnOfCapital.returnAmount.$error.required&&newReturnOfCapital.returnAmount.$touched">Please enter the amount </div>
+                    <div class="error" ng-show="newReturnOfCapital.returnAmount.$error.max&&newReturnOfCapital.returnAmount.$touched">Please Enter Amount That is valid</div>
                 </div>
             </div>
+    </div>
     <div class="row">
         <div class="col-md-6 form-group">
             <label>Adjustment Date</label>
@@ -1223,41 +1228,38 @@
             <div class="error" ng-show="newReturnOfCapital.returnDate.$error.required&&newReturnOfCapital.returnDate.$touched">Please enter record date</div>
         </div>
     </div>
-    <!--
-                <div class="row">
-                    <div class="col-md-12 parameters-view">
-                        <table class="table table-bordered table-hover">
-                            <thead>
-                                <tr class="summary-table-row">
-                                    <td></td>
-                                    <td>EDIS Account No.</td>
-                                    <td>Broker Account No.</td>
-                                    <td>Broker HIN/SRN</td>
-                                    <td>Type</td>
-                                    <td>Name</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="item in allClients">
-                                    <td><input type="checkbox" ng-model="item.selected" /></td>
-                                    <td>{{item.edisAccountNumber}}</td>
-                                    <td>{{item.brokerAccountNumber}}</td>
-                                    <td>{{item.brokerHinSrn}}</td>
-                                    <td>{{item.type}}</td>
-                                    <td>{{item.name}}</td>
 
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-    -->
     <div class="row">
-      
+        <div class="col-md-12 parameters-view">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr class="summary-table-row">
+                        
+                        <td>EDIS Account No.</td>
+                        <td>Share Amount</td>
+                
+                        <td>Return Amount</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in allAccounts">
+                       
+                        <td>{{item.edisAccountNumber}}</td>
+                        <td>{{item.shareAmount}}</td>
+                      
+                        <td><input type="number" ng-model="item.returnAmount" /></td><!--item.selected-->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+
         <div class="col-md-12 text-right">
-            
+
             <button class="btn btn-success" ng-click="add()" ng-disabled="!newReturnOfCapital.$valid">Save</button>
-          
+
         </div>
     </div>
 

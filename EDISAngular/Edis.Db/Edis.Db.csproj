@@ -64,6 +64,8 @@
     <Compile Include="BondType.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="ClientGroup.cs" />
+    <Compile Include="CorperateActions\CorperateActionHistory.cs" />
+    <Compile Include="CorperateActions\ReinvestmentPlanAction.cs" />
     <Compile Include="CorperateActions\ReturnOfCapital.cs" />
     <Compile Include="CountryCode.cs" />
     <Compile Include="EdisContext.cs" />

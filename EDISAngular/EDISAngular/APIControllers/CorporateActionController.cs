@@ -168,14 +168,22 @@ namespace EDISAngular.APIControllers
         [HttpPost, Route("api/Adviser/CorprateAction/newReinvestment")]
         public IHttpActionResult CreateNewReinvestment(ReinvestmentPlanCreationModel model) {
             //repo
+            model.AdviserId = userid;
+            repo.AdviserCreateNewReinvestmentAdviserInital(model);
             return Ok();
         }
 
 
+        [HttpGet, Route("api/Client/CorperateAction/AllPendingActions")]
+        public List<string> GetAllPendingCorperateAction() {
 
+            return new List<string>();
+        }
 
-
-
+        [HttpPost, Route("api/adviser/corporateAction/getAccounts")]
+        public List<string> getAllAccounts(string EquityId) {
+            return new List<string>();
+        }
 
 
 

@@ -326,7 +326,33 @@
     service.allTickers().query(function (data) {
         $scope.allTickers = data;
     })
-  
+  /*$scope.loadClients = function () {
+        var data = [];
+        data = {
+            clientGroup : $scope.clientGroup
+        }
+        $http.post(AppStrings.EDIS_IP + "api/adviser/getAllClientGroups", data)
+                .success(function (data) {
+                    $scope.clients = data;
+                }).error(function (data) {
+                    console.log("Error.............");
+                });
+
+    }*/
+
+    $scope.loadAccounts = function () {
+        var data = [];
+        data = {
+            equityId : $scope.tickerNumber
+        }
+        $http.post(AppStrings.EDIS_IP + "api/adviser/corporateAction/getAccounts", data)
+        .success(function (data) {
+            $scope.allAccounts = data;
+        }).error(function (data) {
+            console.log("Error.............");
+        });
+    }
+
     $scope.add = function () {
         var data = {
             actionName: $scope.actionName,
@@ -403,7 +429,7 @@
             if ($scope.allClients[i].selected) {
                 var client = $scope.allClients[i];
                 data.participants.push({
-                    edisAccountNumber: client.edisAccountNumber,
+                    AccountId: client.edisAccountNumber,
                     //type: client.type,
                     //name: client.name,
                     //investedAmount: client.investedAmount,
