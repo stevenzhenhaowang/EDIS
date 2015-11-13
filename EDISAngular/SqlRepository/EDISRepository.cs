@@ -3589,7 +3589,6 @@ namespace SqlRepository
                 {
                     case EquityTypes.AustralianEquity:
                         subEquity = new AustralianEquity(this);
-                        
                         break;
                     case EquityTypes.InternationalEquity:
                         subEquity = new InternationalEquity(this);
@@ -3603,6 +3602,7 @@ namespace SqlRepository
                 subEquity.Name = equity.Name;
                 subEquity.Sector = equity.Sector;
                 subEquity.EquityType = equity.EquityType;
+                
                 equities.Add(subEquity);
             }
             return equities;
@@ -7985,7 +7985,10 @@ namespace SqlRepository
 
             int numberOfUnit = 0;
 
-            accounts.ForEach(a => numberOfUnit += a.EquityTransactions.Sum(e => e.NumberOfUnits) == null ? 0 : (int)a.EquityTransactions.Sum(e => e.NumberOfUnits));
+            accounts.ForEach(a => {
+                var transactions = a.EquityTransactions.Where(e => e.EquityId == equityId);
+                numberOfUnit += transactions == null ? 0 : (int)transactions.Sum(e => e.NumberOfUnits);
+            });
 
             return numberOfUnit;
         }
@@ -8042,7 +8045,6 @@ namespace SqlRepository
                 return null;
             }
         }
-
 
         public Domain.Portfolio.AggregateRoots.Asset.Equity getEquityByIdAndClientGroup(string equityId, ClientGroup clientGroup) {
             Equity equity = _db.Equities.SingleOrDefault(e => e.AssetId == equityId);
