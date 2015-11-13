@@ -1032,7 +1032,7 @@
                 return $resource(AppStrings.EDIS_IP + "api/Adviser/PortfolioOverview/Stastics" + clientSelectionService.getClientIdQueryString());
             },
             recentStockData: function () {
-                $http.get(AppStrings.EDIS_IP + "api/PortfolioOverview/RecentStock", { companyId: companySelectionService.getCurrentCompanyId(), periodId: periodSelectionService.getCurrentPeriodId() });
+                return $resource(AppStrings.EDIS_IP + "api/PortfolioOverview/RecentStock", { companyId: companySelectionService.getCurrentCompanyId(), periodId: periodSelectionService.getCurrentPeriodId() });
             },                                      
             portfolioRating: function () {
                 return $resource(AppStrings.EDIS_IP + "api/Adviser/PortfolioOverview/PortfolioRating" + clientSelectionService.getClientIdQueryString());
