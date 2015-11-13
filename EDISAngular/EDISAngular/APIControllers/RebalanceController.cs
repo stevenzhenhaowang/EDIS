@@ -33,37 +33,36 @@ namespace EDISAngular.APIControllers
         [HttpGet, Route("api/adviser/models")]
         public List<RebalanceModel> GetAllModelsForAdviser()
         {
-            List<Domain.Portfolio.Rebalance.RebalanceModel> savedModels = edisRepo.GetRebalanceModelByAdviserId(User.Identity.GetUserId());
+            return GenerateReblanaceModel(edisRepo.GetRebalanceModelById(User.Identity.GetUserId()));
+        }
 
+        public List<RebalanceModel> GenerateReblanaceModel(List<Domain.Portfolio.Rebalance.RebalanceModel> savedModels) {
             List<RebalanceModel> models = new List<RebalanceModel>();
 
-            foreach(var savedModel in savedModels){
+            foreach (var savedModel in savedModels) {
                 List<TemplateDetailsItemParameter> parameters = new List<TemplateDetailsItemParameter>();
                 foreach (var parameter in savedModel.TemplateDetailsItemParameters) {
-                    parameters.Add(new TemplateDetailsItemParameter { 
+                    parameters.Add(new TemplateDetailsItemParameter {
                         id = parameter.EquityId,
-                        currentWeighting = parameter.CurrentWeighting == null? 0: (double)parameter.CurrentWeighting,
+                        currentWeighting = parameter.CurrentWeighting == null ? 0 : (double)parameter.CurrentWeighting,
                         itemName = parameter.ItemName,
                     });
                 };
-             
                 models.Add(new RebalanceModel {
                     modelId = savedModel.ModelId,
                     profile = new ModelProfile { profileId = savedModel.ProfileId.ToString(), profileName = edisRepo.GetEnumDescription((RebalanceModelProfile)savedModel.ProfileId) },
                     modelName = savedModel.ModelName,
                     itemParameters = parameters,
-                });   
+                });
             }
 
             return models;
-            //return rebRepo.GetAllModelsForAdviser(User.Identity.GetUserId());
         }
 
-        //[HttpGet, Route("api/client/models")]
-        //public List<RebalanceModel> GetAllModelsForClient()
-        //{
-        //    return rebRepo.GetAllModelsForClient(User.Identity.GetUserId());
-        //}
+        [HttpGet, Route("api/client/models")]
+        public List<RebalanceModel> GetAllModelsForClient() {
+            return GenerateReblanaceModel(edisRepo.GetRebalanceModelById(User.Identity.GetUserId()));
+        }
 
         [HttpGet, Route("api/adviser/model")]
         public RebalanceModel GetModelForId(string modelId)
@@ -94,29 +93,8 @@ namespace EDISAngular.APIControllers
             //return rebRepo.GetModelById(modelId);
         }
 
-        public void SetUpMonthlyCashFlowComparison() {
-            MonthlyCashflowComparison monthlyCashflowComparison = new MonthlyCashflowComparison() { data = new List<MonthlyCashflowComparisonData>() };
 
-
-        }
-
-
-        [HttpGet, Route("api/adviser/model/details")]
-        public RebalanceModel GetModelDetailForId(string modelId)
-        {
-            var savedModel = edisRepo.GetRebalanceModelByModelId(modelId);
-
-            ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(savedModel.ClientGroupId);
-            List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
-            List<ClientAccount> clientAccounts = new List<ClientAccount>();
-            clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
-
-            List<AssetBase> allAssets = new List<AssetBase>();
-            List<LiabilityBase> allLiabilities = new List<LiabilityBase>();
-
-            accounts.ForEach(a => allAssets.AddRange(a.GetAssetsSync()));
-            clientAccounts.ForEach(a => allAssets.AddRange(a.GetAssetsSync()));
-
+        public RebalanceModel GetRebalanceModel(List<AssetBase> allAssets, Domain.Portfolio.Rebalance.RebalanceModel savedModel, ClientGroup clientGroup = null, Client client = null) {
             var weightings = allAssets.OfType<Equity>().Cast<AssetBase>().ToList().GetAssetWeightings();
             var totalMarketValue = allAssets.GetTotalMarketValue();
 
@@ -128,7 +106,6 @@ namespace EDISAngular.APIControllers
             SectorialComparisonModel sectorialComparisonModel = new SectorialComparisonModel() { data = new List<SectorialComparisonData>() };
             MonthlyCashflowComparison monthlyCashflowComparison = new MonthlyCashflowComparison() { data = new List<MonthlyCashflowComparisonData>() };
             List<TransactionCostData> transactionCostData = new List<TransactionCostData>();
-
 
             foreach (var parameter in savedModel.TemplateDetailsItemParameters) {
                 //DiversificationDatas
@@ -152,7 +129,13 @@ namespace EDISAngular.APIControllers
                     currentWeighting = getCurrentWeightingForEquity(parameter.EquityId, weightings);
 
                     //RebalanceDataAnalysisModel
-                    List<Equity> currentEquities = edisRepo.GetEquityForAccountSync(parameter.EquityId, clientGroup);
+                    List<Equity> currentEquities = null;
+                    if (clientGroup != null) {
+                        currentEquities = edisRepo.GetEquityForGroupAccountSync(parameter.EquityId, clientGroup);
+                    } else{
+                        currentEquities = edisRepo.GetEquityForClientAccountSync(parameter.EquityId, client);
+                    }
+
                     int numberOfUnit = 0;
                     double value = 0;
                     double totalCost = 0;
@@ -175,8 +158,8 @@ namespace EDISAngular.APIControllers
 
                     Equity selectedEquity = edisRepo.getEquityById(parameter.EquityId);
 
-                    double reValue = (value / currentWeighting * parameter.CurrentWeighting) == null ? 0 : (double)(value / currentWeighting * parameter.CurrentWeighting);//(totalMarketValue * parameter.CurrentWeighting) == null ? 0 : (double)(totalMarketValue * parameter.CurrentWeighting);
-                    int reUnit = (int)(reValue / selectedEquity.LatestPrice);
+                    double reValue = currentWeighting * parameter.CurrentWeighting == 0 ? (double)(totalMarketValue * parameter.CurrentWeighting) : (double)(value / currentWeighting * parameter.CurrentWeighting);//(totalMarketValue * parameter.CurrentWeighting) == null ? 0 : (double)(totalMarketValue * parameter.CurrentWeighting);
+                    int reUnit = reValue == 0 ? 0 : (int)(reValue / selectedEquity.LatestPrice);
                     double reProfitAndLoss = reValue - totalCost;
                     double differences = (reValue - value) / value;
 
@@ -288,15 +271,13 @@ namespace EDISAngular.APIControllers
                         transactionCostData.Add(transactionData);
                     }
                     var transactionIndex = transactionCostData.IndexOf(transactionData);
-                    transactionCostData[transactionIndex].items.Add(new TransactionCostDataItem { 
+                    transactionCostData[transactionIndex].items.Add(new TransactionCostDataItem {
                         buySell = reValue - value,
                         name = selectedEquity.Name,
                         profitLoss = reProfitAndLoss,
                         //transactionCost = ?,
                         netValue = reValue - value //- transactionCost
                     });
-
-
 
                 }
 
@@ -342,8 +323,6 @@ namespace EDISAngular.APIControllers
             balanceSeetAgainsModel.difference = (balanceSeetAgainsModel.proposed - balanceSeetAgainsModel.current) / balanceSeetAgainsModel.current;
 
 
-
-
             for (int i = 0; i < regionalComparisonModel.data.Count; i++) {
                 for (int j = 0; j < regionalComparisonModel.data[i].items.Count; j++) {
                     regionalComparisonModel.data[i].current += regionalComparisonModel.data[i].items[j].current;
@@ -377,7 +356,7 @@ namespace EDISAngular.APIControllers
                 sectorialComparisonModel.proposedWeighting += sectorialComparisonModel.data[i].proposedWeighting;
             }
 
-            for (int i = 0; i < transactionCostData.Count; i++) { 
+            for (int i = 0; i < transactionCostData.Count; i++) {
                 for (int j = 0; j < transactionCostData[i].items.Count; j++) {
 
                     transactionCostData[i].buySell += transactionCostData[i].items[j].buySell;
@@ -387,7 +366,7 @@ namespace EDISAngular.APIControllers
                     transactionCostData[i].extraDividend += transactionCostData[i].items[j].extraDividend;
                     transactionCostData[i].extraMER += transactionCostData[i].items[j].extraMER;
                 }
-                transactionCostData[i].netValue += (transactionCostData[i].buySell + transactionCostData[i].transactionCost); 
+                //transactionCostData[i].netValue += (transactionCostData[i].buySell + transactionCostData[i].transactionCost);
             }
 
 
@@ -404,48 +383,47 @@ namespace EDISAngular.APIControllers
                 transactionCost = transactionCostData
             };
 
-            //return rebRepo.GetModelById(modelId);
         }
 
 
-        public double getCurrentWeightingForEquity(string equityId, List<Weighting> weightings) {
+        [HttpGet, Route("api/adviser/model/details")]
+        public RebalanceModel GetModelDetailForId(string modelId)
+        {
+            List<AssetBase> allAssets = new List<AssetBase>();
+            var savedModel = edisRepo.GetRebalanceModelByModelId(modelId);
 
-            double weightingPercentage = 0;
-            Weighting weighting = null;
+            ClientGroup clientGroup = edisRepo.getClientGroupByGroupId(savedModel.ClientGroupId);
+            List<GroupAccount> accounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+            List<ClientAccount> clientAccounts = new List<ClientAccount>();
+            clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
 
-            if (weightings.Count == 0) {
-                weightingPercentage = 0;
+            accounts.ForEach(a => allAssets.AddRange(a.GetAssetsSync()));
+            clientAccounts.ForEach(a => allAssets.AddRange(a.GetAssetsSync()));
+
+            return GetRebalanceModel(allAssets, savedModel, clientGroup);
+        }
+
+
+        [HttpGet, Route("api/client/model/details")]
+        public RebalanceModel GetModelDetailForId_Client(string modelId) {
+            List<AssetBase> allAssets = new List<AssetBase>();
+            var savedModel = edisRepo.GetRebalanceModelByModelId(modelId);
+
+            Client client = edisRepo.GetClientSync(User.Identity.GetUserId(), DateTime.Now);
+            ClientGroup clientGroup = edisRepo.GetClientGroupSync(client.ClientGroupId, DateTime.Now);
+            if (clientGroup.MainClientId == client.Id) {
+                List<GroupAccount> groupAccounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
+                groupAccounts.ForEach(a => allAssets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
+                clientAccounts.ForEach(a => allAssets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
+
+                return GetRebalanceModel(allAssets, savedModel, clientGroup);
             } else {
-                weighting = weightings.SingleOrDefault(w => ((Equity)w.Weightable).Id == equityId);
-                if (weighting == null) {
-                    weightingPercentage = 0;
-                } else {
-                    weightingPercentage = weighting.Percentage;
-                }
+                List<ClientAccount> accounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
+                accounts.ForEach(a => allAssets.AddRange(a.GetAssetsSync().OfType<AustralianEquity>().Cast<AssetBase>().ToList()));
+
+                return GetRebalanceModel(allAssets, savedModel, null, client);
             }
-            return weightingPercentage;
-        }
-
-
-
-        public double getCurrentWeightingForEquityGroup(List<Equity> equities, List<Weighting> weightings) {
-
-            double weightingPercentage = 0;
-            foreach (var equity in equities) {
-                Weighting weighting = null;
-
-                if (weightings.Count == 0) {
-                    weightingPercentage += 0;
-                } else {
-                    weighting = weightings.SingleOrDefault(w => ((Equity)w.Weightable).Id == equity.Id);
-                    if (weighting == null) {
-                        weightingPercentage += 0;
-                    } else {
-                        weightingPercentage += weighting.Percentage;
-                    }
-                }
-            }
-            return weightingPercentage;
         }
 
         [HttpPost,Route("api/adviser/model/create")]
@@ -489,6 +467,46 @@ namespace EDISAngular.APIControllers
             }
             return BadRequest();
         }
+
+
+        [HttpPost, Route("api/client/model/create")]
+        public IHttpActionResult CreateNewModel_Client(RebalanceCreationModel model) {
+            Client client = edisRepo.GetClientSync(User.Identity.GetUserId(), DateTime.Now);
+            ClientGroup clientGroup = edisRepo.GetClientGroupSync(client.ClientGroupId, DateTime.Now);
+
+            if (model != null) {
+                List<Domain.Portfolio.Rebalance.TemplateDetailsItemParameter> parameters = new List<Domain.Portfolio.Rebalance.TemplateDetailsItemParameter>();
+                foreach (var parameter in model.parameters) {
+                    parameters.Add(new Domain.Portfolio.Rebalance.TemplateDetailsItemParameter {
+                        EquityId = parameter.parameterId,
+                        ItemName = parameter.parameterName,
+                        CurrentWeighting = (double)parameter.weighting,
+                        ModelId = model.modelId,
+                        identityMetaKey = parameter.identityMetaKey
+                    });
+                };
+
+                Domain.Portfolio.Rebalance.RebalanceModel newModel = new Domain.Portfolio.Rebalance.RebalanceModel {
+                    ModelId = model.modelId,
+                    ClientId = User.Identity.GetUserId(),
+                    ClientGroupId = clientGroup.Id,
+                    ModelName = model.name,
+                    ProfileId = (int)Enum.Parse(typeof(RebalanceModelProfile), model.profileId),
+                    TemplateDetailsItemParameters = parameters
+                };
+
+                if (model.modelId != null) {
+                    edisRepo.UpdateRebalanceModel(newModel);
+                } else {
+                    edisRepo.CreateRebalanceModel(newModel);
+                }
+
+                return Ok();
+                //rebRepo.CreateNewModel(model, User.Identity.GetUserId());
+            }
+            return BadRequest();
+        }
+
         [HttpPost,Route("api/adviser/model/remove")]
         public IHttpActionResult RemoveModel([FromBody]string modelId)
         {
@@ -526,17 +544,6 @@ namespace EDISAngular.APIControllers
             return parameters.OrderBy(p => p.itemName).ToList();
             //return rebRepo.GetAllParametersForGroup(groupId);
         }
-
-        public List<Equity> GetEquitiesByGroup(string groupId) {
-            if (edisRepo.GetAllSectorsSync().Contains(groupId)) {
-                return edisRepo.GetAllEquitiesBySectorName(groupId);
-            } else if (edisRepo.GetAllResearchStringValueByKey("Country").Contains(groupId)) {
-                return edisRepo.GetAllEquitiesByResearchStringValue(groupId);
-            } else {
-                return null;
-            }
-        }
-
 
         [HttpGet, Route("api/adviser/model/filters")]
         public List<FilterGroupModel> GetFilterGroups()
@@ -598,5 +605,54 @@ namespace EDISAngular.APIControllers
 
             //return rebRepo.GetAllModelProfiles();
         }
+
+        public double getCurrentWeightingForEquity(string equityId, List<Weighting> weightings) {
+
+            double weightingPercentage = 0;
+            Weighting weighting = null;
+
+            if (weightings.Count == 0) {
+                weightingPercentage = 0;
+            } else {
+                weighting = weightings.SingleOrDefault(w => ((Equity)w.Weightable).Id == equityId);
+                if (weighting == null) {
+                    weightingPercentage = 0;
+                } else {
+                    weightingPercentage = weighting.Percentage;
+                }
+            }
+            return weightingPercentage;
+        }
+
+        public double getCurrentWeightingForEquityGroup(List<Equity> equities, List<Weighting> weightings) {
+
+            double weightingPercentage = 0;
+            foreach (var equity in equities) {
+                Weighting weighting = null;
+
+                if (weightings.Count == 0) {
+                    weightingPercentage += 0;
+                } else {
+                    weighting = weightings.SingleOrDefault(w => ((Equity)w.Weightable).Id == equity.Id);
+                    if (weighting == null) {
+                        weightingPercentage += 0;
+                    } else {
+                        weightingPercentage += weighting.Percentage;
+                    }
+                }
+            }
+            return weightingPercentage;
+        }
+
+        public List<Equity> GetEquitiesByGroup(string groupId) {
+            if (edisRepo.GetAllSectorsSync().Contains(groupId)) {
+                return edisRepo.GetAllEquitiesBySectorName(groupId);
+            } else if (edisRepo.GetAllResearchStringValueByKey("Country").Contains(groupId)) {
+                return edisRepo.GetAllEquitiesByResearchStringValue(groupId);
+            } else {
+                return null;
+            }
+        }
+
     }
 }

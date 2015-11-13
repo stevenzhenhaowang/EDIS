@@ -19,9 +19,8 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <ul class="nav nav-tabs">
-                            <li ng-class="{active:selectedModel.modelId === item.modelId}" ng-repeat="item in existingModels">
-                                <a ng-click="selectModel(item.modelId)" class="left-btn"> {{item.modelName}}</a>
-                            </li>
+                            <li ng-class="{active:selectedModel.modelId === item.modelId}" ng-repeat="item in currentModels"><a ng-click="selectModel(item.modelId)" class="left-btn"> {{item.modelName}}</a><a class="removeBtn right-btn" ng-class="{active:selectedModel.modelId === item.modelId}" ng-click="remove(item)"><i class="fa fa-times"></i></a></li>
+                            <li><a ng-click="add()"> Add</a></li>
                             <li ng-class="{active:compareOn}"><a ng-click="enableCompare()" ng-show="canCompare()">  Compare</a></li>
                         </ul>
                         <div class="tab-content">
@@ -45,9 +44,9 @@
                                         <ul class="nav nav-tabs" ng-init="step=1">
                                             <li ng-class="{active:step===1}"><a ng-click="step=1">  Summary</a></li>
                                             <li ng-class="{active:step===2}"><a ng-click="step=2">  Diversification</a></li>
-                                            <li ng-class="{active:step===3}"><a ng-click="step=3">  CashFlow</a></li>
+                                            <!--<li ng-class="{active:step===3}"><a ng-click="step=3">  CashFlow</a></li>-->
                                             <li ng-class="{active:step===4}"><a ng-click="step=4">  Transaction Costs</a></li>
-                                            <li ng-class="{active:step===5}"><a ng-click="step=5">  Conmpliance</a></li>
+                                            <!--<li ng-class="{active:step===5}"><a ng-click="step=5">  Conmpliance</a></li>-->
                                         </ul>
                                     </div>
                                 </div>
@@ -136,8 +135,8 @@
                                                                     <td>Realised Profit/Loss</td>
                                                                     <td>Differences</td>
                                                                     <td>Suitability</td>
-                                                                    <td>Target</td>
-                                                                    <td>Diff to Target</td>
+                                                                    <!--<td>Target</td>-->
+                                                                    <!--<td>Diff to Target</td>-->
                                                                     <td>APL Approved</td>
                                                                 </tr>
                                                                 <tr ng-repeat="item in group.data">
@@ -151,9 +150,9 @@
                                                                     <td>{{item.rebalance.value | currency}}</td>
                                                                     <td>{{item.rebalance.profitAndLoss | number:0}}%</td>
                                                                     <td>{{item.advantageousAndDisadvantageous.differences | number:0}}%</td>
-                                                                    <td>{{item.advantageousAndDisadvantageous.suitability | number:0}}%</td>
-                                                                    <td>{{item.advantageousAndDisadvantageous.targe | currency}}%</td>
-                                                                    <td>{{item.advantageousAndDisadvantageous.differenceToTarget | number:0}}%</td>
+                                                                    <td>{{item.advantageousAndDisadvantageous.suitability | number:0}}</td>
+                                                                   <!-- <td>{{item.advantageousAndDisadvantageous.targe | currency}}%</td>-->
+                                                                   <!--<td>{{item.advantageousAndDisadvantageous.differenceToTarget | number:0}}%</td>-->
                                                                     <td>{{item.advantageousAndDisadvantageous.apl}}</td>
                                                                 </tr>
 
@@ -521,8 +520,8 @@
                                                                     <td>Buy/Sell</td>
                                                                     <td>Realised Profit/Loss</td>
                                                                     <td>Transaction Cost</td>
-                                                                    <td>Extra Dividend</td>
-                                                                    <td>Extra MER</td>
+                                                                    <!--<td>Extra Dividend</td>-->
+                                                                    <!--<td>Extra MER</td>-->
                                                                     <td>Net Value</td>
                                                                 </tr>
                                                             </thead>
@@ -535,8 +534,8 @@
                                                                     <td>{{item.buySell | currency}}</td>
                                                                     <td>{{item.profitLoss | currency}}</td>
                                                                     <td>{{item.transactionCost | currency}}</td>
-                                                                    <td>{{item.extraDividend | currency}}</td>
-                                                                    <td>{{item.extraMER | currency}}</td>
+                                                                    <!--<td>{{item.extraDividend | currency}}</td>-->
+                                                                    <!--<td>{{item.extraMER | currency}}</td>-->
                                                                     <td>{{item.netValue | currency}}</td>
                                                                 </tr>
                                                                 <tr class="summary-table-row">
@@ -544,8 +543,8 @@
                                                                     <td>{{group.buySell | currency}}</td>
                                                                     <td>{{group.profitLoss | currency}}</td>
                                                                     <td>{{group.transactionCost | currency}}</td>
-                                                                    <td>{{group.extraDividend | currency}}</td>
-                                                                    <td>{{group.extraMER | currency}}</td>
+                                                                    <!--<td>{{group.extraDividend | currency}}</td>-->
+                                                                    <!--<td>{{group.extraMER | currency}}</td>-->
                                                                     <td>{{group.netValue | currency}}</td>
                                                                 </tr>
                                                             </tbody>
@@ -611,3 +610,157 @@
 </div>
 
 
+
+<script type="text/ng-template" id="addNewModel">
+    <div class="newModel">
+        <div class="row" ng-show="!createModeOn">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <label>Select an existing model</label>
+                    <select ng-model="selectedModelId" class="form-control" ng-options="item.modelId as item.modelName for item in existingModels" required></select>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <button class="btn btn-info" ng-show="!createModeOn" ng-click="createModeOn = true">Create a new model</button>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-show="createModeOn">
+            <div class="col-md-12">
+                <form name="form" novalidate>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <label>Create from existing</label>
+                                <select ng-model="newModel.existingModelId" ng-change="changeTemplateSelection()" name="modelId" class="form-control" ng-options="item.modelId as item.modelName for item in existingModels">
+                                    <option value="">Start from scratch...</option>
+                                </select>
+                                <!--<div class="error" ng-show="form.modelId.$error.required && form.modelId.$touched">Please select an existing model template</div>-->
+                            </div>
+                        </div>
+                        <!--<div class="col-md-6">
+                            <div class="input-group">
+                                <label>Client Group</label>
+                                <select ng-model="newModel.clientGroupId" required name="clientGroupId" class="form-control" ng-options="item.id as item.name for item in groups">
+                                    <option value="">Select...</option>
+                                </select>
+                                <div class="error" ng-show="form.clientGroupId.$error.required && form.clientGroupId.$touched">Please select corresponding client group</div>
+                            </div>
+                        </div>-->
+                    </div>
+                    <div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <label>Model Profile</label>
+                                    <select ng-model="newModel.profileId" name="profileId" class="form-control" ng-options="item.profileId as item.profileName for item in profiles" required>
+                                        <option value="">Please select profile</option>
+                                    </select>
+                                    <div class="error" ng-show="form.profileId.$error.required && form.profileId.$touched">Please select a descriptive profile for this model</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <label>Model Name</label>
+                                    <input name="modelName" ng-model="newModel.modelName" class="form-control" required />
+                                    <div class="error" ng-show="form.modelName.$error.required && form.modelName.$touched">Please enter a model name</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="widget" style="margin-top:10px">
+                            <div class="widget-header">
+                                <h3>Parameter Settings</h3>
+                            </div>
+                            <div class="widget-content">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <label>Parameter Type</label>
+                                            <select ng-model="newModel.filters" name="parameterType" class="form-control" ng-options="item.filters as item.classificationType for item in parameterTypes"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <label>Parameter Group</label>
+                                            <select ng-change="parameterGroupChanged()" ng-model="newModel.parameterGroup" name="parameterGroup" class="form-control" ng-options="item as item.groupName group by item.groupType for item in newModel.filters"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" ng-show="newModel.parameterGroup">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Parameter</label>
+                                            <select ng-model="newModel.parameter" name="parameter" class="form-control" ng-options="item as item.itemName for item in newModel.parameters"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Add</label>
+
+                                            <button class="btn btn-success btn-block" ng-if="newModel.parameter" ng-click="addParameter()">Assign an individual weighting</button>
+                                            <button class="btn btn-success btn-block" ng-if="newModel.parameterGroup" ng-click="addGroupPrameter()">Assign a group weighting</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-bordered table-hover" style="margin-bottom:0;">
+                                    <thead>
+                                        <tr class="summary-table-row">
+                                            <td>Parameter Name</td>
+                                            <td>Weighting</td>
+                                            <td>Remove</td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row parameters-view">
+                            <div class="col-md-12">
+                                <table class="table table-bordered table-hover">
+
+                                    <tbody>
+                                        <tr ng-repeat="item in newModel.selectedParameters">
+                                            <td>
+                                                {{item.parameterName}}
+                                            </td>
+                                            <td>
+                                                <input type="number" max="100" min="0" name="parameter_{{$index}}" ng-model="item.weighting" required class="form-control" />
+                                                <div class="error" ng-show="form.parameter_{{$index}}.$error.required && form.parameter_{{$index}}.$touched">Please enter weighting</div>
+                                                <div class="error" ng-show="form.parameter_{{$index}}.$error.number && form.parameter_{{$index}}.$touched">Please provide numeric input</div>
+                                                <div class="error" ng-show="form.parameter_{{$index}}.$error.max && form.parameter_{{$index}}.$touched">Max value of weighting is 100%</div>
+                                                <div class="error" ng-show="form.parameter_{{$index}}.$error.min && form.parameter_{{$index}}.$touched">Minimum value of weighting is 0%</div>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger" ng-click="removeSelectedParameter(item)">Remove</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-right">
+                <button class="btn btn-danger" value="Cancel" ng-disabled="createModeOn&&(!form.$valid||!actionButtonsActive())" ng-click="close()">Cancel</button>
+                <button class="btn btn-success" value="Save" ng-disabled="createModeOn&&(!form.$valid||!actionButtonsActive())" ng-click="save()">Save</button>
+            </div>
+        </div>
+
+    </div>
+</script>

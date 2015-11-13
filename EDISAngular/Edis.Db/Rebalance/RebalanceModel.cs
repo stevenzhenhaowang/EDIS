@@ -18,6 +18,7 @@ namespace Edis.Db.Rebalance
         public virtual ICollection<TemplateDetailsItemParameter> TemplateDetailsItemParameters { get; set; }
         public virtual Adviser Adviser { get; set; }
         public virtual ClientGroup ClientGroup { get; set; }
+        public virtual Client Client{ get; set; }
 
         public RebalanceModel()
         {

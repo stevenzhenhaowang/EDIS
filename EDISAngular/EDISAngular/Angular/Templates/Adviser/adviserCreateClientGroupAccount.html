@@ -21,7 +21,7 @@
                 <form novalidate name="form" ng-controller="adviserCreateNewClientGroupAccountController">
                     <div class="row">
                         <div class="col-sm-12 form-group">
-                            <label>Select Client Group</label>
+                            <label style="font-weight: bold">Select Client Group</label>
                             <select required class="form-control" name="clientGroup" ng-change="loadClients()" ng-model="clientGroup" ng-options="group.id as group.name for group in groups"></select>
                             <span class="error" ng-show="form.clientGroup.$error.required && form.clientGroup.$touched">Please select client group.</span>
                         </div>

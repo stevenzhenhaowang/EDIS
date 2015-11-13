@@ -92,8 +92,10 @@ namespace Edis.Db
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<RebalanceModel>()
-                .HasRequired<Adviser>(m => m.Adviser);
+                .HasOptional<Adviser>(m => m.Adviser);
 
+            modelBuilder.Entity<RebalanceModel>()
+                .HasOptional<Client>(m => m.Client);
 
             modelBuilder.Entity<RebalanceModel>()
                 .HasRequired<ClientGroup>(m => m.ClientGroup);
