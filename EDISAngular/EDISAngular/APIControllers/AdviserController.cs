@@ -458,7 +458,10 @@ namespace EDISAngular.APIControllers
         [HttpGet, Route("api/adviser/research/companyProfile")]
         public CompanyProfileDataItem GetCompanyProfile(string companyId)
         {
-            Equity equity = edisRepo.GetAllEquities().SingleOrDefault(eq => eq.Id == companyId);
+            Equity equity = edisRepo.getEquityById(companyId);
+            DateTime? priceDate = edisRepo.GetLastPriceDateForEquity(companyId);
+
+            
 
             CompanyProfileDataItem model = new CompanyProfileDataItem
             {
@@ -467,12 +470,13 @@ namespace EDISAngular.APIControllers
                 fullName = equity.Name,
                 closingPrice = equity.LatestPrice,
                 sector = equity.Sector,
+                priceDate = priceDate == null? DateTime.MinValue : (DateTime)priceDate,
                 assetClass = equity.EquityType.ToString(),
                 changeAmount = edisRepo.GetResearchValueForEquitySync("changeAmount", equity.Ticker) == null ? 0 : (double)edisRepo.GetResearchValueForEquitySync("changeAmount", equity.Ticker),
                 changeRatePercentage = edisRepo.GetResearchValueForEquitySync("changeRatePercentage", equity.Ticker) == null ? 0 : (double)edisRepo.GetResearchValueForEquitySync("changeRatePercentage", equity.Ticker),
                 weeksDifferenceAmount = (double)edisRepo.GetResearchValueForEquitySync("52WkHighPrice", equity.Ticker),
                 weeksDifferenceRatePercentage = (double)(edisRepo.GetResearchValueForEquitySync("52WkLowPrice", equity.Ticker) / edisRepo.GetResearchValueForEquitySync("52WkHighPrice", equity.Ticker) == null ? 1 : edisRepo.GetResearchValueForEquitySync("52WkHighPrice", equity.Ticker)),
-                suitabilityScore = edisRepo.GetResearchValueForEquitySync("suitabilityScore", equity.Ticker) == null ? 0 : (double)edisRepo.GetResearchValueForEquitySync("suitabilityScore", equity.Ticker),
+                suitabilityScore = equity.GetRating().TotalScore,
                 suitsTypeOfClients = edisRepo.GetStringResearchValueForEquitySync("suitsTypeOfClients", equity.Ticker),
                 country = edisRepo.GetStringResearchValueForEquitySync("Country", equity.Ticker),
                 exchange = edisRepo.GetStringResearchValueForEquitySync("Exchange", equity.Ticker),
@@ -483,7 +487,7 @@ namespace EDISAngular.APIControllers
                 companyStrategies = edisRepo.GetStringResearchValueForEquitySync("companyStrategies", equity.Ticker),
                 investment = edisRepo.GetStringResearchValueForEquitySync("investment", equity.Ticker),
                 investmentName = edisRepo.GetStringResearchValueForEquitySync("investmentName", equity.Ticker),
-                //priceDate = DateTime.Now,
+                
 
                 indexData = new List<CompanyProfileIndexData>(),
 

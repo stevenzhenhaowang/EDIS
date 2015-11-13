@@ -7,6 +7,19 @@
         $scope.investmentPortfolioDataKendo = new kendo.data.DataSource({
             data: $scope.investmentPortfolio.data
         });
+
+        $scope.clickPortfolio = function (x) {
+            if (angular.isDefined(x)) {
+                switch(x.name){
+                    case "Australian Equity": window.location.href = '#/clientportfolioae'; break;
+                    case "International Equity": window.location.href = '#/clientportfolioint'; break;
+                    case "Managed Investments": window.location.href = '#/clientportfoliomi'; break;
+                    case "Direct & Listed Property": window.location.href = '#/clientportfoliodp'; break;
+                    case "Fixed Income Investments": window.location.href = '#/clientportfoliofi'; break;
+                    case "Cash & Term Deposit": window.location.href = '#/clientportfolioctd'; break;
+                }
+            }
+        };
     })
 
     DBContext.GetEquityLocationData().get(function(data){

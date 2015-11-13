@@ -13,6 +13,7 @@ namespace Domain.Portfolio.Rebalance
         public int ProfileId { get; set; }
         public string ClientGroupId { get; set; }
         public string AdviserId { get; set; }
+        public string ClientId { get; set; }
 
         public List<TemplateDetailsItemParameter> TemplateDetailsItemParameters { get; set; }
     }

@@ -41,7 +41,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="x in investmentPortfolio.data">
+                                <tr ng-repeat="x in investmentPortfolio.data" ng-click="clickPortfolio(x)">
                                     <td>{{x.name}}</td>
                                     <td>{{x.amount | currency}}</td>
                                     <td>{{x.percentage | number:2}}%</td>

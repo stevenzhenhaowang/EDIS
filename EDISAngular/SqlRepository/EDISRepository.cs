@@ -3589,6 +3589,7 @@ namespace SqlRepository
                 {
                     case EquityTypes.AustralianEquity:
                         subEquity = new AustralianEquity(this);
+                        
                         break;
                     case EquityTypes.InternationalEquity:
                         subEquity = new InternationalEquity(this);
@@ -7925,7 +7926,7 @@ namespace SqlRepository
             }
         }
 
-        public List<Domain.Portfolio.AggregateRoots.Asset.Equity> GetEquityForAccountSync(string equityId, ClientGroup clientGroup) {
+        public List<Domain.Portfolio.AggregateRoots.Asset.Equity> GetEquityForGroupAccountSync(string equityId, ClientGroup clientGroup) {
 
             List<GroupAccount> GroupAccounts = GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
             List<ClientAccount> clientAccounts = new List<ClientAccount>();
@@ -7935,6 +7936,27 @@ namespace SqlRepository
             GroupAccounts.ForEach(g => accounts.AddRange(_db.Accounts.Where(a => a.AccountNumber == g.AccountNumber)));
             clientAccounts.ForEach(c => accounts.AddRange(_db.Accounts.Where(a => a.AccountNumber == c.AccountNumber)));
 
+            Equity equity = _db.Equities.SingleOrDefault(e => e.AssetId == equityId);
+            List<Domain.Portfolio.AggregateRoots.Asset.Equity> equities = new List<Domain.Portfolio.AggregateRoots.Asset.Equity>();
+
+            switch (equity.EquityType) {
+                case EquityTypes.AustralianEquity:
+                    accounts.ForEach(a => equities.AddRange(GenerateAustralianEquityForAccountSync(a.AccountId, DateTime.Now, a).Where(auE => auE.Id == equityId)));
+                    break;
+                case EquityTypes.InternationalEquity:
+                    accounts.ForEach(a => equities.AddRange(GenerateInternationalEquityForAccountSync(a.AccountId, DateTime.Now, a).Where(inE => inE.Id == equityId)));
+                    break;
+            }
+
+            return equities;
+        }
+
+
+
+        public List<Domain.Portfolio.AggregateRoots.Asset.Equity> GetEquityForClientAccountSync(string equityId, Client client) {
+
+            List<Account> accounts = new List<Account>();
+            client.GetAccountsSync().ForEach(c => accounts.AddRange(_db.Accounts.Where(a => a.AccountNumber == c.AccountNumber)));
 
             Equity equity = _db.Equities.SingleOrDefault(e => e.AssetId == equityId);
             List<Domain.Portfolio.AggregateRoots.Asset.Equity> equities = new List<Domain.Portfolio.AggregateRoots.Asset.Equity>();
@@ -7968,11 +7990,14 @@ namespace SqlRepository
             return numberOfUnit;
         }
 
+        public DateTime? GetLastPriceDateForEquity(string equityId) {
+            return _db.Equities.SingleOrDefault(e => e.AssetId == equityId).Prices.Max(p => p.CreatedOn);
+        }
+
         public Domain.Portfolio.AggregateRoots.Asset.Equity getEquityById(string equityId) {
             Equity equity = _db.Equities.SingleOrDefault(e => e.AssetId == equityId);
 
             var latestPrice = equity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault();
-            
 
             if(equity.EquityType == EquityTypes.AustralianEquity){
                 return new Domain.Portfolio.AggregateRoots.Asset.AustralianEquity(this)
@@ -7982,8 +8007,9 @@ namespace SqlRepository
                     EquityType = equity.EquityType,
                     Ticker = equity.Ticker,
                     Sector = equity.Sector,
-                    LatestPrice = latestPrice
-                    //ClientAccountId = equity.
+                    LatestPrice = latestPrice,
+                    F0Ratios = GetF0RatiosForEquitySync(equity.Ticker),
+                    F1Recommendation = GetF1RatiosForEquitySync(equity.Ticker)
                 };
             }else if(equity.EquityType == EquityTypes.InternationalEquity){
                 return new Domain.Portfolio.AggregateRoots.Asset.InternationalEquity(this)
@@ -7993,7 +8019,9 @@ namespace SqlRepository
                     EquityType = equity.EquityType,
                     Ticker = equity.Ticker,
                     Sector = equity.Sector,
-                    LatestPrice = latestPrice
+                    LatestPrice = latestPrice,
+                    F0Ratios = GetF0RatiosForEquitySync(equity.Ticker),
+                    F1Recommendation = GetF1RatiosForEquitySync(equity.Ticker)
                 };
             }
             else if (equity.EquityType == EquityTypes.ManagedInvestments)
@@ -8005,7 +8033,9 @@ namespace SqlRepository
                     EquityType = equity.EquityType,
                     Ticker = equity.Ticker,
                     Sector = equity.Sector,
-                    LatestPrice = latestPrice
+                    LatestPrice = latestPrice,
+                    F0Ratios = GetF0RatiosForEquitySync(equity.Ticker),
+                    F1Recommendation = GetF1RatiosForEquitySync(equity.Ticker)
                 };
             }
             else {
@@ -8308,6 +8338,8 @@ namespace SqlRepository
 
         public void CreateRebalanceModel(RebalanceModel model) {
             var adviser = _db.Advisers.SingleOrDefault(a => a.AdviserNumber == model.AdviserId);
+            var client = _db.Clients.SingleOrDefault(a => a.ClientNumber == model.ClientId);
+
             var clientGroup = _db.ClientGroups.SingleOrDefault(c => c.ClientGroupId == model.ClientGroupId);
             List<Edis.Db.Rebalance.TemplateDetailsItemParameter> parameters = new List<Edis.Db.Rebalance.TemplateDetailsItemParameter>();
             foreach(var parameter in model.TemplateDetailsItemParameters){
@@ -8326,6 +8358,7 @@ namespace SqlRepository
                 ModelId = Guid.NewGuid().ToString(),
                 ProfileId = model.ProfileId,
                 Adviser = adviser,
+                Client = client,
                 ClientGroup = clientGroup,
                 ModelName = model.ModelName,
                 TemplateDetailsItemParameters = parameters
@@ -8362,11 +8395,20 @@ namespace SqlRepository
             _db.SaveChanges();         
         }
 
-        public List<RebalanceModel> GetRebalanceModelByAdviserId(string adviserId)
+        public List<RebalanceModel> GetRebalanceModelById(string Id)
         {
-            var adviser = _db.Advisers.SingleOrDefault(a => a.AdviserNumber == adviserId);
-            List<Edis.Db.Rebalance.RebalanceModel> models = _db.RebalanceModels.Where(r => r.Adviser.AdviserId == adviser.AdviserId).ToList();
+            var adviser = _db.Advisers.SingleOrDefault(a => a.AdviserNumber == Id);
+            var client = _db.Clients.SingleOrDefault(c => c.ClientNumber == Id);
 
+            List<Edis.Db.Rebalance.RebalanceModel> models = null;
+            if(adviser != null){
+                models = _db.RebalanceModels.Where(r => r.Adviser.AdviserId == adviser.AdviserId).ToList();
+            } else if (client != null) {
+                models = _db.RebalanceModels.Where(r => r.Client.ClientId == client.ClientId).ToList();
+            } else {
+                return null;
+            }
+            
             List<RebalanceModel> results = new List<RebalanceModel>();
 
             foreach (var model in models)
@@ -8391,9 +8433,7 @@ namespace SqlRepository
                     TemplateDetailsItemParameters = parameters
                 });
             }
-
             return results;
-
         }
 
         public RebalanceModel GetRebalanceModelByModelId(string modelId) {

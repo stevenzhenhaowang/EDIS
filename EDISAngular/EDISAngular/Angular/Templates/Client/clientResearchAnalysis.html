@@ -33,12 +33,11 @@
                                              k-legend="{ position: 'bottom' }"
                                              k-series-defaults="{ type: 'area' , area : { line : { style : 'smooth' } } }"
                                              k-series="[
-                                 { field: 'company', name: 'Underlying Company', categoryField:'month' },
-                                 { field: 'portfolio', name: 'Portfolio', categoryField:'month' },
-                                 { field: 'asx200', name: 'ASX 200', categoryField:'month' }
-                             ]"
+                                                             { field: 'company', name: 'Underlying Company', categoryField:'month' }
+                                                         ]"
                                              k-data-source="dataSource"
-                                             k-tooltip="{ visible: true, format : '{0}' , template: '#= series.name #: $ #= value #'}"></div>
+                                             k-category-axis="{labels: { rotation: 315 }}"
+                                             k-tooltip="{ visible: true, format : '{0}' , template: '#= category #: $ #= value #'}"></div>
 
                                         <div class="row">
                                             <div class="col-sm-12">

@@ -41,10 +41,10 @@ app.factory("clientResearchAnalysisDBService", function ($http, $resource, AppSt
     return function () {
 
         var companyList = function () {
-            return $resource(AppStrings.EDIS_IP + "api/client/companyList");
+            return $resource(AppStrings.EDIS_IP + "api/adviser/companyList");
         };
         var getCompanyProfile = function () {
-            return $resource(AppStrings.EDIS_IP + "api/client/research/companyProfile");
+            return $resource(AppStrings.EDIS_IP + "api/adviser/research/companyProfile");
         }
         var getUserCompanyList = function () {
             return storedCompany;
@@ -105,11 +105,8 @@ app.factory("clientResearchAnalysisDBService", function ($http, $resource, AppSt
 
 angular.module("EDIS")
 .factory("clientResearchRebalanceServices", function (AppStrings, $resource, $filter, $q) {
-
-
     var currentModels = [];//as in memory, displayed in tabs, initially empty.
     var existingModels = [];//as in db, displayed in existing models dropdown list
-
     ///if from tab, should have already been retrieved, otherwise, retrieve from db.
     //May return null/undefined result if modelId is not supplied properly. 
     function getAndSelectModelProfile(modelId) {
@@ -121,7 +118,6 @@ angular.module("EDIS")
                 found = true;
             }
         }
-
         for (var i = 0; i < existingModels.length && !found; i++) {
             if (existingModels[i].modelId === modelId) {
                 currentModels.push(existingModels[i]);
@@ -129,41 +125,34 @@ angular.module("EDIS")
             }
         }
         if (!found) {
-            $resource(AppStrings.EDIS_IP + "api/adviser/model").get({ modelId: modelId }, function (data) {
+            $resource(AppStrings.EDIS_IP + "api/client/model/details").get({ modelId: modelId }, function (data) {
                 currentModels.push(data)
                 deferred.resolve(data);
             })
         }
-
         return deferred.promise;
     }
-
-    function getModelProfile(modelId) {
-
-        for (var i = 0; i < existingModels.length; i++) {
-            if (existingModels[i].modelId === modelId) {
-                return existingModels[i];
-            }
-        }
-        return null;
-
-    }
-
     function getCurrentModels() {
         return currentModels;
     }
-
-
-
-
+    function removeModel(model) {
+        currentModels.splice(currentModels.indexOf(model), 1);
+        existingModels.splice(existingModels.indexOf(model), 1);
+        $http.post(AppStrings.EDIS_IP + "api/adviser/model/remove", { modelId: model.modelId });
+    }
     return function () {
         return {
-            getExistingModels: function () { return $resource(AppStrings.EDIS_IP + "api/client/models"); },//resource
+            getCurrentModels: getCurrentModels,
+            getExistingModels: function () { return $resource(AppStrings.EDIS_IP + "api/client/models"); },//resource   .....
             getAndSelectModelProfile: getAndSelectModelProfile,//promise
-            getModelProfile: function () { return $resource(AppStrings.EDIS_IP + "api/adviser/model"); },//resource, needs id
-
+            getAllProfiles: function () {
+                return $resource(AppStrings.EDIS_IP + "api/adviser/model/profiles");
+            },//resource
+            getModelProfile: function () { return $resource(AppStrings.EDIS_IP + "api/adviser/model"); },//resource, needs id   ......
+            getParameterFilters: function () { return $resource(AppStrings.EDIS_IP + "api/adviser/model/filters"); },//resource
+            getParameters: function () { return $resource(AppStrings.EDIS_IP + "api/adviser/model/parameters"); },//resource, needs id        //, clientGroupId : clientGroupId 
+            addNewModel: function () { return $resource(AppStrings.EDIS_IP + "api/client/model/create"); },//resource, needs object ....
+            removeModel: removeModel//resource, needs id
         };
     };
-
-
 });
