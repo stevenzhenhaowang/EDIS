@@ -489,6 +489,7 @@
     <Compile Include="Models\ServiceModels\CorporateActions\BuybackProgramActionCreationModel.cs" />
     <Compile Include="Models\ServiceModels\CorporateActions\BuyBackProgramData.cs" />
     <Compile Include="Models\ServiceModels\CorporateActions\CorporateActionClientAccountModel.cs" />
+    <Compile Include="Models\ServiceModels\CorporateActions\GetAccountByEquityModel.cs" />
     <Compile Include="Models\ServiceModels\CorporateActions\IpoActionCreationModel.cs" />
     <Compile Include="Models\ServiceModels\CorporateActions\IPOActionData.cs" />
     <Compile Include="Models\ServiceModels\CorporateActions\OtherActionCreationModel.cs" />

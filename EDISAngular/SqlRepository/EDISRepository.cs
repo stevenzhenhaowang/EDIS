@@ -1385,7 +1385,7 @@ namespace SqlRepository
             return result;
         }
 
-        public List<ActivityBase> GetEquityActivitiesForAccountSync(string accountId, string ticker, DateTime to)       //added
+        public List<ActivityBase>  GetEquityActivitiesForAccountSync(string accountId, string ticker, DateTime to)       //added
         {
             //Account lookup ignores date range
             var account = _db.Accounts.Where(a => a.AccountId == accountId)
@@ -8576,5 +8576,49 @@ namespace SqlRepository
            return _db.ReturnOfCapitals.Where(re => re.AdviserId == AdviserId).ToList();
         }
 
+        public List<CorperateActionParticipateAccountsModel> GetAllAdviserAccountAccordingToEquity(string Ticker, string AdviserId)
+        {
+            var result = new List<CorperateActionParticipateAccountsModel>();
+            //All groups that this adviser got
+            var groups = GetAllClientGroupsForAdviserSync(AdviserId, DateTime.Now);
+
+            foreach (var group in groups) {
+                var typeOfGroupAccount = GetAccountsForClientGroupSync(group.ClientGroupNumber, DateTime.Now);
+                if (typeOfGroupAccount != null) {
+                    foreach (var groupAccount in typeOfGroupAccount)
+                    {
+                       var checkie =  checkThisAccountDoesHaveThisEquityOrNot(Ticker , groupAccount);
+                        var newRecord = new CorperateActionParticipateAccountsModel()
+                        {
+                            AccountId = group.Id,
+                            AccountType = "Group Account",
+                        };
+                        result.Add(newRecord);
+                    }
+                }
+               
+
+            }
+
+            //Then all clients within this group
+            //var clients = get
+            //all accounts of this group could be null
+            
+
+
+
+        return result;
+
+
+
+       }
+
+        private Boolean checkThisAccountDoesHaveThisEquityOrNot(string ticker, GroupAccount groupAccount)
+        {
+            var equity = getEquityByTicker(ticker);
+            //GetEquityActivitiesForAccountSync
+            return true;
+        }
+        
     }
 }

@@ -28,10 +28,8 @@
 
       
         //newReturnOfCapital: function () { return $resource(AppStrings.EDIS_IP + "api/Adviser/CorprateAction/newReturnCapital"); },
-        newReturnOfCapital: function (data) {
-            console.log("aaaaaaaaaaaaaa");
-            $http.post(AppStrings.EDIS_IP + "api/Adviser/CorprateAction/newReturnCapital", data).success(function () {
-                console.log("bbbbbbbbbbb");
+        newReturnOfCapital: function (data) {      
+            $http.post(AppStrings.EDIS_IP + "api/Adviser/CorprateAction/newReturnCapital", data).success(function () {              
                     alert("success");
                 }).error(function (data) {
                     alert("failed:" + data);
@@ -50,7 +48,13 @@
         },
 
 
-
+        getAccountByEquity: function (data) {
+            $http.post(AppStrings.EDIS_IP + "api/adviser/corporateAction/getAccountByEquity", data).success(function () {
+                //alert("success");
+            }).error(function (data) {
+                alert("failed:" + data);
+            })
+        },
 
         //  $http.post(AppStrings.EDIS_IP + "api/Personclient/Create", data).success(function () {
                 //    alert("success");

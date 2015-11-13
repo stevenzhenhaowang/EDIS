@@ -83,27 +83,6 @@
     <Compile Include="Liabilities\MarginLendingTransaction.cs" />
     <Compile Include="Liabilities\MortgageHomeLoanTransaction.cs" />
     <Compile Include="Markers\IAsset.cs" />
-    <Compile Include="Migrations\201511110427453_addReinvestmentPlanDb.cs" />
-    <Compile Include="Migrations\201511110427453_addReinvestmentPlanDb.Designer.cs">
-      <DependentUpon>201511110427453_addReinvestmentPlanDb.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511112320460_corpoActionHis.cs" />
-    <Compile Include="Migrations\201511112320460_corpoActionHis.Designer.cs">
-      <DependentUpon>201511112320460_corpoActionHis.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511112347584_numberToAccountId.cs" />
-    <Compile Include="Migrations\201511112347584_numberToAccountId.Designer.cs">
-      <DependentUpon>201511112347584_numberToAccountId.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511100443328_makeitBackToNumber.cs" />
-    <Compile Include="Migrations\201511100443328_makeitBackToNumber.Designer.cs">
-      <DependentUpon>201511100443328_makeitBackToNumber.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511110044585_countrycode2.cs" />
-    <Compile Include="Migrations\201511110044585_countrycode2.Designer.cs">
-      <DependentUpon>201511110044585_countrycode2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NoteLinks.cs" />
     <Compile Include="Notes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -131,20 +110,6 @@
       <Project>{e5bc73b2-7418-4fee-a5b9-a268e9501523}</Project>
       <Name>Shared</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201511110427453_addReinvestmentPlanDb.resx">
-      <DependentUpon>201511110427453_addReinvestmentPlanDb.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511112320460_corpoActionHis.resx">
-      <DependentUpon>201511112320460_corpoActionHis.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511112347584_numberToAccountId.resx">
-      <DependentUpon>201511112347584_numberToAccountId.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511110044585_countrycode2.resx">
-      <DependentUpon>201511110044585_countrycode2.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

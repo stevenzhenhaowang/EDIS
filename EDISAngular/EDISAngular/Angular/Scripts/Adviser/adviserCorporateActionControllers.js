@@ -1,5 +1,5 @@
 ﻿angular.module("EDIS")
-.controller("corporateActionController", ["$scope", "corporateActionServices", "$modal", "adviserGetId", function ($scope, service, $modal, $http) {
+.controller("corporateActionController", ["$scope", "corporateActionServices", "$modal", "$http", function ($scope, service, $modal, $http) {
     service.existingIPOActions().query(function (data) {
         $scope.existingIPOActions = data;
     })
@@ -313,7 +313,7 @@
 
 
   .controller("newReturnOfCapitalActionController",
-["$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", function ($scope,  service, $modalInstance, dateParser, adviserGetId, AppStrings, $http) {
+["$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", "AppStrings", "$http", function ($scope, service, $modalInstance, dateParser, adviserGetId, AppStrings, $http) {
     //service.allCompanies().query(function (data) {
     //    $scope.allCompanies = data;
     //})
@@ -326,6 +326,11 @@
     service.allTickers().query(function (data) {
         $scope.allTickers = data;
     })
+
+
+    //service.getAccountByEquity().query(function (data) {
+    //    $scope.allAccounts = data;
+    //})
   /*$scope.loadClients = function () {
         var data = [];
         data = {
@@ -343,14 +348,23 @@
     $scope.loadAccounts = function () {
         var data = [];
         data = {
-            equityId : $scope.tickerNumber
+            Ticker: $scope.tickerNumber
         }
-        $http.post(AppStrings.EDIS_IP + "api/adviser/corporateAction/getAccounts", data)
-        .success(function (data) {
-            $scope.allAccounts = data;
-        }).error(function (data) {
-            console.log("Error.............");
-        });
+        //service.getAccountByEquity().query({ data }, function (data) {
+        //    $scope.allAccounts = data;
+        //    //asdasdas
+        //    console.log("12312312312312323");
+        //    console.log("12312312312312323");
+        //    console.log("12312312312312323");
+        //    console.log("12312312312312323");
+        //    console.log("12312312312312323");
+        //    })
+        $http.post(AppStrings.EDIS_IP + "api/adviser/corporateAction/getAccountByEquity", data)
+          .success(function (data) {
+              $scope.allAccounts = data;
+          }).error(function (data) {
+              console.log("Error.............");
+          });
     }
 
     $scope.add = function () {
