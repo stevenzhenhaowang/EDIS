@@ -334,7 +334,8 @@
                                             <thead>
                                                 <tr class="summary-table-row">
                                                     <td>Action Name</td>
-                                                 
+                                                    <td>Ticker</td>
+                                                    <td>Edis Account Number</td>
                                                     <td>Return Cash Amount</td>
                                                     <td>Date</td>
                                                 </tr>
@@ -342,7 +343,8 @@
                                             <tbody>
                                                 <tr ng-repeat="item in existingReturnOfCapitals" ng-click="selectReturnOfCapital(item)">
                                                     <td>{{item.actionName}}</td>
-                                                
+                                                    <td>{{item.ticker}}</td>
+                                                    <td>{{item.accountNumber}}</td>
                                                     <td>{{item.returnAmount}}</td>
                                                     <td>{{item.returnDate}}</td>
                                                 </tr>
@@ -428,17 +430,21 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr class="summary-table-row">
-                                                <td>Action Name</td>
-                                                <td>Equity ID</td>
-                                                <td>Reinvestment Shares</td>
-                                                <td>Date</td>
+                                                <th>Action Name</th>
+                                                <th>Account Number</th>
+                                                <th>Ticker</th>
+                                                <th>Reinvestment Shares</th>
+                                                <th>Status</th>
+                                                <th>Date</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="item in existingReinvestments" ng-click="selectReinvestment(item)">
-                                                <td>{{item.corporateActionName}}</td>
-                                                <td>{{item.equityId}}</td>
-                                                <td>{{item.reInvestmentShares}}</td>
+                                                <td>{{item.actionName}}</td>
+                                                <td>{{item.accountNumber}}</td>
+                                                <td>{{item.ticker}}</td>
+                                                <td>{{item.reinvestmentShareAmount}}</td>
+                                                <td>{{item.status}}</td>
                                                 <td>{{item.reinvestmentDate}}</td>
                                             </tr>
                                         </tbody>
@@ -487,7 +493,7 @@
                                             <tbody>
                                                 <tr ng-repeat="client in selectedOtherCorporateAction.participants">
                                                     <td>{{client.edisAccountNumber}}</td>
-                                              <!--      <td>{{client.brokerAccountNumber}}</td>  -->
+                                           
                                                     <td>{{client.type}}</td>
                                                     <td>{{client.name}}</td>
                                                 </tr>
@@ -514,17 +520,21 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr class="summary-table-row">
-                                                <td>Action Name</td>
-                                                <td>Equity ID</td>
-                                                <td>Stock Split Shares</td>
-                                                <td>Date</td>
+                                                <th>Action Name</th>
+                                                <th>Ticker</th>
+                                                <th>Account Number</th>
+                                                <th>Split To Shares</th>
+                                                <th>Status</th>
+                                                <th>Date</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="item in existingStockSplits" ng-click="selectStockSplit(item)">
-                                                <td>{{item.corporateActionName}}</td>
-                                                <td>{{item.equityId}}</td>
-                                                <td>{{item.stockSpilt}}</td>
+                                                <td>{{item.actionName}}</td>
+                                                <td>{{item.ticker}}</td>
+                                                <td>{{item.edisAccountNumber}}</td>
+                                                <td>{{item.splitTo}}</td>
+                                                <td>{{item.status}}</td>
                                                 <td>{{item.splitDate}}</td>
                                             </tr>
                                         </tbody>
@@ -602,17 +612,21 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr class="summary-table-row">
-                                                <td>Action Name</td>
-                                                <td>Action Code</td>
-                                                <td>Bonus Issue</td>
-                                                <td>Date</td>
+                                                <th>Action Name</th>
+                                                <th>Ticker</th>
+                                                <th>Account Number</th>
+                                                <th>Share Adjustment Amount</th>
+                                                <th>Status</th>
+                                                <th>Date</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="item in existingBonuses" ng-click="selectbonus(item)">
-                                                <td>{{item.corporateActionName}}</td>
-                                                <td>{{item.corporateActionCode}}</td>
-                                                <td>{{item.bonusIssue}}</td>
+                                                <td>{{item.actionName}}</td>
+                                                <td>{{item.ticker}}</td>
+                                                <td>{{item.edisAccountNumber}}</td>
+                                                <td>{{item.bonusIssueShareAmount}}</td>
+                                                <td>{{item.status}}</td>
                                                 <td>{{item.bonusDate}}</td>
                                             </tr>
                                         </tbody>
@@ -689,18 +703,24 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr class="summary-table-row">
-                                                <td>Action Name</td>
-                                                <td>Cash Adjustment</td>
-                                                <td>Stock Adjustment</td>
-                                                <td>Date</td>
+                                                <th>Action Name</th>
+                                                <th>Ticker</th>
+                                                <th>Account Number</th>
+                                                <th>Cash Adjustment Amount</th>
+                                                <th>Share Adjustment Amount</th>
+                                                <th>Status</th>
+                                                <th>Date</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="item in buyBacks" ng-click="selectBuyback(item)">
-                                                <td>{{item.corporateActionName}}</td>
-                                                <td>{{item.buyCashAd}}</td>
-                                                <td>{{item.buyStockAd}}</td>
-                                                <td>{{item.buybackDate}}</td>
+                                            <tr ng-repeat="item in existingBuyBackProgram" ng-click="selectBuyback(item)">
+                                                <td>{{item.actionName}}</td>
+                                                <td>{{item.ticker}}</td>
+                                                <td>{{item.edisAccountNumber}}</td>
+                                                <td>{{item.cashAdjusment}}</td>
+                                                <td>{{item.shareAmountAdjustment}}</td>
+                                                <td>{{item.status}}</td>
+                                                <td>{{item.buyBackDate}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -775,20 +795,24 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr class="summary-table-row">
-                                                <td>Action Name</td>
-                                                <td>Equity ID</td>
-                                                <td>Share Amount</td>
-                                                <td>Price</td>
-                                                <td>Date</td>
+                                                <th>Action Name</th>
+                                                <th>Ticker</th>
+                                                <th>Account Number</th>
+                                                <th>Cash Adjustment Amount</th>
+                                                <th>Share Adjustment Amount</th>
+                                                <th>Status</th>
+                                                <th>Date</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="item in rightsIssue" ng-click="selectRightsIssue(item)">
-                                                <td>{{item.corporateActionName}}</td>
-                                                <td>{{item.equityId}}</td>
-                                                <td>{{item.shareAmount}}</td>
-                                                <td>{{item.issuePrice}}</td>
-                                                <td>{{item.issueDate}}</td>
+                                            <tr ng-repeat="item in existingRightsIssues" ng-click="selectRightsIssue(item)">
+                                                <td>{{item.actionName}}</td>
+                                                <td>{{item.ticker}}</td>
+                                                <td>{{item.edisAccountNumber}}</td>
+                                                <td>{{item.cashAdjustment}}</td>
+                                                <td>{{item.shareAdjustment}}</td>
+                                                <td>{{item.status}}</td>
+                                                <td>{{item.RightsIssueDate}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -1211,7 +1235,7 @@
                                  <div class="error" ng-show="newReturnOfCapital.shareAmount.$error.required&&newReturnOfCapital.shareAmount.$touched">Please enter the share amount</div>
                                  <div class="error" ng-show="newReturnOfCapital.shareAmount.$error.number&&newReturnOfCapital.shareAmount.$touched">Please enter the share amount</div>
                              </div>
-                             -->
+                             
           <div class="row">
                 <div class="col-md-6 form-group">
                     <label>Return of Capital Amount</label>
@@ -1219,7 +1243,7 @@
                     <div class="error" ng-show="newReturnOfCapital.returnAmount.$error.required&&newReturnOfCapital.returnAmount.$touched">Please enter the amount </div>
                     <div class="error" ng-show="newReturnOfCapital.returnAmount.$error.max&&newReturnOfCapital.returnAmount.$touched">Please Enter Amount That is valid</div>
                 </div>
-            </div>
+            </div>-->
     </div>
     <div class="row">
         <div class="col-md-6 form-group">
@@ -1236,8 +1260,8 @@
                     <tr class="summary-table-row">
                         
                         <td>EDIS Account No.</td>
+                        <td>Account Name</td>
                         <td>Share Amount</td>
-                
                         <td>Return Amount</td>
                     </tr>
                 </thead>
@@ -1245,9 +1269,19 @@
                     <tr ng-repeat="item in allAccounts">
                        
                         <td>{{item.edisAccountNumber}}</td>
-                        <td>{{item.shareAmount}}</td>
-                      
-                        <td><input type="number" ng-model="item.returnAmount" /></td><!--item.selected-->
+                        <td>{{item.accountName}}</td>
+                        <td>{{item.shareAmount}}</td><!--Findout why its null-->
+                        <td style="width:150px;height:100%">
+                            <input type="number" class="form-control" min="0" name="return_{{$index}}" ng-model="item.returnAmount" required />
+                            <span class="error" ng-show="newReturnOfCapital.return_{{$index}}.$error.required&&newReturnOfCapital.return_{{$index}}.$touched">Please enter return amount</span>
+                            <span class="error" ng-show="newReturnOfCapital.return_{{$index}}.$error.number&&newReturnOfCapital.return_{{$index}}.$touched">Please enter numeric value</span>
+                            <span class="error" ng-show="newReturnOfCapital.return_{{$index}}.$error.min&&newReturnOfCapital.return_{{$index}}.$touched">minimum input is 0</span>
+                        </td>       
+                                
+                        <!--<td><input type="number" ng-model="item.returnAmount" required max="88888888" />display:inline-block;
+                        <div class="error" ng-show="newReturnOfCapital.item.returnAmount.$error.required&&newReturnOfCapital.item.returnAmount.$touched">Please enter the amount </div>
+                        <div class="error" ng-show="newReturnOfCapital.item.returnAmount.$error.max&&newReturnOfCapital.item.returnAmount.$touched">Please Enter Amount That is valid</div>
+                        </td>item.selected-->
                     </tr>
                 </tbody>
             </table>
@@ -1286,19 +1320,15 @@
                     <input class="form-control" name="actionName" ng-model="actionName" required />
                     <div class="error" ng-show="newReinvestmentAction.actionName.$error.required&&newReinvestmentAction.actionName.$touched">Please enter corporate action name</div>
                 </div>
-                <div class="col-md-6 form-group">
-                    <label>Ticker</label>
-                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerName for item in allTickers">
-                        <option value="">Please select.....</option>
-                    </select>
-                    <div class="error" ng-show="newReinvestmentAction.ticker.$error.required&&newReinvestmentAction.ticker.$touched">Please select ticker</div>
-                </div>
+               
             </div>
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label>Reinvestment Share Amount</label>
-                    <input class="form-control" name="reinvestmentShareAmount" ng-model="reinvestmentShareAmount" required />
-                    <div class="error" ng-show="newReinvestmentAction.reinvestmentShareAmount.$error.required&&newReinvestmentAction.reinvestmentShareAmount.$touched">Please enter the share amount </div>
+                    <label>Ticker</label>
+                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerName for item in allTickers" ng-change="loadAccounts()">
+                        <option value="">Please select.....</option>
+                    </select>
+                    <div class="error" ng-show="newReinvestmentAction.ticker.$error.required&&newReinvestmentAction.ticker.$touched">Please select ticker</div>
                 </div>
             </div>
             <div class="row">
@@ -1314,18 +1344,26 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr class="summary-table-row">
-                                <td></td>
                                 <td>EDIS<br />Account No.</td>
-                                <td>Type</td>
-                                <td>Name</td>
+                                <td>Account Name</td>
+                                <td>Share Amount</td>
+                                <td>Reinvestment offer Amount</td>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="item in allClients">
-                                <td><input type="checkbox" ng-model="item.selected" /></td>
+                            <tr ng-repeat="item in allAccounts">
+                                <!--<td><input type="checkbox" ng-model="item.selected" /></td>-->
                                 <td>{{item.edisAccountNumber}}</td>
-                                <td>{{item.type}}</td>
-                                <td>{{item.name}}</td>
+                                <td>{{item.accountName}}</td>
+                                <td>{{item.shareAmount}}</td>
+                                <td style="width:150px;height:100%">
+
+                                    <input type="number" class="form-control" min="0" name="reinvestment_{{$index}}" ng-model="item.reinvenstmentAmount" required />
+                                    <span class="error" ng-show="newReinvestmentAction.reinvestment_{{$index}}.$error.required&&newReinvestmentAction.reinvestment_{{$index}}.$touched">Please enter reinvestment amount</span>
+                                    <span class="error" ng-show="newReinvestmentAction.reinvestment_{{$index}}.$error.number&&newReinvestmentAction.reinvestment_{{$index}}.$touched">Please enter numeric value</span>
+                                    <span class="error" ng-show="newReinvestmentAction.reinvestment_{{$index}}.$error.min&&newReinvestmentAction.reinvestment_{{$index}}.$touched">minimum input is 0</span>
+                                </td>  
+
                                 <!--
                                 <td style="display:inline-block;width:150px;height:100%">
                                     <div ng-if="item.selected">
@@ -1370,62 +1408,63 @@
                         Corporate Action Name
                     </label>
                     <input class="form-control" name="actionName" ng-model="actionName" required />
-                    <div class="error" ng-show="newStockSplitAction.actionName.$error.required&&newStockSplitAction.actionName.$touched">Please enter corporate action name</div>
-                </div>
-                <div class="col-md-6 form-group">
-                    <label>
-                        Corporate Action Code
-                    </label>
-                    <input class="form-control" name="equityID" ng-model="equityID" required />
-                    <div class="error" ng-show="newStockSplitAction.equityID.$error.required&&newStockSplitAction.equityID.$touched">Please enter equityID</div>
+                    <div class="error" ng-show="newStockSplit.actionName.$error.required&&newStockSplit.actionName.$touched">Please enter corporate action name</div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label>Stock Split Share Amount</label>
-                    <input class="form-control" name="stockSplitShares" ng-model="stockSplitShares" required />
-                    <div class="error" ng-show="newStockSplitAction.stockSplitShares.$error.required&&newStockSplitAction.stockSplitShares.$touched">Please enter the split amount </div>
+                    <label>Ticker</label>
+                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerName for item in allTickers" ng-change="loadAccounts()">
+                        <option value="">Please select.....</option>
+                    </select>
+                    <div class="error" ng-show="newStockSplit.ticker.$error.required&&newStockSplit.ticker.$touched">Please select ticker</div>
                 </div>
             </div>
+
+     
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label>Stock Split Date</label>
                     <input class="form-control" name="splitDate" edis-datepicker ng-model="splitDate" required />
-                    <div class="error" ng-show="newStockSplitAction.splitDate.$error.required&&newStockSplitAction.splitDate.$touched">Please enter record date</div>
+                    <div class="error" ng-show="newStockSplit.splitDate.$error.required&&newStockSplit.splitDate.$touched">Please enter record date</div>
                 </div>
             </div>
-            <!--
-                        <div class="row">
-                            <div class="col-md-12 parameters-view">
-                                <table class="table table-bordered table-hover">
-                                    <thead>
-                                        <tr class="summary-table-row">
-                                            <td></td>
-                                            <td>EDIS Account No.</td>
-                                            <td>Broker Account No.</td>
-                                            <td>Broker HIN/SRN</td>
-                                            <td>Type</td>
-                                            <td>Name</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="item in allClients">
-                                            <td><input type="checkbox" ng-model="item.selected" /></td>
-                                            <td>{{item.edisAccountNumber}}</td>
-                                            <td>{{item.brokerAccountNumber}}</td>
-                                            <td>{{item.brokerHinSrn}}</td>
-                                            <td>{{item.type}}</td>
-                                            <td>{{item.name}}</td>
 
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-            -->
+
+            <div class="row">
+                <div class="col-md-12 parameters-view" style="overflow:auto">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr class="summary-table-row">
+                                <td>EDIS<br />Account No.</td>
+                                <td>Account Name</td>
+                                <td>Share Amount</td>
+                                <td>Spilt to</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in allAccounts">
+                              
+                                <td>{{item.edisAccountNumber}}</td>
+                                <td>{{item.accountName}}</td>
+                                <td>{{item.shareAmount}}</td>
+                                <td style="width:150px;height:100%">
+                                    <input type="number" class="form-control" min="0" name="split_{{$index}}" ng-model="item.splitTo" required />
+                                    <span class="error" ng-show="newStockSplit.split_{{$index}}.$error.required&&newStockSplit.split_{{$index}}.$touched">Please enter reinvestment amount</span>
+                                    <span class="error" ng-show="newStockSplit.split_{{$index}}.$error.number&&newStockSplit.split_{{$index}}.$touched">Please enter numeric value</span>
+                                    <span class="error" ng-show="newStockSplit.split_{{$index}}.$error.min&&newStockSplit.split_{{$index}}.$touched">minimum input is 0</span>
+                                </td>
+
+                         
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+         
             <div class="row">
                 <div class="col-md-12 text-right">
-                    <button class="btn btn-success" ng-click="add()" ng-disabled="!newStockSplitAction.$valid||!hasClientsSelected()">Save</button>
+                    <button class="btn btn-success" ng-click="add()" ng-disabled="!newStockSplit.$valid">Save</button>
                 </div>
             </div>
 
@@ -1454,24 +1493,20 @@
                     <input class="form-control" name="actionName" ng-model="actionName" required />
                     <div class="error" ng-show="newBonusAction.actionName.$error.required&&newBonusAction.actionName.$touched">Please enter corporate action name</div>
                 </div>
+                
+            </div>
+            <div class="row">
                 <div class="col-md-6 form-group">
-                    <label>
-                        Corporate Action Code
-                    </label>
-                    <input class="form-control" name="actionCode" ng-model="actionCode" required />
-                    <div class="error" ng-show="newBonusAction.actionCode.$error.required&&newBonusAction.actionCode.$touched">Please enter corporate action code</div>
+                    <label>Ticker</label>
+                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerName for item in allTickers" ng-change="loadAccounts()">
+                        <option value="">Please select.....</option>
+                    </select>
+                    <div class="error" ng-show="newBonusesAction.ticker.$error.required&&newBonusesAction.ticker.$touched">Please select ticker</div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label>Stock Split Share Amount</label>
-                    <input class="form-control" name="bonusIssue" ng-model="bonusIssue" required />
-                    <div class="error" ng-show="newBonusAction.bonusIssue.$error.required&&newBonusAction.bonusIssue.$touched">Please enter the bonus amount </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    <label>Stock Split Date</label>
+                    <label>Bonus Issue Date</label>
                     <input class="form-control" name="bonusDate" edis-datepicker ng-model="bonusDate" required />
                     <div class="error" ng-show="newBonusAction.bonusDate.$error.required&&newBonusAction.bonusDate.$touched">Please enter record date</div>
                 </div>
@@ -1482,21 +1517,23 @@
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                         <tr class="summary-table-row">
-                                            <td></td>
-                                            <td>EDIS Account No.</td>
-                                          
-                                            <td>Type</td>
-                                            <td>Name</td>
+                                            <td>EDIS<br />Account No.</td>
+                                            <td>Account Name</td>
+                                            <td>Share Amount</td>
+                                            <td>Bonus Amount</td>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="item in allClients">
-                                            <td><input type="checkbox" ng-model="item.selected" /></td>
+                                        <tr ng-repeat="item in allAccounts">
                                             <td>{{item.edisAccountNumber}}</td>
-                                      
-                                            <td>{{item.type}}</td>
-                                            <td>{{item.name}}</td>
-
+                                            <td>{{item.accountName}}</td>
+                                            <td>{{item.shareAmount}}</td>
+                                            <td style="width:150px;height:100%">
+                                                <input type="number" class="form-control" min="0" name="bonus_{{$index}}" ng-model="item.BonusShareAmount" required />
+                                                <span class="error" ng-show="newBonusesAction.bonus_{{$index}}.$error.required&&newBonusesAction.bonus_{{$index}}.$touched">Please enter reinvestment amount</span>
+                                                <span class="error" ng-show="newBonusesAction.bonus_{{$index}}.$error.number&&newBonusesAction.bonus_{{$index}}.$touched">Please enter numeric value</span>
+                                                <span class="error" ng-show="newBonusesAction.bonus_{{$index}}.$error.min&&newBonusesAction.bonus_{{$index}}.$touched">minimum input is 0</span>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -1505,7 +1542,7 @@
        
             <div class="row">
                 <div class="col-md-12 text-right">
-                    <button class="btn btn-success" ng-click="add()" ng-disabled="!newBonusAction.$valid||!hasClientsSelected()">Save</button>
+                    <button class="btn btn-success" ng-click="add()" ng-disabled="!newBonusesAction.$valid">Save</button>
                 </div>
             </div>
 
@@ -1531,32 +1568,20 @@
                     <input class="form-control" name="actionName" ng-model="actionName" required />
                     <div class="error" ng-show="newBuyBackAction.actionName.$error.required&&newBuyBackAction.actionName.$touched">Please enter corporate action name</div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6 form-group">
-                    <label>
-                        Equity ID
-                    </label>
-                    <input class="form-control" name="euqityId" ng-model="euqityId" required />
-                    <div class="error" ng-show="newBuyBackAction.euqityId.$error.required&&newBuyBackAction.euqityId.$touched">Please enter euqity Id</div>
+                    <label>Ticker</label>
+                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerName for item in allTickers" ng-change="loadAccounts()">
+                        <option value="">Please select.....</option>
+                    </select>
+                    <div class="error" ng-show="newBonusesAction.ticker.$error.required&&newBonusesAction.ticker.$touched">Please select ticker</div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label>Share Amount</label>
-                    <input class="form-control" name="shareAmount" ng-model="shareAmount" required />
-                    <div class="error" ng-show="newBuyBackAction.shareAmount.$error.required&&newBuyBackAction.shareAmount.$touched">Please enter the Share Amount</div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    <label>Offer Price</label>
-                    <input class="form-control" name="buyBackPrice" ng-model="buyBackPrice" required />
-                    <div class="error" ng-show="newBuyBackAction.buyBackPrice.$error.required&&newBuyBackAction.buyBackPrice.$touched">Please enter the Buy Back Price</div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    <label>Issue Date</label>
-                    <input class="form-control" name="buyBackDate" edis-datepicker ng-model="issueDate" required />
+                    <label>Buy Back Program Date</label>
+                    <input class="form-control" name="buyBackDate" edis-datepicker ng-model="buyBackDate" required />
                     <div class="error" ng-show="newBuyBackAction.buyBackDate.$error.required&&newBuyBackAction.buyBackDate.$touched">Please enter Buy Back date</div>
                 </div>
             </div>
@@ -1566,21 +1591,30 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr class="summary-table-row">
-                                <td></td>
-                                <td>EDIS Account No.</td>
-
-                                <td>Type</td>
-                                <td>Name</td>
+                                <td>EDIS<br />Account No.</td>
+                                <td>Account Name</td>
+                                <td>Share Amount</td>
+                                <td>Share Adjustment Amount</td>
+                                <td>Cash Adjustment Amount</td>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="item in allClients">
-                                <td><input type="checkbox" ng-model="item.selected" /></td>
+                            <tr ng-repeat="item in allAccounts">
                                 <td>{{item.edisAccountNumber}}</td>
-
-                                <td>{{item.type}}</td>
-                                <td>{{item.name}}</td>
-
+                                <td>{{item.accountName}}</td>
+                                <td>{{item.shareAmount}}</td>
+                                <td style="width:150px;height:100%">
+                                    <input type="number" class="form-control" min="-888888888" name="shareAdjustment_{{$index}}" ng-model="item.ShareAdjustment" required />
+                                    <span class="error" ng-show="newBuyBackAction.shareAdjustment_{{$index}}.$error.required&&newBuyBackAction.shareAdjustment_{{$index}}.$touched">Please enter reinvestment amount</span>
+                                    <span class="error" ng-show="newBuyBackAction.shareAdjustment_{{$index}}.$error.number&&newBuyBackAction.shareAdjustment_{{$index}}.$touched">Please enter numeric value</span>
+                                    <span class="error" ng-show="newBuyBackAction.shareAdjustment_{{$index}}.$error.min&&newBuyBackAction.shareAdjustment_{{$index}}.$touched">minimum input is 0</span>
+                                </td>
+                                <td style="width:150px;height:100%">
+                                    <input type="number" class="form-control" min="-8888888888" name="cashAdjustment_{{$index}}" ng-model="item.CashAdjustment" required />
+                                    <span class="error" ng-show="newBuyBackAction.cashAdjustment_{{$index}}.$error.required&&newBuyBackAction.cashAdjustment_{{$index}}.$touched">Please enter reinvestment amount</span>
+                                    <span class="error" ng-show="newBuyBackAction.cashAdjustment_{{$index}}.$error.number&&newBuyBackAction.cashAdjustment_{{$index}}.$touched">Please enter numeric value</span>
+                                    <span class="error" ng-show="newBuyBackAction.cashAdjustment_{{$index}}.$error.min&&newBuyBackAction.cashAdjustment_{{$index}}.$touched">minimum input is 0</span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -1589,7 +1623,7 @@
 
             <div class="row">
                 <div class="col-md-12 text-right">
-                    <button class="btn btn-success" ng-click="add()" ng-disabled="!newBuyBackAction.$valid||!hasClientsSelected()">Save</button>
+                    <button class="btn btn-success" ng-click="add()" ng-disabled="!newBuyBackAction.$valid">Save</button>
                 </div>
             </div>
 
@@ -1612,24 +1646,19 @@
                     <input class="form-control" name="actionName" ng-model="actionName" required />
                     <div class="error" ng-show="newRightsIssueAction.actionName.$error.required&&newRightsIssueAction.actionName.$touched">Please enter corporate action name</div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6 form-group">
-                    <label>
-                        Equity ID
-                    </label>
-                    <input class="form-control" name="euqityId" ng-model="euqityId" required />
-                    <div class="error" ng-show="newRightsIssueAction.euqityId.$error.required&&newRightsIssueAction.euqityId.$touched">Please enter euqity Id</div>
+                    <label>Ticker</label>
+                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerName for item in allTickers" ng-change="loadAccounts()">
+                        <option value="">Please select.....</option>
+                    </select>
+                    <div class="error" ng-show="newRightsIssueAction.ticker.$error.required&&newBonusesAction.ticker.$touched">Please select ticker</div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label>Offer Price</label>
-                    <input class="form-control" name="issuePrice" ng-model="issuePrice" required />
-                    <div class="error" ng-show="newRightsIssueAction.issuePrice.$error.required&&newRightsIssueAction.issuePrice.$touched">Please enter the Right Issue Price</div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    <label>Issue Date</label>
+                    <label>Rights Issue Date</label>
                     <input class="form-control" name="issueDate" edis-datepicker ng-model="issueDate" required />
                     <div class="error" ng-show="newRightsIssueAction.issueDate.$error.required&&newRightsIssueAction.issueDate.$touched">Please enter issue date</div>
                 </div>
@@ -1640,21 +1669,30 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr class="summary-table-row">
-                                <td></td>
-                                <td>EDIS Account No.</td>
-
-                                <td>Type</td>
-                                <td>Name</td>
+                                <td>EDIS<br />Account No.</td>
+                                <td>Account Name</td>
+                                <td>Share Amount</td>
+                                <td>Share Adjustment Amount</td>
+                                <td>Cash Adjustment Amount</td>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="item in allClients">
-                                <td><input type="checkbox" ng-model="item.selected" /></td>
+                            <tr ng-repeat="item in allAccounts">
                                 <td>{{item.edisAccountNumber}}</td>
-
-                                <td>{{item.type}}</td>
-                                <td>{{item.name}}</td>
-
+                                <td>{{item.accountName}}</td>
+                                <td>{{item.shareAmount}}</td>
+                                <td style="width:150px;height:100%">
+                                    <input type="number" class="form-control" min="-888888888" name="shareAdjustment_{{$index}}" ng-model="item.ShareAdjustment" required />
+                                    <span class="error" ng-show="newRightsIssueAction.shareAdjustment_{{$index}}.$error.required&&newRightsIssueAction.shareAdjustment_{{$index}}.$touched">Please enter reinvestment amount</span>
+                                    <span class="error" ng-show="newRightsIssueAction.shareAdjustment_{{$index}}.$error.number&&newRightsIssueAction.shareAdjustment_{{$index}}.$touched">Please enter numeric value</span>
+                                    <span class="error" ng-show="newRightsIssueAction.shareAdjustment_{{$index}}.$error.min&&newRightsIssueAction.shareAdjustment_{{$index}}.$touched">minimum input is 0</span>
+                                </td>
+                                <td style="width:150px;height:100%">
+                                    <input type="number" class="form-control" min="-88888888" name="cashAdjustment_{{$index}}" ng-model="item.CashAdjustment" required />
+                                    <span class="error" ng-show="newRightsIssueAction.cashAdjustment_{{$index}}.$error.required&&newRightsIssueAction.cashAdjustment_{{$index}}.$touched">Please enter reinvestment amount</span>
+                                    <span class="error" ng-show="newRightsIssueAction.cashAdjustment_{{$index}}.$error.number&&newRightsIssueAction.cashAdjustment_{{$index}}.$touched">Please enter numeric value</span>
+                                    <span class="error" ng-show="newRightsIssueAction.cashAdjustment_{{$index}}.$error.min&&newRightsIssueAction.cashAdjustment_{{$index}}.$touched">minimum input is 0</span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -1663,7 +1701,7 @@
 
             <div class="row">
                 <div class="col-md-12 text-right">
-                    <button class="btn btn-success" ng-click="add()" ng-disabled="!newRightsIssueAction.$valid||!hasClientsSelected()">Save</button>
+                    <button class="btn btn-success" ng-click="add()" ng-disabled="!newRightsIssueAction.$valid">Save</button>
                 </div>
             </div>
 

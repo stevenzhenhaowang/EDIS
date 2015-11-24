@@ -109,12 +109,16 @@ namespace EDISAngular.APIControllers
 
                         edisAccountNumber = account.AccountNumber,
                         type = account.AccountType.ToString(),
-                        name = client.FirstName + " " + client.LastName
+                        shareAmount = client.FirstName + " " + client.LastName
                     });
                 }
             }
             return allClients;
         }
+
+
+     
+
         //[HttpGet,Route("api/adviser/clientaccounts")]
         //[Authorize(Roles=AuthorizationRoles.Role_Adviser)]
         //public List<CorporateActionClientAccountModel> GetClientAccountsForCompany(string companyTicker)

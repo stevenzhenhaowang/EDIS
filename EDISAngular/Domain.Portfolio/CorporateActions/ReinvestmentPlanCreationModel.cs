@@ -10,7 +10,6 @@ namespace Domain.Portfolio.CorporateActions
     {
         public string Ticker { get; set; }
         public string AdviserId { get; set; }
-        public string ShareMount { get; set; }
         public string ActionName  { get; set; }
         public DateTime ReinvestmentDate { get; set; }
         
@@ -19,6 +18,7 @@ namespace Domain.Portfolio.CorporateActions
     }
 
     public class ReinvestmentPlanParticipants {
-        public string AccountId { get; set; }
+        public string AccountNumber { get; set; }
+        public string ShareMount { get; set; }
     }
 }

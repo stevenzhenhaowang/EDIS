@@ -94,6 +94,7 @@
                                 <table class="table table-hover">
                                     <tr>
                                         <th>Action Name</th>
+                                        
                                         <th>Ticker</th>
                                         <th>Share Amount</th>
                                         <th>Price </th>
@@ -105,6 +106,7 @@
                                     </tr>
                                   <!---->  <tr ng-repeat="pendingAction in allPendingAction">
                                                <td>{{pendingAction.ActionName}}</td>
+                                               
                                                <td>{{pendingAction.Ticker}}</td>
                                                <td>{{pendingAction.ShareAmount}}</td>
                                                <td>{{pendingAction.Price}}</td>
@@ -130,7 +132,7 @@
     </div>
 
 </div>
-</div>
+
 <script type="text/ng-template" id="newCorrespondenceMessage">
     <div class="NewNote">
         <form name="noteForm" novalidate>

@@ -71,8 +71,16 @@
     <Compile Include="AggregateRoots\Accounts\AccountBase.cs" />
     <Compile Include="AggregateRoots\Accounts\ClientAccount.cs" />
     <Compile Include="AggregateRoots\Accounts\GroupAccount.cs" />
+    <Compile Include="CorporateActions\BonusIssueCreationModel.cs" />
+    <Compile Include="CorporateActions\BuyBackProgramCreationModel.cs" />
+    <Compile Include="CorporateActions\ClientActionModel.cs" />
+    <Compile Include="CorporateActions\ClientCorporateHistoryModel.cs" />
+    <Compile Include="CorporateActions\CorperateActionParticipateAccountsModel.cs" />
+    <Compile Include="CorporateActions\PendingActionViewModel.cs" />
     <Compile Include="CorporateActions\ReinvestmentPlanCreationModel.cs" />
     <Compile Include="CorporateActions\ReturnOfCapitalCreationModel.cs" />
+    <Compile Include="CorporateActions\RightsIssueCreationModel.cs" />
+    <Compile Include="CorporateActions\StockSplitCreationModel.cs" />
     <Compile Include="Correspondence\Correspondence.cs" />
     <Compile Include="Correspondence\CorrespondenceFollowup.cs" />
     <Compile Include="Correspondence\Message.cs" />

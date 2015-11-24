@@ -1,5 +1,5 @@
 ﻿angular.module("EDIS")
-.controller("corporateActionController", ["$scope", "corporateActionServices", "$modal", "adviserGetId", function ($scope, service, $modal, $http) {
+.controller("corporateActionController", ["$scope", "corporateActionServices", "$modal", "$http", function ($scope, service, $modal, $http) {
     service.existingIPOActions().query(function (data) {
         $scope.existingIPOActions = data;
     })
@@ -11,7 +11,6 @@
         $scope.existingReturnOfCapitals = data;
     })
     
-
     service.exsistingReinvestment().query(function (data) {
         $scope.existingReinvestments = data;
     })
@@ -24,7 +23,13 @@
         $scope.existingBonuses = data;
     })
 
+    service.existingRightsIssues().query(function (data) {
+        $scope.existingRightsIssues = data;
+    })
 
+    service.existingBuyBackProgram().query(function (data) {
+        $scope.existingBuyBackProgram = data;
+    })
      
 
 
@@ -313,7 +318,7 @@
 
 
   .controller("newReturnOfCapitalActionController",
-["$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", function ($scope,  service, $modalInstance, dateParser, adviserGetId, AppStrings, $http) {
+["$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", "AppStrings", "$http", function ($scope, service, $modalInstance, dateParser, adviserGetId, AppStrings, $http) {
     //service.allCompanies().query(function (data) {
     //    $scope.allCompanies = data;
     //})
@@ -326,45 +331,42 @@
     service.allTickers().query(function (data) {
         $scope.allTickers = data;
     })
-  /*$scope.loadClients = function () {
-        var data = [];
-        data = {
-            clientGroup : $scope.clientGroup
-        }
-        $http.post(AppStrings.EDIS_IP + "api/adviser/getAllClientGroups", data)
-                .success(function (data) {
-                    $scope.clients = data;
-                }).error(function (data) {
-                    console.log("Error.............");
-                });
 
-    }*/
+
 
     $scope.loadAccounts = function () {
         var data = [];
         data = {
-            equityId : $scope.tickerNumber
+            Ticker: $scope.tickerNumber
         }
-        $http.post(AppStrings.EDIS_IP + "api/adviser/corporateAction/getAccounts", data)
-        .success(function (data) {
-            $scope.allAccounts = data;
-        }).error(function (data) {
-            console.log("Error.............");
-        });
+        $http.post(AppStrings.EDIS_IP + "api/adviser/corporateAction/getAccountByEquity", data)
+          .success(function (data) {
+              $scope.allAccounts = data;
+          }).error(function (data) {
+              console.log("Error.............");
+          });
     }
+
 
     $scope.add = function () {
         var data = {
             actionName: $scope.actionName,
             equityId: $scope.tickerNumber,
-            shareAmount: $scope.shareAmount,
-            //adviserUserId: adviserId,
-            returnAmount: $scope.returnAmount,
             returnDate: dateParser($scope.returnDate),
           
-            //participants: []
+            ParticipantsInfo: []
         };
         //this corperate action is mandatory all clients should participate which needs to be implemented
+
+        for (var i = 0; i < $scope.allAccounts.length; i++) {
+            //if ($scope.allClients[i].selected) {
+            var client = $scope.allAccounts[i];
+            data.ParticipantsInfo.push({
+                   accountNumber: client.edisAccountNumber,
+                    returnAmount: client.returnAmount
+                });
+            //}
+        }
         //var allClients = service.allClients().query(function (data) {
         //    data.participants = data;
         //})
@@ -374,6 +376,7 @@
         //    if ($scope.allClients[i].selected) {
         //        data.participants.push($scope.allClients[i])
         //    }
+
         //}
 
         service.newReturnOfCapital(data, function () {
@@ -391,7 +394,7 @@
 
 
   .controller("newReinvestmentActionController",
-["$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", function ($scope, service, $modalInstance, dateParser, adviserGetId) {
+["$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", "$http", "AppStrings", function ($scope, service, $modalInstance, dateParser, adviserGetId, $http, AppStrings) {
     //service.allCompanies().query(function (data) {
     //    $scope.allCompanies = data;
     //})
@@ -410,12 +413,28 @@
         $scope.allTickers = data;
     })
 
+
+
+    $scope.loadAccounts = function () {
+        var data = [];
+        data = {
+            Ticker: $scope.tickerNumber
+        }
+        $http.post(AppStrings.EDIS_IP + "api/adviser/corporateAction/getAccountByEquity", data)
+          .success(function (data) {
+              $scope.allAccounts = data;
+          }).error(function (data) {
+              console.log("Error.............");
+          });
+    }
+
+
     $scope.add = function () {
         var data = {
             ActionName: $scope.actionName,
-            ticker: $scope.tickerNumber,
-            ShareMount: $scope.reinvestmentShareAmount,
-            reinvestmentDate: dateParser($scope.reinvestmentDate),
+            Ticker: $scope.tickerNumber,
+            //ShareMount: $scope.reinvestmentShareAmount,
+            ReinvestmentDate: dateParser($scope.reinvestmentDate),
 
             participants: []
         };
@@ -425,11 +444,12 @@
         //        data.participants.push($scope.allClients[i])
         //    }
         //}
-        for (var i = 0; i < $scope.allClients.length; i++) {
-            if ($scope.allClients[i].selected) {
-                var client = $scope.allClients[i];
+        for (var i = 0; i < $scope.allAccounts.length; i++) {
+           // if ($scope.allClients[i].selected) {
+            var client = $scope.allAccounts[i];
                 data.participants.push({
-                    AccountId: client.edisAccountNumber,
+                    accountNumber: client.edisAccountNumber,
+                    shareMount: client.reinvenstmentAmount,
                     //type: client.type,
                     //name: client.name,
                     //investedAmount: client.investedAmount,
@@ -437,26 +457,7 @@
                     //unitPrice: 0,
                     //tickerNumber: ""
                 });
-            }
-        }
-
-
-
-        $scope.hasClientsSelected = function () {
-            if ($scope.allClients === undefined || $scope.allClients === null || $scope.allClients.length === 0) {
-                return false;
-            } else {
-                var numberOfSelected = 0;
-                for (var i = 0; i < $scope.allClients.length; i++) {
-                    if ($scope.allClients[i].selected) {
-                        numberOfSelected++;
-                    }
-                }
-                if (numberOfSelected > 0) {
-                    return true;
-                }
-                return false;
-            }
+           // }
         }
 
         //service.addnewReinvestmentAction().save(data, function () {
@@ -473,8 +474,8 @@
 }])
 
 
- .controller("newStockSplitActionController",
-["$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", function ($scope, service, $modalInstance, dateParser, adviserGetId) {
+ .controller("newStockSplitActionController", 
+["$http", "$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", "AppStrings", function ($http, $scope, service, $modalInstance, dateParser, adviserGetId, AppStrings) {
     //service.allCompanies().query(function (data) {
     //    $scope.allCompanies = data;
     //})
@@ -488,53 +489,53 @@
         $scope.allTickers = data;
     })
 
+
     service.allClients().query(function (data) {
         $scope.allClients = data;
     })
 
+    $scope.loadAccounts = function () {
+        var data = [];
+        data = {
+            Ticker: $scope.tickerNumber
+        }
+        $http.post(AppStrings.EDIS_IP + "api/adviser/corporateAction/getAccountByEquity", data)
+          .success(function (data) {
+              $scope.allAccounts = data;
+          }).error(function (data) {
+              console.log("Error.............");
+          });
+    }
 
     $scope.add = function () {
         var data = {
-            corporateActionName: $scope.actionName,
-            corporateActionCode: $scope.actionCode,
-
+            ActionName: $scope.actionName,
             adviserUserId: adviserId,
-            stockSplitShares: $scope.stockSplitShares,
+            Ticker:$scope.tickerNumber, 
             splitDate: dateParser($scope.splitDate),
 
-            participants: []
+            AccountsInfo: []
         };
 
-        for (var i = 0; i < $scope.allClients.length; i++) {
-            if ($scope.allClients[i].selected) {
-                data.participants.push($scope.allClients[i])
-            }
+        for (var i = 0; i < $scope.allAccounts.length; i++) {
+            var client = $scope.allAccounts[i];
+            data.AccountsInfo.push
+           ({
+               accountNumber: client.edisAccountNumber,
+               splitToUnit: client.splitTo,
+           });
         }
 
-        service.addOtherAction().save(data, function () {
+        service.newStockSplitAction(data, function () {
             $modalInstance.close({ reason: "success" });
-
         })
 
-
+        /*service.addnewReinvestmentAction(data, function () {
+            $modalInstance.close({ reason: "success" });
+        })*/
 
     }
-       $scope.hasClientsSelected = function () {
-            if ($scope.allClients === undefined || $scope.allClients === null || $scope.allClients.length === 0) {
-                return false;
-            } else {
-                var numberOfSelected = 0;
-                for (var i = 0; i < $scope.allClients.length; i++) {
-                    if ($scope.allClients[i].selected) {
-                        numberOfSelected++;
-                    }
-                }
-                if (numberOfSelected > 0) {
-                    return true;
-                }
-                return false;
-            }
-        }
+
 
 
 
@@ -543,7 +544,7 @@
 
 
  .controller("newBonusesActionController",
-["$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", function ($scope, service, $modalInstance, dateParser, adviserGetId) {
+["$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", "$http", "AppStrings", function ($scope, service, $modalInstance, dateParser, adviserGetId, $http, AppStrings) {
     service.allCompanies().query(function (data) {
         $scope.allCompanies = data;
     })
@@ -553,29 +554,50 @@
         adviserId = data;
     })
 
-    service.allClients().query(function (data) {
-        $scope.allClients = data;
+    service.allTickers().query(function (data) {
+        $scope.allTickers = data;
     })
+
+
+    //service.allClients().query(function (data) {
+    //    $scope.allClients = data;
+    //})
+
+    $scope.loadAccounts = function () {
+        var data = [];
+        data = {
+            Ticker: $scope.tickerNumber
+        }
+        $http.post(AppStrings.EDIS_IP + "api/adviser/corporateAction/getAccountByEquity", data)
+          .success(function (data) {
+              $scope.allAccounts = data;
+          }).error(function (data) {
+              console.log("Error.............");
+          });
+    }
 
     $scope.add = function () {
         var data = {
-            corporateActionName: $scope.actionName,
-            corporateActionCode: $scope.actionCode,
+            ActionName: $scope.actionName,
+            Ticker: $scope.tickerNumber,
 
-            adviserUserId: adviserId,
-            bonusIssue: $scope.bonusIssue,
-            bonusDate: dateParser($scope.bonusDate),
+            AdviserId: adviserId,
+        
+            BonusIssueDate: dateParser($scope.bonusDate),
 
-            participants: []
+            Participants: []
         };
 
-        for (var i = 0; i < $scope.allClients.length; i++) {
-            if ($scope.allClients[i].selected) {
-                data.participants.push($scope.allClients[i])
-            }
+        for (var i = 0; i < $scope.allAccounts.length; i++) {
+            var client = $scope.allAccounts[i];
+            data.Participants.push
+           ({
+               AccountNumber: client.edisAccountNumber,
+               ShareAmount: client.BonusShareAmount,
+           });
         }
 
-        service.addOtherAction().save(data, function () {
+        service.newBonusIssueAction(data, function () {
             $modalInstance.close({ reason: "success" });
 
         })
@@ -586,7 +608,7 @@
 }])
     //newBuyBackController
     .controller("newBuyBackController",
-["$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", function ($scope, service, $modalInstance, dateParser, adviserGetId) {
+["$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", "$http", "AppStrings", function ($scope, service, $modalInstance, dateParser, adviserGetId, $http, AppStrings) {
     //service.allCompanies().query(function (data) {
     //    $scope.allCompanies = data;
     //})
@@ -596,29 +618,50 @@
         adviserId = data;
     })
 
-    service.allClients().query(function (data) {
-        $scope.allClients = data;
+    service.allTickers().query(function (data) {
+        $scope.allTickers = data;
     })
+
+
+    //service.allClients().query(function (data) {
+    //    $scope.allClients = data;
+    //})
+
+    $scope.loadAccounts = function () {
+        var data = [];
+        data = {
+            Ticker: $scope.tickerNumber
+        }
+        $http.post(AppStrings.EDIS_IP + "api/adviser/corporateAction/getAccountByEquity", data)
+          .success(function (data) {
+              $scope.allAccounts = data;
+          }).error(function (data) {
+              console.log("Error.............");
+          });
+    }
 
     $scope.add = function () {
         var data = {
-            corporateActionName: $scope.actionName,
-            corporateActionCode: $scope.actionCode,
+            ActionName: $scope.actionName,
+            AdviserId: adviserId,
+            Ticker: $scope.tickerNumber,
+            //rightsIssue: $scope.rightsIssue,
+            BuyBackDate: dateParser($scope.buyBackDate),
 
-            adviserUserId: adviserId,
-            rightsIssue: $scope.rightsIssue,
-            rightsDate: dateParser($scope.issue),
-
-            participants: []
+            Participants: []
         };
 
-        for (var i = 0; i < $scope.allClients.length; i++) {
-            if ($scope.allClients[i].selected) {
-                data.participants.push($scope.allClients[i])
-            }
+        for (var i = 0; i < $scope.allAccounts.length; i++) {
+            var client = $scope.allAccounts[i];
+            data.Participants.push
+           ({
+               AccountNumber: client.edisAccountNumber,
+               ShareAmount: client.ShareAdjustment,
+               CashAmount: client.CashAdjustment
+           });
         }
 
-        service.addOtherAction().save(data, function () {
+        service.newBuyBackProgramAction(data, function () {
             $modalInstance.close({ reason: "success" });
 
         })
@@ -630,7 +673,7 @@
 
 
 .controller("newRightsIssueController",
-["$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", function ($scope, service, $modalInstance, dateParser, adviserGetId) {
+["$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", "$http", "AppStrings", function ($scope, service, $modalInstance, dateParser, adviserGetId, $http, AppStrings) {
     //service.allCompanies().query(function (data) {
     //    $scope.allCompanies = data;
     //})
@@ -640,29 +683,50 @@
         adviserId = data;
     })
 
-    service.allClients().query(function (data) {
-        $scope.allClients = data;
+    service.allTickers().query(function (data) {
+        $scope.allTickers = data;
     })
+
+
+    //service.allClients().query(function (data) {
+    //    $scope.allClients = data;
+    //})
+
+    $scope.loadAccounts = function () {
+        var data = [];
+        data = {
+            Ticker: $scope.tickerNumber
+        }
+        $http.post(AppStrings.EDIS_IP + "api/adviser/corporateAction/getAccountByEquity", data)
+          .success(function (data) {
+              $scope.allAccounts = data;
+          }).error(function (data) {
+              console.log("Error.............");
+          });
+    }
 
     $scope.add = function () {
         var data = {
-            corporateActionName: $scope.actionName,
-            corporateActionCode: $scope.actionCode,
+            ActionName: $scope.actionName,
+            AdviserId: adviserId,
+            Ticker: $scope.tickerNumber,
+            //rightsIssue: $scope.rightsIssue,
+            RightsIssueDate: dateParser($scope.issueDate),
 
-            adviserUserId: adviserId,
-            rightsIssue: $scope.rightsIssue,
-            rightsDate: dateParser($scope.issue),
-
-            participants: []
+            Participants: []
         };
 
-        for (var i = 0; i < $scope.allClients.length; i++) {
-            if ($scope.allClients[i].selected) {
-                data.participants.push($scope.allClients[i])
-            }
+        for (var i = 0; i < $scope.allAccounts.length; i++) {
+            var client = $scope.allAccounts[i];
+            data.Participants.push
+           ({
+               AccountNumber: client.edisAccountNumber,
+               ShareAmount: client.ShareAdjustment,
+               CashAmount: client.CashAdjustment
+           });
         }
 
-        service.addOtherAction().save(data, function () {
+        service.newRightsIssueAction(data, function () {
             $modalInstance.close({ reason: "success" });
 
         })

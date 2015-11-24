@@ -60,8 +60,8 @@ namespace Edis.Db
         public DbSet<MarginLender> MarginLenders { get; set; }
 
         public DbSet<CorperateActionHistory> CorporateActions { get; set; }
-        public DbSet<ReturnOfCapital> ReturnOfCapitals { get; set; }
-        public DbSet<ReinvestmentPlanAction> ReinvestmentPlanActions { get; set; }
+        //public DbSet<ReturnOfCapital> ReturnOfCapitals { get; set; }
+        //public DbSet<ReinvestmentPlanAction> ReinvestmentPlanActions { get; set; }
 
 
 

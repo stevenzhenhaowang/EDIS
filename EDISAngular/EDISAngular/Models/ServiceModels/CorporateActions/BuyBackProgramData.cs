@@ -7,17 +7,12 @@ namespace EDISAngular.Models.ServiceModels.CorporateActions
 {
     public class BuyBackProgramData
     {
-     
-            public string actionId { get; set; }
-            public string cashAdjustments { get; set; }
-            public string stockAdjustments { get; set; }
-            public DateTime buyBackTime { get; set; }
-            public List<BuybackParticipant> participants { get; set; }
-        
-    }
-
-    public class BuybackParticipant
-    {
+        public string actionName { get; set; }
+        public string ticker { get; set; }
+        public DateTime buyBackDate { get; set; }
+        public string status { get; set; }
         public string edisAccountNumber { get; set; }
+        public string shareAmountAdjustment { get; set; }
+        public string cashAdjusment { get; set; }
     }
 }

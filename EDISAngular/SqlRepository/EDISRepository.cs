@@ -1383,7 +1383,7 @@ namespace SqlRepository
             return result;
         }
 
-        public List<ActivityBase> GetEquityActivitiesForAccountSync(string accountId, string ticker, DateTime to)       //added
+        public List<ActivityBase>  GetEquityActivitiesForAccountSync(string accountId, string ticker, DateTime to)       //added
         {
             //Account lookup ignores date range
             var account = _db.Accounts.Where(a => a.AccountId == accountId)
@@ -6868,21 +6868,24 @@ namespace SqlRepository
                 equity.Prices = new List<AssetPrice>();
             }
             var price = equity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault();
-            if (price == null || price.Price != record.Price)
-            {
-                equity.Prices.Add(new AssetPrice
-                {
-                    CorrespondingAssetKey = equity.AssetId,
-                    Id = Guid.NewGuid().ToString(),
-                    CreatedOn = DateTime.Now,
-                    Price = record.Price,
-                    AssetType = record.EquityType == EquityTypes.AustralianEquity
-                        ? AssetTypes.AustralianEquity
-                        : record.EquityType == EquityTypes.InternationalEquity
-                            ? AssetTypes.InternationalEquity
-                            : AssetTypes.ManagedInvestments
-                });
-            }
+
+            //Assets price commented out
+
+            //if (price == null || price.Price != record.Price)
+            //{
+            //    equity.Prices.Add(new AssetPrice
+            //    {
+            //        CorrespondingAssetKey = equity.AssetId,
+            //        Id = Guid.NewGuid().ToString(),
+            //        CreatedOn = DateTime.Now,
+            //        Price = record.Price,
+            //        AssetType = record.EquityType == EquityTypes.AustralianEquity
+            //            ? AssetTypes.AustralianEquity
+            //            : record.EquityType == EquityTypes.InternationalEquity
+            //                ? AssetTypes.InternationalEquity
+            //                : AssetTypes.ManagedInvestments
+            //    });
+            //}
             equity.EquityTransactions.Add(etransaction);
             account.EquityTransactions.Add(etransaction);
             if (record.FeesRecords != null && record.FeesRecords.Count > 0)
@@ -8850,31 +8853,120 @@ namespace SqlRepository
 
 
 
-          public void CreateNewReturnOfCapitalAction(ReturnOfCapitalCreationModel model)
-        {
-            //to do 
-            //get all associated cashAccounts to increase the capital 
+        //  public void CreateNewReturnOfCapitalAction(ReturnOfCapitalCreationModel model)
+        //{
+        //    //to do 
+        //    //get all associated cashAccounts to increase the capital 
 
-            var accountsToAction = GetAllClientGroupsForAdviserSync(model.AdviserId, DateTime.Now);
+        //    var accountsToAction = GetAllClientGroupsForAdviserSync(model.AdviserId, DateTime.Now);
 
-            if (accountsToAction != null){ 
-               foreach (var clientGroup in accountsToAction)
-              {
-                    var GroupAccount =  GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now).FirstOrDefault();
-                   
-                    var amountToDeductOrIncrease = Convert.ToDouble(model.ReturnOfCapitalAmount);
-                    MakeCashTransactions(clientGroup.ClientGroupNumber, amountToDeductOrIncrease, GroupAccount);
-                    //recordReturnOfCapital(model.AdviserId, account.ClientGroupNumber, model.ReturnOfCapitalAmount, model.ActionName);
-                    recordReturnOfCapitalHistory(model.AdviserId, GroupAccount.Id, model.ReturnOfCapitalAmount, model.ActionName, clientGroup.Id);
-              };
+        //    if (accountsToAction != null){ 
+        //       foreach (var clientGroup in accountsToAction)
+        //      {
+        //            var GroupAccount =  GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now).FirstOrDefault();
+
+        //            var amountToDeductOrIncrease = Convert.ToDouble(model.ReturnOfCapitalAmount);
+        //            MakeCashTransactions(clientGroup.ClientGroupNumber, amountToDeductOrIncrease, GroupAccount);
+        //            recordReturnOfCapitalHistory(model.AdviserId, GroupAccount.Id, model.ReturnOfCapitalAmount, model.ActionName, clientGroup.Id);
+        //      };
+        //    }
+        //    _db.SaveChanges();
+        //}
+
+
+
+
+
+
+
+        public void CreateNewReturnOfCapitalAction(ReturnOfCapitalCreationModel model) {
+            var accounts = model.AccountsInfo;
+            foreach (var account in accounts) {
+                var amountToDeductOrIncrease = Convert.ToDouble(account.ReturnAmount);
+                MakeCashTransactions(account.AccountNumber, amountToDeductOrIncrease, model.AdviserId);
+                recordReturnOfCapitalHistory(model.AdviserId, account.AccountNumber, amountToDeductOrIncrease.ToString(), model.ActionName,model.Ticker);
             }
+            
+        }
+       
+        public void CreateNewStockSplitAction(StockSplitCreationModel model) {
+            //change total number of units to this passin value
+            if (model.AccountsInfo != null) {
+                var equity = getEquityByTicker(model.Ticker);
+                foreach (var acc in model.AccountsInfo) {
+                    var account = _db.Accounts.Where(a => a.AccountNumber == acc.AccountNumber).FirstOrDefault();
+                    //var clientAccount = GetClientAccountSync(acc.AccountNumber, DateTime.Now);
+                    var numberOfUnits = checkUnitOfSharesByEquityIdAndAssociatedAccount(equity.AssetId, account);
+                    var sharetoMaketrans =Convert.ToInt16(acc.splitToUnit) - numberOfUnits;
+                    ChangeStockShare(sharetoMaketrans, account, equity);
+                    AddNewCorporateAction(CorporateActionType.StockSplit, model.AdviserId, account.AccountNumber, "0", model.ActionName, CorporateActionStatus.Mandatory, acc.splitToUnit, model.Ticker);
+                }
+            }
+        }
+        
+        public void CreateNewBonusIssueAction(BonusIssueCreationModel model) {
+            //simply increase number of units by this passin value
+            if (model.Participants != null)
+            {
+                var equity = getEquityByTicker(model.Ticker);
+                foreach (var acc in model.Participants)
+                {
+                    var account = _db.Accounts.Where(a => a.AccountNumber == acc.AccountNumber).FirstOrDefault();
+                    ChangeStockShare(Convert.ToInt16(acc.ShareAmount), account, equity);
+                    AddNewCorporateAction(CorporateActionType.BonusIssue, model.AdviserId, account.AccountNumber, "0", model.ActionName, CorporateActionStatus.Mandatory, acc.ShareAmount, model.Ticker);
+                }
+            }
+        }
+        
+        public void CreateNewBuyBackProgramActionAdviseInital(BuyBackProgramCreationModel model) {
+            //increase cash account total amount deduct total number of units
+            if (model.Participants != null)
+            {
+                foreach (var account in model.Participants)
+                {
+                    AddNewCorporateAction(CorporateActionType.BuyBackProgram, model.AdviserId, account.AccountNumber, account.CashAmount, model.ActionName, CorporateActionStatus.Pending, account.ShareAmount, model.Ticker);
+                }
+            }
+
+        }
+
+        public void CreateNewRightsIssueActionAdviseInital(RightsIssueCreationModel model) {
+            //deduct cash account total amount incease total number of units
+            if (model.Participants != null)
+            {
+                foreach (var account in model.Participants)
+                {
+                    AddNewCorporateAction(CorporateActionType.RightsIssue, model.AdviserId, account.AccountNumber, account.CashAmount, model.ActionName, CorporateActionStatus.Pending, account.ShareAmount, model.Ticker);
+                }
+            }
+        }
+
+        private void AddNewCorporateAction(CorporateActionType actionType,string adviserId, string accountNumber, string cashAmount,string actionName, CorporateActionStatus status, string shareAmount, string ticker) {
+            var newRecord = new CorperateActionHistory()
+            {
+                ActionType = actionType,
+                AdviserId = adviserId,
+                AssociatedAccountNumber = accountNumber,
+                CashAdjustmentAmount = cashAmount,
+                CorperateActionDate = DateTime.Now,
+                CorperateActionName = actionName,
+                Status = status,
+                StockAdjustmentShareAmount = shareAmount,
+                Ticker = ticker
+            };
+            _db.CorporateActions.Add(newRecord);
             _db.SaveChanges();
         }
 
+        public void MakeCashTransactions(string accountNumber, double amount , string adviserId) {
+            
+            var account = _db.Accounts.Where(acc => acc.AccountNumber == accountNumber).FirstOrDefault();
+            var clientGroup = GetClientGroupAccountSync(account.AccountNumber, DateTime.Now);
+            //get this account cash account
+            var cashAccount =  _db.CashAccounts.Where(ca => ca.AccountNumber == clientGroup.AccountNumber).SingleOrDefault();
 
-        public void MakeCashTransactions(string cashAccountNumber, double amount, GroupAccount clientGroup) {
-            var cashAccount =  _db.CashAccounts.Where(ca => ca.AccountNumber == cashAccountNumber).SingleOrDefault();
-          
+
+
             if (cashAccount.CashTransactions == null)
             {
                 cashAccount.CashTransactions = new List<CashTransaction>();
@@ -8886,22 +8978,23 @@ namespace SqlRepository
                 CashAccount = cashAccount,
                 CashAccountId = cashAccount.Id,
                 Amount = amount,
-                TransactionDate = DateTime.Now,      
+                TransactionDate = DateTime.Now,
             };
-            var account = new Account();
-            if (clientGroup == null)
-            {
-                //Because we could have a client has a group but this group does not have an account
-                //which makes the parma groupAccount can be null
-                //so we need to get this person's account through his group number->cash account number
-                //first get this group then get client then account
-                var group = _db.ClientGroups.Where(cg => cg.GroupNumber == cashAccountNumber).FirstOrDefault();
-                var client = _db.Clients.Where(c => c.ClientGroupId == group.ClientGroupId).FirstOrDefault();
-                 account = _db.Accounts.Where(acc => acc.AccountId == client.ClientId).FirstOrDefault();
-            }
-            else {
-                account = _db.Accounts.Where(acc => acc.AccountNumber == clientGroup.AccountNumber).FirstOrDefault();
-            }
+
+            //var account = new Account();
+            //if (clientGroup == null)
+            //{
+            //Because we could have a client has a group but this group does not have an account
+            //which makes the parma groupAccount can be null
+            //so we need to get this person's account through his group number->cash account number
+            //first get this group then get client then account
+            //var group = _db.ClientGroups.Where(cg => cg.GroupNumber == cashAccountNumber).FirstOrDefault();
+            //var client = _db.Clients.Where(c => c.ClientGroupId == group.ClientGroupId).FirstOrDefault();
+            // account = _db.Accounts.Where(acc => acc.AccountId == client.ClientId).FirstOrDefault();
+            // }
+            //else {
+            //    account = _db.Accounts.Where(acc => acc.AccountNumber == clientGroup.AccountNumber).FirstOrDefault();
+            //}
             cashAccount.FaceValue += amount;
             cashAccount.CashTransactions.Add(cashTrans);
             account.CashTransactions.Add(cashTrans);
@@ -8909,36 +9002,20 @@ namespace SqlRepository
             _db.SaveChanges();
         }
 
-
-
-        //public void recordReturnOfCapital(string AdviseId, string ClientGroupNumber,string amount, string actionName) {
-        //    var newRecord = new ReturnOfCapital() {
-        //        AdviserId =  AdviseId,
-        //        AssociatedAccountNumber = ClientGroupNumber,
-        //        CorperateActionName = actionName,
-        //        ReturnDate = DateTime.Now,
-        //        ReturnCashAmount = amount
-        //    };
-        //    _db.ReturnOfCapitals.Add(newRecord);
-        //    _db.SaveChanges();
-        //}
-
-
-
-        private void recordReturnOfCapitalHistory(string AdviseId, string accountId, string amount, string actionName, string ClientGroupId)
+        private void recordReturnOfCapitalHistory(string AdviseId, string accountNumber, string amount, string actionName, string Ticker)
         {
             var newRecord = new CorperateActionHistory()
             {
                 ActionType = CorporateActionType.ReturnOfCapital,
                 AdviserId = AdviseId,
-                AssociatedAccountId = accountId,
+                AssociatedAccountNumber = accountNumber,
                 CashAdjustmentAmount = amount,
                 CorperateActionDate = DateTime.Now,
                 CorperateActionName = actionName,
                 Status = CorporateActionStatus.Mandatory, 
-                Ticker = "",
+                Ticker = Ticker,
                 StockAdjustmentShareAmount = "0",
-                ClientGroupId = ClientGroupId
+               // ClientGroupId = ClientGroupId
             };
             _db.CorporateActions.Add(newRecord);
             _db.SaveChanges();
@@ -8947,31 +9024,28 @@ namespace SqlRepository
 
         public void AdviserCreateNewReinvestmentAdviserInital(ReinvestmentPlanCreationModel model)
         {
-            ////to do pass all notifications to the clients that in this model
+            //to do pass all notifications to the clients that in this model
             //record this action as well 
-            //var allParticipants = model.Participants;
-            //foreach (var acc in allParticipants) {
-            //    var newRecord = new CorperateActionHistory() {
-            //        AdviserId = model.AdviserId,
-            //        ParticipantsAccount = acc.AccountId,
-            //        ReinvestmentDate = model.ReinvestmentDate,
-            //        ShareAmount = Convert.ToDouble( model.ShareMount),
-            //        Status = CorporateActionStatus.Pending,
-            //        Ticker = model.Ticker
-            //    };
-            //    _db.ReinvestmentPlanActions.Add(newRecord);
-            //}
-            //_db.SaveChanges();
-            ////then retieve this record at client side using account number
-            ////let the clients to decide whether this corperate action is gonna execute or not 
-        }
-
-
-
-
-        public void RetrieveReinvestmentForClientSide(string ClientId) {
-           
-
+            var allParticipants = model.Participants;
+            foreach (var acc in allParticipants)
+            {
+                var newRecord = new CorperateActionHistory()
+                {
+                    AdviserId = model.AdviserId,
+                    ActionType = CorporateActionType.ReinvestmentPlan,
+                    Status = CorporateActionStatus.Pending,
+                    AssociatedAccountNumber = acc.AccountNumber,
+                    CashAdjustmentAmount = "0",
+                    CorperateActionDate = model.ReinvestmentDate,
+                    CorperateActionName = model.ActionName,
+                    StockAdjustmentShareAmount = acc.ShareMount,
+                    Ticker = model.Ticker,
+                };
+                _db.CorporateActions.Add(newRecord);
+            }
+            _db.SaveChanges();
+            //then retieve this record at client side using account number or clientID
+            //let the clients to decide whether this corperate action is gonna execute or not 
         }
 
 
@@ -8980,9 +9054,333 @@ namespace SqlRepository
         }
 
 
-        public List<ReturnOfCapital> GetAllReturnOfCapitalRecord(string AdviserId) {
-           return _db.ReturnOfCapitals.Where(re => re.AdviserId == AdviserId).ToList();
+        //public List<ReturnOfCapital> GetAllReturnOfCapitalRecord(string AdviserId) {
+        //   return _db.ReturnOfCapitals.Where(re => re.AdviserId == AdviserId).ToList();
+        //}
+
+        public List<CorperateActionHistory> GetReturnOfCapitalHistoryByAdviser(string AdviserId)
+        {
+           return _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.ReturnOfCapital).ToList();
+            
         }
 
+        public List<CorperateActionHistory> GetReinvestmentPlanHistoryByAdviser(string AdviserId) {
+            return _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.ReinvestmentPlan).ToList();
+        }
+
+        public List<CorperateActionHistory> GetStockSplitHistoryByAdviser(string AdviserId) {
+            return _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.StockSplit).ToList();
+        }
+
+        public List<CorperateActionHistory> GetRightsIssueHistoryByAdviser(string AdviserId)
+        {
+            return _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.RightsIssue).ToList();
+        }
+
+        public List<CorperateActionHistory> GetBuyBackProgramHistoryByAdviser(string AdviserId)
+        {
+            return _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.BuyBackProgram).ToList();
+        }
+
+        public List<CorperateActionHistory> GetBonusIssueHistoryByAdviser(string AdviserId)
+        {
+            return _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.BonusIssue).ToList();
+        }
+
+
+
+
+
+        public List<PendingActionViewModel> GetAllPendingCorporateActionsForClient(string ClientNumber, ActionRetrieveType type) {
+            var result = new List<PendingActionViewModel>();
+
+            var clientGroup = CheckClientGroupMainClientIdByClientNumber(ClientNumber);
+            
+            if (clientGroup != null)
+            {
+                //MainClient Need to get all this client group Accounts
+                var groupAccounts = clientGroup.GroupAccounts.ToList();
+                if (groupAccounts != null) {
+                    foreach (var acc in groupAccounts) {
+                        var pendingActions = GetAllPendingActionsForAccount(acc.AccountNumber,type);
+                        if (pendingActions != null)
+                            result.AddRange(pendingActions);
+                    }
+                }
+            }
+
+            var clientAccounts = GetAccountsForClientByClientNumberSync(ClientNumber, DateTime.Now);
+
+            if (clientAccounts != null)
+            {
+                foreach (var acc in clientAccounts)
+                {
+                    var pendingActions = GetAllPendingActionsForAccount(acc.AccountNumber, type);
+                    if(pendingActions != null)
+                        result.AddRange(pendingActions);
+                }
+            }
+            
+            return result;
+        }
+
+        private List<PendingActionViewModel> GetAllPendingActionsForAccount(string AccountNumber , ActionRetrieveType type) {
+            var pendingActions = new List<CorperateActionHistory>();
+            if (type == ActionRetrieveType.PendingRetrieve)
+            {
+                pendingActions = GetAllPendingActionForAccount(AccountNumber);
+            }
+            if (type == ActionRetrieveType.AllActionRetrieve) {
+                pendingActions = GetAllActionsForAccount(AccountNumber);
+            }
+            var pendings = GetAllPendingActionsByCorporateActionHistories(pendingActions);
+            
+            return pendings;
+        }
+
+        private List<PendingActionViewModel> GetAllPendingActionsByCorporateActionHistories(List<CorperateActionHistory> thisPendingActions) {
+            var result = new List<PendingActionViewModel>();
+            if (thisPendingActions != null)
+            {
+                foreach (var action in thisPendingActions)
+                {
+                    var newRecord = new PendingActionViewModel()
+                    {
+                        ActionName = action.CorperateActionName,
+                        Ticker = action.Ticker,
+                        ShareAmount = action.StockAdjustmentShareAmount,
+                        AccountNumber = action.AssociatedAccountNumber,
+                        AdjustmentDate = action.CorperateActionDate,
+                        CashAdjustments = action.CashAdjustmentAmount,
+                        Status = GetEnumDescription(action.Status),
+                        ActionType = GetEnumDescription(action.ActionType),
+                        ActionId = action.Id,
+                    };
+                    result.Add(newRecord);
+                }
+            }
+            return result;
+        }
+
+        private Edis.Db.ClientGroup CheckClientGroupMainClientIdByClientNumber(string ClientNumber) {
+            var client = _db.Clients.Where(c => c.ClientNumber == ClientNumber).FirstOrDefault();
+            var clientGroup = _db.ClientGroups.Where(ga => ga.MainClientId == client.ClientId).FirstOrDefault();
+            return clientGroup;
+        }
+
+        private List<CorperateActionHistory> GetAllPendingActionForAccount(string accountNumber)
+        {
+            return _db.CorporateActions.Where(ca => ca.AssociatedAccountNumber == accountNumber && ca.Status == CorporateActionStatus.Pending).OrderBy(ca => ca.ActionType).ToList();      
+        }
+
+        private List<CorperateActionHistory> GetAllActionsForAccount(string accountNumber)
+        {
+            return _db.CorporateActions.Where(ca => ca.AssociatedAccountNumber == accountNumber).OrderBy(ca => ca.ActionType).ToList();
+        }
+
+        public List<ClientAccount> GetAccountsForClientByClientNumberSync(string ClientNumber, DateTime toDate)  
+        {
+            var client =
+                    _db.Clients.Where(
+                        c => c.ClientNumber == ClientNumber && c.CreatedOn.HasValue && c.CreatedOn.Value <= toDate)
+                        .Include(c => c.Accounts)
+                        .SingleOrDefault();
+            if (client == null)
+            {
+                ProfileCannotBefound(ClientNumber, toDate, "Client");
+            }
+            var result = new List<ClientAccount>();
+            //foreach (var account in client.Accounts.Where(acc => acc.AccountType == accountType))                                 //..........................................Account Type changed
+            //{
+            //    result.Add(GetClientAccountSync(account.AccountNumber, toDate));
+            //}
+            foreach (var account in client.Accounts)
+            {
+                result.Add(GetClientAccountSync(account.AccountNumber, toDate));
+            }
+
+            return result;
+        }
+
+        public List<CorperateActionParticipateAccountsModel> GetAllAdviserAccountAccordingToEquity(string Ticker, string AdviserId)
+        {
+            var equityId = getEquityByTicker(Ticker).AssetId;         
+            //All groups that this adviser got
+            var groups = GetAllClientGroupsForAdviserSync(AdviserId, DateTime.Now);
+            //Acccounts wait to be checked
+            List<Account> accounts = new List<Account>();
+            foreach (var group in groups)
+            {   
+                var typeOfGroupAccount = GetAccountsForClientGroupSync(group.ClientGroupNumber, DateTime.Now);
+                if (typeOfGroupAccount != null)//group account could be null
+                {
+                    //add all group accounts to accounts
+                    typeOfGroupAccount.ForEach(g => accounts.AddRange(_db.Accounts.Where(a => a.AccountNumber == g.AccountNumber)));
+                }
+                //Then all clients within this group
+                var clientAccountsWithinThisGroup = new List<ClientAccount>();
+                group.GetClientsSync().ForEach(c => clientAccountsWithinThisGroup.AddRange(c.GetAccountsSync()));
+                //add all clients' account to the accounts 
+                clientAccountsWithinThisGroup.ForEach(c => accounts.AddRange(_db.Accounts.Where(a => a.AccountNumber == c.AccountNumber)));
+            }
+            return AccountsForCorperateActions(accounts, equityId, Ticker);
+        }
+       
+        private List<CorperateActionParticipateAccountsModel> AccountsForCorperateActions(List<Account> accounts, string equityId, string Ticker) {
+
+            var result = new List<CorperateActionParticipateAccountsModel>();
+            if (accounts != null)
+            {
+                foreach (var account in accounts)
+                {
+                    var numberOfUnits = checkUnitOfSharesByEquityIdAndAssociatedAccount(equityId, account);
+                    if (numberOfUnits > 0)
+                    {
+                        var newRecord = new CorperateActionParticipateAccountsModel()
+                        {
+                            AccountNumber = account.AccountNumber,
+                            ShareAmount = numberOfUnits.ToString(),
+                            Ticker = Ticker,
+                            AccountName = account.AccountInfo,
+                        };
+                        result.Add(newRecord);
+                    }
+                }
+            }
+            return result;
+        }
+
+        private int checkUnitOfSharesByEquityIdAndAssociatedAccount(string equityId, Account account)
+        {
+            var allTrans = account.EquityTransactions.Where(et => et.EquityId == equityId).ToList();
+            int numberOfUnits = 0;
+            if (allTrans != null)
+            {
+                foreach (var transaction in allTrans)
+                {
+                    numberOfUnits += (int)transaction.NumberOfUnits;
+                }
+            }
+            return numberOfUnits;
+        }
+
+        public void ClientAcceptCorporateAction(int ActionId) {
+            var action = _db.CorporateActions.Where(ca => ca.Id == ActionId).FirstOrDefault();
+            action.Status = CorporateActionStatus.Approved;
+            //then do what this corporate Action needs to be done
+            switch (action.ActionType){
+                case CorporateActionType.ReinvestmentPlan:
+                    MakeReinvestmentPlanAction(action);
+                    break;
+                case CorporateActionType.RightsIssue:
+                    MakeAction(action);
+                    break;
+                case CorporateActionType.BuyBackProgram:
+                    MakeAction(action);
+                    break;
+                default: break;
+            }
+        }
+
+        private void MakeAction(CorperateActionHistory action) {
+            var amount = Convert.ToDouble(action.CashAdjustmentAmount);
+            MakeCashTransactions(action.AssociatedAccountNumber, amount, action.AdviserId);
+            var account = _db.Accounts.Where(a => a.AccountNumber == action.AssociatedAccountNumber).FirstOrDefault();
+            var equity = getEquityByTicker(action.Ticker);
+            var numberOfUnits = Convert.ToInt32(action.StockAdjustmentShareAmount);
+            ChangeStockShare(numberOfUnits, account, equity);
+            _db.SaveChanges();
+        }
+
+        ////not nessary maybe
+        //private void MakeBuyBackProgramAction(CorperateActionHistory action) {
+        //   
+        //}
+
+        private void MakeReinvestmentPlanAction(CorperateActionHistory action) {
+            //IncreaseNumberOfUnits
+            var account = GetClientAccountSync(action.AssociatedAccountNumber,DateTime.Now);
+            var equityId = getEquityByTicker(action.Ticker);
+            var equity = getEquityById(equityId.AssetId);
+
+            account.MakeTransactionSync(new EquityTransactionCreation() {
+
+                EquityType = equity.EquityType,
+                NumberOfUnits = Convert.ToInt32(action.StockAdjustmentShareAmount),
+                Price = equity.LatestPrice,
+                TransactionDate = DateTime.Now,
+                Ticker = equity.Ticker,
+                Sector = equity.Sector,
+                Name = equity.Name,
+                FeesRecords = new List<TransactionFeeRecordCreation>()
+                {
+                    //fee record needs to be implemented by deducting amount in cash account
+                    new TransactionFeeRecordCreation()
+                    {
+                        Amount = 100,
+                        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
+                    }
+                }
+
+            });
+            _db.SaveChanges();
+        }
+
+        public void ClientRejectCorporateAction(int ActionId)
+        {
+            var action = _db.CorporateActions.Where(ca => ca.Id == ActionId).FirstOrDefault();
+            action.Status = CorporateActionStatus.Rejected;
+            //then do what this corporate Action needs to be done
+            _db.SaveChanges();
+        }
+
+        private void ChangeStockShare(int NumberOfUnits, Account account, Equity equity) {
+            var clientAccount = GetClientAccountSync(account.AccountNumber, DateTime.Now);
+            if (clientAccount != null)
+            {
+                clientAccount.MakeTransactionSync(new EquityTransactionCreation()
+                {
+                    Name = equity.Name,
+                    NumberOfUnits = NumberOfUnits,
+                    Price = 0,
+                    Sector = equity.Sector,
+                    Ticker = equity.Ticker,
+                    TransactionDate = DateTime.Now,
+                    FeesRecords = new List<TransactionFeeRecordCreation>(),
+                    //EquityType = EquityTypes.ManagedInvestments,
+                    //FeesRecords = new List<TransactionFeeRecordCreation>() {
+                    //     new TransactionFeeRecordCreation()
+                    //    {
+                    //        Amount = 100,
+                    //        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
+                    //    }
+                    //},
+                });
+            }
+            else {
+                var groupAccount = GetClientGroupAccountSync(account.AccountNumber, DateTime.Now);
+                if (groupAccount != null) {
+                    groupAccount.MakeTransactionSync(new EquityTransactionCreation()
+                    {
+                        Name = equity.Name,
+                        NumberOfUnits = NumberOfUnits,
+                        Price = 0,
+                        Sector = equity.Sector,
+                        Ticker = equity.Ticker,
+                        TransactionDate = DateTime.Now,
+                        FeesRecords = new List<TransactionFeeRecordCreation>(),
+                        //EquityType = EquityTypes.ManagedInvestments,
+                        //FeesRecords = new List<TransactionFeeRecordCreation>() {
+                        //     new TransactionFeeRecordCreation()
+                        //    {
+                        //        Amount = 100,
+                        //        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
+                        //    }
+                        //},
+                    });
+                }
+            }
+            _db.SaveChanges();
+        }
     }
 }

@@ -129,7 +129,7 @@
     $scope.submit = function () {
         var data = {};
         data = {
-            clientGroup: $scope.clientGroup,
+            clientGroup: $scope.clientGroup, 
             client: $scope.selectedClient,
             accountType: $scope.selectedAccountType,
             accountName: $scope.accountName,

@@ -1,21 +1,19 @@
 ﻿using Shared;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Edis.Db.CorperateActions
+namespace Domain.Portfolio.CorporateActions
 {
-    public class CorperateActionHistory
+    public class ClientCorporateHistoryModel
     {
-        [Key]
-        public int Id { get; set; }
+        public int ReferenceID { get; set; }
         public CorporateActionStatus Status { get; set; }
         public CorporateActionType ActionType { get; set; }
         public string CorperateActionName { get; set; }
-        public string AdviserId { get; set; } 
+        public string AdviserId { get; set; }
         public string CashAdjustmentAmount { get; set; }
         public string Ticker { get; set; }
         public string StockAdjustmentShareAmount { get; set; }
