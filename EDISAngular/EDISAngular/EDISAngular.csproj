@@ -498,6 +498,7 @@
     <Compile Include="Models\ServiceModels\CorporateActions\ReinvestmentData.cs" />
     <Compile Include="Models\ServiceModels\CorporateActions\ReturnOfCapitalActionCreationModel.cs" />
     <Compile Include="Models\ServiceModels\CorporateActions\ReturnOfCapitalData.cs" />
+    <Compile Include="Models\ServiceModels\CorporateActions\RightsIssueData.cs" />
     <Compile Include="Models\ServiceModels\CorporateActions\StockSplitActionCreationModel.cs" />
     <Compile Include="Models\ServiceModels\CorporateActions\StockSplitData.cs" />
     <Compile Include="Models\ServiceModels\DataNameAmountPair.cs" />
@@ -589,6 +590,7 @@
     <Content Include="Angular\Scripts\Adviser\adviserCorporateActionControllers.js" />
     <Content Include="Angular\Scripts\Adviser\adviserCreateClientControllers.js" />
     <Content Include="Angular\Scripts\Adviser\Services\makeTransactionsControllers.js" />
+    <Content Include="Angular\Scripts\Client\clientCorporateActionViewController.js" />
     <Content Include="Angular\Scripts\Client\clientCorrespondenceViewControllers.js" />
     <Content Include="Angular\Scripts\Client\clientOverviewController.js" />
     <Content Include="Angular\Scripts\Client\clientPortfolioCCController.js" />
@@ -652,6 +654,7 @@
     <Content Include="Angular\Templates\Adviser\correspondence.html" />
     <Content Include="Angular\Templates\Adviser\home.html" />
     <Content Include="Angular\Templates\Adviser\reminders.html" />
+    <Content Include="Angular\Templates\Client\clientCorporateActions.html" />
     <Content Include="Angular\Templates\Client\clientRebalance.html" />
     <Content Include="Angular\Templates\Client\clientResearchAnalysis.html" />
     <Content Include="Angular\Templates\Client\clientPortfolioAE.html" />

@@ -21,6 +21,7 @@
         $routeProvider.when("/clientportfolioins", { templateUrl: "/Angular/Templates/Client/clientPortfolioINS.html" })
         $routeProvider.when("/clientresearchAnalysis", { templateUrl: "/Angular/Templates/Client/clientResearchAnalysis.html" })
         $routeProvider.when("/clientresearchRebalance", { templateUrl: "/Angular/Templates/Client/clientRebalance.html" })
+        $routeProvider.when("/clientCorporateActions", { templateUrl: "/Angular/Templates/Client/clientCorporateActions.html" })
         $routeProvider.otherwise({ templateUrl: "/Angular/Templates/Client/home.html" });
     });
     app.config(function (uiGmapGoogleMapApiProvider) {

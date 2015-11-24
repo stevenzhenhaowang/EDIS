@@ -7,14 +7,11 @@ namespace EDISAngular.Models.ServiceModels.CorporateActions
 {
     public class StockSplitData
     {
-        public string actionId { get; set; }
-        public string actionCode { get; set; }
-        public string stockSplitShares { get; set; }
+        public string actionName { get; set; }
+        public string ticker { get; set; }
         public DateTime splitDate { get; set; }
-        public List<StockSplitParticipant> participants { get; set; }
-    }
-    public class StockSplitParticipant
-    {
+        public string status { get; set; }
         public string edisAccountNumber { get; set; }
+        public string splitTo { get; set; }
     }
 }

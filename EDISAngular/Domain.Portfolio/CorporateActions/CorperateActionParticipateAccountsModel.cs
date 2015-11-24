@@ -8,10 +8,9 @@ namespace Domain.Portfolio.CorporateActions
 {
     public class CorperateActionParticipateAccountsModel
     {
-        public string AccountId { get; set; }
+        public string AccountNumber { get; set; }
         public string Ticker { get; set; }
         public string ShareAmount { get; set; }
-        public string AccountType { get; set; }
-
+        public string AccountName { get; set; }
     }
 }

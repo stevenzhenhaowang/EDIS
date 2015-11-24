@@ -9,17 +9,17 @@ namespace Shared
 {
     public enum CorporateActionType
     {
-        [Description("ReturnOfCapital")]
+        [Description("Return Of Capital")]
         ReturnOfCapital = 1,
-        [Description("ReinvestmentPlan")]
+        [Description("Reinvestment Plan")]
         ReinvestmentPlan = 2,
-        [Description("StockSplit")]
+        [Description("Stock Split")]
         StockSplit = 3,
-        [Description("BonusIssue")]
+        [Description("Bonus Issue")]
         BonusIssue =4,
-        [Description("BuyBackProgram")]
+        [Description("Buy Back Program")]
         BuyBackProgram = 5,
-        [Description("RightsIssue")]
+        [Description("Rights Issue")]
         RightsIssue = 6,
     }
 }

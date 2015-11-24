@@ -74,6 +74,7 @@
     <Compile Include="ProductTypes.cs" />
     <Compile Include="PropertyType.cs" />
     <Compile Include="CorporateActionStatus.cs" />
+    <Compile Include="ActionRetrieveType.cs" />
     <Compile Include="RiskLevels.cs" />
     <Compile Include="TransactionExpenseType.cs" />
     <Compile Include="AssetTypes.cs" />

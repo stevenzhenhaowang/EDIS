@@ -1,0 +1,109 @@
+﻿<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+            <li class="active">Client Corporate Actions</li>
+        </ul>
+    </div>
+</div>
+
+
+
+<div class="content">
+    <div class="main-header">
+        <h2>Client Corporate Actions</h2>
+    </div>
+    <div class="main-content" ng-controller="clientCorporateActionViewController">
+     
+                <div class="row">
+                    <div class="col-sm-8">
+                        <ul class="nav nav-tabs" ng-init="tab=1">
+                            <li ng-class="{active:tab==1}"><a ng-click="tab=1"><i class="fa fa-list"></i> Pending Actions</a></li>
+                            <li ng-class="{active:tab==2}"><a ng-click="tab=2"><i class="fa fa-user"></i>Corperate Actions history</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade" ng-class="{'active in':tab==1}">
+                                <label>Corporate Pending Action</label>
+                               <form name="CorporateAction" novalidate>
+                                <table class="table table-hover">
+                                    <tr>
+                                        <th>Action Name</th>
+                                        <th>Action Type</th>
+                                        <th>Associate Account Number</th>
+                                        <th>Ticker</th>
+                                        <th>Share Amount</th>   
+                                        <th>Cash Adjustment</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Accecpt</th>
+                                        <th>Reject</th>
+                                    </tr>
+                                    <!---->
+                                    <tr ng-repeat="pendingAction in allPendingActions">
+                                        <td>{{pendingAction.ActionName}}</td>
+                                        <td>{{pendingAction.ActionType}}</td>
+                                        <td>{{pendingAction.AccountNumber}}</td>
+                                        <td>{{pendingAction.Ticker}}</td>
+                                        <td>{{pendingAction.ShareAmount}}</td>
+                                        <td>{{pendingAction.CashAdjustments}}</td>
+                                        <td>{{pendingAction.AdjustmentDate}}</td>
+                                        <td>{{pendingAction.Status}}</td>
+                                        
+                                    <!--    <td style="width:150px;height:100%">
+                                            <input type="number" class="form-control" min="0" name="action_{{$index}}" ng-model="item.returnAmount" required />
+                                            <span class="error" ng-show="CorporateAction.action_{{$index}}.$error.required&&CorporateAction.action_{{$index}}.$touched">Please enter amount</span>
+                                            <span class="error" ng-show="CorporateAction.action_{{$index}}.$error.number&&CorporateAction.action_{{$index}}.$touched">Please enter numeric value</span>
+                                            <span class="error" ng-show="CorporateAction.action_{{$index}}.$error.min&&CorporateAction.action_{{$index}}.$touched">minimum input is 0</span>
+                                        </td>    -->
+                                        <td>
+                                            <button class="btn btn-success" ng-click="accept(pendingAction)">Accecpt</button> 
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-danger" ng-click="reject(pendingAction)">Reject</button>
+                                        </td>
+
+                                    </tr>
+
+
+                                </table>
+                                   </form>
+                            </div>
+
+
+
+                            <div class="tab-pane fade" ng-class="{'active in':tab==2}">
+                                <label>Corporate Action History</label>
+                                <table class="table table-hover">
+                                    <tr>
+                                        <th>Action Name</th>
+                                        <th>Action Type</th>
+                                        <th>Associate Account Number</th>
+                                        <th>Ticker</th>
+                                        <th>Share Amount</th>
+                                        <th>Cash Adjustment</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    <tr ng-repeat="action in AllActions">
+                                        <td>{{action.ActionName}}</td>
+                                        <td>{{action.ActionType}}</td>
+                                        <td>{{action.AccountNumber}}</td>
+                                        <td>{{action.Ticker}}</td>
+                                        <td>{{action.ShareAmount}}</td>
+                                        <td>{{action.CashAdjustments}}</td>
+                                        <td>{{action.AdjustmentDate}}</td>
+                                        <td>{{action.Status}}</td>
+                                    </tr>
+                                    </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+       
+
+    </div>
+
+</div>
+
+

@@ -107,7 +107,7 @@ namespace EDISAngular.APIControllers
 
                         edisAccountNumber = account.AccountNumber,
                         type = account.AccountType.ToString(),
-                        name = client.FirstName + " " + client.LastName
+                        shareAmount = client.FirstName + " " + client.LastName
                     });
                 }
             }
@@ -115,25 +115,7 @@ namespace EDISAngular.APIControllers
         }
 
 
-        [HttpPost, Route("api/adviser/corporateAction/getAccountByEquity")]
-        [Authorize(Roles = AuthorizationRoles.Role_Adviser)]
-        public List<CorporateActionClientAccountModel> GetAllClientAccountsByEquity(GetAccountByEquityModel model)
-        {
-            var userid = User.Identity.GetUserId();
-           // var result = edisRepo.GetAllAdviserAccountAccordingToEquity(model.Ticker, userid);
-
-
-
-            return new List<CorporateActionClientAccountModel> {
-                new CorporateActionClientAccountModel() {
-
-                    edisAccountNumber = "123",
-                    name = "asd",
-                    type = "asd"
-                    
-                }
-            };
-        }
+     
 
         //[HttpGet,Route("api/adviser/clientaccounts")]
         //[Authorize(Roles=AuthorizationRoles.Role_Adviser)]

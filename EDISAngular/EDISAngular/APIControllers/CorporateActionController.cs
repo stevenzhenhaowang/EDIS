@@ -10,6 +10,9 @@ using EDISAngular.Models.ServiceModels;
 using Microsoft.AspNet.Identity;
 using SqlRepository;
 using Domain.Portfolio.CorporateActions;
+using System.Reflection;
+using System.ComponentModel;
+using Shared;
 
 namespace EDISAngular.APIControllers
 {
@@ -23,6 +26,27 @@ namespace EDISAngular.APIControllers
         {
             userid = User.Identity.GetUserId();
         }
+
+
+        [HttpPost, Route("api/adviser/corporateAction/getAccountByEquity")]
+        public List<CorporateActionClientAccountModel> GetAllClientAccountsByEquity(GetAccountByEquityModel model)
+        {
+           
+            var repoRetrieve = repo.GetAllAdviserAccountAccordingToEquity(model.Ticker, userid);
+            var result = new List<CorporateActionClientAccountModel>();
+            foreach (var reassign in repoRetrieve) {
+                var newRecord = new CorporateActionClientAccountModel()
+                {
+                    edisAccountNumber = reassign.AccountNumber,
+                    shareAmount = reassign.ShareAmount,
+                    accountName = reassign.AccountName
+                };
+                result.Add(newRecord);
+            }
+            return result;
+        }
+
+
 
         [HttpGet, Route("api/Adviser/CorporateAction/IPO")]
         public List<IPOActionData> GetAllIpoActionsForAdviser()
@@ -66,61 +90,129 @@ namespace EDISAngular.APIControllers
         [HttpGet, Route("api/Adviser/CorprateAction/ReturnOfCapital")]
         public List<ReturnOfCapitalData> GetAllReturnOfCapitalActionForAdviser() {
             var result = new List<ReturnOfCapitalData>();
-            var repoRetrival = repo.GetAllReturnOfCapitalRecord(userid);
+            var repoRetrival = repo.GetReturnOfCapitalHistoryByAdviser(userid);
             foreach (var re in repoRetrival) {
                 var oneRecord = new ReturnOfCapitalData() {
                     actionName = re.CorperateActionName,
-                    returnDate = re.ReturnDate,
-                    returnAmount = re.ReturnCashAmount,
+                    returnDate = re.CorperateActionDate,
+                    returnAmount = re.CashAdjustmentAmount,
+                    accountNumber = re.AssociatedAccountNumber,
+                    ticker = re.Ticker,
                     //?  do need to may be for display purpose its ok  accountName = re.AssociatedAccountNumber
                 };
                 result.Add(oneRecord);
             }
             return result;
-            //return new List<ReturnOfCapitalData> {
-            //    new ReturnOfCapitalData {
-            //        actionId = "re1234", actionName = "whateverName", equityId = "equityID", returnDate = DateTime.Now, returnAmount = "888",
-            //        shareAmount= "whatever", participants = new List<returnOfCapitalParticipant> { new returnOfCapitalParticipant { edisAccountNumber = "cartman"} }
-            //    }
-            //};
         }
         [HttpGet, Route("api/Adviser/CorporateAction/Reinvestment")]
         public List<ReinvestmentData> GetAllReinvestmentsActionForAdviser() {
             Console.WriteLine("get all reinvestments action check");
-            return new List<ReinvestmentData>{
-                new ReinvestmentData {
-                    actionName = "reinvestment",equtiyId = "equity", reinvestmentDate = DateTime.Now,
-                    reinvestmentShareAmount = "reinvestmentAmount", participants= new List<ReinvestmentParticipant> {
-                        new ReinvestmentParticipant { edisAccountNumber = "kyle"}
-                    }
-                }
+            var result = new List<ReinvestmentData>();
+            var repoRetrival = repo.GetReinvestmentPlanHistoryByAdviser(userid);
+            foreach (var re in repoRetrival)
+            {
+                var oneRecord = new ReinvestmentData()
+                {
+                    actionName = re.CorperateActionName,
+                    ticker = re.Ticker,
+                    reinvestmentShareAmount = re.StockAdjustmentShareAmount,
+                    accountNumber = re.AssociatedAccountNumber,
+                    reinvestmentDate = re.CorperateActionDate,
+                    status = GetEnumDescription(re.Status),
 
-            };
+                };
+                result.Add(oneRecord);
+            }
+            return result;
         }
 
 
         [HttpGet, Route("api/Adviser/CorporateAction/StockSplit")]
         public List<StockSplitData> GetAllStockSplitActionDataForAdvise() {
-            return new List<StockSplitData> {
-                new StockSplitData { actionId = "stockSplitID", actionCode = "splitcode" , splitDate = DateTime.Now,
-               stockSplitShares = "how many?", participants = new List<StockSplitParticipant> {
-                   new StockSplitParticipant { edisAccountNumber = "edis"}
-               } }
-            };
-
+            var result = new List<StockSplitData>();
+            var repoRetrival = repo.GetStockSplitHistoryByAdviser(userid);
+            foreach (var re in repoRetrival) {
+                var oneRecord = new StockSplitData
+                {
+                    actionName = re.CorperateActionName,
+                    edisAccountNumber = re.AssociatedAccountNumber,
+                    splitDate = re.CorperateActionDate,
+                    splitTo = re.StockAdjustmentShareAmount,
+                    status = GetEnumDescription(re.Status),
+                    ticker = re.Ticker,
+                };
+                result.Add(oneRecord);
+            }
+            return result;
         }
 
         [HttpGet, Route("api/Adviser/CorporateAction/BonusIssues")]
         public List<BonusIssueData> GetAllBonusIssuesActionDataForAdviser()
         {
-            return new List<BonusIssueData> { new BonusIssueData {
-                actionId = "bonuseIssue", actionCode = "bonusIssueCode", bonusDate = DateTime.Now, bonusIssue = "issues", partcipants
-                = new List<BonusParticipant> { new BonusParticipant { edisAccountNumber = "kenny"} }
-            } };
+            var result = new List<BonusIssueData>();
+            var repoRetrival = repo.GetBonusIssueHistoryByAdviser(userid);
+            foreach (var re in repoRetrival)
+            {
+                var oneRecord = new BonusIssueData()
+                {
+                    actionName = re.CorperateActionName,
+                    bonusDate = re.CorperateActionDate,
+                    bonusIssueShareAmount = re.StockAdjustmentShareAmount,
+                    edisAccountNumber = re.AssociatedAccountNumber,
+                    ticker = re.Ticker,
+                    status = GetEnumDescription(re.Status),
+                    //?  do need to may be for display purpose its ok  accountName = re.AssociatedAccountNumber
+                };
+                result.Add(oneRecord);
+            }
+            return result;
+        }
+
+        [HttpGet, Route("api/Adviser/CorporateAction/BuyBackProgram")]
+        public List<BuyBackProgramData> GetAllBuyBackProgramActionDataForAdviser()
+        {
+            var result = new List<BuyBackProgramData>();
+            var repoRetrival = repo.GetBuyBackProgramHistoryByAdviser(userid);
+            foreach (var re in repoRetrival)
+            {
+                var oneRecord = new BuyBackProgramData()
+                {
+                    actionName = re.CorperateActionName,
+                    buyBackDate = re.CorperateActionDate,
+                    cashAdjusment = re.CashAdjustmentAmount,
+                    shareAmountAdjustment = re.StockAdjustmentShareAmount,
+                    ticker = re.Ticker,
+                    edisAccountNumber = re.AssociatedAccountNumber,
+                    status = GetEnumDescription(re.Status),
+                    
+                };
+                result.Add(oneRecord);
+            }
+            return result;
+        }
+        [HttpGet, Route("api/Adviser/CorporateAction/RightsIssues")]
+        public List<RightsIssueData> GetAllRightsIssuesActionDataForAdviser()
+        {
+            var result = new List<RightsIssueData>();
+            var repoRetrival = repo.GetRightsIssueHistoryByAdviser(userid);
+            foreach (var re in repoRetrival)
+            {
+                var oneRecord = new RightsIssueData()
+                {
+                    actionName = re.CorperateActionName,
+                    RightsIssueDate = re.CorperateActionDate,
+                    cashAdjustment = re.CashAdjustmentAmount,
+                    shareAdjustment = re.StockAdjustmentShareAmount,
+                    ticker = re.Ticker,
+                    edisAccountNumber = re.AssociatedAccountNumber,
+                    status = GetEnumDescription(re.Status),
+                };
+                result.Add(oneRecord);
+            }
+            return result;
         }
 
 
-       
 
         [HttpPost, Route("api/Adviser/CorprateAction/IPO")]
         public IHttpActionResult CreateNewIPO(IPOActionData model)
@@ -146,23 +238,30 @@ namespace EDISAngular.APIControllers
         public IHttpActionResult CreateNewReturnCapital(ReturnOfCapitalActionCreationModel model)
         {
             var userid = User.Identity.GetUserId();
-            Console.WriteLine("create new return of captial Check");
+            //Console.WriteLine("create new return of captial Check");
             if (model != null && ModelState.IsValid)
-            {
+           {
                 ReturnOfCapitalCreationModel repoModel = new ReturnOfCapitalCreationModel();
-                //repoModel.EquityId = model.equityId;
-                repoModel.ReturnOfCapitalAmount = model.returnAmount;
-                //repoModel.ShareMount = model.shareAmount;
+                repoModel.AccountsInfo = new List<ReturnOfCapitalParticipantAccounts>();
                 repoModel.AdjustmentDate = model.returnDate;
                 repoModel.AdviserId = userid;
                 repoModel.ActionName = model.actionName;
+                repoModel.Ticker = model.equityId;
+                var partiInfo = model.ParticipantsInfo;
+                foreach (var acc in partiInfo) {
+                  var newAccount =  new ReturnOfCapitalParticipantAccounts()
+                    {
+                        AccountNumber = acc.accountNumber,
+                        ReturnAmount = acc.returnAmount
+                    };
+                    repoModel.AccountsInfo.Add(newAccount);
+                }
                 repo.CreateNewReturnOfCapitalAction(repoModel);
 
 
                 return Ok();
-            }
+             }
             return BadRequest();
-
         }
 
         [HttpPost, Route("api/Adviser/CorprateAction/newReinvestment")]
@@ -172,23 +271,74 @@ namespace EDISAngular.APIControllers
             repo.AdviserCreateNewReinvestmentAdviserInital(model);
             return Ok();
         }
+        [HttpPost, Route("api/Adviser/CorprateAction/newStockSplit")]
+        public IHttpActionResult CreateNewStockSplit(StockSplitCreationModel model)
+        {
+            model.AdviserId = userid;
+            repo.CreateNewStockSplitAction(model);
+            return Ok();
+        }
+
+
+        [HttpPost, Route("api/Adviser/CorprateAction/newBonusIssue")]
+        public IHttpActionResult CreateNewBonusIssue(BonusIssueCreationModel model)
+        {
+            model.AdviserId = userid;
+            repo.CreateNewBonusIssueAction(model);
+            return Ok();
+        }
+
+        [HttpPost, Route("api/Adviser/CorprateAction/newRightsIssue")]
+        public IHttpActionResult CreateRightsIssue(RightsIssueCreationModel model)
+        {
+            model.AdviserId = userid;
+            repo.CreateNewRightsIssueActionAdviseInital(model);
+            return Ok();
+        }
+
+        [HttpPost, Route("api/Adviser/CorprateAction/newBuyBackProgram")]
+        public IHttpActionResult CreateBuyBackProgram(BuyBackProgramCreationModel model)
+        { 
+            model.AdviserId = userid;
+            repo.CreateNewBuyBackProgramActionAdviseInital(model);
+            return Ok();
+        }
 
 
         [HttpGet, Route("api/Client/CorperateAction/AllPendingActions")]
-        public List<string> GetAllPendingCorperateAction() {
-
-            return new List<string>();
+        public List<PendingActionViewModel> GetAllPendingCorperateAction() {  
+            return repo.GetAllPendingCorporateActionsForClient(userid, ActionRetrieveType.PendingRetrieve);
         }
 
-        [HttpPost, Route("api/adviser/corporateAction/getAccounts")]
-        public List<string> getAllAccounts(string EquityId) {
-            return new List<string>();
+        [HttpGet, Route("api/Client/CorperateAction/AllActions")]
+        public List<PendingActionViewModel> GetAllActionsForClient()
+        {
+            return repo.GetAllPendingCorporateActionsForClient(userid, ActionRetrieveType.AllActionRetrieve);
+        }
+        //[HttpPost, Route("api/adviser/corporateAction/getAccounts")]
+        //public List<string> getAllAccounts(string EquityId) {
+        //    return new List<string>();
+        //}
+
+
+        [HttpPost, Route("api/client/corporateAction/rejectactions")]
+        public IHttpActionResult clientRejectActions([FromBody]ClientActionModel model)
+        {
+            var actionIdIntValue = Convert.ToInt32(model.ActionId);
+            repo.ClientRejectCorporateAction(actionIdIntValue);
+            return Ok();
+        }
+
+        [HttpPost, Route("api/client/corporateAction/acceptactions")]
+        public IHttpActionResult clientAcceptActions([FromBody]ClientActionModel model)
+        {
+            var actionIdIntValue = Convert.ToInt32(model.ActionId);
+            repo.ClientAcceptCorporateAction(actionIdIntValue);
+            return Ok();
         }
 
 
-
-
-
+     
 
 
         [HttpGet, Route("api/Adviser/CorporateAction/Company")]
@@ -215,6 +365,22 @@ namespace EDISAngular.APIControllers
 
 
 
+
+        private string GetEnumDescription(Enum value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
+
+            DescriptionAttribute[] attributes =
+                (DescriptionAttribute[])fi.GetCustomAttributes(
+                typeof(DescriptionAttribute),
+                false);
+
+            if (attributes != null &&
+                attributes.Length > 0)
+                return attributes[0].Description;
+            else
+                return value.ToString();
+        }
 
 
     }
