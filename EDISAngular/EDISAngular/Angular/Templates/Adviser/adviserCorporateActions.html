@@ -1219,7 +1219,7 @@
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label>Ticker</label>
-                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerName for item in allTickers" ng-change="loadAccounts()">
+                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerNumber for item in allTickers" ng-change="loadAccounts()">
                         <option value="">Please select.....</option>
                     </select>
                     <div class="error" ng-show="newReturnOfCapital.ticker.$error.required&&newReturnOfCapital.ticker.$touched">Please select ticker</div>
@@ -1325,9 +1325,7 @@
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label>Ticker</label>
-                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerName for item in allTickers" ng-change="loadAccounts()">
-                        <option value="">Please select.....</option>
-                    </select>
+                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerNumber for item in allTickers" ng-change="loadAccounts()"/>
                     <div class="error" ng-show="newReinvestmentAction.ticker.$error.required&&newReinvestmentAction.ticker.$touched">Please select ticker</div>
                 </div>
             </div>
@@ -1414,7 +1412,7 @@
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label>Ticker</label>
-                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerName for item in allTickers" ng-change="loadAccounts()">
+                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerNumber for item in allTickers" ng-change="loadAccounts()">
                         <option value="">Please select.....</option>
                     </select>
                     <div class="error" ng-show="newStockSplit.ticker.$error.required&&newStockSplit.ticker.$touched">Please select ticker</div>
@@ -1498,7 +1496,7 @@
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label>Ticker</label>
-                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerName for item in allTickers" ng-change="loadAccounts()">
+                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerNumber for item in allTickers" ng-change="loadAccounts()">
                         <option value="">Please select.....</option>
                     </select>
                     <div class="error" ng-show="newBonusesAction.ticker.$error.required&&newBonusesAction.ticker.$touched">Please select ticker</div>
@@ -1572,7 +1570,7 @@
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label>Ticker</label>
-                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerName for item in allTickers" ng-change="loadAccounts()">
+                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerNumber for item in allTickers" ng-change="loadAccounts()">
                         <option value="">Please select.....</option>
                     </select>
                     <div class="error" ng-show="newBonusesAction.ticker.$error.required&&newBonusesAction.ticker.$touched">Please select ticker</div>
@@ -1650,7 +1648,7 @@
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label>Ticker</label>
-                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerName for item in allTickers" ng-change="loadAccounts()">
+                    <select class="form-control" ng-model="tickerNumber" name="ticker" required ng-options="item.tickerNumber as item.tickerNumber for item in allTickers" ng-change="loadAccounts()">
                         <option value="">Please select.....</option>
                     </select>
                     <div class="error" ng-show="newRightsIssueAction.ticker.$error.required&&newBonusesAction.ticker.$touched">Please select ticker</div>

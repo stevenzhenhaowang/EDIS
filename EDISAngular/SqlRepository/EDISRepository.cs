@@ -9060,31 +9060,54 @@ namespace SqlRepository
 
         public List<CorperateActionHistory> GetReturnOfCapitalHistoryByAdviser(string AdviserId)
         {
-           return _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.ReturnOfCapital).ToList();
-            
+            var result = _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.ReturnOfCapital).ToList();
+            if (result == null) {
+                return new List<CorperateActionHistory>();
+            } else
+                return result;
         }
 
         public List<CorperateActionHistory> GetReinvestmentPlanHistoryByAdviser(string AdviserId) {
-            return _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.ReinvestmentPlan).ToList();
+            var result = _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.ReinvestmentPlan).ToList();
+            if (result == null) {
+                return new List<CorperateActionHistory>();
+            } else
+                return result;
         }
 
         public List<CorperateActionHistory> GetStockSplitHistoryByAdviser(string AdviserId) {
-            return _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.StockSplit).ToList();
+            var result = _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.StockSplit).ToList();
+            if (result == null) {
+                return new List<CorperateActionHistory>();
+            } else
+                return result;
         }
 
         public List<CorperateActionHistory> GetRightsIssueHistoryByAdviser(string AdviserId)
         {
-            return _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.RightsIssue).ToList();
+            var result = _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.RightsIssue).ToList();
+            if (result == null) {
+                return new List<CorperateActionHistory>();
+            } else
+                return result;
         }
 
         public List<CorperateActionHistory> GetBuyBackProgramHistoryByAdviser(string AdviserId)
         {
-            return _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.BuyBackProgram).ToList();
+            var result = _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.BuyBackProgram).ToList();
+            if (result == null) {
+                return new List<CorperateActionHistory>();
+            } else
+                return result;
         }
 
         public List<CorperateActionHistory> GetBonusIssueHistoryByAdviser(string AdviserId)
         {
-            return _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.BonusIssue).ToList();
+            var result =  _db.CorporateActions.Where(ca => ca.AdviserId == AdviserId && ca.ActionType == CorporateActionType.BonusIssue).ToList();
+            if (result == null) {
+                return new List<CorperateActionHistory>();
+            } else
+                return result;
         }
 
 
@@ -9204,6 +9227,10 @@ namespace SqlRepository
 
         public List<CorperateActionParticipateAccountsModel> GetAllAdviserAccountAccordingToEquity(string Ticker, string AdviserId)
         {
+            if(string.IsNullOrEmpty(Ticker)){
+                return new List<CorperateActionParticipateAccountsModel>();
+            }
+
             var equityId = getEquityByTicker(Ticker).AssetId;         
             //All groups that this adviser got
             var groups = GetAllClientGroupsForAdviserSync(AdviserId, DateTime.Now);

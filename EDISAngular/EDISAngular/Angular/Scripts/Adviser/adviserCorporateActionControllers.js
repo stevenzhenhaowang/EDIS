@@ -31,18 +31,6 @@
         $scope.existingBuyBackProgram = data;
     })
      
-
-
-
-
-
-
-
-
-
-
-
-
     $scope.selectIPOAction = function (item) {
         $scope.selectedIPOAction = item;
     }
@@ -421,11 +409,11 @@
             Ticker: $scope.tickerNumber
         }
         $http.post(AppStrings.EDIS_IP + "api/adviser/corporateAction/getAccountByEquity", data)
-          .success(function (data) {
-              $scope.allAccounts = data;
-          }).error(function (data) {
-              console.log("Error.............");
-          });
+            .success(function (data) {
+                $scope.allAccounts = data;
+            }).error(function (data) {
+                console.log("Error.............");
+            });
     }
 
 
