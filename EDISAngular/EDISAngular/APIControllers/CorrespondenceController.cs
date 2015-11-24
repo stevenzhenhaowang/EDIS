@@ -87,17 +87,14 @@ namespace EDISAngular.APIControllers
             if (message != null && ModelState.IsValid)
             {
 
-                if (User.IsInRole(AuthorizationRoles.Role_Adviser))
-                {
+                if (User.IsInRole(AuthorizationRoles.Role_Adviser)) {
                     var adviser = edisRepo.GetAdviserSync(message.adviserNumber, DateTime.Now);
-                    if (adviser == null || adviser.AdviserNumber != User.Identity.GetUserId())
-                    {
+                    if (adviser == null || adviser.AdviserNumber != User.Identity.GetUserId()) {
                         ModelState.AddModelError("", "Invalid adviser id supplied, or current adviser is trying to add note for another adviser, which is illegal.");
                         return BadRequest(ModelState);
                     }
                     #region make sure client cannot create notes
-                    if (User.IsInRole(AuthorizationRoles.Role_Client) && message.noteTypeId == BusinessLayerParameters.noteType_note)
-                    {
+                    if (User.IsInRole(AuthorizationRoles.Role_Client) && message.noteTypeId == BusinessLayerParameters.noteType_note) {
                         ModelState.AddModelError("", "Client cannot add self-note.");
                         return BadRequest(ModelState);
                     }
@@ -107,9 +104,8 @@ namespace EDISAngular.APIControllers
 
                     #endregion
 
-                    Message messageData = new Message(edisRepo)
-                    {
-                        adviserNumber = adviser.Id,
+                    Message messageData = new Message(edisRepo) {
+                        adviserNumber = adviser.Id,      
                         assetTypeId = Int32.Parse(message.assetTypeId),
                         body = message.body,
                         accountId = message.adviserNumber,
@@ -132,9 +128,45 @@ namespace EDISAngular.APIControllers
                     };
 
                     edisRepo.CreateNewMessageSync(messageData, senderRole);
+                    return Ok();
+                } else {
+                    var adviser = edisRepo.GetAdviserSync(message.adviserNumber, DateTime.Now);
+                    #region make sure client cannot create notes
+                    if (User.IsInRole(AuthorizationRoles.Role_Client) && message.noteTypeId == BusinessLayerParameters.noteType_note) {
+                        ModelState.AddModelError("", "Client cannot add self-note.");
+                        return BadRequest(ModelState);
+                    }
+                    var senderRole = User.IsInRole(AuthorizationRoles.Role_Adviser) ?
+                                            BusinessLayerParameters.correspondenceSenderRole_adviser
+                                            : BusinessLayerParameters.correspondenceSenderRole_client;
 
+                    #endregion
+                    
+                    Message messageData = new Message(edisRepo) {
+                        adviserNumber = adviser.Id,      
+                        assetTypeId = Int32.Parse(message.assetTypeId),
+                        body = message.body,
+                        accountId = message.adviserNumber,
+                        clientId = message.clientId,
+                        dateCompleted = message.dateCompleted,
+                        dateDue = message.dateDue,
+                        followupActions = message.followupActions,
+                        followupDate = message.followupDate,
+                        isAccepted = message.isAccepted,
+                        isDeclined = message.isDeclined,
+                        noteSerial = message.noteSerial,
+                        noteTypeId = message.noteTypeId,
+                        productTypeId = Int32.Parse(message.productTypeId),
+                        reminder = message.reminder,
+                        reminderDate = DateTime.Now,                    //need to be updated
+                        resourceToken = message.resourceToken,
+                        status = message.status,
+                        subject = message.subject,
+                        timespent = message.timespent
+                    };
+                    edisRepo.CreateNewMessageSync(messageData, senderRole);
+                    return Ok();
                 }
-                return Ok();
             }
             else
             {

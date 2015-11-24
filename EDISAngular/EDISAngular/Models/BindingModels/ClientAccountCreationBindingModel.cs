@@ -23,5 +23,7 @@ namespace EDISAngular.Models.BindingModels
         [Required]
         [DisplayName("Account Name")]
         public string accountName { get; set; }
+
+        public string marginLenderId { get; set; }
     }
 }

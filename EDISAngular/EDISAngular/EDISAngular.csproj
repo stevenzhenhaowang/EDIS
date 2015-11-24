@@ -528,6 +528,8 @@
     <Compile Include="Models\ServiceModels\PortfolioModels\InvestmentCashflowDetailedModel.cs" />
     <Compile Include="Models\ServiceModels\PortfolioModels\InvestmentPortfolioModel.cs" />
     <Compile Include="Models\ServiceModels\PortfolioModels\ManagedInvestmentCompanyProfileModel.cs" />
+    <Compile Include="Models\ServiceModels\PortfolioModels\MarginLendingAccountPortfolioDetails.cs" />
+    <Compile Include="Models\ServiceModels\PortfolioModels\MarginLendingPortfolioDetailsModel.cs" />
     <Compile Include="Models\ServiceModels\PortfolioModels\MortgageCashflowDetailedModel.cs" />
     <Compile Include="Models\ServiceModels\PortfolioModels\MortgageInvestmentGeneralInfo.cs" />
     <Compile Include="Models\ServiceModels\PortfolioModels\MortgageInvestmentProfileModel.cs" />
@@ -558,6 +560,7 @@
     <Compile Include="Models\ServiceModels\RebalanceModels\TemplateDetails.cs" />
     <Compile Include="Models\ServiceModels\RebalanceModels\TransactionCostData.cs" />
     <Compile Include="Models\ServiceModels\TickerBriefModel.cs" />
+    <Compile Include="Models\ServiceModels\TransactionModels\PropertyTransactionModel.cs" />
     <Compile Include="Models\ViewModels\AccountView.cs" />
     <Compile Include="Models\ViewModels\AdviserBriefListView.cs" />
     <Compile Include="Models\ViewModels\AdviserDetailedView.cs" />

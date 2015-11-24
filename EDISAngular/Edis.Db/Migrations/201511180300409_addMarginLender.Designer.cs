@@ -7,13 +7,13 @@ namespace Edis.Db.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class clientRebalance : IMigrationMetadata
+    public sealed partial class addMarginLender : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(clientRebalance));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(addMarginLender));
         
         string IMigrationMetadata.Id
         {
-            get { return "201511120312509_clientRebalance"; }
+            get { return "201511180300409_addMarginLender"; }
         }
         
         string IMigrationMetadata.Source

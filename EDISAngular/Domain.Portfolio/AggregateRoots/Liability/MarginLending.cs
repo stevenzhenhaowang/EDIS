@@ -15,9 +15,11 @@ namespace Domain.Portfolio.AggregateRoots.Liability
         /// Lvr is recorded in security
         /// </summary>
         public List<Security> Securities { get; set; }
-        //public double LoanValueRatio { get; set; }
+        public double LoanValueRatio { get; set; }
         public double LoanAmount { get; set; }
+        public AssetBase Asset { get; set; }
         public double CurrentInterestRate { get; set; }
+        public double NetCostValue { get; set; }        
 
         public MarginLending(IRepository repo) : base(repo)
         {
@@ -31,7 +33,7 @@ namespace Domain.Portfolio.AggregateRoots.Liability
 
         public override List<ActivityBase> GetActivitiesSync(DateTime? beforeDate = null)
         {
-            return this._repository.GetInsuranceActivitiesSync(this.Id, beforeDate ?? DateTime.Now)
+            return this._repository.GetMarginLendingActivitiesSync(this.Id, beforeDate ?? DateTime.Now)
                 ;
         }
     }

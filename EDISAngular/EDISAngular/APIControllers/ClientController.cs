@@ -44,7 +44,7 @@ namespace EDISAngular.APIControllers
             var userid = User.Identity.GetUserId();
             Adviser adviser = edisRepo.GetAdviserForClient(userid);
             AdviserView view = new AdviserView { 
-                accountNumber = adviser.Id,
+                accountNumber = adviser.AdviserNumber,  //id==> number
                 name = adviser.FirstName + " " + adviser.LastName
             };
 

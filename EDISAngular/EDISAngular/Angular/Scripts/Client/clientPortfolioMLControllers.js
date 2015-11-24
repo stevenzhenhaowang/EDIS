@@ -156,14 +156,11 @@ app.controller("clientPortfolioMLCompanyProfilesController", ["$scope", "clientP
     })
 }])
 app.controller("clientPortfolioMLLoanDetailsController", ["$scope", "clientPortfolioMLLoanDetails", function ($scope, DBContext) {
-
-    $scope.$watch("selectedProvider", function (newValue) {
-        DBContext.get({ clientAccountNumber: newValue.edisAccountNumber }, function (data) {
+    $scope.$on('ml-account-portfolio', function (event, args) {
+        DBContext().get(function (data) {
             $scope.data = data;
         })
     })
-
-
 }])
 app.controller("clientPortfolioMLLoanAccountControllers", ["$scope", "clientPortfolioMLLoanInfo", function ($scope, DBContext) {
     $scope.$watch("selectedProvider", function (newValue) {

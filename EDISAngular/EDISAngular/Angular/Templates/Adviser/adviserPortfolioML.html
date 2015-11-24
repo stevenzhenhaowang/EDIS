@@ -14,9 +14,9 @@
         <h2><client-name></client-name>Margin Lending</h2>
         <client-selector></client-selector>
     </div>
-    <div class="main-content" ng-controller="adviserPortfolioMLViewController">
+    <div class="main-content" > <!--ng-controller="adviserPortfolioMLViewController"-->
         <div class="row">
-            <div class="col-md-7">
+            <div > <!--class="col-md-7"-->
                 <div class="row">
                     <div class="col-sm-12">
                         <ul class="nav nav-tabs" ng-init="tab=1">
@@ -27,7 +27,7 @@
                             <div class="tab-pane active in">
                                 <div ng-if="tab===1">
 
-                                    
+
                                     <div class="row">
                                         <div class="col-sm-12" ng-controller="adviserPortfolioMLCompanyProfilesController">
 
@@ -40,169 +40,111 @@
                                                     <table class="table table-striped table-hover">
                                                         <thead>
                                                             <tr class="summary-table-row">
-                                                                <td>Ticker</td>
-                                                                <td>Company</td>
-                                                                <td>Units</td>
-                                                                <td>Cost Price</td>
-                                                                <td>Brokerage</td>
-                                                                <td>Net Cost</td>
-                                                                <td>Market Price</td>
+                                                                <td>Asset Catergory</td>
                                                                 <td>Market Value</td>
-                                                                <td>Profit/Loss($)</td>
-                                                                <td>Profit/Loss(%)</td>
-                                                                <td>Annual Income</td>
-                                                                <td>Annual Interest Expenses</td>
-                                                                <td>Cashflow Position</td>
-                                                                <td>Positive/Negative Gearing</td>
-                                                                <td>Suitability</td>
+                                                                <td>Net Cost Value</td>
+                                                                <td>Loan Amount</td>
+                                                                <td>Loan Value Ratio</td>
+                                                                <!--<td>Max Loan Value Ratio</td>-->
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr ng-repeat="item in data">
-                                                                <td>{{item.ticker}}</td>
-                                                                <td>{{item.company}}</td>
-                                                                <td>{{item.units}}</td>
-                                                                <td>{{item.costPrice | currency}}</td>
-                                                                <td>{{item.brokerage | currency}}</td>
-                                                                <td>{{item.netCost | currency}}</td>
-                                                                <td>{{item.marketPrice | currency}}</td>
-                                                                <td>{{item.marketValue3 | currency}}</td>
-                                                                <td>{{item.plPercentage | number : 2}}%</td>
-                                                                <td>{{item.plValue | currency}}</td>
-                                                                <td>{{item.annualIncome | currency}}</td>
-                                                                <td>{{item.annualInterestExpenses | currency}}</td>
-                                                                <td>{{item.cashflowPosition}}</td>
-                                                                <td>{{item.gearing}}</td>
-                                                                <td>{{item.suitability}}</td>
+                                                            <tr ng-repeat="item in data.data">
+                                                                <td>{{item.assetCatargory}}</td>
+                                                                <td>{{item.marketValue | currency}}</td>
+                                                                <td>{{item.netCostValue | currency}}</td>
+                                                                <td>{{item.loanAmount | currency}}</td>
+                                                                <td>{{item.loanValueRatio | number : 2}}%</td>
+                                                                <!--<td>{{item.maxLoanValueRatio | number : 0}}%</td>-->
                                                             </tr>
                                                         </tbody>
-
-
-
-
-
-
                                                     </table>
                                                 </div>
                                             </div>
-
-
-
-
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row" ng-controller="adviserPortfolioMLLoadClientsController">
                                         <div class="col-md-4 form-group">
                                             <label><strong>Select Client Account</strong></label>
-                                            <select class="form-control" ng-model="selectedProvider" ng-options="item as item.name for item in providers"></select>
+
+                                            <account-selector></account-selector>
+                                            <!--<select class="form-control" name="clientName" ng-model="selectedClient" ng-options="item.id as item.name for item in allClients"></select>-->
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-12" ng-controller="adviserPortfolioMLLoanDetailsController">
-                                            <div class="widget">
-                                                <div class="widget-header">
-                                                    <h3><i class="fa fa-bar-chart-o"></i>Client Account Portfolio</h3>
-                                                </div>
-                                                <div class="widget-content">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <table class="table table-striped table-hover">
-                                                                <thead>
-                                                                    <tr class="summary-table-row">
-                                                                        <td>Ticker</td>
-                                                                        <td>Company Name</td>
-                                                                        <td>Net Cost Value</td>
-                                                                        <td>Market Value</td>
-                                                                        <td>Loan Value Ratio</td>
-                                                                        <td>Loan Amount</td>
-                                                                        <td>Equity in Asset</td>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr ng-repeat="item in data.data">
-                                                                        <td>{{item.ticker}}</td>
-                                                                        <td>{{item.company}}</td>
-                                                                        <td>{{item.netCostValue | currency}}</td>
-                                                                        <td>{{item.marketValue | currency}}</td>
-                                                                        <td>{{item.loanValueRatio | number : 0}}%</td>
-                                                                        <td>{{item.loanAmount | currency}}</td>
-                                                                        <td>{{item.equityInAsset}}</td>
-                                                                    </tr>
-                                                                </tbody>
 
-                                                            </table>
+                                    <div ng-controller="adviserPortfolioMLLoanDetailsController">
+                                        <div class="row">
+                                            <div class="col-sm-12" >
+                                                <div class="widget">
+                                                    <div class="widget-header">
+                                                        <h3><i class="fa fa-bar-chart-o"></i>Client Account Portfolio</h3>
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <table class="table table-striped table-hover">
+                                                                    <thead>
+                                                                        <tr class="summary-table-row">
+                                                                            <td>Ticker</td>
+                                                                            <td>Company Name</td>
+                                                                            <td>Market Value</td>
+                                                                            <td>Net Cost Value</td>
+                                                                            <td>Loan Amount</td>
+                                                                            <td>Loan Value Ratio</td>
+                                                                            <td>Max Loan Value Ratio</td>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr ng-repeat="item in data.data">
+                                                                            <td>{{item.ticker}}</td>
+                                                                            <td>{{item.companyName}}</td>
+                                                                            <td>{{item.marketValue | currency}}</td>
+                                                                            <td>{{item.netCostValue | currency}}</td>
+                                                                            <td>{{item.loanAmount | currency}}</td>
+                                                                            <td><span ng-class="{'color-red': item.loanValueRatio > item.maxLoanValueRatio}">{{item.loanValueRatio | number : 2}}%</span></td>
+                                                                            <td>{{item.maxLoanValueRatio | number : 2}}%</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div>
+                                                    <div class="widget">
+                                                        <div class="widget-header">
+                                                            <h3><i class="fa fa-bar-chart-o"></i>Margin Lender</h3>
+                                                        </div>
+                                                        <div class="widget-content">
+                                                            <table class="table table-striped table-hover">
+                                                                <thead>
+                                                                    <tr class="summary-table-row">
+                                                                        <td>Ticker</td>
+                                                                        <td>Company</td>
+                                                                        <td>Max Loan Value Ratio</td>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-repeat="item in data.marginLenders">
+                                                                        <td>{{item.ticker}}</td>
+                                                                        <td>{{item.companyName}}</td>
+                                                                        <td>{{item.maxLoanValueRatio | number : 2}}%</td>
+                                                                    </tr>
+                                                                </tbody>
 
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div ng-controller="adviserPortfolioMLLoanAccountControllers">
-                                                <div class="widget">
-                                                    <div class="widget-header">
-                                                        <h3><i class="fa fa-bar-chart-o"></i>Client Account Loan Information</h3>
-
-                                                    </div>
-                                                    <div class="widget-content">
-                                                        <table class="table table-striped table-hover">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>Account Name</td>
-                                                                    <td>{{data.accountName}}</td>
-                                                                </tr>
-                                                                <tr><td>Loan Number</td><td>{{data.loanNumber}}</td></tr>
-                                                                <tr><td>Trading Account</td><td>{{data.tradingAccount}}</td></tr>
-                                                                <tr><td>Date Opened</td><td>{{data.dateOpened | date}}</td></tr>
-                                                                <tr class="summary-table-row"><td><strong>Account Designation</strong></td><td></td></tr>
-                                                                <tr><td>Address 1</td><td>{{data.addressOne}}</td></tr>
-                                                                <tr><td>Address 2</td><td>{{data.addressTwo}}</td></tr>
-                                                                <tr><td>Address 3</td><td>{{data.addressThree}}</td></tr>
-                                                                <tr><td>City/State/Postcode</td><td>{{data.city}}/{{data.state}}/{{data.postCode}}</td></tr>
-                                                                <tr><td>Phone</td><td>{{data.phone}}</td></tr>
-                                                                <tr><td>Mobile</td><td>{{data.mobile}}</td></tr>
-                                                                <tr><td>Work</td><td>{{data.work}}</td></tr>
-                                                                <tr><td>Email</td><td>{{data.email}}</td></tr>
-                                                                <tr><td>Loan Provider</td><td>{{data.loanProvider}}</td></tr>
-                                                                <tr><td>PID</td><td>{{data.pid}}</td></tr>
-                                                                <tr><td>Loan Provider Address 1</td><td>{{data.lpAddressOne}}</td></tr>
-                                                                <tr><td>Loan Provider Address 2</td><td>{{data.lpAddressTwo}}</td></tr>
-                                                                <tr><td>Loan Provider Address 3</td><td>{{data.lpAddressThree}}</td></tr>
-                                                                <tr><td>City/State/Postcode</td><td>{{data.lpCity}}/{{data.lpState}}/{{data.lpPostcode}}</td></tr>
-                                                                <tr><td>Contact Person</td><td>{{data.lpContactPerson}}</td></tr>
-                                                                <tr><td>Phone Number</td><td>{{data.lpPhoneNumber}}</td></tr>
-                                                                <tr><td>Fax Number</td><td>{{data.lpFax}}</td></tr>
-                                                                <tr class="summary-table-row"><td>Loan Summary</td><td></td></tr>
-                                                                <tr><td>Variable Loan</td><td>{{data.variableLoan}}</td></tr>
-                                                                <tr><td>Fixed Rate Loan</td><td>{{data.fixedRateLoan}}</td></tr>
-                                                                <tr><td>Unsettled Transaction</td><td>{{data.unsettledTransaction}}</td></tr>
-                                                                <tr><td>Total Outstanding Loan</td><td>{{data.totalOutstandingLoan}}</td></tr>
-                                                                <tr><td>Max Loan Limits</td><td>{{data.maxLoanLimits}}</td></tr>
-                                                                <tr><td>Available Spending</td><td>{{data.availableSpending}}</td></tr>
-                                                                <tr><td>Available Cash</td><td>{{data.availableCash}}</td></tr>
-                                                                <tr><td>Base LVR</td><td>{{data.baseLVR}}</td></tr>
-                                                                <tr><td>Buffer</td><td>{{data.buffer}}</td></tr>
-                                                                <tr><td>Marin Call LVR</td><td>{{data.marinCallLVR}}</td></tr>
-                                                                <tr><td>Current LVR</td><td>{{data.currentLVR}}</td></tr>
-                                                                <tr><td>Net Annual Income &amp; Expenses</td><td>{{data.netAnnualIncome}}</td></tr>
-                                                                <tr><td>Negative/Positive Gearing</td><td>{{data.negativePositiveGearing}}</td></tr>
-                                                                <tr><td>Total Annual Interest Expense</td><td>{{data.totalAnnualInterestExpense}}</td></tr>
-                                                                <tr><td>TOtal Annual Income Expense</td><td>{{data.totalAnnualIncomeExpense}}</td></tr>
-                                                            </tbody>
-                                                        </table>
+                                                            </table>
 
 
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-
-
                                 </div>
                                 <div ng-if="tab===2">
                                     <div class="row">
@@ -275,6 +217,7 @@
                                                 </div>
                                             </div>
                                             <div ng-controller="adviserPortfolioMLTypeOfGearingStrategyController">
+                                                <!---->
                                                 <div class="widget">
                                                     <div class="widget-header">
                                                         <h3><i class="fa fa-bar-chart-o"></i>Type of Gearing Strategy</h3>
@@ -322,7 +265,6 @@
                                                                 <tr><td>No. of Securities Less 40% LVR</td><td>{{data.numberOfSecurities40less}}</td></tr>
                                                             </tbody>
                                                         </table>
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -335,48 +277,49 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-5">
+            <!--<div class="col-md-5">
                 <div class="row">
                     <div class="col-sm-12">
-
+                        
                         <div ng-controller="adviserPortfolioMLRatingController">
-                            <div class="widget hidden" >
+                            <div class="widget hidden">
                                 <div class="widget-header">
                                     <h3><i class="fa fa-bar-chart-o"></i>Portfolio Rating</h3>
 
                                 </div>
                                 <div class="widget-content"><div kendo-chart k-options="mainOptions" k-rebind="data"></div></div>
                             </div>
-                        </div>
 
 
-                   <!--     <div class="widget" ng-controller="adviserPortfolioMLCashflowController">
-                            <div class="widget-header">
-                                <h3><i class="fa fa-bar-chart-o"></i>Monthly Cash Flow Summary</h3>
-                       -->
-                            </div>
-                            <div class="widget-content">
-                                <table class="table table-striped table-hover">
-                                    <thead>
-                                        <tr class="summary-table-row">
-                                            <td>Month</td>
-                                            <td>Income</td>
-                                            <td>Expense</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="item in data.data">
-                                            <td>{{item.date | date : 'MMMM'}}</td>
-                                            <td>{{item.income | currency}}</td>
-                                            <td>{{item.expense | currency}}</td>
-                                        </tr>
-                                        <tr class="summary-table-row">
-                                            <td>Total</td>
-                                            <td>{{data.totalIncome | currency}}</td>
-                                            <td>{{data.totalExpense | currency}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+
+                            <div class="widget" ng-controller="adviserPortfolioMLCashflowController">
+                                <div class="widget-header">
+                                    <h3><i class="fa fa-bar-chart-o"></i>Monthly Cash Flow Summary</h3>
+
+                                </div>
+                                <div class="widget-content">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr class="summary-table-row">
+                                                <td>Month</td>
+                                                <td>Income</td>
+                                                <td>Expense</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="item in data.data">
+                                                <td>{{item.date | date : 'MMMM'}}</td>
+                                                <td>{{item.income | currency}}</td>
+                                                <td>{{item.expense | currency}}</td>
+                                            </tr>
+                                            <tr class="summary-table-row">
+                                                <td>Total</td>
+                                                <td>{{data.totalIncome | currency}}</td>
+                                                <td>{{data.totalExpense | currency}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                         <div class="widget" ng-controller="adviserPortfolioMLStatisticsController">
@@ -401,11 +344,9 @@
                                 </table>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
 
     </div>

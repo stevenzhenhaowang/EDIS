@@ -357,7 +357,9 @@ namespace EDISAngular.APIControllers
                 },
                 liability = new SummaryItem {
                     data = new List<DataNameAmountPair> {
-                        //new DataNameAmountPair{amount =  liabilities.OfType<MortgageAndHomeLiability>().Cast<LiabilityBase>().ToList(),name="Mortgage & Investment Loans"},
+                        new DataNameAmountPair{amount =  liabilities.OfType<MortgageAndHomeLiability>().Cast<LiabilityBase>().ToList().GetTotalLiabilitiesValue(),name="Mortgage & Investment Loans"},
+                        new DataNameAmountPair{amount =  liabilities.OfType<MarginLending>().Cast<LiabilityBase>().ToList().GetTotalLiabilitiesValue(),name="Margin Loans"},
+                        new DataNameAmountPair{amount =  liabilities.OfType<Insurance>().Cast<LiabilityBase>().ToList().GetTotalLiabilitiesValue(),name="Insurance"},
                         //new DataNameAmountPair{amount=30000,name="Margin Loans"}
                     }
                 },
@@ -365,13 +367,13 @@ namespace EDISAngular.APIControllers
                     data = new List<DataNameAmountPair> {
                         //new DataNameAmountPair{amount=30000, name="Investor Equity"},
                         //new DataNameAmountPair{amount=500000, name="Non-Investment Asset"}
-                    }
+                    },
                 }
             };
 
             summary.investment.total = summary.investment.data.Sum(d => d.amount);
             summary.liability.total = summary.liability.data.Sum(d => d.amount);
-            summary.networth.total = summary.networth.data.Sum(d => d.amount);
+            summary.networth.total = summary.investment.total + summary.liability.total;
 
             return summary;
         }
@@ -558,7 +560,9 @@ namespace EDISAngular.APIControllers
                     model.countryCodes += "'" + countryCode + "',";
                 }
             });
-            model.countryCodes = model.countryCodes.TrimEnd(',');
+            if (model.countryCodes != null) {
+                model.countryCodes = model.countryCodes.TrimEnd(',');
+            }
 
             return model;
         }

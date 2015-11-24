@@ -82,7 +82,43 @@
     <Compile Include="Liabilities\LoanValueRatio.cs" />
     <Compile Include="Liabilities\MarginLendingTransaction.cs" />
     <Compile Include="Liabilities\MortgageHomeLoanTransaction.cs" />
+    <Compile Include="MarginLender.cs" />
     <Compile Include="Markers\IAsset.cs" />
+    <Compile Include="Migrations\201511170000027_changeMarginlending.cs" />
+    <Compile Include="Migrations\201511170000027_changeMarginlending.Designer.cs">
+      <DependentUpon>201511170000027_changeMarginlending.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511180300409_addMarginLender.cs" />
+    <Compile Include="Migrations\201511180300409_addMarginLender.Designer.cs">
+      <DependentUpon>201511180300409_addMarginLender.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511180306542_addMarginLender-collection.cs" />
+    <Compile Include="Migrations\201511180306542_addMarginLender-collection.Designer.cs">
+      <DependentUpon>201511180306542_addMarginLender-collection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511180307511_deleteLenderIdFromLRV.cs" />
+    <Compile Include="Migrations\201511180307511_deleteLenderIdFromLRV.Designer.cs">
+      <DependentUpon>201511180307511_deleteLenderIdFromLRV.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511180350109_whatchange.cs" />
+    <Compile Include="Migrations\201511180350109_whatchange.Designer.cs">
+      <DependentUpon>201511180350109_whatchange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511182305026_change-lvr-tickername.cs" />
+    <Compile Include="Migrations\201511182305026_change-lvr-tickername.Designer.cs">
+      <DependentUpon>201511182305026_change-lvr-tickername.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511182306248_change-lvr-ticker\.cs" />
+    <Compile Include="Migrations\201511182306248_change-lvr-ticker\.Designer.cs" />
+    <Compile Include="Migrations\201511190001122_deleteMaginlendingRefinLVR.cs" />
+    <Compile Include="Migrations\201511190001122_deleteMaginlendingRefinLVR.Designer.cs">
+      <DependentUpon>201511190001122_deleteMaginlendingRefinLVR.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511192259589_addEquityTranIdToMarginLendingTran.cs" />
+    <Compile Include="Migrations\201511192259589_addEquityTranIdToMarginLendingTran.Designer.cs">
+      <DependentUpon>201511192259589_addEquityTranIdToMarginLendingTran.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NoteLinks.cs" />
     <Compile Include="Notes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -110,6 +146,35 @@
       <Project>{e5bc73b2-7418-4fee-a5b9-a268e9501523}</Project>
       <Name>Shared</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201511170000027_changeMarginlending.resx">
+      <DependentUpon>201511170000027_changeMarginlending.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511180300409_addMarginLender.resx">
+      <DependentUpon>201511180300409_addMarginLender.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511180306542_addMarginLender-collection.resx">
+      <DependentUpon>201511180306542_addMarginLender-collection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511180307511_deleteLenderIdFromLRV.resx">
+      <DependentUpon>201511180307511_deleteLenderIdFromLRV.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511180350109_whatchange.resx">
+      <DependentUpon>201511180350109_whatchange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511182305026_change-lvr-tickername.resx">
+      <DependentUpon>201511182305026_change-lvr-tickername.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511182306248_change-lvr-ticker\.resx">
+      <DependentUpon>.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511190001122_deleteMaginlendingRefinLVR.resx">
+      <DependentUpon>201511190001122_deleteMaginlendingRefinLVR.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511192259589_addEquityTranIdToMarginLendingTran.resx">
+      <DependentUpon>201511192259589_addEquityTranIdToMarginLendingTran.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

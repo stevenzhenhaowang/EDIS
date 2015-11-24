@@ -204,7 +204,7 @@
                                                                     <td>{{item.marketValue | currency}}</td>
                                                                     <td>{{item.marketWeighting}}%</td>
                                                                     <td>{{item.pl | currency}}</td>
-                                                                    <td>{{item.plp}}%</td>
+                                                                    <td>{{item.plp | number : 2}}%</td>
                                                                     <td>
                                                                         <div class="progress">
                                                                             <div class="progress-bar" style="width:{{item.suitability}}%"></div>
@@ -242,14 +242,14 @@
                                                                     <td>{{item.fiveYearReturn | currency}}</td>
                                                                     <td>{{item.earningsPerShare | currency}}</td>
                                                                     <!--<td>{{item.dividends | currency}}</td>-->
-                                                                    <td>{{item.dividend}}%</td>
+                                                                    <td>{{item.dividend | number : 2}}%</td>
                                                                     <td>{{item.beta}}</td>
                                                                     <td>{{item.returnOnAsset | currency}}</td>
                                                                     <td>{{item.returnOnEquity | currency}}</td>
-                                                                    <td>{{item.priceEarningsRatio}}%</td>
+                                                                    <td>{{item.priceEarningsRatio | number : 2}}%</td>
                                                                     <!--<td>{{item.priceBook}}</td>-->
                                                                     <!--<td>{{item.priceCashflow}}</td>-->
-                                                                    <td>{{item.avMarketCap}}</td>
+                                                                    <td>{{item.avMarketCap | number : 2}}</td>
 
                                                                 </tr>
                                                             </tbody>

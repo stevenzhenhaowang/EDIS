@@ -15,6 +15,10 @@ namespace Domain.Portfolio.Entities.CreationModels.Transaction
         public double LoanAmount { get; set; }
         public bool IsAcquire { get; set; }
         public double InterestRate { get; set; }
+        public string AssetId { get; set; }
+        public AssetTypes AssetTypes { get; set; }
+        public double Ratio { get; set; }
+        public string EquityTransactionId { get; set; }
     }
 
     public class MarginLendingLoanValueRatio

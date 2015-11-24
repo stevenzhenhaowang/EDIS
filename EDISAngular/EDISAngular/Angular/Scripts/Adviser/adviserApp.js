@@ -146,7 +146,7 @@
     app.directive("clientSelector", ["$route", "clientSelectionService", function ($route, clientSelectionService) {
         return {
             restrict: 'E',
-            template: '<select class="form-control" style="max-width:300px" ng-model="selectedClient" ng-change="selectClient(item)" ng-options="item as item.name for item in clients"></select>',
+            template: '<select class="form-control" style="max-width:300px" ng-model="selectedClient" ng-change="selectClient(item)" ng-options="client as client.name for client in clients"></select>',
             controller: ["$scope", "$resource", "AppStrings", function ($scope, $resource, AppStrings) {
                 $resource(AppStrings.EDIS_IP + "api/adviser/clientgroups").query(function (data) {
                     var found = false;
@@ -178,11 +178,32 @@
 
     }]);
 
+    app.directive("accountSelector", ["$route", "accountSelectionService", "clientSelectionService", function ($route, accountSelectionService, clientSelectionService) {
+        return {
+            restrict: 'E',
+            template: '<select class="form-control" style="max-width:180px" ng-model="selectedAccount" ng-change="selectAccount(item)" ng-options="item as item.name for item in allClients"></select>',
+            controller: ["$scope", "$resource", "AppStrings", "clientSelectionService", "$rootScope", function ($scope, $resource, AppStrings, clientSelector, $rootScope) {
+                $resource(AppStrings.EDIS_IP+ "api/Adviser/MarginLendingPortfolio/ClientAccountsForGroup" + clientSelector.getClientIdQueryString()).query(function (data) {
+                    $scope.allClients = data;
+                })
+                $scope.selectAccount = function () {
+                    if ($scope.selectedAccount.id === -1) {
+                        accountSelectionService.resetSelection();
+                    } else {
+                        accountSelectionService.selectAccount($scope.selectedAccount.id, $scope.selectedAccount.name, $scope.selectedAccount.accountCatergory);
+                    }
+                    $rootScope.$broadcast('ml-account-portfolio');
+                }
+            }]
+        }
+    }]);
+
+
     app.directive("companySelector", ["$route", "companySelectionService", function ($route, companySelectionService) {
         return {
             restrict: 'E',
             template: '<select class="form-control" style="max-width:250px" ng-model="selectedCompany" ng-change="selectCompany(item)"  ng-options="item as item.name for item in companyList" required></select>',
-            controller: ["$scope", "$resource", "AppStrings", function ($scope, $resource, AppStrings) {
+            controller: ["$scope", "$resource", "AppStrings", "$rootScope", function ($scope, $resource, AppStrings, $rootScope) {
                 $resource(AppStrings.EDIS_IP + "api/adviser/companyList").query(function (data) {
                     var found = false;
                     $scope.companyList = data;
@@ -204,10 +225,8 @@
                     } else {
                         companySelectionService.selectCompany($scope.selectedCompany.id, $scope.selectedCompany.name);
                     }
-
-                    $route.reload();
+                    //$rootScope.$broadcast('stockChart');
                 }
-
             }]
         }
     }]);
@@ -238,9 +257,7 @@
                     } else {
                        tickerSelectionService.selectTicker($scope.selectedTicker.id, $scope.selectedTicker.name);
                     }
-
                 }
-
             }]
         }
     }]);
@@ -249,7 +266,7 @@
         return {
             restrict: 'E',
             template: '<select class="form-control" style="max-width:150px" ng-model="selectedPeriod" ng-change="selectPeriod(item)"  ng-options="item as item.name for item in periodList" required></select>',
-            controller: ["$scope", "$resource", "AppStrings", function ($scope, $resource, AppStrings) {
+            controller: ["$scope", "$resource", "AppStrings", "$rootScope", function ($scope, $resource, AppStrings, $rootScope) {
                 $resource(AppStrings.EDIS_IP + "api/adviser/periodList").query(function (data) {
                     var found = false;
                     $scope.periodList = data;
@@ -265,14 +282,18 @@
                         $scope.selectedPeriod = allPeriods;
                     }
                 })
+
+
                 $scope.selectPeriod = function () {
+                    
                     if ($scope.selectedPeriod.id === -1) {
                         periodSelectionService.resetSelection();
                     } else {
                         periodSelectionService.selectPeriod($scope.selectedPeriod.id, $scope.selectedPeriod.name);
                     }
 
-                    $route.reload();
+                    $rootScope.$broadcast('stockChart');
+                    //$route.reload();
                 }
 
             }]
@@ -342,6 +363,53 @@
             getClientName:getClientName
         }
     })
+
+    app.factory("accountSelectionService", function ($http, $resource, AppStrings) {
+        var currentAccountId = "";
+        var currentAccountFullName = "";
+        var currentAccountCatergory = "";
+        function selectAccount(accountId, accountName, accountCatergory) {
+            currentAccountId = accountId;
+            currentAccountFullName = accountName;
+            currentAccountCatergory = accountCatergory;
+        }
+        function getCurrentAccountId() {
+            return currentAccountId;
+        }
+        function hasAccountSelected() {
+            return currentAccountId !== "";
+        }
+        function resetSelection() {
+            currentAccountId = "";
+            currentAccountName = "";
+        }
+        function getAccountIdQueryString() {
+            if (currentAccountId !== "") {
+                return "?accountId=" + currentAccountId;
+            } else {
+                return "";
+            }
+        }
+
+        function getAccountName() {
+            return currentAccountFullName;
+        }
+
+        function getAccountCatergory() {
+            return currentAccountCatergory;
+        }
+
+        return {
+            selectAccount: selectAccount,
+            getCurrentAccountId: getCurrentAccountId,
+            hasAccountSelected: hasAccountSelected,
+            resetSelection: resetSelection,
+            getAccountIdQueryString: getAccountIdQueryString,
+            getAccountName: getAccountName,
+            getAccountCatergory: getAccountCatergory
+        }
+    })
+
     app.factory("companySelectionService", function ($http, $resource, AppStrings) {
         var currentCompanyId = "";
         var currentCompanyName = "";
@@ -1164,6 +1232,20 @@
             return deferred.promise;
         }
         return getClients
+    });
+
+    app.factory("adviserGetMarginLenders", function ($http, $q, AppStrings) {
+        function getLenders() {
+            var deferred = $q.defer();
+            $http.get(AppStrings.EDIS_IP + "api/adviser/marginLenders")
+            .success(function (data) {
+                deferred.resolve(data);
+            }).error(function (data) {
+                deferred.reject("Bad request");
+            });
+            return deferred.promise;
+        }
+        return getLenders
     });
 
 

@@ -960,7 +960,20 @@
     //END OF MHL SERVICES
 
     //START OF ML SERVICES
-    //not implemented
+
+    app.factory("adviserPortfolioMLCompanyProfile", ["clientSelectionService", "$http", "$resource", "AppStrings", function (clientSelector, $http, $resource, AppStrings) {
+        return function () {
+            return $resource(AppStrings.EDIS_IP + "api/Adviser/MarginLendingPortfolio/ProfolioDetails" + clientSelector.getClientIdQueryString());
+        }
+    }]);
+
+
+    app.factory("adviserPortfolioMLLoanDetails", ["accountSelectionService", "$http", "$resource", "AppStrings", function (accountSelector, $http, $resource, AppStrings) {
+        return function () {
+            return $resource(AppStrings.EDIS_IP + "api/Adviser/MarginLendingPortfolio/AccountPortfolio", { accountId: accountSelector.getCurrentAccountId(), accountCatergory: accountSelector.getAccountCatergory() });
+        }
+    }]);
+
     app.factory("adviserPortfolioMLRatingInfo", function ($http, $resource) {
         return function () {
             return {
@@ -1090,189 +1103,7 @@
             }
         }
     })
-    app.factory("adviserPortfolioMLCompanyProfile", function ($http, $resource) {
-        return function () {
-            return [
-                {
-                    ticker: "ticker",
-                    company: "company",
-                    units: Math.floor(Math.random() * 1000),
-                    costPrice: Math.random() * 10000,
-                    brokerage: Math.random() * 100000,
-                    netCost: Math.random() * 100000,
-                    marketPrice: Math.random() * 10000,
-                    marketValue: Math.random() * 10000,
-                    plPercentage: Math.random() * 100,
-                    plValue: Math.random() * 10000,
-                    annualIncome: Math.random() * 10000,
-                    annualInterestExpenses: Math.random() * 10000,
-                    cashflowPosition: "Position",
-                    gearing: "Positive",
-                    suitability: Math.floor(Math.random() * 100)
-                }, {
-                    ticker: "ticker",
-                    company: "company",
-                    units: Math.floor(Math.random() * 1000),
-                    costPrice: Math.random() * 10000,
-                    brokerage: Math.random() * 100000,
-                    netCost: Math.random() * 100000,
-                    marketPrice: Math.random() * 10000,
-                    marketValue: Math.random() * 10000,
-                    plPercentage: Math.random() * 100,
-                    plValue: Math.random() * 10000,
-                    annualIncome: Math.random() * 10000,
-                    annualInterestExpenses: Math.random() * 10000,
-                    cashflowPosition: "Position",
-                    gearing: "Positive",
-                    suitability: Math.floor(Math.random() * 100)
-                }, {
-                    ticker: "ticker",
-                    company: "company",
-                    units: Math.floor(Math.random() * 1000),
-                    costPrice: Math.random() * 10000,
-                    brokerage: Math.random() * 100000,
-                    netCost: Math.random() * 100000,
-                    marketPrice: Math.random() * 10000,
-                    marketValue: Math.random() * 10000,
-                    plPercentage: Math.random() * 100,
-                    plValue: Math.random() * 10000,
-                    annualIncome: Math.random() * 10000,
-                    annualInterestExpenses: Math.random() * 10000,
-                    cashflowPosition: "Position",
-                    gearing: "Positive",
-                    suitability: Math.floor(Math.random() * 100)
-                }, {
-                    ticker: "ticker",
-                    company: "company",
-                    units: Math.floor(Math.random() * 1000),
-                    costPrice: Math.random() * 10000,
-                    brokerage: Math.random() * 100000,
-                    netCost: Math.random() * 100000,
-                    marketPrice: Math.random() * 10000,
-                    marketValue: Math.random() * 10000,
-                    plPercentage: Math.random() * 100,
-                    plValue: Math.random() * 10000,
-                    annualIncome: Math.random() * 10000,
-                    annualInterestExpenses: Math.random() * 10000,
-                    cashflowPosition: "Position",
-                    gearing: "Positive",
-                    suitability: Math.floor(Math.random() * 100)
-                }, {
-                    ticker: "ticker",
-                    company: "company",
-                    units: Math.floor(Math.random() * 1000),
-                    costPrice: Math.random() * 10000,
-                    brokerage: Math.random() * 100000,
-                    netCost: Math.random() * 100000,
-                    marketPrice: Math.random() * 10000,
-                    marketValue: Math.random() * 10000,
-                    plPercentage: Math.random() * 100,
-                    plValue: Math.random() * 10000,
-                    annualIncome: Math.random() * 10000,
-                    annualInterestExpenses: Math.random() * 10000,
-                    cashflowPosition: "Position",
-                    gearing: "Positive",
-                    suitability: Math.floor(Math.random() * 100)
-                }, {
-                    ticker: "ticker",
-                    company: "company",
-                    units: Math.floor(Math.random() * 1000),
-                    costPrice: Math.random() * 10000,
-                    brokerage: Math.random() * 100000,
-                    netCost: Math.random() * 100000,
-                    marketPrice: Math.random() * 10000,
-                    marketValue: Math.random() * 10000,
-                    plPercentage: Math.random() * 100,
-                    plValue: Math.random() * 10000,
-                    annualIncome: Math.random() * 10000,
-                    annualInterestExpenses: Math.random() * 10000,
-                    cashflowPosition: "Position",
-                    gearing: "Positive",
-                    suitability: Math.floor(Math.random() * 100)
-                }, {
-                    ticker: "ticker",
-                    company: "company",
-                    units: Math.floor(Math.random() * 1000),
-                    costPrice: Math.random() * 10000,
-                    brokerage: Math.random() * 100000,
-                    netCost: Math.random() * 100000,
-                    marketPrice: Math.random() * 10000,
-                    marketValue: Math.random() * 10000,
-                    plPercentage: Math.random() * 100,
-                    plValue: Math.random() * 10000,
-                    annualIncome: Math.random() * 10000,
-                    annualInterestExpenses: Math.random() * 10000,
-                    cashflowPosition: "Position",
-                    gearing: "Positive",
-                    suitability: Math.floor(Math.random() * 100)
-                },
-
-
-
-            ]
-        }
-    });
-    app.factory("adviserPortfolioMLLoanDetails", function ($http, $resource) {
-        return function () {
-            return {
-                provider: "Colonial Geared Investments",
-                data: [
-                    {
-                        ticker: "ticker",
-                        company: "company",
-                        netCostValue: Math.random() * 10000,
-                        marketValue: Math.random() * 10000,
-                        loanValueRatio: Math.random() * 100,
-                        loanAmount: Math.random() * 100000,
-                        equityInAsset: "asset"
-                    }, {
-                        ticker: "ticker",
-                        company: "company",
-                        netCostValue: Math.random() * 10000,
-                        marketValue: Math.random() * 10000,
-                        loanValueRatio: Math.random() * 100,
-                        loanAmount: Math.random() * 100000,
-                        equityInAsset: "asset"
-                    }, {
-                        ticker: "ticker",
-                        company: "company",
-                        netCostValue: Math.random() * 10000,
-                        marketValue: Math.random() * 10000,
-                        loanValueRatio: Math.random() * 100,
-                        loanAmount: Math.random() * 100000,
-                        equityInAsset: "asset"
-                    }, {
-                        ticker: "ticker",
-                        company: "company",
-                        netCostValue: Math.random() * 10000,
-                        marketValue: Math.random() * 10000,
-                        loanValueRatio: Math.random() * 100,
-                        loanAmount: Math.random() * 100000,
-                        equityInAsset: "asset"
-                    }, {
-                        ticker: "ticker",
-                        company: "company",
-                        netCostValue: Math.random() * 10000,
-                        marketValue: Math.random() * 10000,
-                        loanValueRatio: Math.random() * 100,
-                        loanAmount: Math.random() * 100000,
-                        equityInAsset: "asset"
-                    }, {
-                        ticker: "ticker",
-                        company: "company",
-                        netCostValue: Math.random() * 10000,
-                        marketValue: Math.random() * 10000,
-                        loanValueRatio: Math.random() * 100,
-                        loanAmount: Math.random() * 100000,
-                        equityInAsset: "asset"
-                    },
-
-
-                ]
-
-            }
-        }
-    })
+    
     app.factory("adviserPortfolioMLSuitabilityDetails", function ($http, $resource) {
         return function () {
             return {
@@ -1389,13 +1220,16 @@
         }
     })
     app.factory("adviserPortfolioMLAccountsGet", function ($resource, AppStrings) {
-
         return function () {
-
+            return {};
         }
     })
 
-
+    app.factory("adviserPortfolioMLClientsGet", ["clientSelectionService", "$http", "$resource", "AppStrings", function (clientSelector, $http, $resource, AppStrings) {
+        return function () {
+            return $resource(AppStrings.EDIS_IP + "api/Adviser/MarginLendingPortfolio/ClientAccountsForGroup" + clientSelector.getClientIdQueryString());
+        }
+    }]);
 
 
     //END OF ML SERVICES

@@ -12,6 +12,7 @@ using Domain.Portfolio.Entities.CreationModels.Income;
 using Domain.Portfolio.Entities.CreationModels.Transaction;
 using Domain.Portfolio.Values.Ratios;
 using Shared;
+using Domain.Portfolio.AggregateRoots.Liability;
 
 
 namespace Domain.Portfolio.Interfaces
@@ -57,16 +58,16 @@ namespace Domain.Portfolio.Interfaces
         Task RecordTransaction(TransactionCreationBase transaction);
         void RecordTransactionSync(TransactionCreationBase transaction);    //added
         Task<ClientAccount> CreateNewClientAccount(string clientNumber, string notes, AccountType accountType);
-        ClientAccount CreateNewClientAccountSync(string clientNumber, string notes, AccountType accountType);       //added
+        ClientAccount CreateNewClientAccountSync(string clientNumber, string notes, AccountType accountType, string marginLenderId);       //added
         Task<GroupAccount> CreateNewClientGroupAccount(string clientGroupNumber, string notes, AccountType accountType);
-        GroupAccount CreateNewClientGroupAccountSync(string clientGroupNumber, string notes, AccountType accountType);    //added
+        GroupAccount CreateNewClientGroupAccountSync(string clientGroupNumber, string notes, AccountType accountType, string marginLenderId);    //added
         Task RecordConsultancyFee(ConsultancyFeeRecordCreation fee);
         void RecordConsultancyFeeSync(ConsultancyFeeRecordCreation fee);        //added
         Task RecordIncome(IncomeCreationBase income);
         void RecordIncomeSync(IncomeCreationBase income);       //added
         Task<List<ClientGroup>> GetAllClientGroupsForAdviser(string adviserNumber, DateTime todate);
         List<ClientGroup> GetAllClientGroupsForAdviserSync(string adviserNumber, DateTime todate);            // added
-
+        List<MarginLenderPasser>GetAllMarginLenders();
 
         Task<List<ClientAccount>> GetAccountsForClient(string clientNumber, DateTime toDate, AccountType accountType);
         List<ClientAccount> GetAccountsForClientSync(string clientNumber, DateTime toDate, AccountType accountType);        //added
@@ -78,6 +79,7 @@ namespace Domain.Portfolio.Interfaces
         List<Client> GetClientsForGroupSync(string clientGroupNumber, DateTime toDate);     //added
         Task<List<AssetBase>> GetAssetsForAccount(string accountNumber, DateTime dateTime);
         List<AssetBase> GetAssetsForAccountSync(string accountNumber, DateTime dateTime);       //added
+        List<AssetBase> GetEquityAssetsForAccount(string accountNumber, DateTime beforeDate);
         Task FeedResearchValueForBond(string key, double value, string ticker, string issuer);
         Task<double?> GetResearchValueForBond(string key, string ticker);
         Task FeedResearchValueForEquity(string key, double value, string propertyId, string issuer);

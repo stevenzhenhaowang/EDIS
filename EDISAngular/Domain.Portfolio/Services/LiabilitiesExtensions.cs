@@ -1,5 +1,6 @@
 ﻿using Domain.Portfolio.AggregateRoots;
 using Domain.Portfolio.Entities.Activity;
+using Domain.Portfolio.Values;
 using Domain.Portfolio.Values.Cashflow;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,14 @@ namespace Domain.Portfolio.Services
                 result.Add(flow);
             }
             return result;
+        }
+
+        public static double GetTotalTransactionExpence(this List<LiabilityBase> liabilities) {
+            return liabilities.Sum(l => l.GetCost().Total);
+        }
+
+        public static double GetTotalLiabilitiesValue(this List<LiabilityBase> liabilities) {
+            return liabilities.Sum(l => l.GetLiabilityValue());
         }
     }
 }

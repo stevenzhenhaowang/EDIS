@@ -20,5 +20,6 @@ namespace Domain.Portfolio.Entities.CreationModels.Transaction
         public double Price { get; set; }
         public List<TransactionFeeRecordCreation> FeesRecords { get; set; }
         public DateTime TransactionDate { get; set; }
+        public double LoanAmount { get; set; }
     }
 }

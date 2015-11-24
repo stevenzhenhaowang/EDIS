@@ -10,6 +10,8 @@ using EDISAngular.Models.ServiceModels;
 using Microsoft.AspNet.Identity;
 using SqlRepository;
 using Domain.Portfolio.CorporateActions;
+using EDISAngular.Models.ViewModels;
+using Shared;
 
 namespace EDISAngular.APIControllers
 {
@@ -200,8 +202,36 @@ namespace EDISAngular.APIControllers
         [HttpGet, Route("api/Adviser/CorprateAction/Ticker")]
         public List<TickerBriefModel> GetAllTickers()
         {
-            return comRepo.GetAllTIckers().OrderBy(t => t.tickerName).ToList();
+            return comRepo.GetAllTIckers().OrderBy(t => t.tickerNumber).ToList();
         }
+
+        [HttpGet, Route("api/Adviser/CorprateAction/PropertyTypes")]
+        public List<ClientView> GetAllPropertyTypes() {
+            List<ClientView> views = new List<ClientView>();
+
+            foreach(var type in Enum.GetValues(typeof(PropertyType))){
+                views.Add(new ClientView { 
+                    id = ((int)type).ToString(),
+                    name = type.ToString()
+                });
+            }
+            return views;
+        }
+
+
+        [HttpGet, Route("api/Adviser/CorprateAction/TypeOfMortgageRates")]
+        public List<ClientView> GetAllTypeOfMortgageRates() {
+            List<ClientView> views = new List<ClientView>();
+
+            foreach (var type in Enum.GetValues(typeof(TypeOfMortgageRates))) {
+                views.Add(new ClientView {
+                    id = ((int)type).ToString(),
+                    name = type.ToString()
+                });
+            }
+            return views;
+        }
+
         [HttpPost, Route("api/Adviser/CorporateAction/IPO/Allocation")]
         public IHttpActionResult AllocateIPO(IPOActionData model)
         {

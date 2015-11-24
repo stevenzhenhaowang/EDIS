@@ -107,14 +107,11 @@ namespace SqlRepository
 
             //to do front end will pass in a what ever the number is 
             //then we get this client's account number then make an equity transaction
-            var account = _db.Accounts.Where(a => a.AccountId == model.AccountId).FirstOrDefault();
+            var account = _db.Accounts.Where(a => a.AccountId == model.Account.id).FirstOrDefault();
             var accountToMakeTrans = GetClientAccountSync(account.AccountNumber, DateTime.Now);
             var equity = getEquityByTicker(model.Ticker);
 
-
-            accountToMakeTrans.MakeTransactionSync(new EquityTransactionCreation()
-            {
-                //EquityType = EquityTypes.ManagedInvestments,
+            accountToMakeTrans.MakeTransactionSync(new EquityTransactionCreation() {
                 //FeesRecords = new List<TransactionFeeRecordCreation>() {
                 //     new TransactionFeeRecordCreation()
                 //    {
@@ -122,15 +119,16 @@ namespace SqlRepository
                 //        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
                 //    }
                 //},
+                EquityType = equity.EquityType,
                 FeesRecords = new List<TransactionFeeRecordCreation>(),
                 Name = equity.Name,
                 NumberOfUnits = model.NumberOfUnits,
                 Price = model.Price,
                 Sector = equity.Sector,
                 Ticker = equity.Ticker,
-                TransactionDate = model.TransactionDate
+                TransactionDate = model.TransactionDate,
+                LoanAmount = model.LoanAmount
             });
-
 
 
 
@@ -141,7 +139,7 @@ namespace SqlRepository
             //});
             accountToMakeTrans.MakeTransactionSync(new CashAccountTransactionAccountCreation()
             {
-                Amount = model.Price * model.NumberOfUnits,
+                Amount = -(model.Price * model.NumberOfUnits - model.LoanAmount),
                 AnnualInterestSoFar = 0,
                 Bsb = "123456",
                 CashAccountName = accountToMakeTrans.AccountNameOrInfo,
@@ -2670,6 +2668,11 @@ namespace SqlRepository
                 CreatedOn = DateTime.Now,
                 GrantedOn = marginLending.GrantedOn,
                 IsAcquire = marginLending.IsAcquire,
+                AssetId = marginLending.AssetId,
+                AssetTypes = marginLending.AssetTypes,
+                Ratio = marginLending.Ratio,
+                EquityTransactionId = marginLending.EquityTransactionId,
+
                 LiabilityRates = new List<LiabilityRate>()
                 {
                     new LiabilityRate()
@@ -2680,20 +2683,20 @@ namespace SqlRepository
                         Id = Guid.NewGuid().ToString()
                     }
                 },
-                LoanValueRatios = new List<LoanValueRatio>()
+                //LoanValueRatios = new List<LoanValueRatio>()
             };
-            foreach (var marginLendingLoanValueRatio in marginLending.Ratios)
-            {
-                marginLendingTransaction.LoanValueRatios.Add(new LoanValueRatio()
-                {
-                    AssetId = marginLendingLoanValueRatio.AssetId,
-                    Id = Guid.NewGuid().ToString(),
-                    AssetTypes = marginLendingLoanValueRatio.AssetTypes,
-                    Ratio = marginLendingLoanValueRatio.Ratio,
-                    CreatedOn = DateTime.Now,
-                    ActiveDate = marginLendingLoanValueRatio.EffectiveFrom
-                });
-            }
+            //foreach (var marginLendingLoanValueRatio in marginLending.Ratios)
+            //{
+            //    marginLendingTransaction.LoanValueRatios.Add(new LoanValueRatio()
+            //    {
+            //        Ticker = marginLendingLoanValueRatio.AssetId,
+            //        Id = Guid.NewGuid().ToString(),
+            //        AssetTypes = marginLendingLoanValueRatio.AssetTypes,
+            //        MaxRatio = marginLendingLoanValueRatio.Ratio,
+            //        CreatedOn = DateTime.Now,
+            //        ActiveDate = marginLendingLoanValueRatio.EffectiveFrom
+            //    });
+            //}
             _db.MarginLendingTransactions.Add(marginLendingTransaction);
         }
 
@@ -2729,7 +2732,7 @@ namespace SqlRepository
         }
 
 
-        public ClientAccount CreateNewClientAccountSync(string clientNumber, string notes, AccountType accountType)     //added
+        public ClientAccount CreateNewClientAccountSync(string clientNumber, string notes, AccountType accountType, string marginLenderId)     //added
         {
             var accountNumber = "";
 
@@ -2753,8 +2756,8 @@ namespace SqlRepository
                 CashAndTermDepositPayments = new List<Interest>(),
                 DirectPropertyPayments = new List<Rental>(),
                 AccountType = accountType,
-                AccountInfo = notes
-                
+                AccountInfo = notes,
+                MarginLenderId = marginLenderId
             });
             _db.SaveChanges();
 
@@ -2793,7 +2796,7 @@ namespace SqlRepository
             return await GetClientGroupAccount(groupNumber, DateTime.Now);
         }
 
-        public GroupAccount CreateNewClientGroupAccountSync(string clientGroupNumber, string notes, AccountType accountType)        //added
+        public GroupAccount CreateNewClientGroupAccountSync(string clientGroupNumber, string notes, AccountType accountType, string marginLenderId)        //added
         {
             var groupNumber = "";
 
@@ -2817,7 +2820,8 @@ namespace SqlRepository
                 CashAndTermDepositPayments = new List<Interest>(),
                 DirectPropertyPayments = new List<Rental>(),
                 AccountType = accountType,
-                AccountInfo = notes
+                AccountInfo = notes,
+                MarginLenderId = marginLenderId
             });
             _db.SaveChanges();
 
@@ -3057,7 +3061,8 @@ namespace SqlRepository
             {
                 Id = clientGroup.Adviser.AdviserId,
                 FirstName = adviser.FirstName,
-                LastName = adviser.LastName
+                LastName = adviser.LastName,
+                AdviserNumber = clientGroup.Adviser.AdviserNumber
             };
         }
 
@@ -3419,6 +3424,24 @@ namespace SqlRepository
             return result;
         }
 
+        public List<AssetBase> GetEquityAssetsForAccount(string accountNumber, DateTime beforeDate) {
+            var dbAccount =
+                           _db.Accounts.Local
+                                   .FirstOrDefault(a => a.AccountNumber == accountNumber && a.CreatedOn.HasValue && a.CreatedOn.Value <= beforeDate) ??
+                               _db.Accounts.Where(
+                                   a => a.AccountNumber == accountNumber && a.CreatedOn.HasValue && a.CreatedOn.Value <= beforeDate)
+                                   .Include(a => a.EquityTransactions.Select(e => e.Equity.Prices))
+                                   .FirstOrDefault();
+            var result = new List<AssetBase>();
+
+            if (dbAccount.EquityTransactions.Any()) {
+                result.AddRange(GenerateAustralianEquityForAccountSync(dbAccount.AccountId, beforeDate, dbAccount));
+                result.AddRange(GenerateInternationalEquityForAccountSync(dbAccount.AccountId, beforeDate, dbAccount));
+                result.AddRange(GenerateManagedFundForAccountSync(dbAccount.AccountId, beforeDate, dbAccount));
+            }
+            return result;
+        }
+
         public async Task FeedResearchValueForBond(string key, double value, string ticker, string issuer)
         {
 
@@ -3676,6 +3699,44 @@ namespace SqlRepository
                     .FirstOrDefault()
                     .StringValue;            // StringValue => Value.ToString()
         }
+
+        public double? GetMaxRatio(string ticker, string lenderId) {
+            MarginLender lender = _db.MarginLenders.Where(m => m.LenderId == lenderId).Include(m => m.Ratios).FirstOrDefault();
+
+            if (lender != null) {
+                var ratio = lender.Ratios.Where(r => r.Ticker == ticker).ToList();
+                if (ratio.Count != 0) {
+                    return ratio.OrderByDescending(r => r.CreatedOn).FirstOrDefault().MaxRatio;
+                }
+            }
+            return null;
+        }
+
+
+        public List<MarginLenderPasser> GetAllMarginLenders() {
+            var lenders = _db.MarginLenders.ToList();
+            List<MarginLenderPasser> results = new List<MarginLenderPasser>();
+
+            lenders.ForEach(l => {
+                results.Add(new MarginLenderPasser {
+                    LenderId = l.LenderId,
+                    LenderName = l.LenderName
+                });
+            });
+            return results;
+        }
+
+        //public double? GetResearchValue(string key, string ) {
+        //    var researchValues = _db.ResearchValues.Where(r => r.Key == key).ToList();
+
+        //    if (researchValues.Count == 0 || researchValues == null) {
+        //        return null;
+        //    } else {
+        //        return researchValues.OrderByDescending(r => r.CreatedOn).SingleOrDefault().Value;
+        //    }
+        //}
+
+
 
         public async Task FeedResearchValueForProperty(string key, double value, string propertyId, string issuer)
         {
@@ -4422,10 +4483,10 @@ namespace SqlRepository
                 && m.GrantedOn.HasValue
                 && m.GrantedOn.Value <= beforeDate)
                     .ToList();
-            allMarginLendings.AddRange(await _db.MarginLendingTransactions.Where(m => m.Account.AccountId == marginLending_old.Account.AccountId
-            && m.GrantedOn.HasValue && m.GrantedOn.Value <= beforeDate)
-            .Include(m => m.LoanValueRatios)
-            .ToListAsync());
+            //allMarginLendings.AddRange(await _db.MarginLendingTransactions.Where(m => m.Account.AccountId == marginLending_old.Account.AccountId
+            //&& m.GrantedOn.HasValue && m.GrantedOn.Value <= beforeDate)
+            //.Include(m => m.LoanValueRatios)
+            //.ToListAsync());
 
             var allRepayments =
                 _db.RepaymentRecords.Local.Where(
@@ -4449,10 +4510,10 @@ namespace SqlRepository
             {
                 var marginLending = orderedMarginLending[i];
 
-                var relevantExpenses =
-                    _db.TransactionExpenses.Local.Where(ex => ex.CorrespondingTransactionId == marginLending.Id)
-                        .ToList();
-                relevantExpenses.AddRange(await _db.TransactionExpenses.Where(ex => ex.CorrespondingTransactionId == marginLending.Id).ToListAsync());
+                //var relevantExpenses =
+                //    _db.TransactionExpenses.Local.Where(ex => ex.CorrespondingTransactionId == marginLending.Id)
+                //        .ToList();
+                //relevantExpenses.AddRange(await _db.TransactionExpenses.Where(ex => ex.CorrespondingTransactionId == marginLending.Id).ToListAsync());
 
 
 
@@ -4477,12 +4538,12 @@ namespace SqlRepository
                     AssetLvRs = new Dictionary<string, double>()
                 };
                 //populate lvrs
-                if (marginLending.LoanValueRatios.Any())
-                {
-                    transaction.AssetLvRs = marginLending.LoanValueRatios.GroupBy(l => l.AssetId)
-                       .ToDictionary(g => g.Key, g => g.OrderByDescending(r => r.ActiveDate).FirstOrDefault().Ratio);
+                //if (marginLending.LoanValueRatios.Any())
+                //{
+                //    transaction.AssetLvRs = marginLending.LoanValueRatios.GroupBy(l => l.EquityId)
+                //       .ToDictionary(g => g.Key, g => g.OrderByDescending(r => r.ActiveDate).FirstOrDefault().Ratio);
 
-                }
+                //}
                 activity.Transactions.Add(transaction);
                 if (transaction.LiabilityTransactionType == LiabilityTransactionType.Adjustment)
                 {
@@ -4500,16 +4561,16 @@ namespace SqlRepository
 
 
 
-                foreach (var transactionExpense in relevantExpenses)
-                {
-                    activity.Expenses.Add(new FinancialActivityCostRecord()
-                    {
-                        Id = transactionExpense.Id,
-                        Transaction = activity.Transactions.Last(),
-                        ActivityCostType = TransactionExpenseType.LiabilityProcessingFee,
-                        Amount = transactionExpense.Amount.GetValueOrDefault()
-                    });
-                }
+                //foreach (var transactionExpense in relevantExpenses)
+                //{
+                //    activity.Expenses.Add(new FinancialActivityCostRecord()
+                //    {
+                //        Id = transactionExpense.Id,
+                //        Transaction = activity.Transactions.Last(),
+                //        ActivityCostType = TransactionExpenseType.LiabilityProcessingFee,
+                //        Amount = transactionExpense.Amount.GetValueOrDefault()
+                //    });
+                //}
 
 
                 result.Add(activity);
@@ -4564,10 +4625,10 @@ namespace SqlRepository
                 && m.GrantedOn.HasValue
                 && m.GrantedOn.Value <= beforeDate)
                     .ToList();
-            allMarginLendings.AddRange(_db.MarginLendingTransactions.Where(m => m.Account.AccountId == marginLending_old.Account.AccountId
-            && m.GrantedOn.HasValue && m.GrantedOn.Value <= beforeDate)
-            .Include(m => m.LoanValueRatios)
-            .ToList());
+            //allMarginLendings.AddRange(_db.MarginLendingTransactions.Where(m => m.Account.AccountId == marginLending_old.Account.AccountId
+            //&& m.GrantedOn.HasValue && m.GrantedOn.Value <= beforeDate)
+            //.Include(m => m.LoanValueRatios)
+            //.ToList());
 
             var allRepayments =
                 _db.RepaymentRecords.Local.Where(
@@ -4618,12 +4679,12 @@ namespace SqlRepository
                     AssetLvRs = new Dictionary<string, double>()
                 };
                 //populate lvrs
-                if (marginLending.LoanValueRatios.Any())
-                {
-                    transaction.AssetLvRs = marginLending.LoanValueRatios.GroupBy(l => l.AssetId)
-                       .ToDictionary(g => g.Key, g => g.OrderByDescending(r => r.ActiveDate).FirstOrDefault().Ratio);
+                //if (marginLending.LoanValueRatios.Any())
+                //{
+                //    transaction.AssetLvRs = marginLending.LoanValueRatios.GroupBy(l => l.EquityId)
+                //       .ToDictionary(g => g.Key, g => g.OrderByDescending(r => r.ActiveDate).FirstOrDefault().Ratio);
 
-                }
+                //}
                 activity.Transactions.Add(transaction);
                 if (transaction.LiabilityTransactionType == LiabilityTransactionType.Adjustment)
                 {
@@ -4638,8 +4699,6 @@ namespace SqlRepository
                     };
                     activity.Transactions.Add(updatedTransaction);
                 }
-
-
 
                 foreach (var transactionExpense in relevantExpenses)
                 {
@@ -5011,6 +5070,135 @@ namespace SqlRepository
             _db.SaveChanges();
         }
 
+        public List<Account> GetAllAccountsByClientGroupId(string clientGroupId) {
+            List<Account> accounts = new List<Account>();
+
+            var clientGroup = getClientGroupByGroupId(clientGroupId);
+            List<GroupAccount> GroupAccounts = GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
+            List<ClientAccount> clientAccounts = new List<ClientAccount>();
+            clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
+
+            GroupAccounts.ForEach(g => accounts.AddRange(_db.Accounts.Where(a => a.AccountNumber == g.AccountNumber)));
+            clientAccounts.ForEach(c => accounts.AddRange(_db.Accounts.Where(a => a.AccountNumber == c.AccountNumber)));
+
+            return accounts;
+        }
+
+        public List<MarginLending> GetAllMarginLendingByAssetType(AssetTypes assetType, string clientGroupId) {
+            List<MarginLending> marginLendings = new List<MarginLending>();
+
+            List<MarginLendingTransaction> transactions = new List<MarginLendingTransaction>();
+
+            if(string.IsNullOrEmpty(clientGroupId)){
+                return null;
+            }
+
+            var accounts = GetAllAccountsByClientGroupId(clientGroupId);
+
+            accounts.ForEach(a => 
+                    transactions.AddRange(_db.MarginLendingTransactions.Where(m => m.AssetTypes == assetType && m.AccountId == a.AccountId).ToList())                
+                );
+
+            transactions.ForEach(t => {
+                AssetBase asset = null;
+                var eTransaction = _db.EquityTransactions.FirstOrDefault(e => e.Id == t.EquityTransactionId);
+
+                switch (t.AssetTypes) {
+                    case AssetTypes.AustralianEquity:
+                        var aeEquity = _db.Equities.FirstOrDefault(e => e.AssetId == t.AssetId);
+                        
+                        asset = new AustralianEquity(this) {
+                            Id = aeEquity.AssetId,
+                            EquityType = aeEquity.EquityType,
+                            Ticker = aeEquity.Ticker,
+                            LatestPrice = eTransaction == null ? 0 : eTransaction.UnitPriceAtPurchase == null? 0 : (double)eTransaction.UnitPriceAtPurchase,
+                            TotalNumberOfUnits = eTransaction == null? 0 : (double)eTransaction.NumberOfUnits
+                        };
+                        break;
+                    case AssetTypes.InternationalEquity:
+                        var ieEquity = _db.Equities.FirstOrDefault(e => e.AssetId == t.AssetId);
+                        asset = new InternationalEquity(this) {
+                            Id = ieEquity.AssetId,
+                            EquityType = ieEquity.EquityType,
+                            Ticker = ieEquity.Ticker,
+                            LatestPrice = eTransaction == null ? 0 : eTransaction.UnitPriceAtPurchase == null ? 0 : (double)eTransaction.UnitPriceAtPurchase,
+                            TotalNumberOfUnits = eTransaction == null ? 0 : (double)eTransaction.NumberOfUnits
+                        };
+                        break;
+                    case AssetTypes.ManagedInvestments:
+                        var miEquity = _db.Equities.FirstOrDefault(e => e.AssetId == t.AssetId);
+                        asset = new InternationalEquity(this) {
+                            Id = miEquity.AssetId,
+                            EquityType = miEquity.EquityType,
+                            Ticker = miEquity.Ticker,
+                            LatestPrice = eTransaction == null ? 0 : eTransaction.UnitPriceAtPurchase == null ? 0 : (double)eTransaction.UnitPriceAtPurchase,
+                            TotalNumberOfUnits = eTransaction == null ? 0 : (double)eTransaction.NumberOfUnits
+                        };
+                        break;
+                }
+
+                marginLendings.Add(new MarginLending(this) {
+                    LoanAmount = t.LoanAmount == null ? 0 : (double)t.LoanAmount,
+                    LoanValueRatio = t.Ratio,
+                    Asset = asset
+                });
+            });
+
+            return marginLendings;
+        }
+
+        public MarginLending GetMarginLendingForAccountAsset(string assetId, string accountNumber) {
+            var transactions = _db.MarginLendingTransactions.Where(t => t.AssetId == assetId && t.Account.AccountNumber == accountNumber).ToList();
+            
+            if(transactions.Count == 0){
+                return null;
+            }
+            double? totalLoanAmount = 0;
+            double netCostValue = 0;
+            double totalPrice = 0;
+
+            transactions.ForEach(t => {
+                var eTransaction = _db.EquityTransactions.FirstOrDefault(e => e.Id == t.EquityTransactionId);
+                totalLoanAmount += t.LoanAmount;
+                netCostValue += (double)(eTransaction.UnitPriceAtPurchase * eTransaction.NumberOfUnits - t.LoanAmount);
+                totalPrice += (double)(eTransaction.UnitPriceAtPurchase * eTransaction.NumberOfUnits);
+            });
+
+            
+            return new MarginLending(this) {
+                //Id = _db.Accounts.SingleOrDefault(a => a.AccountId == transaction.AccountId).MarginLenderId,
+                LoanAmount = totalLoanAmount == null? 0 : (double)totalLoanAmount,
+                LoanValueRatio = (double)(totalLoanAmount / totalPrice),
+                NetCostValue = netCostValue
+            };
+        }
+
+
+        public List<MarginLenderPasser> GetMarginLendersByTicker(string ticker) {
+            List<MarginLenderPasser> lenders = new List<MarginLenderPasser>();
+            var marginLenders = _db.MarginLenders.Include(l => l.Ratios).ToList();
+
+            foreach(var lender in marginLenders){
+                var ratios = lender.Ratios.Where(r => r.Ticker == ticker).ToList();
+                List<LoanValueRatioPasser> lvr = new List<LoanValueRatioPasser>();
+                ratios.ForEach(r => {
+                    lvr.Add(new LoanValueRatioPasser{
+                        Ticker = r.Ticker,
+                        CreatedOn = r.CreatedOn,
+                        MaxRatio = r.MaxRatio,
+                        ActiveDate = r.ActiveDate,
+                        AssetTypes = r.AssetTypes
+                    });
+                });
+
+                lenders.Add(new MarginLenderPasser { 
+                    LenderName = lender.LenderName,
+                    Ratios = lvr
+                });
+            }
+            return lenders;
+        }
+
 
         #region liability helpers
         private async Task GenerateInsuranceForAccount(List<LiabilityBase> result, Account account, DateTime beforeDate)
@@ -5326,148 +5514,148 @@ namespace SqlRepository
                     CurrentBalance = lending.LoanAmount.Value - paidAmount,
                     CurrentInterestRate = lending.LiabilityRates.OrderByDescending(r => r.EffectiveFrom).FirstOrDefault().Rate.GetValueOrDefault()
                 };
-                foreach (var ratio in lending.LoanValueRatios)
-                {
+                //foreach (var ratio in lending.LoanValueRatios)
+                //{
 
-                    #region insert fixed income
-                    if (ratio.AssetTypes == AssetTypes.FixedIncomeInvestments)
-                    {
-                        var bond = _db.Bonds.Local.SingleOrDefault(b => b.BondId == ratio.AssetId) ??
-                                   await _db.Bonds.Where(b => b.BondId == ratio.AssetId)
-                                   .Include(b => b.Prices)
-                                   .Include(b => b.BondTransactions)
-                                   .Include(b => b.CouponPayments)
-                                   .Include(b => b.ResearchValues)
-                                   .SingleOrDefaultAsync();
-                        marginLending.Securities.Add(new Security()
-                        {
-                            LoanValueRatio = lending.LoanValueRatios.Any(r => r.AssetId == bond.BondId)
-                            ? lending.LoanValueRatios.FirstOrDefault(r => r.AssetId == bond.BondId).Ratio
-                            : 0,
-                            Asset = new FixedIncome(this)
-                            {
-                                TotalNumberOfUnits = bond.BondTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault(),
-                                Ticker = bond.Ticker,
-                                Id = bond.BondId,
-                                CouponFrequency = bond.Frequency,
-                                LatestPrice =
-                                bond.Prices.Any()
-                                    ? bond.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault()
-                                    : 0,
-                                ClientAccountId = account.AccountId,
-                                BondType = bond.BondType,
-                                //todo possible performance hazard 
-                                BoundDetails = GetBondDetails(bond.Ticker).Result,
-                                CouponRate =
-                                bond.CouponPayments.Where(c => c.PaymentOn <= DateTime.Now && c.PaymentOn <= oneYearAgo)
-                                    .Sum(p => p.Amount) /
-                                bond.BondTransactions.Sum(b => b.NumberOfUnits) /
-                                bond.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price,
-                                FixedIncomeName = bond.Name,
-                                Issuer = bond.Issuer
-                            }
-                        });
-                    }
-                    #endregion
+                //    #region insert fixed income
+                //    if (ratio.AssetTypes == AssetTypes.FixedIncomeInvestments)
+                //    {
+                //        var bond = _db.Bonds.Local.SingleOrDefault(b => b.BondId == ratio.EquityId) ??
+                //                   await _db.Bonds.Where(b => b.BondId == ratio.EquityId)
+                //                   .Include(b => b.Prices)
+                //                   .Include(b => b.BondTransactions)
+                //                   .Include(b => b.CouponPayments)
+                //                   .Include(b => b.ResearchValues)
+                //                   .SingleOrDefaultAsync();
+                //        marginLending.Securities.Add(new Security()
+                //        {
+                //            LoanValueRatio = lending.LoanValueRatios.Any(r => r.EquityId == bond.BondId)
+                //            ? lending.LoanValueRatios.FirstOrDefault(r => r.EquityId == bond.BondId).Ratio
+                //            : 0,
+                //            Asset = new FixedIncome(this)
+                //            {
+                //                TotalNumberOfUnits = bond.BondTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault(),
+                //                Ticker = bond.Ticker,
+                //                Id = bond.BondId,
+                //                CouponFrequency = bond.Frequency,
+                //                LatestPrice =
+                //                bond.Prices.Any()
+                //                    ? bond.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault()
+                //                    : 0,
+                //                ClientAccountId = account.AccountId,
+                //                BondType = bond.BondType,
+                //                //todo possible performance hazard 
+                //                BoundDetails = GetBondDetails(bond.Ticker).Result,
+                //                CouponRate =
+                //                bond.CouponPayments.Where(c => c.PaymentOn <= DateTime.Now && c.PaymentOn <= oneYearAgo)
+                //                    .Sum(p => p.Amount) /
+                //                bond.BondTransactions.Sum(b => b.NumberOfUnits) /
+                //                bond.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price,
+                //                FixedIncomeName = bond.Name,
+                //                Issuer = bond.Issuer
+                //            }
+                //        });
+                //    }
+                //    #endregion
 
-                    #region australian equity
-                    if (ratio.AssetTypes == AssetTypes.AustralianEquity)
-                    {
-                        var australianEquity = _db.Equities.Local.SingleOrDefault(
-                            eq => eq.EquityType == EquityTypes.AustralianEquity
-                                  && eq.AssetId == ratio.AssetId) ??
-                                               await
-                                                   _db.Equities.Where(
-                                                       eq =>
-                                                           eq.EquityType == EquityTypes.AustralianEquity &&
-                                                           eq.AssetId == ratio.AssetId)
-                                                       .Include(eq => eq.EquityTransactions)
-                                                       .Include(eq => eq.Dividends)
-                                                       .Include(eq => eq.Prices)
-                                                       .Include(eq => eq.ResearchValues)
-                                                       .SingleOrDefaultAsync();
-                        marginLending.Securities.Add(new Security()
-                        {
-                            LoanValueRatio = ratio.Ratio,
-                            Asset = new AustralianEquity(this)
-                            {
-                                Id = australianEquity.AssetId,
-                                ClientAccountId = account.AccountId,
-                                F0Ratios = await GetF0RatiosForEquity(australianEquity.Ticker),
-                                Ticker = australianEquity.Ticker,
-                                Name = australianEquity.Name,
-                                F1Recommendation = await GetF1RatiosForEquity(australianEquity.Ticker),
-                                LatestPrice = australianEquity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
-                                Sector = australianEquity.Sector,
-                                TotalNumberOfUnits = australianEquity.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault()
-                            }
-                        });
-                    }
-                    #endregion
+                //    #region australian equity
+                //    if (ratio.AssetTypes == AssetTypes.AustralianEquity)
+                //    {
+                //        var australianEquity = _db.Equities.Local.SingleOrDefault(
+                //            eq => eq.EquityType == EquityTypes.AustralianEquity
+                //                  && eq.AssetId == ratio.EquityId) ??
+                //                               await
+                //                                   _db.Equities.Where(
+                //                                       eq =>
+                //                                           eq.EquityType == EquityTypes.AustralianEquity &&
+                //                                           eq.AssetId == ratio.EquityId)
+                //                                       .Include(eq => eq.EquityTransactions)
+                //                                       .Include(eq => eq.Dividends)
+                //                                       .Include(eq => eq.Prices)
+                //                                       .Include(eq => eq.ResearchValues)
+                //                                       .SingleOrDefaultAsync();
+                //        marginLending.Securities.Add(new Security()
+                //        {
+                //            LoanValueRatio = ratio.Ratio,
+                //            Asset = new AustralianEquity(this)
+                //            {
+                //                Id = australianEquity.AssetId,
+                //                ClientAccountId = account.AccountId,
+                //                F0Ratios = await GetF0RatiosForEquity(australianEquity.Ticker),
+                //                Ticker = australianEquity.Ticker,
+                //                Name = australianEquity.Name,
+                //                F1Recommendation = await GetF1RatiosForEquity(australianEquity.Ticker),
+                //                LatestPrice = australianEquity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
+                //                Sector = australianEquity.Sector,
+                //                TotalNumberOfUnits = australianEquity.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault()
+                //            }
+                //        });
+                //    }
+                //    #endregion
 
-                    #region international equity
-                    if (ratio.AssetTypes == AssetTypes.InternationalEquity)
-                    {
-                        var internationalEquity =
-                            _db.Equities.Local.SingleOrDefault(eq => eq.AssetId == ratio.AssetId) ??
-                            await _db.Equities.Where(eq => eq.AssetId == ratio.AssetId)
-                                .Include(ins => ins.Dividends)
-                                .Include(ins => ins.EquityTransactions)
-                                .Include(ins => ins.Prices)
-                                .Include(ins => ins.ResearchValues)
-                                .FirstOrDefaultAsync();
+                //    #region international equity
+                //    if (ratio.AssetTypes == AssetTypes.InternationalEquity)
+                //    {
+                //        var internationalEquity =
+                //            _db.Equities.Local.SingleOrDefault(eq => eq.AssetId == ratio.EquityId) ??
+                //            await _db.Equities.Where(eq => eq.AssetId == ratio.EquityId)
+                //                .Include(ins => ins.Dividends)
+                //                .Include(ins => ins.EquityTransactions)
+                //                .Include(ins => ins.Prices)
+                //                .Include(ins => ins.ResearchValues)
+                //                .FirstOrDefaultAsync();
 
-                        marginLending.Securities.Add(new Security()
-                        {
-                            LoanValueRatio = ratio.Ratio,
-                            Asset = new InternationalEquity(this)
-                            {
-                                Id = internationalEquity.AssetId,
-                                Ticker = internationalEquity.Ticker,
-                                Name = internationalEquity.Name,
-                                TotalNumberOfUnits = internationalEquity.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault(),
-                                LatestPrice = internationalEquity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
-                                ClientAccountId = account.AccountId,
-                                F1Recommendation = await GetF1RatiosForEquity(internationalEquity.Ticker),
-                                Sector = internationalEquity.Sector,
-                                F0Ratios = await GetF0RatiosForEquity(internationalEquity.Ticker)
-                            }
-                        });
-                    }
-                    #endregion
-
-
-                    #region managed investment
-                    if (ratio.AssetTypes == AssetTypes.ManagedInvestments)
-                    {
-                        var managedInvestment = _db.Equities.Local.FirstOrDefault(eq => eq.AssetId == ratio.AssetId) ??
-                                                await _db.Equities.Where(eq => eq.AssetId == ratio.AssetId)
-                                                    .Include(eq => eq.Dividends)
-                                                    .Include(eq => eq.EquityTransactions)
-                                                    .Include(eq => eq.Prices)
-                                                    .SingleOrDefaultAsync();
-                        marginLending.Securities.Add(new Security()
-                        {
-                            LoanValueRatio = ratio.Ratio,
-                            Asset = new ManagedInvestment(this)
-                            {
-                                Ticker = managedInvestment.Ticker,
-                                Name = managedInvestment.Name,
-                                Id = managedInvestment.AssetId,
-                                TotalNumberOfUnits = managedInvestment.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault(),
-                                LatestPrice = managedInvestment.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
-                                ClientAccountId = account.AccountId,
-                                F1Recommendation = await GetF1RatiosForEquity(managedInvestment.Ticker),
-                                Sector = managedInvestment.Sector,
-                                F0Ratios = await GetF0RatiosForEquity(managedInvestment.Ticker),
-                                FundAllocation = GetFundAllocationForManagedFund(managedInvestment.AssetId),
-                            }
-                        });
-                    }
-                    #endregion
+                //        marginLending.Securities.Add(new Security()
+                //        {
+                //            LoanValueRatio = ratio.Ratio,
+                //            Asset = new InternationalEquity(this)
+                //            {
+                //                Id = internationalEquity.AssetId,
+                //                Ticker = internationalEquity.Ticker,
+                //                Name = internationalEquity.Name,
+                //                TotalNumberOfUnits = internationalEquity.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault(),
+                //                LatestPrice = internationalEquity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
+                //                ClientAccountId = account.AccountId,
+                //                F1Recommendation = await GetF1RatiosForEquity(internationalEquity.Ticker),
+                //                Sector = internationalEquity.Sector,
+                //                F0Ratios = await GetF0RatiosForEquity(internationalEquity.Ticker)
+                //            }
+                //        });
+                //    }
+                //    #endregion
 
 
-                }
+                //    #region managed investment
+                //    if (ratio.AssetTypes == AssetTypes.ManagedInvestments)
+                //    {
+                //        var managedInvestment = _db.Equities.Local.FirstOrDefault(eq => eq.AssetId == ratio.EquityId) ??
+                //                                await _db.Equities.Where(eq => eq.AssetId == ratio.EquityId)
+                //                                    .Include(eq => eq.Dividends)
+                //                                    .Include(eq => eq.EquityTransactions)
+                //                                    .Include(eq => eq.Prices)
+                //                                    .SingleOrDefaultAsync();
+                //        marginLending.Securities.Add(new Security()
+                //        {
+                //            LoanValueRatio = ratio.MaxRatio,
+                //            Asset = new ManagedInvestment(this)
+                //            {
+                //                Ticker = managedInvestment.Ticker,
+                //                Name = managedInvestment.Name,
+                //                Id = managedInvestment.AssetId,
+                //                TotalNumberOfUnits = managedInvestment.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault(),
+                //                LatestPrice = managedInvestment.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
+                //                ClientAccountId = account.AccountId,
+                //                F1Recommendation = await GetF1RatiosForEquity(managedInvestment.Ticker),
+                //                Sector = managedInvestment.Sector,
+                //                F0Ratios = await GetF0RatiosForEquity(managedInvestment.Ticker),
+                //                FundAllocation = GetFundAllocationForManagedFund(managedInvestment.AssetId),
+                //            }
+                //        });
+                //    }
+                //    #endregion
+
+
+                //}
                 result.Add(marginLending);
             }
         }
@@ -5502,149 +5690,263 @@ namespace SqlRepository
                     LoanAmount = lending.LoanAmount.Value,
                     Securities = new List<Security>(),
                     CurrentBalance = lending.LoanAmount.Value - paidAmount,
-                    CurrentInterestRate = lending.LiabilityRates.OrderByDescending(r => r.EffectiveFrom).FirstOrDefault().Rate.GetValueOrDefault()
+                    CurrentInterestRate = lending.LiabilityRates.Count == 0 ? 0 : lending.LiabilityRates.OrderByDescending(r => r.EffectiveFrom).FirstOrDefault().Rate.GetValueOrDefault()
                 };
-                foreach (var ratio in lending.LoanValueRatios)
-                {
 
-                    #region insert fixed income
-                    if (ratio.AssetTypes == AssetTypes.FixedIncomeInvestments)
-                    {
-                        var bond = _db.Bonds.Local.SingleOrDefault(b => b.BondId == ratio.AssetId) ??
-                                   _db.Bonds.Where(b => b.BondId == ratio.AssetId)
+                if (lending.AssetTypes == AssetTypes.FixedIncomeInvestments) {
+                    var bond = _db.Bonds.Local.SingleOrDefault(b => b.BondId == lending.AssetId) ??
+                                   _db.Bonds.Where(b => b.BondId == lending.AssetId)
                                    .Include(b => b.Prices)
                                    .Include(b => b.BondTransactions)
                                    .Include(b => b.CouponPayments)
                                    .Include(b => b.ResearchValues)
                                    .SingleOrDefault();
-                        marginLending.Securities.Add(new Security()
-                        {
-                            LoanValueRatio = lending.LoanValueRatios.Any(r => r.AssetId == bond.BondId)
-                            ? lending.LoanValueRatios.FirstOrDefault(r => r.AssetId == bond.BondId).Ratio
-                            : 0,
-                            Asset = new FixedIncome(this)
-                            {
-                                TotalNumberOfUnits = bond.BondTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault(),
-                                Ticker = bond.Ticker,
-                                Id = bond.BondId,
-                                CouponFrequency = bond.Frequency,
-                                LatestPrice =
-                                bond.Prices.Any()
-                                    ? bond.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault()
-                                    : 0,
-                                ClientAccountId = account.AccountId,
-                                BondType = bond.BondType,
-                                //todo possible performance hazard 
-                                BoundDetails = GetBondDetails(bond.Ticker).Result,
-                                CouponRate =
-                                bond.CouponPayments.Where(c => c.PaymentOn <= DateTime.Now && c.PaymentOn <= oneYearAgo)
-                                    .Sum(p => p.Amount) /
-                                bond.BondTransactions.Sum(b => b.NumberOfUnits) /
-                                bond.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price,
-                                FixedIncomeName = bond.Name,
-                                Issuer = bond.Issuer
-                            }
-                        });
-                    }
-                    #endregion
-
-                    #region australian equity
-                    if (ratio.AssetTypes == AssetTypes.AustralianEquity)
-                    {
-                        var australianEquity = _db.Equities.Local.SingleOrDefault(
-                            eq => eq.EquityType == EquityTypes.AustralianEquity
-                                  && eq.AssetId == ratio.AssetId) ??
-                                                   _db.Equities.Where(
-                                                       eq =>
-                                                           eq.EquityType == EquityTypes.AustralianEquity &&
-                                                           eq.AssetId == ratio.AssetId)
-                                                       .Include(eq => eq.EquityTransactions)
-                                                       .Include(eq => eq.Dividends)
-                                                       .Include(eq => eq.Prices)
-                                                       .Include(eq => eq.ResearchValues)
-                                                       .SingleOrDefault();
-                        marginLending.Securities.Add(new Security()
-                        {
-                            LoanValueRatio = ratio.Ratio,
-                            Asset = new AustralianEquity(this)
-                            {
-                                Id = australianEquity.AssetId,
-                                Name = australianEquity.Name,
-                                ClientAccountId = account.AccountId,
-                                F0Ratios = GetF0RatiosForEquitySync(australianEquity.Ticker),
-                                Ticker = australianEquity.Ticker,
-                                F1Recommendation = GetF1RatiosForEquitySync(australianEquity.Ticker),
-                                LatestPrice = australianEquity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
-                                Sector = australianEquity.Sector,
-                                TotalNumberOfUnits = australianEquity.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault()
-                            }
-                        });
-                    }
-                    #endregion
-
-                    #region international equity
-                    if (ratio.AssetTypes == AssetTypes.InternationalEquity)
-                    {
-                        var internationalEquity =
-                            _db.Equities.Local.SingleOrDefault(eq => eq.AssetId == ratio.AssetId) ??
-                            _db.Equities.Where(eq => eq.AssetId == ratio.AssetId)
-                                .Include(ins => ins.Dividends)
-                                .Include(ins => ins.EquityTransactions)
-                                .Include(ins => ins.Prices)
-                                .Include(ins => ins.ResearchValues)
-                                .FirstOrDefault();
-
-                        marginLending.Securities.Add(new Security()
-                        {
-                            LoanValueRatio = ratio.Ratio,
-                            Asset = new InternationalEquity(this)
-                            {
-                                Id = internationalEquity.AssetId,
-                                Ticker = internationalEquity.Ticker,
-                                Name = internationalEquity.Name,
-                                TotalNumberOfUnits = internationalEquity.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault(),
-                                LatestPrice = internationalEquity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
-                                ClientAccountId = account.AccountId,
-                                F1Recommendation = GetF1RatiosForEquitySync(internationalEquity.Ticker),
-                                Sector = internationalEquity.Sector,
-                                F0Ratios = GetF0RatiosForEquitySync(internationalEquity.Ticker)
-                            }
-                        });
-                    }
-                    #endregion
-
-
-                    #region managed investment
-                    if (ratio.AssetTypes == AssetTypes.ManagedInvestments)
-                    {
-                        var managedInvestment = _db.Equities.Local.FirstOrDefault(eq => eq.AssetId == ratio.AssetId) ??
-                                                _db.Equities.Where(eq => eq.AssetId == ratio.AssetId)
-                                                    .Include(eq => eq.Dividends)
-                                                    .Include(eq => eq.EquityTransactions)
-                                                    .Include(eq => eq.Prices)
-                                                    .SingleOrDefault();
-                        marginLending.Securities.Add(new Security()
-                        {
-                            LoanValueRatio = ratio.Ratio,
-                            Asset = new ManagedInvestment(this)
-                            {
-                                Ticker = managedInvestment.Ticker,
-                                Name = managedInvestment.Name,
-                                Id = managedInvestment.AssetId,
-                                TotalNumberOfUnits = managedInvestment.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault(),
-                                LatestPrice = managedInvestment.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
-                                ClientAccountId = account.AccountId,
-                                F1Recommendation = GetF1RatiosForEquitySync(managedInvestment.Ticker),
-                                Sector = managedInvestment.Sector,
-                                F0Ratios = GetF0RatiosForEquitySync(managedInvestment.Ticker),
-                                FundAllocation = GetFundAllocationForManagedFund(managedInvestment.AssetId),
-                            }
-                        });
-                    }
-                    #endregion
-
-
+                    marginLending.Securities.Add(new Security() {
+                        LoanValueRatio = lending.Ratio,
+                        Asset = new FixedIncome(this) {
+                            TotalNumberOfUnits = bond.BondTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault(),
+                            Ticker = bond.Ticker,
+                            Id = bond.BondId,
+                            CouponFrequency = bond.Frequency,
+                            LatestPrice =
+                            bond.Prices.Any()
+                                ? bond.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault()
+                                : 0,
+                            ClientAccountId = account.AccountId,
+                            BondType = bond.BondType,
+                            //todo possible performance hazard 
+                            BoundDetails = GetBondDetails(bond.Ticker).Result,
+                            CouponRate =
+                            bond.CouponPayments.Where(c => c.PaymentOn <= DateTime.Now && c.PaymentOn <= oneYearAgo)
+                                .Sum(p => p.Amount) /
+                            bond.BondTransactions.Sum(b => b.NumberOfUnits) /
+                            bond.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price,
+                            FixedIncomeName = bond.Name,
+                            Issuer = bond.Issuer
+                        }
+                    });
                 }
+
+                if (lending.AssetTypes == AssetTypes.AustralianEquity) {
+                    var australianEquity = _db.Equities.Local.SingleOrDefault(
+                        eq => eq.EquityType == EquityTypes.AustralianEquity
+                              && eq.AssetId == lending.AssetId) ??
+                                               _db.Equities.Where(
+                                                   eq =>
+                                                       eq.EquityType == EquityTypes.AustralianEquity &&
+                                                       eq.AssetId == lending.AssetId)
+                                                   .Include(eq => eq.EquityTransactions)
+                                                   .Include(eq => eq.Dividends)
+                                                   .Include(eq => eq.Prices)
+                                                   .Include(eq => eq.ResearchValues)
+                                                   .SingleOrDefault();
+                    marginLending.Securities.Add(new Security() {
+                        LoanValueRatio = lending.Ratio,
+                        Asset = new AustralianEquity(this) {
+                            Id = australianEquity.AssetId,
+                            Name = australianEquity.Name,
+                            ClientAccountId = account.AccountId,
+                            F0Ratios = GetF0RatiosForEquitySync(australianEquity.Ticker),
+                            Ticker = australianEquity.Ticker,
+                            F1Recommendation = GetF1RatiosForEquitySync(australianEquity.Ticker),
+                            LatestPrice = australianEquity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
+                            Sector = australianEquity.Sector,
+                            TotalNumberOfUnits = australianEquity.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault()
+                        }
+                    });
+                }
+
+                if (lending.AssetTypes == AssetTypes.InternationalEquity) {
+                    var internationalEquity =
+                        _db.Equities.Local.SingleOrDefault(eq => eq.AssetId == lending.AssetId) ??
+                        _db.Equities.Where(eq => eq.AssetId == lending.AssetId)
+                            .Include(ins => ins.Dividends)
+                            .Include(ins => ins.EquityTransactions)
+                            .Include(ins => ins.Prices)
+                            .Include(ins => ins.ResearchValues)
+                            .FirstOrDefault();
+
+                    marginLending.Securities.Add(new Security() {
+                        LoanValueRatio = lending.Ratio,
+                        Asset = new InternationalEquity(this) {
+                            Id = internationalEquity.AssetId,
+                            Ticker = internationalEquity.Ticker,
+                            Name = internationalEquity.Name,
+                            TotalNumberOfUnits = internationalEquity.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault(),
+                            LatestPrice = internationalEquity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
+                            ClientAccountId = account.AccountId,
+                            F1Recommendation = GetF1RatiosForEquitySync(internationalEquity.Ticker),
+                            Sector = internationalEquity.Sector,
+                            F0Ratios = GetF0RatiosForEquitySync(internationalEquity.Ticker)
+                        }
+                    });
+                }
+
+                if (lending.AssetTypes == AssetTypes.ManagedInvestments) {
+                    var managedInvestment = _db.Equities.Local.FirstOrDefault(eq => eq.AssetId == lending.AssetId) ??
+                                            _db.Equities.Where(eq => eq.AssetId == lending.AssetId)
+                                                .Include(eq => eq.Dividends)
+                                                .Include(eq => eq.EquityTransactions)
+                                                .Include(eq => eq.Prices)
+                                                .SingleOrDefault();
+                    marginLending.Securities.Add(new Security() {
+                        LoanValueRatio = lending.Ratio,
+                        Asset = new ManagedInvestment(this) {
+                            Ticker = managedInvestment.Ticker,
+                            Name = managedInvestment.Name,
+                            Id = managedInvestment.AssetId,
+                            TotalNumberOfUnits = managedInvestment.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault(),
+                            LatestPrice = managedInvestment.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
+                            ClientAccountId = account.AccountId,
+                            F1Recommendation = GetF1RatiosForEquitySync(managedInvestment.Ticker),
+                            Sector = managedInvestment.Sector,
+                            F0Ratios = GetF0RatiosForEquitySync(managedInvestment.Ticker),
+                            FundAllocation = GetFundAllocationForManagedFund(managedInvestment.AssetId),
+                        }
+                    });
+                }
+
+                //foreach (var ratio in lending.LoanValueRatios)
+                //{
+
+                //    #region insert fixed income
+                //    if (ratio.AssetTypes == AssetTypes.FixedIncomeInvestments)
+                //    {
+                //        var bond = _db.Bonds.Local.SingleOrDefault(b => b.BondId == ratio.EquityId) ??
+                //                   _db.Bonds.Where(b => b.BondId == ratio.EquityId)
+                //                   .Include(b => b.Prices)
+                //                   .Include(b => b.BondTransactions)
+                //                   .Include(b => b.CouponPayments)
+                //                   .Include(b => b.ResearchValues)
+                //                   .SingleOrDefault();
+                //        marginLending.Securities.Add(new Security()
+                //        {
+                //            LoanValueRatio = lending.LoanValueRatios.Any(r => r.EquityId == bond.BondId)
+                //            ? lending.LoanValueRatios.FirstOrDefault(r => r.EquityId == bond.BondId).Ratio
+                //            : 0,
+                //            Asset = new FixedIncome(this)
+                //            {
+                //                TotalNumberOfUnits = bond.BondTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault(),
+                //                Ticker = bond.Ticker,
+                //                Id = bond.BondId,
+                //                CouponFrequency = bond.Frequency,
+                //                LatestPrice =
+                //                bond.Prices.Any()
+                //                    ? bond.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault()
+                //                    : 0,
+                //                ClientAccountId = account.AccountId,
+                //                BondType = bond.BondType,
+                //                //todo possible performance hazard 
+                //                BoundDetails = GetBondDetails(bond.Ticker).Result,
+                //                CouponRate =
+                //                bond.CouponPayments.Where(c => c.PaymentOn <= DateTime.Now && c.PaymentOn <= oneYearAgo)
+                //                    .Sum(p => p.Amount) /
+                //                bond.BondTransactions.Sum(b => b.NumberOfUnits) /
+                //                bond.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price,
+                //                FixedIncomeName = bond.Name,
+                //                Issuer = bond.Issuer
+                //            }
+                //        });
+                //    }
+                //    #endregion
+
+                //    #region australian equity
+                //    if (ratio.AssetTypes == AssetTypes.AustralianEquity)
+                //    {
+                //        var australianEquity = _db.Equities.Local.SingleOrDefault(
+                //            eq => eq.EquityType == EquityTypes.AustralianEquity
+                //                  && eq.AssetId == ratio.EquityId) ??
+                //                                   _db.Equities.Where(
+                //                                       eq =>
+                //                                           eq.EquityType == EquityTypes.AustralianEquity &&
+                //                                           eq.AssetId == ratio.EquityId)
+                //                                       .Include(eq => eq.EquityTransactions)
+                //                                       .Include(eq => eq.Dividends)
+                //                                       .Include(eq => eq.Prices)
+                //                                       .Include(eq => eq.ResearchValues)
+                //                                       .SingleOrDefault();
+                //        marginLending.Securities.Add(new Security()
+                //        {
+                //            LoanValueRatio = ratio.Ratio,
+                //            Asset = new AustralianEquity(this)
+                //            {
+                //                Id = australianEquity.AssetId,
+                //                Name = australianEquity.Name,
+                //                ClientAccountId = account.AccountId,
+                //                F0Ratios = GetF0RatiosForEquitySync(australianEquity.Ticker),
+                //                Ticker = australianEquity.Ticker,
+                //                F1Recommendation = GetF1RatiosForEquitySync(australianEquity.Ticker),
+                //                LatestPrice = australianEquity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
+                //                Sector = australianEquity.Sector,
+                //                TotalNumberOfUnits = australianEquity.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault()
+                //            }
+                //        });
+                //    }
+                //    #endregion
+
+                //    #region international equity
+                //    if (ratio.AssetTypes == AssetTypes.InternationalEquity)
+                //    {
+                //        var internationalEquity =
+                //            _db.Equities.Local.SingleOrDefault(eq => eq.AssetId == ratio.EquityId) ??
+                //            _db.Equities.Where(eq => eq.AssetId == ratio.EquityId)
+                //                .Include(ins => ins.Dividends)
+                //                .Include(ins => ins.EquityTransactions)
+                //                .Include(ins => ins.Prices)
+                //                .Include(ins => ins.ResearchValues)
+                //                .FirstOrDefault();
+
+                //        marginLending.Securities.Add(new Security()
+                //        {
+                //            LoanValueRatio = ratio.Ratio,
+                //            Asset = new InternationalEquity(this)
+                //            {
+                //                Id = internationalEquity.AssetId,
+                //                Ticker = internationalEquity.Ticker,
+                //                Name = internationalEquity.Name,
+                //                TotalNumberOfUnits = internationalEquity.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault(),
+                //                LatestPrice = internationalEquity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
+                //                ClientAccountId = account.AccountId,
+                //                F1Recommendation = GetF1RatiosForEquitySync(internationalEquity.Ticker),
+                //                Sector = internationalEquity.Sector,
+                //                F0Ratios = GetF0RatiosForEquitySync(internationalEquity.Ticker)
+                //            }
+                //        });
+                //    }
+                //    #endregion
+
+
+                //    #region managed investment
+                //    if (ratio.AssetTypes == AssetTypes.ManagedInvestments)
+                //    {
+                //        var managedInvestment = _db.Equities.Local.FirstOrDefault(eq => eq.AssetId == ratio.EquityId) ??
+                //                                _db.Equities.Where(eq => eq.AssetId == ratio.EquityId)
+                //                                    .Include(eq => eq.Dividends)
+                //                                    .Include(eq => eq.EquityTransactions)
+                //                                    .Include(eq => eq.Prices)
+                //                                    .SingleOrDefault();
+                //        marginLending.Securities.Add(new Security()
+                //        {
+                //            LoanValueRatio = ratio.Ratio,
+                //            Asset = new ManagedInvestment(this)
+                //            {
+                //                Ticker = managedInvestment.Ticker,
+                //                Name = managedInvestment.Name,
+                //                Id = managedInvestment.AssetId,
+                //                TotalNumberOfUnits = managedInvestment.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault(),
+                //                LatestPrice = managedInvestment.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
+                //                ClientAccountId = account.AccountId,
+                //                F1Recommendation = GetF1RatiosForEquitySync(managedInvestment.Ticker),
+                //                Sector = managedInvestment.Sector,
+                //                F0Ratios = GetF0RatiosForEquitySync(managedInvestment.Ticker),
+                //                FundAllocation = GetFundAllocationForManagedFund(managedInvestment.AssetId),
+                //            }
+                //        });
+                //    }
+                //    #endregion
+
+
+                //}
                 result.Add(marginLending);
             }
         }
@@ -6437,6 +6739,10 @@ namespace SqlRepository
                     _db.TransactionExpenses.Add(expense);
                 }
             }
+
+            var accountToMakeTrans = GetClientAccountSync(account.AccountNumber, DateTime.Now);
+            record.loan.PropertyId = property.PropertyId;
+            accountToMakeTrans.MakeTransactionSync(record.loan);
         }
 
         private async Task RecordEquityTransaction(TransactionCreationBase transaction, Account account,
@@ -6597,6 +6903,34 @@ namespace SqlRepository
                     _db.TransactionExpenses.Add(expense);
                 }
             }
+
+            AssetTypes type = AssetTypes.AustralianEquity;
+            switch (equity.EquityType) {
+                case EquityTypes.AustralianEquity:
+                    type = AssetTypes.AustralianEquity;
+                    break;
+                case EquityTypes.InternationalEquity:
+                    type = AssetTypes.InternationalEquity;
+                    break;
+                case EquityTypes.ManagedInvestments:
+                    type = AssetTypes.ManagedInvestments;
+                    break;
+            }
+
+            var accountToMakeTrans = GetClientAccountSync(account.AccountNumber, DateTime.Now);
+            accountToMakeTrans.MakeTransactionSync(new MarginLendingTransactionCreation { 
+                AssetId = equity.AssetId,
+                AssetTypes = type,
+                GrantedOn = DateTime.Now,
+                IsAcquire = false,
+                LoanAmount = record.LoanAmount,
+                ExpiryDate = DateTime.Now.AddDays(365),
+                InterestRate = 0,
+                Ratio = record.NumberOfUnits * record.Price == 0 ? 0 : (record.LoanAmount / (record.NumberOfUnits * record.Price)),
+                EquityTransactionId = etransaction.Id
+            });
+
+
         }
 
         private async Task RecordCashAccountTransaction(TransactionCreationBase transaction, Edis.Db.Adviser adviser,
@@ -7674,8 +8008,10 @@ namespace SqlRepository
                 NoteType = message.noteTypeId,
                 NoteId = Guid.NewGuid().ToString(),
                 Subject = message.subject,
-                SenderRole = senderRole
+                SenderRole = senderRole,
+                Client = _db.Clients.SingleOrDefault(c => c.ClientNumber == message.clientId)
             };
+
 
             _db.Notes.Add(note);
 
@@ -7894,6 +8230,42 @@ namespace SqlRepository
             _db.SaveChanges();
         }
 
+        public ClientAccount GetClientAccountById(string accountId) {
+            var clientAccount =
+                _db.Accounts.Local
+                    .FirstOrDefault(
+                        a => a.AccountId == accountId && a.CreatedOn.HasValue) ??
+                _db.Accounts.Where(
+                    a => a.AccountId == accountId && a.CreatedOn.HasValue)
+                    .FirstOrDefault();
+
+            return new ClientAccount(this) {
+                AccountNameOrInfo = clientAccount.AccountInfo,
+                AccountNumber = clientAccount.AccountNumber,
+                AccountType = clientAccount.AccountType,
+                Id = clientAccount.AccountId,
+                MarginLenderId = clientAccount.MarginLenderId,
+            };
+        }
+
+        public GroupAccount GetGroupAccountById(string accountId) {
+            var groupAccount =
+                _db.Accounts.Local
+                    .FirstOrDefault(
+                        a => a.AccountId == accountId && a.CreatedOn.HasValue) ??
+                _db.Accounts.Where(
+                    a => a.AccountId == accountId && a.CreatedOn.HasValue)
+                    .FirstOrDefault();
+
+            return new GroupAccount(this) {
+                AccountNameOrInfo = groupAccount.AccountInfo,
+                AccountNumber = groupAccount.AccountNumber,
+                AccountType = groupAccount.AccountType,
+                Id = groupAccount.AccountId,
+                MarginLenderId = groupAccount.MarginLenderId
+            };
+        }
+
 
 
         public Equity getEquityByTicker(string ticker)
@@ -7974,14 +8346,8 @@ namespace SqlRepository
         }
 
 
-        public int GetEquityUnitByEquityIdAndClientGroup(string equityId, ClientGroup clientGroup) {
-            List<GroupAccount> GroupAccounts = GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
-            List<ClientAccount> clientAccounts = new List<ClientAccount>();
-            clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
-
-            List<Account> accounts = new List<Account>();
-            GroupAccounts.ForEach(g => accounts.AddRange(_db.Accounts.Where(a => a.AccountNumber == g.AccountNumber)));
-            clientAccounts.ForEach(c => accounts.AddRange(_db.Accounts.Where(a => a.AccountNumber == c.AccountNumber)));
+        public int GetEquityUnitByEquityIdAndClientGroup(string equityId, string clientGroupId) {
+            List<Account> accounts = GetAllAccountsByClientGroupId(clientGroupId);
 
             int numberOfUnit = 0;
 
@@ -8046,7 +8412,7 @@ namespace SqlRepository
             }
         }
 
-        public Domain.Portfolio.AggregateRoots.Asset.Equity getEquityByIdAndClientGroup(string equityId, ClientGroup clientGroup) {
+        public Domain.Portfolio.AggregateRoots.Asset.Equity getEquityByIdAndClientGroup(string equityId, string clientGroupId) {
             Equity equity = _db.Equities.SingleOrDefault(e => e.AssetId == equityId);
 
             var latestPrice = equity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault();
@@ -8060,7 +8426,7 @@ namespace SqlRepository
                     F0Ratios = GetF0RatiosForEquitySync(equity.Ticker),
                     F1Recommendation = GetF1RatiosForEquitySync(equity.Ticker),
                     Sector = equity.Sector,
-                    TotalNumberOfUnits = GetEquityUnitByEquityIdAndClientGroup(equityId, clientGroup),
+                    TotalNumberOfUnits = GetEquityUnitByEquityIdAndClientGroup(equityId, clientGroupId),
                     LatestPrice = latestPrice
                 };
             } else if (equity.EquityType == EquityTypes.InternationalEquity) {
@@ -8072,7 +8438,7 @@ namespace SqlRepository
                     F0Ratios = GetF0RatiosForEquitySync(equity.Ticker),
                     F1Recommendation = GetF1RatiosForEquitySync(equity.Ticker),
                     Sector = equity.Sector,
-                    TotalNumberOfUnits = GetEquityUnitByEquityIdAndClientGroup(equityId, clientGroup),
+                    TotalNumberOfUnits = GetEquityUnitByEquityIdAndClientGroup(equityId, clientGroupId),
                     LatestPrice = latestPrice
                 };
             } else if (equity.EquityType == EquityTypes.ManagedInvestments) {
@@ -8084,7 +8450,7 @@ namespace SqlRepository
                     F0Ratios = GetF0RatiosForEquitySync(equity.Ticker),
                     F1Recommendation = GetF1RatiosForEquitySync(equity.Ticker),
                     Sector = equity.Sector,
-                    TotalNumberOfUnits = GetEquityUnitByEquityIdAndClientGroup(equityId, clientGroup),
+                    TotalNumberOfUnits = GetEquityUnitByEquityIdAndClientGroup(equityId, clientGroupId),
                     LatestPrice = latestPrice
                 };
             } else {

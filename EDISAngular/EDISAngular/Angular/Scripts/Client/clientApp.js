@@ -204,6 +204,28 @@
         }
     }]);
 
+
+    app.directive("accountSelector", ["$route", "accountSelectionService", function ($route, accountSelectionService) {
+        return {
+            restrict: 'E',
+            template: '<select class="form-control" style="max-width:180px" ng-model="selectedAccount" ng-change="selectAccount(item)" ng-options="item as item.name for item in allClients"></select>',
+            controller: ["$scope", "$resource", "AppStrings", "$rootScope", function ($scope, $resource, AppStrings, $rootScope) {
+                $resource(AppStrings.EDIS_IP + "api/Client/MarginLendingPortfolio/ClientAccountsForClient").query(function (data) {
+                    $scope.allClients = data;
+                })
+                $scope.selectAccount = function () {
+                    if ($scope.selectedAccount.id === -1) {
+                        accountSelectionService.resetSelection();
+                    } else {
+                        accountSelectionService.selectAccount($scope.selectedAccount.id, $scope.selectedAccount.name, $scope.selectedAccount.accountCatergory);
+                    }
+                    $rootScope.$broadcast('ml-account-portfolio');
+                }
+            }]
+        }
+    }]);
+
+
     app.factory("companySelectionService", function ($http, $resource, AppStrings) {
         var currentCompanyId = "";
         var currentCompanyName = "";
@@ -282,6 +304,53 @@
         }
     })
 
+
+
+    app.factory("accountSelectionService", function ($http, $resource, AppStrings) {
+        var currentAccountId = "";
+        var currentAccountFullName = "";
+        var currentAccountCatergory = "";
+        function selectAccount(accountId, accountName, accountCatergory) {
+            currentAccountId = accountId;
+            currentAccountFullName = accountName;
+            currentAccountCatergory = accountCatergory;
+        }
+        function getCurrentAccountId() {
+            return currentAccountId;
+        }
+        function hasAccountSelected() {
+            return currentAccountId !== "";
+        }
+        function resetSelection() {
+            currentAccountId = "";
+            currentAccountName = "";
+        }
+        function getAccountIdQueryString() {
+            if (currentAccountId !== "") {
+                return "?accountId=" + currentAccountId;
+            } else {
+                return "";
+            }
+        }
+
+        function getAccountName() {
+            return currentAccountFullName;
+        }
+
+        function getAccountCatergory() {
+            return currentAccountCatergory;
+        }
+
+        return {
+            selectAccount: selectAccount,
+            getCurrentAccountId: getCurrentAccountId,
+            hasAccountSelected: hasAccountSelected,
+            resetSelection: resetSelection,
+            getAccountIdQueryString: getAccountIdQueryString,
+            getAccountName: getAccountName,
+            getAccountCatergory: getAccountCatergory
+        }
+    })
 
     app.factory("clientRemindersDBService", function ($http, $resource) {
         var DBContext = {

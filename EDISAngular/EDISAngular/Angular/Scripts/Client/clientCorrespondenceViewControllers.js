@@ -239,11 +239,12 @@
                     subject: $scope.subject,
                     body: $scope.commentary,
                     followupActions: $scope.actions,
-                    dateDue: convertStringToDate($scope.completionDate),
-                    followupDate: convertStringToDate($scope.followupDate),
+                    dateCompleted: convertStringToDate($scope.completionDate),
+                    followupDate: $scope.followupDate === null ? null : convertStringToDate($scope.followupDate),
                     reminder: $scope.removeFromReminder === "true" ? false : true,
                     noteTypeId: $scope.messageType,
-                    resourceToken: getToken
+                    resourceToken: getToken,
+                    dateDue: convertStringToDate($scope.completionDate),
                 };
                 $http.post(AppStrings.EDIS_IP + "api/correspondence/create", model)
                 .success(function () {

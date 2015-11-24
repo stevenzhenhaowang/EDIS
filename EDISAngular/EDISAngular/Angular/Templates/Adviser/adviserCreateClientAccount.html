@@ -44,7 +44,7 @@
                                     <div class="col-md-6 form-group">
                                         <label>Select Client Group</label>
                                         <select required class="form-control" name="clientGroup" ng-change="loadClients()" ng-model="clientGroup" ng-options="group.id as group.name for group in groups"></select>
-                                        <span class="error" ng-show="form.clientGroup.$error.required && form.clientGroup.$touched">Please select client group.</span>
+                                        <span class="error" ng-show="form.clientGroup.$error.required && form.clientGroup.$touched">Please select a client group.</span>
                                     </div>
                                 </div>
 
@@ -52,7 +52,15 @@
                                     <div class="col-md-6 form-group">
                                         <label>Select Client</label>
                                         <select required class="form-control" name="clientName" ng-model="selectedClient" ng-options="client.id as client.name for client in clients"></select>
-                                        <span class="error" ng-show="form.clientGroup.$error.required && form.clientGroup.$touched">Please select client group.</span>
+                                        <span class="error" ng-show="form.clientGroup.$error.required && form.clientGroup.$touched">Please select a client group.</span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 form-group">
+                                        <label>Select Margin Lender</label>
+                                        <select required class="form-control" name="marginLender" ng-model="marginLender" ng-options="lender.id as lender.name for lender in marginLenders"></select>
+                                        <span class="error" ng-show="form.marginLender.$error.required && form.marginLender.$touched">Please select margin lender.</span>
                                     </div>
                                 </div>
 
@@ -60,7 +68,7 @@
                                     <div class="col-md-6 form-group">
                                         <label>Select Account Type</label>
                                         <select required class="form-control" name="accountType" ng- ng-model="selectedAccountType" ng-options="accountTypes.name as accountTypes.name for accountTypes in accountTypes"></select>
-                                        <span class="error" ng-show="form.clientGroup.$error.required && form.clientGroup.$touched">Please select client group.</span>
+                                        <span class="error" ng-show="form.clientGroup.$error.required && form.clientGroup.$touched">Please select a client group.</span>
                                     </div>
                                 </div>
 
@@ -92,12 +100,19 @@
 
                                 <div class="row">
                                     <div class="col-md-6 form-group">
+                                        <label>Select Margin Lender</label>
+                                        <select required class="form-control" name="marginLender" ng-model="marginLender" ng-options="lender.id as lender.name for lender in marginLenders"></select>
+                                        <span class="error" ng-show="form.marginLender.$error.required && form.marginLender.$touched">Please select margin lender.</span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 form-group">
                                         <label>Select Account Type</label>
                                         <select required class="form-control" name="accountType" ng- ng-model="selectedAccountType" ng-options="accountTypes.name as accountTypes.name for accountTypes in accountTypes"></select>
                                         <span class="error" ng-show="form.clientGroup.$error.required && form.clientGroup.$touched">Please select client group.</span>
                                     </div>
                                 </div>
-
 
                                 <div class="row">
                                     <div class="col-md-6 form-group">
@@ -105,7 +120,6 @@
                                         <input class="form-control" name="accountName" ng-model="accountName" required />
                                         <span class="error" ng-show="form.accountName.$error.required && form.accountName.$touched">Please enter account name.</span>
                                     </div>
-
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">

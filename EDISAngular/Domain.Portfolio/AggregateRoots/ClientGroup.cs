@@ -30,12 +30,6 @@ namespace Domain.Portfolio.AggregateRoots
             return this._repository.GetAccountsForClientGroupSync(this.ClientGroupNumber, beforeDate ?? DateTime.Now, accountType);
         } 
 
-
-        public async Task<GroupAccount> AddAccount(string notes, AccountType accountType)
-        {
-            return await this._repository
-                .CreateNewClientGroupAccount(this.ClientGroupNumber,notes, accountType);
-        }
         public async Task<List<Client>> GetClients(DateTime? beforeDate=null)
         {
             return await this._repository.GetClientsForGroup(this.ClientGroupNumber, beforeDate??DateTime.Now);

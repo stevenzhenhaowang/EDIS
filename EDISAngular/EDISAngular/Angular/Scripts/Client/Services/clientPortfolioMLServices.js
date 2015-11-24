@@ -12,12 +12,28 @@ app.factory("clientPortfolioMLStatistics", function (AppStrings, $resource, $fil
 app.factory("clientPortfolioMLLoanInfo", function (AppStrings, $resource) {
     return $resource(AppStrings.EDIS_IP + "api/Adviser/MarginLendingPortfolio/AccountLoanInfo");
 })
-app.factory("clientPortfolioMLCompanyProfile", function (AppStrings, $resource) {
-    return $resource(AppStrings.EDIS_IP + "api/Client/MarginLendingPortfolio/allCompanies");
-});
-app.factory("clientPortfolioMLLoanDetails", function (AppStrings, $resource) {
-    return $resource(AppStrings.EDIS_IP + "api/Adviser/MarginLendingPortfolio/AccountLoanCompanyDetails");
-})
+//app.factory("clientPortfolioMLCompanyProfile", function (AppStrings, $resource) {
+//    return $resource(AppStrings.EDIS_IP + "api/Client/MarginLendingPortfolio/allCompanies");
+//});
+
+app.factory("clientPortfolioMLCompanyProfile", ["$http", "$resource", "AppStrings", function ($http, $resource, AppStrings) {
+    return function () {
+        return $resource(AppStrings.EDIS_IP + "api/Client/MarginLendingPortfolio/ProfolioDetails");
+    }
+}]);
+
+//app.factory("clientPortfolioMLLoanDetails", function (AppStrings, $resource) {
+//    return $resource(AppStrings.EDIS_IP + "api/Adviser/MarginLendingPortfolio/AccountLoanCompanyDetails");
+//})
+
+app.factory("clientPortfolioMLLoanDetails", ["accountSelectionService", "$http", "$resource", "AppStrings", function (accountSelector, $http, $resource, AppStrings) {
+    return function () {
+        return $resource(AppStrings.EDIS_IP + "api/Client/MarginLendingPortfolio/AccountPortfolio", { accountId: accountSelector.getCurrentAccountId(), accountCatergory: accountSelector.getAccountCatergory() });
+    }
+}]);
+
+
+
 app.factory("clientPortfolioMLSuitabilityDetails", function (AppStrings, $resource) {
     return $resource(AppStrings.EDIS_IP + "api/Client/MarginLendingPortfolio/SuitabilityDetails");
 })

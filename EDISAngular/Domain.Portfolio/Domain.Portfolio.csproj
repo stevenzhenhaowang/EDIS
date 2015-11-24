@@ -59,6 +59,8 @@
     <Compile Include="AggregateRoots\ClientGroup.cs" />
     <Compile Include="AggregateRoots\LiabilityBase.cs" />
     <Compile Include="AggregateRoots\Liability\Insurance.cs" />
+    <Compile Include="AggregateRoots\Liability\LoanValueRatioPasser.cs" />
+    <Compile Include="AggregateRoots\Liability\MarginLenderPasser.cs" />
     <Compile Include="AggregateRoots\Liability\MarginLending.cs" />
     <Compile Include="AggregateRoots\Liability\MortgageAndHomeLiability.cs" />
     <Compile Include="AggregateRoots\Liability\Security.cs" />
@@ -126,6 +128,7 @@
     <Compile Include="Interfaces\ISuitabilityForecastParameter.cs" />
     <Compile Include="Entities\CreationModels\Transaction\TransactionCreationBase.cs" />
     <Compile Include="Interfaces\IWeightable.cs" />
+    <Compile Include="Interfaces\MarginLender.cs" />
     <Compile Include="Internals\BuyTransactionModel.cs" />
     <Compile Include="Internals\SellTransactionModel.cs" />
     <Compile Include="Internals\TransactionPosition.cs" />

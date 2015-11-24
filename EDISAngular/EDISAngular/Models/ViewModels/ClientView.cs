@@ -9,5 +9,6 @@ namespace EDISAngular.Models.ViewModels
     {
         public string id { get; set; }
         public string name { get; set; }
+        public string accountCatergory { get; set; }
     }
 }

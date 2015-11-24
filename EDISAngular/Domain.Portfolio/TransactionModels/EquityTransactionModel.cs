@@ -14,10 +14,14 @@ namespace Domain.Portfolio.TransactionModels
         public double Price { get; set; }
         public string Sector { get; set; }
         public string Ticker { get; set; }
-        public DateTime TransactionDate { get; set; } 
-        public string AccountId { get; set; }
+        public double LoanAmount { get; set; }
+        public DateTime TransactionDate { get; set; }
+        public EquityAccountView Account { get; set; }
+    }
 
-
-
+    public class EquityAccountView {
+        public string id { get; set; }
+        public string name { get; set; }
+        public string accountCatagory { get; set; }
     }
 }

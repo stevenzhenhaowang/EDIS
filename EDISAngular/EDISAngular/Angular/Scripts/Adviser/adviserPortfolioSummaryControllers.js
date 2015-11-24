@@ -32,20 +32,23 @@
         })
 
     }]);
-    app.controller("adviserPortfolioStockDataController", ["$scope", "AdviserPortfolioSummaryDBService", function ($scope, DBContext) {
-        DBContext.recentStockData().query(function (data) {
-            $scope.data = data;
+    app.controller("adviserPortfolioStockDataController", ["$scope", "AdviserPortfolioSummaryDBService", "$rootScope", function ($scope, DBContext, $rootScope) {
+        $scope.$on('stockChart', function(event, args){
+            DBContext.recentStockData().query(function (data) {
+                $scope.data = data;
           
-            $scope.dataSource = new kendo.data.DataSource({
-                //data: $scope.data,
-                data:data,  
-                sort: {
-                    field: "year",
-                    dir: "asc"
-                }
-            });
+                $scope.dataSource = new kendo.data.DataSource({
+                    //data: $scope.data,
+                    data:data,  
+                    sort: {
+                        field: "year",
+                        dir: "asc"
+                    }
+                });
+            })
         })
     }]);
+
 
     //app.controller("adviserPortfolioStockDataController", ["$scope", "$http", "companySelectionService", "periodSelectionService", function ($scope, $http, companySelectionService, periodSelectionService) {
 
@@ -107,14 +110,14 @@
                     type: "column"
                 },
                 series: [{
-                    name: "Risk",
-                    data: [$scope.data.risk]
-                }, {
+                //    name: "Risk",
+                //    data: [$scope.data.risk]
+                //}, {
                     name: "Suitability",
                     data: [$scope.data.suitability]
-                }, {
-                    name: "% of Asset Not Suited",
-                    data: [$scope.data.notSuited]
+                //}, {
+                //    name: "% of Asset Not Suited",
+                //    data: [$scope.data.notSuited]
                 }],
                 valueAxis: {
                     labels: {

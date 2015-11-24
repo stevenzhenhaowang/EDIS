@@ -1,12 +1,12 @@
 ﻿angular.module("EDIS")
 .controller("adviserCreateClientController", ["adviserCreateClientService", "$scope", "$http", "AppStrings", "adviserGetId",
-    "adviserGetClientGroups", function (service, $scope, $http, AppStrings, adviserId, clientGroups) {
+    "adviserGetClientGroups", "adviserGetMarginLenders", function (service, $scope, $http, AppStrings, adviserId, clientGroups, marginLenders) {
         adviserId().then(function (value) {
             $scope.adviserId = value;
         });
         clientGroups().then(function (value) {
             $scope.existingGroups = value;
-        })
+        });
         $scope.reset = function () {
             $scope.collection = {
                 personProfile: {
@@ -99,14 +99,19 @@
         $scope.reset();
     }])
 
-.controller("adviserCreateNewClientAccountController", function ($http, $scope, AppStrings, adviserGetClientGroups, adviserGetClientAccountTypes) {
+.controller("adviserCreateNewClientAccountController", function ($http, $scope, AppStrings, adviserGetClientGroups, adviserGetClientAccountTypes, adviserGetMarginLenders) {
     adviserGetClientGroups().then(function (data) {
         $scope.groups = data;
         //$scope.clients = data;
     });
     adviserGetClientAccountTypes().then(function (data) {
         $scope.accountTypes = data;
+    });
+    adviserGetMarginLenders().then(function (data) {
+        $scope.marginLenders = data;
     })
+
+
     
     $scope.loadClients = function () {
         var data = [];
@@ -119,9 +124,7 @@
                 }).error(function (data) {
                     console.log("Error.............");
                 });
-
     }
-
 
     $scope.submit = function () {
         var data = {};
@@ -129,7 +132,8 @@
             clientGroup: $scope.clientGroup,
             client: $scope.selectedClient,
             accountType: $scope.selectedAccountType,
-            accountName: $scope.accountName
+            accountName: $scope.accountName,
+            marginLenderId: $scope.marginLender
         };
 
         $http.post(AppStrings.EDIS_IP + "api/adviser/createClientAccount", data).success(function () {
@@ -140,13 +144,16 @@
     }
 })
 
-.controller("adviserCreateNewClientGroupAccountController", function ($http, $scope, AppStrings, adviserGetClientGroups, adviserGetClientAccountTypes) {
+.controller("adviserCreateNewClientGroupAccountController", function ($http, $scope, AppStrings, adviserGetClientGroups, adviserGetClientAccountTypes, adviserGetMarginLenders) {
     adviserGetClientGroups().then(function (data) {
         $scope.groups = data;
         //$scope.clients = data;
     });
     adviserGetClientAccountTypes().then(function (data) {
         $scope.accountTypes = data;
+    });
+    adviserGetMarginLenders().then(function (data) {
+        $scope.marginLenders = data;
     })
 
     $scope.submit = function () {
@@ -154,7 +161,8 @@
         data = {
             clientGroup: $scope.clientGroup,
             accountType: $scope.selectedAccountType,
-            accountName: $scope.accountName
+            accountName: $scope.accountName,
+            marginLenderId: $scope.marginLender
         }
 
         $http.post(AppStrings.EDIS_IP + "api/adviser/createGroupAccount", data).success(function () {

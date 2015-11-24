@@ -57,6 +57,7 @@ namespace Edis.Db
         
         public DbSet<RiskProfile> RiskProfiles { get; set; }
         public DbSet<CountryCode> CountryCodes { get; set; }
+        public DbSet<MarginLender> MarginLenders { get; set; }
 
         public DbSet<CorperateActionHistory> CorporateActions { get; set; }
         public DbSet<ReturnOfCapital> ReturnOfCapitals { get; set; }
@@ -100,7 +101,7 @@ namespace Edis.Db
             modelBuilder.Entity<RebalanceModel>()
                 .HasRequired<ClientGroup>(m => m.ClientGroup);
 
-            modelBuilder.Entity<MarginLendingTransaction>().HasMany(m => m.LoanValueRatios);
+            //modelBuilder.Entity<MarginLendingTransaction>().HasMany(m => m.LoanValueRatios);
             modelBuilder.Entity<Account>().HasMany(ac=>ac.Insurances)
                 .WithRequired(c=>c.Account).WillCascadeOnDelete(true);
 

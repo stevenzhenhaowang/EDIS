@@ -2677,4 +2677,28 @@ a.right-btn {
 .hide-element {
   display: none; }
 
+.label-transaction {
+    width: 200px;
+}
+
+.garage-title {
+    white-space: nowrap;
+}
+
+.button-transaction {
+    margin-top: 20px;
+}
+
+.lable-margin {
+    margin-top: 10px;
+    width: 300px;
+}
+
+.color-blue {
+    color: blue
+}
+
+.color-red {
+    color: red
+}
 /*# sourceMappingURL=adviser.css.map */

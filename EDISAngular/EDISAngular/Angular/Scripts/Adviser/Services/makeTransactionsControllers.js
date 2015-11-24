@@ -38,15 +38,32 @@ angular.module("EDIS")
             console.log("Error.............");
         });
     }
+
     $scope.loadAllTickers = function () {
         $http.get(AppStrings.EDIS_IP + "api/Adviser/CorprateAction/Ticker")
             .success(function (data) {
                 $scope.allTickers = data;
-              
             }).error(function (data) {
                 console.log("Error.............");
             });
     }
+
+    $scope.propertyTypes = [];
+    $scope.typeOfRates = [];
+
+    $http.get(AppStrings.EDIS_IP + "api/Adviser/CorprateAction/PropertyTypes")
+        .success(function (data) {
+            $scope.propertyTypes = data;
+        }).error(function (data) {
+            console.log("Error.............");
+        });
+    
+    $http.get(AppStrings.EDIS_IP + "api/Adviser/CorprateAction/TypeOfMortgageRates")
+        .success(function (data) {
+            $scope.typeOfRates = data;
+        }).error(function (data) {
+            console.log("Error.............");
+        });
 
     $scope.reset = function () {
         $scope.collection = {
@@ -64,28 +81,20 @@ angular.module("EDIS")
 
     $scope.save = function () {
         var data = {};
-        var clientId = {};
         if ($scope.collection.transactionType === "Equity") {
             data = {
-                Ticker: $scope.collection.equityTrans.Ticker,
+                Ticker: $scope.collection.equityTrans.Ticker.tickerNumber,
                 Sector: $scope.collection.equityTrans.Sector,
                 Price: $scope.collection.equityTrans.Price,
                 NumberOfUnits: $scope.collection.equityTrans.NumberOfUnits,
+                LoanAmount: $scope.collection.equityTrans.LoanAmount,
                 TransactionDate: dateParser($scope.collection.equityTrans.TransactionDate),
-                Name: "",
+                Name: $scope.collection.equityTrans.Ticker.tickerName,
              
-                AccountId: $scope.collection.selectedAccount
+                Account: $scope.collection.selectedAccount
             };
-        //    $http({
-        //    method: 'POST',
-        //    url: AppStrings.EDIS_IP + "api/adviser/makeEquityTransactions",
-        //    data: {
-        //        data: data,
-        //        clientNumber: "desc here"
-        //    }
-        //})
             $http.post(AppStrings.EDIS_IP + "api/adviser/makeEquityTransactions", data).success(function () {
-                alert("successs" + $scope.collection.equityTrans.TransactionDate);
+                alert("Successs");
             }).error(function (data) {
                 alert("failed:" + data);
             })
@@ -100,11 +109,25 @@ angular.module("EDIS")
 
             };
         }
-        else {
+        else if ($scope.collection.transactionType == "Property") {
             data = {
+                PropertyAddress: $scope.collection.propertyTrans.propertyAddress,
+                PropertyType: $scope.collection.propertyTrans.propertyType,
+                PropertyPrice: $scope.collection.propertyTrans.propertyPrice,
+                LoanAmount: $scope.collection.propertyTrans.loanAmount,
+                LoanRate: $scope.collection.propertyTrans.loanRate,
+                TypeOfRate: $scope.collection.propertyTrans.typeOfRate,
+                TransactionFee: $scope.collection.propertyTrans.transactionFee,
+                TransactionDate: dateParser($scope.collection.propertyTrans.transactionDate),
+                Institution: $scope.collection.propertyTrans.institution,
 
+                Account: $scope.collection.selectedAccount
             };
-
+            $http.post(AppStrings.EDIS_IP + "api/adviser/makePropertyTransactions", data).success(function () {
+                alert("Successs");
+            }).error(function (data) {
+                alert("failed:" + data);
+            })
         }
 
 

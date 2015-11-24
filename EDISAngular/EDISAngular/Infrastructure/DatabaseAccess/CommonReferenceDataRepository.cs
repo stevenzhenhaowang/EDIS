@@ -235,7 +235,7 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
             var equities = repo.GetAllEquities();
             var result = new List<TickerBriefModel>();
             foreach (var equity in equities) {
-                result.Add(new TickerBriefModel { tickerName = equity.Ticker, tickerNumber = equity.Ticker });
+                result.Add(new TickerBriefModel { tickerName = equity.Name, tickerNumber = equity.Ticker });
             }
             return result;
         }

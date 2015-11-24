@@ -202,7 +202,9 @@ namespace EDISAngular.APIControllers
             ClientGroup clientGroup = edisRepo.GetClientGroupSync(client.ClientGroupId, DateTime.Now);
             if (clientGroup.MainClientId == client.Id) {
                 List<GroupAccount> groupAccounts = edisRepo.GetAccountsForClientGroupSync(clientGroup.ClientGroupNumber, DateTime.Now);
-                List<ClientAccount> clientAccounts = edisRepo.GetAccountsForClientSync(client.ClientNumber, DateTime.Now);
+                List<ClientAccount> clientAccounts = new List<ClientAccount>();
+                clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
+
                 groupAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<FixedIncome>().Cast<AssetBase>().ToList()));
                 clientAccounts.ForEach(a => assets.AddRange(a.GetAssetsSync().OfType<FixedIncome>().Cast<AssetBase>().ToList()));
             } else {

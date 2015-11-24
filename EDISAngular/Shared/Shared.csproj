@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountCatergories.cs" />
     <Compile Include="AccountType.cs" />
     <Compile Include="ASXIndexTypes.cs" />
     <Compile Include="BalanceGroups.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="ProductTypes.cs" />
     <Compile Include="PropertyType.cs" />
     <Compile Include="CorporateActionStatus.cs" />
+    <Compile Include="ResearchValueKeys.cs" />
     <Compile Include="RiskLevels.cs" />
     <Compile Include="TransactionExpenseType.cs" />
     <Compile Include="AssetTypes.cs" />

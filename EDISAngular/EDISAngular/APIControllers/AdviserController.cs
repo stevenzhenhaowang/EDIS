@@ -25,6 +25,8 @@ using Domain.Portfolio.AggregateRoots.Liability;
 using Domain.Portfolio.AggregateRoots.Asset;
 using Domain.Portfolio.TransactionModels;
 using Domain.Portfolio.Entities.CreationModels.Transaction;
+using EDISAngular.Models.ServiceModels.TransactionModels;
+using Domain.Portfolio.Entities.CreationModels.Cost;
 
 namespace EDISAngular.APIControllers
 {
@@ -55,8 +57,8 @@ namespace EDISAngular.APIControllers
             clientGroup.GetClientsSync().ForEach(c => clientAccounts.AddRange(c.GetAccountsSync()));
 
             List<AccountView> result = new List<AccountView>();
-            accounts.ForEach(a => result.Add(new AccountView { id = a.Id, name = a.AccountNameOrInfo}));
-            clientAccounts.ForEach(a => result.Add(new AccountView { id = a.Id, name = a.AccountNameOrInfo }));
+            accounts.ForEach(a => result.Add(new AccountView { id = a.Id, name = a.AccountNameOrInfo, accountCatagory = AccountCatergories.GroupAccount.ToString()}));
+            clientAccounts.ForEach(a => result.Add(new AccountView { id = a.Id, name = a.AccountNameOrInfo, accountCatagory = AccountCatergories.ClientAccount.ToString()}));
 
             //var ClientGroupId = ClientGroupID.clientGroup;
             ////Here we retrieve the group account then add to the result
@@ -135,9 +137,49 @@ namespace EDISAngular.APIControllers
         [HttpPost, Route("api/adviser/makeEquityTransactions")]
         public string adviserMakeEquityTransactions(EquityTransactionModel model, string clientId="") {
             edisRepo.AdviserMakeEquityTransactions(model);    
-            return "ok zhong de ok ";
+            return "Ok";
         }
 
+
+        [HttpPost, Route("api/adviser/makePropertyTransactions")]
+        public IHttpActionResult adviserMakePropertyTransactions(PropertyTransactionModel model) {
+            AccountBase account = null;
+
+            if (model.Account.accountCatagory == AccountCatergories.GroupAccount.ToString()) {
+                account = edisRepo.GetGroupAccountById(model.Account.id);
+            } else {
+                account = edisRepo.GetClientAccountById(model.Account.id);
+            }
+
+            List<TransactionFeeRecordCreation> feeRecords = new List<TransactionFeeRecordCreation>();
+            feeRecords.Add(new TransactionFeeRecordCreation {
+                Amount = model.TransactionFee,
+                TransactionExpenseType = TransactionExpenseType.LiabilityProcessingFee
+            });
+
+            HomeLoanTransactionCreation homeLoan = new HomeLoanTransactionCreation {
+                GrantedOn = model.TransactionDate,
+                LoanAmount = model.LoanAmount,
+                LoanRate = model.LoanRate,
+                TypeOfMortgageRates = (TypeOfMortgageRates)Enum.Parse(typeof(TypeOfMortgageRates), model.TypeOfRate),
+                ExpiryDate = model.TransactionDate.AddDays(365),
+                LoanRepaymentType = LoanRepaymentType.NotSpecified,
+                IsAcquire = true,
+                Institution = model.Institution
+            };
+
+            account.MakeTransactionSync(new PropertyTransactionCreation {
+                FullAddress = model.PropertyAddress,
+                Price = model.PropertyPrice,
+                PropertyType = model.PropertyType.ToString(),
+                TransactionDate = model.TransactionDate,
+                FeesRecords = feeRecords,
+                IsBuy = true,
+                loan = homeLoan
+            });
+
+            return Ok();
+        }
 
 
         [HttpPost, Route("api/adviser/getAllClientGroups")]
@@ -179,12 +221,12 @@ namespace EDISAngular.APIControllers
             var userid = User.Identity.GetUserId();
 
             List<ClientView> clients = new List<ClientView>();
-            foreach (AccountType type in Enum.GetValues(typeof(AccountType)))
+            foreach (AccountType type in Enum.GetValues(typeof(AccountType))) {
                 clients.Add(new ClientView
                 {
                     name = type.ToString(),
                 });
-
+            }
             return clients;
         }
 
@@ -193,7 +235,7 @@ namespace EDISAngular.APIControllers
         [Authorize(Roles = AuthorizationRoles.Role_Adviser)]
         public void createClientAccount(ClientAccountCreationBindingModel model)
         {
-            edisRepo.CreateNewClientAccountSync(model.client, model.accountName, model.accountType);
+            edisRepo.CreateNewClientAccountSync(model.client, model.accountName, model.accountType, model.marginLenderId);
 
         }
 
@@ -201,7 +243,7 @@ namespace EDISAngular.APIControllers
         [Authorize(Roles = AuthorizationRoles.Role_Adviser)]
         public void createClientGroupAccount(ClientAccountCreationBindingModel model)
         {
-            edisRepo.CreateNewClientGroupAccountSync(model.clientGroup, model.accountName, model.accountType);
+            edisRepo.CreateNewClientGroupAccountSync(model.clientGroup, model.accountName, model.accountType, model.marginLenderId);
         }
 
         [HttpGet, Route("api/adviser/clients")]
@@ -268,6 +310,27 @@ namespace EDISAngular.APIControllers
             //return advisorRepo.GetClientGroupsByAdviserId(userid);
 
         }
+
+
+
+        [HttpGet, Route("api/adviser/marginLenders")]
+        [Authorize(Roles = AuthorizationRoles.Role_Adviser)]
+        public List<ClientView> getAllMarginLenders() {
+
+            var userid = User.Identity.GetUserId();
+            var adviser = edisRepo.GetAdviserSync(userid, DateTime.Now);
+
+            var lenders = edisRepo.GetAllMarginLenders();
+            List<ClientView> lenderView = new List<ClientView>();
+            foreach (var lender in lenders) {
+                lenderView.Add(new ClientView {
+                    id = lender.LenderId,
+                    name = lender.LenderName
+                });
+            }
+            return lenderView;
+        }
+
         [HttpGet, Route("api/adviser/businessRevenueBrief")]
         public BusinessPortfolioOverviewBriefModel GetBriefBusinessRevenue()
         {
@@ -472,21 +535,21 @@ namespace EDISAngular.APIControllers
                 sector = equity.Sector,
                 priceDate = priceDate == null? DateTime.MinValue : (DateTime)priceDate,
                 assetClass = equity.EquityType.ToString(),
-                changeAmount = edisRepo.GetResearchValueForEquitySync("changeAmount", equity.Ticker) == null ? 0 : (double)edisRepo.GetResearchValueForEquitySync("changeAmount", equity.Ticker),
-                changeRatePercentage = edisRepo.GetResearchValueForEquitySync("changeRatePercentage", equity.Ticker) == null ? 0 : (double)edisRepo.GetResearchValueForEquitySync("changeRatePercentage", equity.Ticker),
-                weeksDifferenceAmount = (double)edisRepo.GetResearchValueForEquitySync("52WkHighPrice", equity.Ticker),
-                weeksDifferenceRatePercentage = (double)(edisRepo.GetResearchValueForEquitySync("52WkLowPrice", equity.Ticker) / edisRepo.GetResearchValueForEquitySync("52WkHighPrice", equity.Ticker) == null ? 1 : edisRepo.GetResearchValueForEquitySync("52WkHighPrice", equity.Ticker)),
+                changeAmount = edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.changeAmount, equity.Ticker) == null ? 0 : (double)edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.changeAmount, equity.Ticker),
+                changeRatePercentage = edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.changeRatePercentage, equity.Ticker) == null ? 0 : (double)edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.changeRatePercentage, equity.Ticker),
+                weeksDifferenceAmount = (double)edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.fivtyTwoWkHighPrice, equity.Ticker),
+                weeksDifferenceRatePercentage = (double)(edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.fivtyTwoWkLowPrice, equity.Ticker) / edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.fivtyTwoWkHighPrice, equity.Ticker) == null ? 1 : edisRepo.GetResearchValueForEquitySync("52WkHighPrice", equity.Ticker)),
                 suitabilityScore = equity.GetRating().TotalScore,
-                suitsTypeOfClients = edisRepo.GetStringResearchValueForEquitySync("suitsTypeOfClients", equity.Ticker),
-                country = edisRepo.GetStringResearchValueForEquitySync("Country", equity.Ticker),
-                exchange = edisRepo.GetStringResearchValueForEquitySync("Exchange", equity.Ticker),
-                marketCapitalisation = edisRepo.GetResearchValueForEquitySync("MarketCap", equity.Ticker).ToString(),
-                currencyType = edisRepo.GetStringResearchValueForEquitySync("Currency", equity.Ticker),
-                reasons = edisRepo.GetStringResearchValueForEquitySync("reasons", equity.Ticker),
-                companyBriefing = edisRepo.GetStringResearchValueForEquitySync("companyBriefing", equity.Ticker),
-                companyStrategies = edisRepo.GetStringResearchValueForEquitySync("companyStrategies", equity.Ticker),
-                investment = edisRepo.GetStringResearchValueForEquitySync("investment", equity.Ticker),
-                investmentName = edisRepo.GetStringResearchValueForEquitySync("investmentName", equity.Ticker),
+                suitsTypeOfClients = edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.suitsTypeOfClients, equity.Ticker),
+                country = edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.Country, equity.Ticker),
+                exchange = edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.Exchange, equity.Ticker),
+                marketCapitalisation = edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.MarketCap, equity.Ticker).ToString(),
+                currencyType = edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.Currency, equity.Ticker),
+                reasons = edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.reasons, equity.Ticker),
+                companyBriefing = edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.companyBriefing, equity.Ticker),
+                companyStrategies = edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.companyStrategies, equity.Ticker),
+                investment = edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.investment, equity.Ticker),
+                investmentName = edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.investmentName, equity.Ticker),
                 
 
                 indexData = new List<CompanyProfileIndexData>(),
@@ -507,22 +570,22 @@ namespace EDISAngular.APIControllers
                             data=new List<AnalysisPayloadGroupDataItem>{
                                 new AnalysisPayloadGroupDataItem{
                                     name= "Current Short Term Recommendation",
-                                    baseInformation= edisRepo.GetStringResearchValueForEquitySync("baseInformationShort", equity.Ticker),
-                                    morningstar= edisRepo.GetStringResearchValueForEquitySync("morningstarShort", equity.Ticker),
-                                    brokerX= edisRepo.GetStringResearchValueForEquitySync("brokerXShort", equity.Ticker),
-                                    ASX200Accumulation= edisRepo.GetStringResearchValueForEquitySync("ASX200AccumulationShort", equity.Ticker),
+                                    baseInformation= edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.baseInformationShort, equity.Ticker),
+                                    morningstar= edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.morningstarShort, equity.Ticker),
+                                    brokerX= edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.brokerXShort, equity.Ticker),
+                                    ASX200Accumulation= edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.ASX200AccumulationShort, equity.Ticker),
                                 },new AnalysisPayloadGroupDataItem{
                                     name= "Current Long Term Recommendation",
-                                    baseInformation= edisRepo.GetStringResearchValueForEquitySync("baseInformationLong", equity.Ticker),
-                                    morningstar= edisRepo.GetStringResearchValueForEquitySync("morningstarLong", equity.Ticker),
-                                    brokerX= edisRepo.GetStringResearchValueForEquitySync("brokerXLong", equity.Ticker),
-                                    ASX200Accumulation= edisRepo.GetStringResearchValueForEquitySync("ASX200AccumulationLong", equity.Ticker),
+                                    baseInformation= edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.baseInformationLong, equity.Ticker),
+                                    morningstar= edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.morningstarLong, equity.Ticker),
+                                    brokerX= edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.brokerXLong, equity.Ticker),
+                                    ASX200Accumulation= edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.ASX200AccumulationLong, equity.Ticker),
                                 },new AnalysisPayloadGroupDataItem{
                                     name= "Price Target",
-                                    baseInformation= edisRepo.GetStringResearchValueForEquitySync("baseInformationPrice", equity.Ticker),
-                                    morningstar= edisRepo.GetStringResearchValueForEquitySync("morningstarPrice", equity.Ticker),
-                                    brokerX= edisRepo.GetStringResearchValueForEquitySync("brokerXPrice", equity.Ticker),
-                                    ASX200Accumulation= edisRepo.GetStringResearchValueForEquitySync("ASX200AccumulationPrice", equity.Ticker),
+                                    baseInformation= edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.baseInformationPrice, equity.Ticker),
+                                    morningstar= edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.morningstarPrice, equity.Ticker),
+                                    brokerX= edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.brokerXPrice, equity.Ticker),
+                                    ASX200Accumulation= edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.ASX200AccumulationPrice, equity.Ticker),
                                 },
 
                             }

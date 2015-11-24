@@ -40,6 +40,11 @@ namespace Domain.Portfolio.AggregateRoots
             };
         }
 
+        public double GetLiabilityValue() {
+            var activities = this.GetActivitiesSync();
+            return activities.Sum(a => a.Transactions.Sum(t => t.AmountPerUnit));
+        }
+
         protected LiabilityBase(IRepository repo) : base(repo)
         {
         }

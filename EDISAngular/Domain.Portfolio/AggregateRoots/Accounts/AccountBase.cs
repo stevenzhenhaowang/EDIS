@@ -25,7 +25,7 @@ namespace Domain.Portfolio.AggregateRoots.Accounts
 
         public string AccountNameOrInfo { get; set; }
 
-
+        public string MarginLenderId { get; set; }
 
         public List<AssetBase> GetAssets(DateTime? beforeDate = null)
         {
@@ -35,6 +35,10 @@ namespace Domain.Portfolio.AggregateRoots.Accounts
         public List<AssetBase> GetAssetsSync(DateTime? beforeDate = null)
         {
             return this._repository.GetAssetsForAccountSync(this.AccountNumber, beforeDate ?? DateTime.Now);
+        }
+
+        public List<AssetBase> GetEquities(DateTime? beforeDate = null) {
+            return this._repository.GetEquityAssetsForAccount(this.AccountNumber, beforeDate ?? DateTime.Now);
         }
 
         public List<LiabilityBase> GetLiabilities(DateTime? beforeDate = null)
