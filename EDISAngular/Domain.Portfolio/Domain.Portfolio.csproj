@@ -128,7 +128,6 @@
     <Compile Include="Interfaces\ISuitabilityForecastParameter.cs" />
     <Compile Include="Entities\CreationModels\Transaction\TransactionCreationBase.cs" />
     <Compile Include="Interfaces\IWeightable.cs" />
-    <Compile Include="Interfaces\MarginLender.cs" />
     <Compile Include="Internals\BuyTransactionModel.cs" />
     <Compile Include="Internals\SellTransactionModel.cs" />
     <Compile Include="Internals\TransactionPosition.cs" />
