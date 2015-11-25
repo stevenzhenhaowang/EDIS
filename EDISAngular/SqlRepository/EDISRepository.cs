@@ -137,30 +137,32 @@ namespace SqlRepository
             //    CashAccount
 
             //});
-            accountToMakeTrans.MakeTransactionSync(new CashAccountTransactionAccountCreation()
-            {
-                Amount = -(model.Price * model.NumberOfUnits - model.LoanAmount),
-                AnnualInterestSoFar = 0,
-                Bsb = "123456",
-                CashAccountName = accountToMakeTrans.AccountNameOrInfo,
-                CashAccountNumber = accountToMakeTrans.AccountNumber,
-                CashAccountType = CashAccountType.TermDeposit,
-                CurrencyType = CurrencyType.AustralianDollar,
-                Frequency = Frequency.Annually,
-                InterestRate = 0,
-                MaturityDate = DateTime.Now.AddYears(1),
-                TermsInMonths = 0,
-                TransactionDate = DateTime.Now,
-                TransactionFeeRecords = new List<TransactionFeeRecordCreation>()
-                {
-                    new TransactionFeeRecordCreation()
-                    {
-                        Amount = 0,
-                        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
-                    }
-                }
+            MakeCashTransactions(account.AccountNumber, - (model.NumberOfUnits * model.Price - model.LoanAmount));
 
-            });
+            //accountToMakeTrans.MakeTransactionSync(new CashAccountTransactionAccountCreation()
+            //{
+            //    Amount = -(model.Price * model.NumberOfUnits - model.LoanAmount),
+            //    AnnualInterestSoFar = 0,
+            //    Bsb = "123456",
+            //    CashAccountName = accountToMakeTrans.AccountNameOrInfo,
+            //    CashAccountNumber = accountToMakeTrans.AccountNumber,
+            //    CashAccountType = CashAccountType.TermDeposit,
+            //    CurrencyType = CurrencyType.AustralianDollar,
+            //    Frequency = Frequency.Annually,
+            //    InterestRate = 0,
+            //    MaturityDate = DateTime.Now.AddYears(1),
+            //    TermsInMonths = 0,
+            //    TransactionDate = DateTime.Now,
+            //    TransactionFeeRecords = new List<TransactionFeeRecordCreation>()
+            //    {
+            //        new TransactionFeeRecordCreation()
+            //        {
+            //            Amount = 0,
+            //            TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
+            //        }
+            //    }
+
+            //});
 
 
 
@@ -5749,7 +5751,7 @@ namespace SqlRepository
                             F0Ratios = GetF0RatiosForEquitySync(australianEquity.Ticker),
                             Ticker = australianEquity.Ticker,
                             F1Recommendation = GetF1RatiosForEquitySync(australianEquity.Ticker),
-                            LatestPrice = australianEquity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
+                            LatestPrice = australianEquity.Prices.Count == 0 ? 0 : australianEquity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
                             Sector = australianEquity.Sector,
                             TotalNumberOfUnits = australianEquity.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault()
                         }
@@ -5773,7 +5775,7 @@ namespace SqlRepository
                             Ticker = internationalEquity.Ticker,
                             Name = internationalEquity.Name,
                             TotalNumberOfUnits = internationalEquity.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault(),
-                            LatestPrice = internationalEquity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
+                            LatestPrice = internationalEquity.Prices.Count == 0 ? 0 : internationalEquity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
                             ClientAccountId = account.AccountId,
                             F1Recommendation = GetF1RatiosForEquitySync(internationalEquity.Ticker),
                             Sector = internationalEquity.Sector,
@@ -5796,7 +5798,7 @@ namespace SqlRepository
                             Name = managedInvestment.Name,
                             Id = managedInvestment.AssetId,
                             TotalNumberOfUnits = managedInvestment.EquityTransactions.Sum(t => t.NumberOfUnits).GetValueOrDefault(),
-                            LatestPrice = managedInvestment.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
+                            LatestPrice = managedInvestment.Prices.Count == 0 ? 0 : managedInvestment.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault(),
                             ClientAccountId = account.AccountId,
                             F1Recommendation = GetF1RatiosForEquitySync(managedInvestment.Ticker),
                             Sector = managedInvestment.Sector,
@@ -7069,6 +7071,7 @@ namespace SqlRepository
                     _db.TransactionExpenses.Add(expense);
                 }
             }
+
         }
 
 
@@ -7707,7 +7710,7 @@ namespace SqlRepository
                     internationalEquity.F1Recommendation = GetF1RatiosForEquitySync(equity.Ticker);
                     internationalEquity.Id = equity.AssetId;
                     internationalEquity.Name = equity.Name;
-                    internationalEquity.LatestPrice =
+                    internationalEquity.LatestPrice = transaction.Equity.Prices.Count == 0 ? 0 :
                         transaction.Equity.Prices.OrderByDescending(p => p.CreatedOn)
                             .FirstOrDefault()
                             .Price.GetValueOrDefault();
@@ -8883,7 +8886,7 @@ namespace SqlRepository
             var accounts = model.AccountsInfo;
             foreach (var account in accounts) {
                 var amountToDeductOrIncrease = Convert.ToDouble(account.ReturnAmount);
-                MakeCashTransactions(account.AccountNumber, amountToDeductOrIncrease, model.AdviserId);
+                MakeCashTransactions(account.AccountNumber, amountToDeductOrIncrease);
                 recordReturnOfCapitalHistory(model.AdviserId, account.AccountNumber, amountToDeductOrIncrease.ToString(), model.ActionName,model.Ticker);
             }
             
@@ -8958,7 +8961,7 @@ namespace SqlRepository
             _db.SaveChanges();
         }
 
-        public void MakeCashTransactions(string accountNumber, double amount , string adviserId) {
+        public void MakeCashTransactions(string accountNumber, double amount) {
             
             var account = _db.Accounts.Where(acc => acc.AccountNumber == accountNumber).FirstOrDefault();
             var clientGroup = GetClientGroupAccountSync(account.AccountNumber, DateTime.Now);
@@ -9311,7 +9314,7 @@ namespace SqlRepository
 
         private void MakeAction(CorperateActionHistory action) {
             var amount = Convert.ToDouble(action.CashAdjustmentAmount);
-            MakeCashTransactions(action.AssociatedAccountNumber, amount, action.AdviserId);
+            MakeCashTransactions(action.AssociatedAccountNumber, amount);
             var account = _db.Accounts.Where(a => a.AccountNumber == action.AssociatedAccountNumber).FirstOrDefault();
             var equity = getEquityByTicker(action.Ticker);
             var numberOfUnits = Convert.ToInt32(action.StockAdjustmentShareAmount);
