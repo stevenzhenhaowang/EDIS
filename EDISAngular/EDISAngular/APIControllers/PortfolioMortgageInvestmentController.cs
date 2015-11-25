@@ -136,10 +136,11 @@ namespace EDISAngular.APIControllers
             double monthlyRepayment = 0;
 
             foreach (var mah in liabilities.OfType<MortgageAndHomeLiability>()) {
-                mah.GetActivitiesSync().OfType<FinancialActivity>().ToList().ForEach(a => monthlyRepayment += a.Incomes.Sum(i => i.Amount));
+                mah.GetActivitiesSync().OfType<FinancialActivity>().ToList().ForEach(a => monthlyRepayment += a.Expenses.Sum(e => e.Amount));
                 marketValue += mah.Property.GetTotalMarketValue();
                 propertyGearingRatio += mah.CurrentPropertyGearingRatio;
                 outstandingLoans += mah.CurrentBalance;
+                
             }
 
             MortgageInvestmentGeneralInfo info = new MortgageInvestmentGeneralInfo {
@@ -210,12 +211,14 @@ namespace EDISAngular.APIControllers
             MortgageInvestmentProfileModel model = new MortgageInvestmentProfileModel { data = new List<MortgageInvestmentProfileItem>() };
             var mortgageAndHomes = liabilities.OfType<MortgageAndHomeLiability>();
             foreach (var mortgageAndHome in mortgageAndHomes) {
+                
+
                 double monthlyRepayment = 0;
                 foreach (var activity in mortgageAndHome.GetActivitiesSync().OfType<FinancialActivity>()) {
-                    monthlyRepayment += activity.Incomes.Sum(i => i.Amount);
+                    monthlyRepayment += activity.Expenses.Sum(e => e.Amount);
                 }
                 model.data.Add(new MortgageInvestmentProfileItem {
-                    propertyName = mortgageAndHome.Property.PropertyType,
+                    propertyName = ((PropertyType)Int32.Parse(mortgageAndHome.Property.PropertyType)).ToString(),
                     address = mortgageAndHome.Property.FullAddress,
                     currency = mortgageAndHome.CurrencyType.ToString(),
                     marketValue = mortgageAndHome.Property.GetTotalMarketValue(),
@@ -228,7 +231,12 @@ namespace EDISAngular.APIControllers
                     loanExpiryDate = mortgageAndHome.ExpiryDate,
                     RepaymentType = mortgageAndHome.LoanRepaymentType.ToString(),
                     currentLoanBalance = mortgageAndHome.CurrentBalance,
-                    currentFinancialYearInterest = mortgageAndHome.CurrentFiancialYearInterest
+                    currentFinancialYearInterest = mortgageAndHome.CurrentFiancialYearInterest,
+                    interestRates = mortgageAndHome.CurrentFiancialYearInterest,
+                    startDate = mortgageAndHome.GrantedOn,
+                    NumberOfYearsToExpiry = (mortgageAndHome.ExpiryDate - mortgageAndHome.GrantedOn).TotalDays / 365,
+                    numberOfYearsToDate = (DateTime.Now - mortgageAndHome.GrantedOn).TotalDays / 365,
+                    suitability = mortgageAndHome.Property.GetRating().TotalScore
                 });
             }
             return model;

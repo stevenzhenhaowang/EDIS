@@ -2701,4 +2701,10 @@ a.right-btn {
 .color-red {
     color: red
 }
+
+.col-bottom {
+  float: left;
+  margin-bottom: 1px;
+  line-height: 1.8;
+}
 /*# sourceMappingURL=adviser.css.map */

@@ -162,12 +162,12 @@ namespace EDISAngular.APIControllers
             });
 
             HomeLoanTransactionCreation homeLoan = new HomeLoanTransactionCreation {
-                GrantedOn = model.TransactionDate,
+                GrantedOn = model.GrantedDate,
                 LoanAmount = model.LoanAmount,
                 LoanRate = model.LoanRate,
                 TypeOfMortgageRates = (TypeOfMortgageRates)Enum.Parse(typeof(TypeOfMortgageRates), model.TypeOfRate),
-                ExpiryDate = model.TransactionDate.AddDays(365),
-                LoanRepaymentType = LoanRepaymentType.NotSpecified,
+                ExpiryDate = model.ExpiryDate,
+                LoanRepaymentType = LoanRepaymentType.DirectDebt,
                 IsAcquire = true,
                 Institution = model.Institution
             };

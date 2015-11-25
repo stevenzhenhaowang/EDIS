@@ -120,6 +120,8 @@ angular.module("EDIS")
                 TransactionFee: $scope.collection.propertyTrans.transactionFee,
                 TransactionDate: dateParser($scope.collection.propertyTrans.transactionDate),
                 Institution: $scope.collection.propertyTrans.institution,
+                GrantedDate: dateParser($scope.collection.propertyTrans.grantedDate),
+                ExpiryDate: dateParser($scope.collection.propertyTrans.expiryDate),
 
                 Account: $scope.collection.selectedAccount
             };

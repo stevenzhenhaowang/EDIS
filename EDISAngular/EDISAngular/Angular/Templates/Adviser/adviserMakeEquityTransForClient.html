@@ -117,45 +117,82 @@
 
                         <div ng-if="collection.transactionType==='Property'">
                             <div class="row">
-                                <label>Property Transaction</label>
-                            </div>
+                                <table class="row">
+                                    <tr>
+                                        <td class="col-md-6">
+                                            <label class="label-transaction lable-margin">Property Full Address</label>
+                                            <input type="text" ng-model="collection.propertyTrans.propertyAddress" class="form-control" required name="propertyAddress" />
+                                            <div class="error" ng-show="form.propertyAddress.$error.required&&form.propertyAddress.$touched">Please Enter The Full Address</div>
+                                        </td>
+                                        <td class="col-md-6">
+                                            <label class="label-transaction lable-margin">Property Type</label>
+                                            <select class="form-control" ng-model="collection.propertyTrans.propertyType" name="propertyType" required ng-options="item.id as item.name for item in propertyTypes" />
+                                            <div class="error" ng-show="form.propertyType.$error.required&&form.propertyType.$touched">Please Select a Property Type</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-md-6">
+                                            <label class="label-transaction lable-margin">Property Price</label>
+                                            <input type="number" ng-model="collection.propertyTrans.propertyPrice" class="form-control" required name="propertyPrice" />
+                                            <div class="error" ng-show="form.propertyPrice.$error.required&&form.propertyPrice.$touched">Please Enter Property Price</div>
 
-                            <div class="row">
-                                <label class="label-transaction lable-margin">Property Full Address</label>
-                                <input type="text" ng-model="collection.propertyTrans.propertyAddress" class="form-control" required name="propertyAddress" />
-                                <div class="error" ng-show="form.propertyAddress.$error.required&&form.propertyAddress.$touched">Please Enter The Full Address</div>
+                                        </td>
+                                        <td class="col-md-6"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-md-6">
+                                            <label class="label-transaction lable-margin">Loan Amount</label>
+                                            <input type="number" ng-model="collection.propertyTrans.loanAmount" class="form-control" required name="loanAmount" />
+                                            <div class="error" ng-show="form.loanAmount.$error.required&&form.loanAmount.$touched">Please Enter Loan Amount</div>
 
-                                <label class="label-transaction lable-margin">Property Type</label>
-                                <select class="form-control" ng-model="collection.propertyTrans.propertyType" name="propertyType" required ng-options="item.id as item.name for item in propertyTypes"/>
-                                <div class="error" ng-show="form.propertyType.$error.required&&form.propertyType.$touched">Please Select a Property Type</div>
+                                        </td>
+                                        <td class="col-md-6">
+                                            <label class="label-transaction lable-margin">Loan Institution</label>
+                                            <input type="text" ng-model="collection.propertyTrans.institution" class="form-control" required name="institution" />
+                                            <div class="error" ng-show="form.institution.$error.required&&form.institution.$touched">Please Enter Loan Institution</div>
 
-                                <label class="label-transaction lable-margin">Property Price</label>
-                                <input type="number" ng-model="collection.propertyTrans.propertyPrice" class="form-control" required name="propertyPrice" />
-                                <div class="error" ng-show="form.propertyPrice.$error.required&&form.propertyPrice.$touched">Please Enter Property Price</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-md-6">
+                                            <label class="label-transaction lable-margin">Loan Rate</label>
+                                            <input type="number" ng-model="collection.propertyTrans.loanRate" class="form-control" required name="loanRate" />
+                                            <div class="error" ng-show="form.loanRate.$error.required&&form.loanRate.$touched">Please Enter Loan Rate</div>
 
-                                <label class="label-transaction lable-margin">Loan Amount</label>
-                                <input type="number" ng-model="collection.propertyTrans.loanAmount" class="form-control" required name="loanAmount" />
-                                <div class="error" ng-show="form.loanAmount.$error.required&&form.loanAmount.$touched">Please Enter Loan Amount</div>
+                                        </td>
+                                        <td class="col-md-6">
+                                            <label class="label-transaction lable-margin">Type of Rate</label>
+                                            <select class="form-control" ng-model="collection.propertyTrans.typeOfRate" name="typeOfRate" required ng-options="item.id as item.name for item in typeOfRates" />
+                                            <div class="error" ng-show="form.typeOfRate.$error.required&&form.typeOfRate.$touched">Please Select Type Of Rate</div>
 
-                                <label class="label-transaction lable-margin">Loan Institution</label>
-                                <input type="text" ng-model="collection.propertyTrans.institution" class="form-control" required name="institution" />
-                                <div class="error" ng-show="form.institution.$error.required&&form.institution.$touched">Please Enter Loan Institution</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-md-6">
+                                            <label class="lable-margin">Granted Date</label>
+                                            <input class="form-control" edis-datepicker ng-model="collection.propertyTrans.grantedDate" required name="grantedDate" />
+                                            <div class="error" ng-show="form.grantedDate.$error.required&&form.grantedDate.$touched">Please select a Granted date</div>
+                                        </td>
+                                        <td class="col-md-6">
+                                            <label class="lable-margin">Expiry Date</label>
+                                            <input class="form-control" edis-datepicker ng-model="collection.propertyTrans.expiryDate" required name="expiryDate" />
+                                            <div class="error" ng-show="form.expiryDate.$error.required&&form.expiryDate.$touched">Please select a transaction date</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-md-6">
+                                            <label class="label-transaction lable-margin">Transaction fee</label>
+                                            <input type="text" ng-model="collection.propertyTrans.transactionFee" class="form-control" required name="transactionFee" />
+                                            <div class="error" ng-show="form.transactionFee.$error.required&&form.typeOfRate.$touched">Please Enter Transaction Fee</div>
 
-                                <label class="label-transaction lable-margin">Loan Rate</label>
-                                <input type="number" ng-model="collection.propertyTrans.loanRate" class="form-control" required name="loanRate" />
-                                <div class="error" ng-show="form.loanRate.$error.required&&form.loanRate.$touched">Please Enter Loan Rate</div>
-
-                                <label class="label-transaction lable-margin">Type of Rate</label>
-                                <select class="form-control" ng-model="collection.propertyTrans.typeOfRate" name="typeOfRate" required ng-options="item.id as item.name for item in typeOfRates"/>
-                                <div class="error" ng-show="form.typeOfRate.$error.required&&form.typeOfRate.$touched">Please Select Type Of Rate</div>
-
-                                <label class="label-transaction lable-margin">Transaction fee</label>
-                                <input type="text" ng-model="collection.propertyTrans.transactionFee" class="form-control" required name="transactionFee" />
-                                <div class="error" ng-show="form.transactionFee.$error.required&&form.typeOfRate.$touched">Please Enter Transaction Fee</div>
-
-                                <label class="lable-margin">Transaction Date</label>
-                                <input class="form-control" edis-datepicker ng-model="collection.propertyTrans.transactionDate" required name="propertyTransactionDate" />
-                                <div class="error" ng-show="form.propertyTransactionDate.$error.required&&form.propertyTransactionDate.$touched">Please select a transaction date</div>
+                                        </td>
+                                        <td class="col-md-6">
+                                            <label class="lable-margin">Transaction Date</label>
+                                            <input class="form-control" edis-datepicker ng-model="collection.propertyTrans.transactionDate" required name="propertyTransactionDate" />
+                                            <div class="error" ng-show="form.propertyTransactionDate.$error.required&&form.propertyTransactionDate.$touched">Please select a transaction date</div>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
 

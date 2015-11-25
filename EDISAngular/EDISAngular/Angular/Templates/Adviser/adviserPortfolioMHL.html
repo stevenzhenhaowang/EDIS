@@ -37,7 +37,7 @@
                                                             <div id="secondary-stat-item1" class="secondary-stat-item big-number-stat clearfix">
                                                                 <div class="data">
                                                                     <span class="col-left big-number">{{data.marketValue | currency}}</span>
-                                                                    <span class="col-right"><em>Total Market Value</em></span>
+                                                                    <span class="col-bottom"><em>Total Property Market Value</em></span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -46,17 +46,17 @@
                                                             <div id="secondary-stat-item2" class="secondary-stat-item big-number-stat clearfix">
                                                                 <div class="data">
                                                                     <span class="col-left big-number">{{data.outstandingLoans | currency}}</span>
-                                                                    <span class="col-right"><em>Total Out-standing Loans</em></span>
+                                                                    <span class="col-bottom"><em>Total Out-standing Loans</em></span>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
+                                                    <!--<div class="row">
                                                         <div class="col-md-6">
                                                             <div id="secondary-stat-item3" class="secondary-stat-item big-number-stat clearfix">
                                                                 <div class="data">
                                                                     <span class="col-left big-number">{{data.propertyGearingRatio | number : 0}}%</span>
-                                                                    <span class="col-right"><em>Total Property Gearing Ratio</em></span>
+                                                                    <span class="col-bottom"><em>Total Property Gearing Ratio</em></span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -65,7 +65,7 @@
                                                             <div id="secondary-stat-item4" class="secondary-stat-item big-number-stat clearfix">
                                                                 <div class="data">
                                                                     <span class="col-left big-number">{{data.monthlyRepayment | currency}}%</span>
-                                                                    <span class="col-right"><em>Total Monthly Repayments</em></span>
+                                                                    <span class="col-bottom"><em>Total Monthly Repayments</em></span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -88,7 +88,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div>-->
                                                 </div>
                                                 <!--<div class="row">
                                                     <div class="col-sm-8" ng-controller="adviserPortfolioMHLRatingController">
@@ -157,8 +157,8 @@
                                                                     <td>Institution</td>
                                                                     <td>Type of Rates</td>
                                                                     <td>Interest Rate</td>
-                                                                    <td>Monthly Repayment Amount</td>
-                                                                    <td>Monthly Repayment Date</td>
+                                                                    <!--<td>Monthly Repayment Amount</td>
+                                                                    <td>Monthly Repayment Date</td>-->
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -168,12 +168,12 @@
                                                                     <td>{{item.currency}}</td>
                                                                     <td>{{item.marketValue | currency}}</td>
                                                                     <td>{{item.outstandingLoan | currency}}</td>
-                                                                    <td>{{item.currentPropertyGearingRatio | number : 0}}</td>
+                                                                    <td>{{item.currentPropertyGearingRatio | number : 2}}</td>
                                                                     <td>{{item.institution}}</td>
                                                                     <td>{{item.typeOfRates}}</td>
-                                                                    <td>{{item.interestRates | number : 0}}%</td>
-                                                                    <td>{{item.monthlyRepaymentAmount | currency}}</td>
-                                                                    <td>{{item.montlyRepaymentDate}}</td>
+                                                                    <td>{{item.interestRates | number : 2}}%</td>
+                                                                    <!--<td>{{item.monthlyRepaymentAmount | currency}}</td>
+                                                                    <td>{{item.montlyRepaymentDate}}</td>-->
 
                                                                 </tr>
                                                             </tbody>
@@ -191,12 +191,12 @@
                                                                     <td>No. of Years to Date</td>
                                                                     <td>No. of Years to Expiry</td>
                                                                     <td>Repayment Type</td>
-                                                                    <td>Maximum Loan Limit</td>
+                                                                    <!--<td>Maximum Loan Limit</td>-->
                                                                     <td>Current Loan Balance</td>
                                                                     <td>Avaliable Funds</td>
-                                                                    <td>Repayment Method</td>
+                                                                    <!--<td>Repayment Method</td>-->
                                                                     <td>Current Financial Year Interest</td>
-                                                                    <td>Last Financial Year Interest</td>
+                                                                    <!--<td>Last Financial Year Interest</td>-->
                                                                     <td>Suitability</td>
 
 
@@ -206,18 +206,18 @@
                                                                 <tr ng-repeat="item in data.data">
                                                                     <td>{{item.propertyName}}</td>
                                                                     <td>{{item.address}}</td>
-                                                                    <td>{{item.loanContractTerm | number : 0}}</td>
+                                                                    <td>{{item.loanContractTerm | number : 2}}</td>
                                                                     <td>{{item.startDate | date}}</td>
                                                                     <td>{{item.loanExpiryDate | date}}</td>
-                                                                    <td>{{item.numberOfYearsToDate}}</td>
-                                                                    <td>{{item.NumberOfYearsToExpiry}}</td>
+                                                                    <td>{{item.numberOfYearsToDate | number: 2}}</td>
+                                                                    <td>{{item.NumberOfYearsToExpiry | number: 2}}</td>
                                                                     <td>{{item.RepaymentType}}</td>
-                                                                    <td>{{item.maximumLoanLimit | currency}}</td>
+                                                                    <!--<td>{{item.maximumLoanLimit | currency}}</td>-->
                                                                     <td>{{item.currentLoanBalance | currency}}</td>
                                                                     <td>{{item.avaliableFunds | currency}}</td>
-                                                                    <td>{{item.repaymentMethod}}</td>
+                                                                    <!--<td>{{item.repaymentMethod}}</td>-->
                                                                     <td>{{item.currentFinancialYearInterest | currency}}</td>
-                                                                    <td>{{item.lastFinancialYearInterest | currency}}</td>
+                                                                    <!--<td>{{item.lastFinancialYearInterest | currency}}</td>-->
                                                                     <td>{{item.suitability | number : 0}}</td>
 
                                                                 </tr>

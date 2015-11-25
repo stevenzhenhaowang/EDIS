@@ -14,7 +14,9 @@ namespace EDISAngular.Models.ServiceModels.TransactionModels {
         public string TypeOfRate { get; set; }
         public double TransactionFee { get; set; }
         public string Institution { get; set; }
-        public DateTime TransactionDate { get; set; } 
+        public DateTime TransactionDate { get; set; }
+        public DateTime GrantedDate { get; set; }
+        public DateTime ExpiryDate { get; set; }
     }
 
     public class PropertyAccountView {
