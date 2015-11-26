@@ -130,15 +130,8 @@ namespace SqlRepository
                 LoanAmount = model.LoanAmount
             });
 
-
-
-            //accountToMakeTrans.MakeTransactionSync(new CashTransaction() {
-            //    Amount = model.Price * model.NumberOfUnits,
-            //    CashAccount
-
-            //});
             MakeCashTransactions(account.AccountNumber, - (model.NumberOfUnits * model.Price - model.LoanAmount));
-
+            _db.SaveChanges();
             //accountToMakeTrans.MakeTransactionSync(new CashAccountTransactionAccountCreation()
             //{
             //    Amount = -(model.Price * model.NumberOfUnits - model.LoanAmount),
@@ -172,7 +165,7 @@ namespace SqlRepository
 
 
             //});
-            _db.SaveChanges();
+
             //var account = GetClientAccountSync(model.ClientId, DateTime.Now);
             //var equity = getEquityByTicker(model.Ticker);
             //account.MakeTransactionSync(new EquityTransactionCreation() {
@@ -8961,15 +8954,66 @@ namespace SqlRepository
             _db.SaveChanges();
         }
 
+        //private string CheckAccountIsAGroupAccountOrAClientAccount(Account account) {
+        //    var isGroupAccount = _db.ClientGroups.FirstOrDefault(g => g.GroupAccounts.Any(a => a.AccountNumber == account.AccountNumber));
+        //    if (isGroupAccount == null)
+        //    {
+        //        var hasClientAccount = _db.Clients.FirstOrDefault(c => c.Accounts.Any(a => a.AccountNumber == account.AccountNumber));
+        //        if (hasClientAccount == null)
+        //        {
+        //            return "GroupAccountOnly";
+        //        }
+
+        //        return "GroupAccountAndClientAccount";
+        //    }
+
+        //   var clientAccount = _db.Clients.FirstOrDefault(c => c.Accounts.Any(a => a.AccountNumber == account.AccountNumber));
+        //   if (clientAccount == null)
+        //   {
+        //       return "ClientAccountOnly";
+        //   }          
+        //    return "Nothing";
+        //}
+
+        private AccountCatergories CheckAccountIsAGroupAccountOrAClientAccount(Account account)
+        {
+            var isGroupAccount = _db.ClientGroups.FirstOrDefault(g => g.GroupAccounts.Any(a => a.AccountNumber == account.AccountNumber));
+            if (isGroupAccount == null) {
+                var isClientAccount = _db.Clients.FirstOrDefault(c => c.Accounts.Any(a => a.AccountNumber == account.AccountNumber));
+                if (isClientAccount != null) {
+                    return AccountCatergories.ClientAccount;
+                }
+                return AccountCatergories.Noway;
+            }
+            return AccountCatergories.GroupAccount;
+        }
+
+        private CashAccount GetCashAccountByGroupAccount(Account account) {
+            var clientGroup = _db.ClientGroups.FirstOrDefault(g => g.GroupAccounts.Any(a => a.AccountNumber == account.AccountNumber));
+            return _db.CashAccounts.Where(c => c.AccountNumber == clientGroup.GroupNumber).FirstOrDefault();
+        }
+
+        private CashAccount GetCashAccountByClientAccount(Account account) {
+            var client = _db.Clients.FirstOrDefault(c => c.Accounts.Any(a => a.AccountNumber == account.AccountNumber));
+            var clientGroup = _db.ClientGroups.Where(cg => cg.ClientGroupId == client.ClientGroupId).FirstOrDefault();
+            return _db.CashAccounts.Where(ca => ca.AccountNumber == clientGroup.GroupNumber).FirstOrDefault();
+        }
+
         public void MakeCashTransactions(string accountNumber, double amount) {
-            
             var account = _db.Accounts.Where(acc => acc.AccountNumber == accountNumber).FirstOrDefault();
-            var clientGroup = GetClientGroupAccountSync(account.AccountNumber, DateTime.Now);
+            var accountType = CheckAccountIsAGroupAccountOrAClientAccount(account);
+
             //get this account cash account
-            var cashAccount =  _db.CashAccounts.Where(ca => ca.AccountNumber == clientGroup.AccountNumber).SingleOrDefault();
+            var cashAccount = new CashAccount();
+            if (accountType == AccountCatergories.ClientAccount) {
+                cashAccount = GetCashAccountByClientAccount(account);
+            }
 
+            if (accountType == AccountCatergories.GroupAccount) {
+                cashAccount = GetCashAccountByGroupAccount(account);
+            }
 
-
+            //because whatever this account is they have a client group then we can get this client group's cash account
             if (cashAccount.CashTransactions == null)
             {
                 cashAccount.CashTransactions = new List<CashTransaction>();
@@ -8984,20 +9028,6 @@ namespace SqlRepository
                 TransactionDate = DateTime.Now,
             };
 
-            //var account = new Account();
-            //if (clientGroup == null)
-            //{
-            //Because we could have a client has a group but this group does not have an account
-            //which makes the parma groupAccount can be null
-            //so we need to get this person's account through his group number->cash account number
-            //first get this group then get client then account
-            //var group = _db.ClientGroups.Where(cg => cg.GroupNumber == cashAccountNumber).FirstOrDefault();
-            //var client = _db.Clients.Where(c => c.ClientGroupId == group.ClientGroupId).FirstOrDefault();
-            // account = _db.Accounts.Where(acc => acc.AccountId == client.ClientId).FirstOrDefault();
-            // }
-            //else {
-            //    account = _db.Accounts.Where(acc => acc.AccountNumber == clientGroup.AccountNumber).FirstOrDefault();
-            //}
             cashAccount.FaceValue += amount;
             cashAccount.CashTransactions.Add(cashTrans);
             account.CashTransactions.Add(cashTrans);
@@ -9321,11 +9351,6 @@ namespace SqlRepository
             ChangeStockShare(numberOfUnits, account, equity);
             _db.SaveChanges();
         }
-
-        ////not nessary maybe
-        //private void MakeBuyBackProgramAction(CorperateActionHistory action) {
-        //   
-        //}
 
         private void MakeReinvestmentPlanAction(CorperateActionHistory action) {
             //IncreaseNumberOfUnits
