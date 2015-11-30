@@ -27,14 +27,14 @@
                     </div>
 
                     <!--loadClients
-                    <div class="row">
-                        <div class="col-sm-12 form-group">
-                            <label>Select Client</label>
-                            <select required class="form-control" name="clientName" ng-model="collection.selectedClient" ng-options="client.id as client.name for client in clients"></select>
-                            <span class="error" ng-show="form.clientGroup.$error.required && form.clientGroup.$touched">Please select client group.</span>
-                        </div>
-                    </div>
-                        -->
+        <div class="row">
+            <div class="col-sm-12 form-group">
+                <label>Select Client</label>
+                <select required class="form-control" name="clientName" ng-model="collection.selectedClient" ng-options="client.id as client.name for client in clients"></select>
+                <span class="error" ng-show="form.clientGroup.$error.required && form.clientGroup.$touched">Please select client group.</span>
+            </div>
+        </div>
+            -->
                     <div class="row">
                         <div class="col-sm-12 form-group">
                             <label>Select Account</label>
@@ -48,7 +48,7 @@
                     <div class="row">
                         <div class="col-md-3 form-group">
 
-                            <label class ="label-transaction">Transaction Type</label>
+                            <label class="label-transaction">Transaction Type</label>
 
                             <div class="garage-title">
                                 <label class="label-transaction">
@@ -79,7 +79,7 @@
                     <div class="col-md-8 form-group">
                         <div ng-if="collection.transactionType==='Equity'">
                             <div class="row">
-                                <label>Equity Transaction</label><br/>
+                                <label>Equity Transaction</label><br />
                                 <label class="lable-margin">Ticker</label>
                                 <select class="form-control" ng-model="collection.equityTrans.Ticker" name="ticker" required ng-options="item as item.tickerNumber for item in allTickers" />
                                 <div class="error" ng-show="form.ticker.$error.required&&form.ticker.$touched">Please select ticker</div>
@@ -96,8 +96,8 @@
                                 <label class="label-transaction lable-margin">Number of Units  (Total Amount: <span class="color-blue">{{collection.equityTrans.Price * collection.equityTrans.NumberOfUnits | currency}}</span>)</label>
                                 <input type="text" ng-model="collection.equityTrans.NumberOfUnits" class="form-control" required name="NumberOfUnits" />
                                 <div class="error" ng-show="form.NumberOfUnits.$error.required&&form.NumberOfUnits.$touched">Please Enter Number Of Units</div>
-                                
-                                <label class="label-transaction lable-margin">Loan Amount</label> 
+
+                                <label class="label-transaction lable-margin">Loan Amount</label>
                                 <input type="text" ng-model="collection.equityTrans.LoanAmount" class="form-control" required name="LoanAmount" />
                                 <div class="error" ng-show="form.LoanAmount.$error.required&&form.LoanAmount.$touched">Please Loan Amount</div>
                             </div>
@@ -108,12 +108,44 @@
                             </div>
                         </div>
 
+
+
+
+
+
                         <div ng-if="collection.transactionType==='Bond'">
                             <div class="row">
                                 <label>Bond Transaction</label>
                             </div>
-                            
+                            <div class="row">
+                                <select class="form-control" ng-model="collection.bondTrans.Ticker" name="ticker" required ng-options="item as item.tickerNumber for item in bondTickers" />
+                                <div class="error" ng-show="form.ticker.$error.required&&form.ticker.$touched">Please select ticker</div>
+                            </div>
+                            <!--May implement bond information when it got selected-->
+
+                            <div class="row">
+                                <label class="label-transaction lable-margin">Price</label>
+                                <input type="text" ng-model="collection.bondTrans.Price" class="form-control" required name="Price" />
+                                <div class="error" ng-show="form.Price.$error.required&&form.Price.$touched">Please Enter Price</div>
+
+                                <label class="label-transaction lable-margin">Number of Units  (Total Amount: <span class="color-blue">{{collection.bondTrans.Price * collection.bondTrans.NumberOfUnits | currency}}</span>)</label>
+                                <input type="text" ng-model="collection.bondTrans.NumberOfUnits" class="form-control" required name="NumberOfUnits" />
+                                <div class="error" ng-show="form.NumberOfUnits.$error.required&&form.NumberOfUnits.$touched">Please Enter Number Of Units</div>
+                            </div>
+
+                            <div class="row">
+                                    <label class="lable-margin">Transaction Date</label>
+                                    <input class="form-control" edis-datepicker ng-model="collection.bondTrans.TransactionDate" required name="TransactionDate" />
+                                    <div class="error" ng-show="form.TransactionDate.$error.required&&form.TransactionDate.$touched">Please select a transaction date</div>
+                             </div>
                         </div>
+
+
+
+
+
+
+
 
                         <div ng-if="collection.transactionType==='Property'">
                             <div class="row">
@@ -200,7 +232,92 @@
                             <div class="row">
                                 <label>Insurance Transaction</label>
                             </div>
-                            <label>Insurance Transaction Need Data in order to be implemented</label>
+
+                            <div class="row">
+                                <table class="row">
+                                    <tr>
+                                        <td class="col-md-6">
+                                            <label class="label-transaction lable-margin">Insurance Type</label>
+                                            <select class="form-control" ng-model="collection.insureTrans.insuranceType" name="insuranceType" required ng-options="item.id as item.name for item in insuranceTypes" >
+                                                <!--<option>None</option>
+                                                <option>Asset Insurance</option>
+                                                <option>Persoanl Insurance</option>
+                                                <option>Liability Insurance</option>
+                                                <option>Miscellaneous Insurance</option>-->
+                                            </select>
+                                            <span class="error" ng-show="form.insuranceType.$error.required && form.insuranceType.$touched">Please select insurance type.</span>
+
+                                        </td>
+                                        <td class="col-md-6">
+                                            <label class="label-transaction lable-margin">Amount Insured</label>
+                                            <input type="number" ng-model="collection.insureTrans.insureAmount" class="form-control" required name="insureAmount" />
+                                            <div class="error" ng-show="form.insureAmount.$error.required&&form.insureAmount.$touched">Please Enter insure Amount</div>
+                                        </td>
+
+                                        <td class="col-md-6">
+                                            <label class="label-transaction lable-margin">Is aquired</label>
+                                            <input type="radio" ng-model="collection.insureTrans.isAquired" name="true" value="true" ng-required="!collection.isAquired" style="width:30px;"/><label style="width:100px;">Yes</label>
+                                            <input type="radio" ng-model="collection.insureTrans.isAquired" name="false"  value="false" ng-required="!collection.isAquired"  style="width:30px;"/><label style="width:100px;">No</label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-md-6">
+                                            <label class="label-transaction lable-margin">Policy type</label>
+                                            <select class="form-control" ng-model="collection.insureTrans.policyType" name="policyType" required ng-options="item.id as item.name for item in policyTypes">
+                                               
+                                            </select>
+                                            <span class="error" ng-show="form.policyType.$error.required && form.policyType.$touched">Please select policy Type.</span>
+
+                                        </td>
+                                        <td class="col-md-6">
+                                            <label class="label-transaction lable-margin">Policy Number</label>
+                                            <input type="number" ng-model="collection.insureTrans.policyNumber" class="form-control" required name="policyNumber" />
+                                            <div class="error" ng-show="form.policyNumber.$error.required&&form.policyNumber.$touched">Please Enter Policy Number</div>
+
+                                        </td>
+                                        <td class="col-md-6">
+                                            <label class="label-transaction lable-margin">Policy Address</label>
+                                            <input type="text" ng-model="collection.insureTrans.policyAddress" class="form-control" required name="policyAddress" />
+                                            <div class="error" ng-show="form.policyAddress.$error.required&&form.policyAddress.$touched">Please Enter Policy Address</div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-md-6">
+                                            <label class="label-transaction lable-margin">Premium</label>
+                                            <input type="number" ng-model="collection.insureTrans.Premium" class="form-control" required name="Premium" />
+                                            <div class="error" ng-show="form.Premium.$error.required&&form.Premium.$touched">Please Enter Premium</div>
+
+                                        </td>
+                                        <td class="col-md-6">
+                                            <label class="lable-margin">Issuer</label>
+                                            <input type="text" ng-model="collection.insureTrans.issuer" class="form-control" required name="issuer" />
+                                            <div class="error" ng-show="form.issuer.$error.required&&form.issuer.$touched">Please Enter Issuer</div>
+                                        </td>
+                                        <td class="col-md-6">
+                                            <label class="lable-margin">Entities insured</label>
+                                            <input type="text" ng-model="collection.insureTrans.insuredEntity" class="form-control" required name="insuredEntity" />
+                                            <div class="error" ng-show="form.insuredEntity.$error.required&&form.insuredEntity.$touched">Please Enter Insured Entity</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-md-6">
+                                            <label class="lable-margin">Granted Date</label>
+                                            <input class="form-control" edis-datepicker ng-model="collection.insureTrans.grantedDate" required name="grantedDate" />
+                                            <div class="error" ng-show="form.grantedDate.$error.required&&form.grantedDate.$touched">Please select a Granted date</div>
+                                        </td>
+                                        <td class="col-md-6">
+                                            <label class="lable-margin">Expiry Date</label>
+                                            <input class="form-control" edis-datepicker ng-model="collection.insureTrans.expiryDate" required name="expiryDate" />
+                                            <div class="error" ng-show="form.expiryDate.$error.required&&form.expiryDate.$touched">Please select an Expiry Date</div>
+                                        </td>
+                                    </tr>
+                                    
+                                </table>
+                            </div>
+
+                        
                         </div>
 
                         <div ng-if="collection.transactionType==='MarginLending'">

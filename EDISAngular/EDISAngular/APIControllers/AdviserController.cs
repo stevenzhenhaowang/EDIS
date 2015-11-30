@@ -139,9 +139,52 @@ namespace EDISAngular.APIControllers
          
 
         [HttpPost, Route("api/adviser/makeEquityTransactions")]
-        public string adviserMakeEquityTransactions(EquityTransactionModel model, string clientId="") {
+        public IHttpActionResult adviserMakeEquityTransactions(EquityTransactionModel model) {
             edisRepo.AdviserMakeEquityTransactions(model);    
-            return "Ok";
+            return Ok();
+        }
+
+
+        [HttpPost, Route("api/adviser/makeBondTransactions")]
+        public IHttpActionResult adviserMakeBondsTransactions(EquityTransactionModel model)
+        {
+            edisRepo.AdviserMakeBondsTransactions(model);
+            return Ok();
+        }
+
+        //"api/adviser/makeInsuranceTransactions"
+        [HttpPost, Route("api/adviser/makeInsuranceTransactions")]
+        public IHttpActionResult adviserMakeInsuranceTransactions(InsuranceTransactionModel model)
+        {
+            // edisRepo.AdviserMakeBondsTransactions(model);
+            AccountBase account = null;
+
+            if (model.account.accountCatagory == AccountCatergories.GroupAccount.ToString())
+            {
+                account = edisRepo.GetGroupAccountById(model.account.id);
+            }
+            else
+            {
+                account = edisRepo.GetClientAccountById(model.account.id);
+            }
+
+            account.MakeTransactionSync(new InsuranceTransactionCreation()
+            {
+                AmountInsured = Convert.ToDouble(model.insuranceAmount),
+                EntitiesInsured = model.insuredEntity,
+                ExpiryDate = model.expiryDate,
+                GrantedOn = model.grantedDate,
+                InsuranceType = model.insuranceType,
+                NameOfPolicy = model.insuranceType.ToString(),
+                PolicyType = model.policyType,
+                Premium = Convert.ToDouble(model.premium),
+                IsAcquire = model.isAquired,
+                Issuer = model.issuer,
+                PolicyAddress = model.policyAddress,
+                PolicyNumber = model.policyNumber
+            });
+
+            return Ok();
         }
 
 
@@ -420,6 +463,31 @@ namespace EDISAngular.APIControllers
         }
 
 
+        [HttpGet, Route("api/adviser/allBondTickers")]
+        public List<TickerBriefModel> GetAllBondTickers()
+        {
+            var bonds = edisRepo.GetAllBonds();
+            var result = new List<TickerBriefModel>();
+            foreach (var bond in bonds)
+            {
+                result.Add(new TickerBriefModel { tickerName = bond.Ticker, tickerNumber = bond.Ticker });
+            }
+            return result;
+        }
+
+        [HttpGet, Route("api/adviser/allProperties")]
+        public List<PropertyBriefModel> GetAllProperties() {
+            var properties = edisRepo.GetAllProperties();
+            var result = new List<PropertyBriefModel>();
+            foreach (var property in properties) {
+                result.Add(new PropertyBriefModel { FullAddress = property.FullAddress, id = property.GooglePlaceId});
+            }
+            return result;
+        }
+
+
+
+
         [HttpGet, Route("api/adviser/worldMarkets")]
         public List<WordMarketItemModel> GetWorldMarkets()
         {
@@ -636,6 +704,38 @@ namespace EDISAngular.APIControllers
             return model;
             //return advisorRepo.GetCompanyProfile(User.Identity.GetUserId(), companyId);
         }
+
+
+
+        [HttpPost, Route("api/adviser/CouponDividend")]
+        public IHttpActionResult InsertCouponDividend(DevidendCreationModel model)
+        {
+            edisRepo.InsertCouponDividend(model);
+            return Ok();
+        }
+
+        [HttpPost, Route("api/adviser/JustDividend")]
+        public IHttpActionResult InsertJustDividend(DevidendCreationModel model)
+        {
+            edisRepo.InsertJustDividend(model);
+            return Ok();
+        }
+
+        [HttpPost, Route("api/adviser/InterestDividend")]
+        public IHttpActionResult InsertInterestDividend(DevidendCreationModel model)
+        {
+            edisRepo.InsertInterestDividend(model);
+            return Ok();
+        }
+
+        [HttpPost, Route("api/adviser/RentalDividend")]
+        public IHttpActionResult InsertRentalDividend(DevidendCreationModel model)
+        {
+            edisRepo.InsertRentalDividend(model);
+            return Ok();
+        }
+
+
 
 
     }

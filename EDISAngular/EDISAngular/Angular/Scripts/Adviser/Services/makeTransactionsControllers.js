@@ -11,7 +11,13 @@ angular.module("EDIS")
         $scope.groups = data;
     });
 
-
+    $scope.bondTickers = [];
+    $http.get(AppStrings.EDIS_IP + "api/adviser/allBondTickers")
+     .success(function (data) {
+         $scope.bondTickers = data;
+     }).error(function (data) {
+         console.log("Error.............");
+     });
   
     //$scope.loadClients = function () {
     //    var data = [];
@@ -50,6 +56,28 @@ angular.module("EDIS")
 
     $scope.propertyTypes = [];
     $scope.typeOfRates = [];
+
+
+    $scope.policyTypes = [];
+    $scope.insuranceTypes = [];
+
+    $http.get(AppStrings.EDIS_IP + "api/Adviser/Transaction/policyTypes")
+       .success(function (data) {
+           $scope.policyTypes = data;
+       }).error(function (data) {
+           console.log("Error.............");
+       });
+
+
+    $http.get(AppStrings.EDIS_IP + "api/Adviser/Transaction/insuranceTypes")
+       .success(function (data) {
+           $scope.insuranceTypes = data;
+       }).error(function (data) {
+           console.log("Error.............");
+       });
+
+
+
 
     $http.get(AppStrings.EDIS_IP + "api/Adviser/CorprateAction/PropertyTypes")
         .success(function (data) {
@@ -101,13 +129,48 @@ angular.module("EDIS")
         }
         else if ($scope.collection.transactionType === "Bond") {
             data = {
-
+                Ticker: $scope.collection.bondTrans.Ticker.tickerNumber,
+                Price: $scope.collection.bondTrans.Price,
+                NumberOfUnits: $scope.collection.bondTrans.NumberOfUnits,
+                //LoanAmount: $scope.collection.equityTrans.LoanAmount,
+                TransactionDate: dateParser($scope.collection.bondTrans.TransactionDate),
+                Account: $scope.collection.selectedAccount,
             };
+            $http.post(AppStrings.EDIS_IP + "api/adviser/makeBondTransactions", data).success(function () {
+                alert("Successs");
+            }).error(function (data) {
+                alert("failed:" + data);
+            })
+
+            console.log("yes~");
         }
         else if ($scope.collection.transactionType == "Insurance") {
+            var aaa = true;
+            if ($scope.collection.insureTrans.isAquired === "false") {
+                aaa = false;
+            }
             data = {
+                 insuranceType : $scope.collection.insureTrans.insuranceType,
+                 insuranceAmount : $scope.collection.insureTrans.insureAmount,
+                 isAquired : aaa,
+                 policyType : $scope.collection.insureTrans.policyType,
+                 policyNumber : $scope.collection.insureTrans.policyNumber,
+                 policyAddress : $scope.collection.insureTrans.policyAddress,
+                 premium : $scope.collection.insureTrans.Premium,
+                 issuer : $scope.collection.insureTrans.issuer,
+                 insuredEntity : $scope.collection.insureTrans.insuredEntity,
+                 grantedDate : dateParser( $scope.collection.insureTrans.grantedDate),
+                 expiryDate : dateParser( $scope.collection.insureTrans.expiryDate),
+
+
+                account: $scope.collection.selectedAccount
 
             };
+            $http.post(AppStrings.EDIS_IP + "api/adviser/makeInsuranceTransactions", data).success(function () {
+                alert("Successs");
+            }).error(function (data) {
+                alert("failed:" + data);
+            })
         }
         else if ($scope.collection.transactionType == "Property") {
             data = {
@@ -144,34 +207,5 @@ angular.module("EDIS")
 //    return function () {
 //        $resource(AppStrings.EDIS_IP + "api/Personclient/GetAllGlientGroup");
 //    }
-
 //})
-
-/* [
-        {
-            id: "00001",
-            name: "Mr. X and Mrs. Y",
-            accountNumber: "00001",
-            numberOfLinks: 5,
-            dateCreated: new Date(),
-        }, {
-            id: "00002",
-            name: "Mr. A and Mrs. B",
-            accountNumber: "00002",
-            numberOfLinks: 8,
-            dateCreated: new Date(),
-        }, {
-            id: "00003",
-            name: "Mr. C and Mrs. D",
-            accountNumber: "00003",
-            numberOfLinks: 3,
-            dateCreated: new Date(),
-        }, {
-            id: "00004",
-            name: "Mr. E and Mrs. F",
-            accountNumber: "00004",
-            numberOfLinks: 9,
-            dateCreated: new Date(),
-        },
-    ];*/
 ;

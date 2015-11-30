@@ -108,7 +108,7 @@ namespace SqlRepository
             //to do front end will pass in a what ever the number is 
             //then we get this client's account number then make an equity transaction
             var account = _db.Accounts.Where(a => a.AccountId == model.Account.id).FirstOrDefault();
-            var accountToMakeTrans = GetClientAccountSync(account.AccountNumber, DateTime.Now);
+            var accountToMakeTrans = GetTransactionAccountByAccountId(account);
             var equity = getEquityByTicker(model.Ticker);
 
             accountToMakeTrans.MakeTransactionSync(new EquityTransactionCreation() {
@@ -131,82 +131,68 @@ namespace SqlRepository
             });
 
             MakeCashTransactions(account.AccountNumber, - (model.NumberOfUnits * model.Price - model.LoanAmount));
-            _db.SaveChanges();
-            //accountToMakeTrans.MakeTransactionSync(new CashAccountTransactionAccountCreation()
-            //{
-            //    Amount = -(model.Price * model.NumberOfUnits - model.LoanAmount),
-            //    AnnualInterestSoFar = 0,
-            //    Bsb = "123456",
-            //    CashAccountName = accountToMakeTrans.AccountNameOrInfo,
-            //    CashAccountNumber = accountToMakeTrans.AccountNumber,
-            //    CashAccountType = CashAccountType.TermDeposit,
-            //    CurrencyType = CurrencyType.AustralianDollar,
-            //    Frequency = Frequency.Annually,
-            //    InterestRate = 0,
-            //    MaturityDate = DateTime.Now.AddYears(1),
-            //    TermsInMonths = 0,
-            //    TransactionDate = DateTime.Now,
-            //    TransactionFeeRecords = new List<TransactionFeeRecordCreation>()
-            //    {
-            //        new TransactionFeeRecordCreation()
-            //        {
-            //            Amount = 0,
-            //            TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
-            //        }
-            //    }
-
-            //});
-
-
-
-            //accountToMakeTrans.MakeTransactionSync(new CashAccountTransactionAccountCreation() {
-
-
-
-
-            //});
-
-            //var account = GetClientAccountSync(model.ClientId, DateTime.Now);
-            //var equity = getEquityByTicker(model.Ticker);
-            //account.MakeTransactionSync(new EquityTransactionCreation() {
-            //    EquityType = EquityTypes.ManagedInvestments,
-            //    FeesRecords = new List<TransactionFeeRecordCreation>(),
-            //    Name = "Test Stock",
-            //    NumberOfUnits = model.NumberOfUnits,
-            //    Price = model.Price,
-            //    Sector = model.Sector,
-            //    Ticker = model.Ticker,
-            //    TransactionDate = new DateTime(2015, 3, 1, 12, 32, 30),
-
-
-            //});
-
-            //equityType is an emum
-
-
+            _db.SaveChanges();     
         }
 
 
+        private AccountBase GetTransactionAccountByAccountId(Account account) {
 
+            var checkAccount = CheckAccountIsAGroupAccountOrAClientAccount(account);
+            AccountBase accountToMakeTrans = null;
+            if (checkAccount == AccountCatergories.ClientAccount)
+            {
+                accountToMakeTrans = GetGroupAccountById(account.AccountId);
+            }
 
+            if (checkAccount == AccountCatergories.GroupAccount)
+            {
+                accountToMakeTrans = GetClientAccountById(account.AccountId);
+            }
+            return accountToMakeTrans;
+        }
+
+        public void AdviserMakeBondsTransactions(EquityTransactionModel model)
+        {
+            var account = _db.Accounts.Where(a => a.AccountId == model.Account.id).FirstOrDefault();
+            var accountToMakeTrans = GetTransactionAccountByAccountId(account);
+            var bond = GetBondByTicker(model.Ticker);
+            accountToMakeTrans.MakeTransactionSync(new BondTransactionCreation() {
+                BondName = bond.Name,
+                Ticker = bond.Ticker,
+                Frequency = bond.Frequency,
+                BondType = bond.BondType,
+                Issuer = bond.Issuer,
+                NumberOfUnits = model.NumberOfUnits,
+                TransactionDate = model.TransactionDate,
+                UnitPrice = model.Price,
+                //TransactionFeeRecords
+
+            });
+            MakeCashTransactions(account.AccountNumber, -(model.NumberOfUnits * model.Price - model.LoanAmount));
+            _db.SaveChanges();
+        }
+
+        private Bond GetBondByTicker(string Ticker) {
+           return _db.Bonds.Where(b => b.Ticker == Ticker).FirstOrDefault();
+        }
 
         public void insertData3()
         {
             var account = GetClientAccountSync("04263398", DateTime.Now);
             account.MakeTransactionSync(new InsuranceTransactionCreation()
             {
-                AmountInsured = 20000,
-                EntitiesInsured = "123",
-                ExpiryDate = DateTime.Now.AddDays(30),
-                GrantedOn = DateTime.Now,
-                InsuranceType = InsuranceType.AssetInsurance,
-                NameOfPolicy = PolicyType.Car.ToString(),
-                PolicyType = PolicyType.Car,
-                Premium = 28000,
+                AmountInsured = 20000,//
+                EntitiesInsured = "123",//
+                ExpiryDate = DateTime.Now.AddDays(30),//
+                GrantedOn = DateTime.Now,//
+                InsuranceType = InsuranceType.AssetInsurance,//
+                NameOfPolicy = PolicyType.Car.ToString(),//
+                PolicyType = PolicyType.Car,//
+                Premium = 28000,//
                 IsAcquire = true,
-                Issuer = "Steven",
-                PolicyAddress = "517 flinders lane, melbourne, vic",
-                PolicyNumber = "0193"
+                Issuer = "Steven",//
+                PolicyAddress = "517 flinders lane, melbourne, vic",//
+                PolicyNumber = "0193"//
             });
             account.MakeTransactionSync(new InsuranceTransactionCreation()
             {
@@ -528,7 +514,6 @@ namespace SqlRepository
 
             });
         }
-
 
         public void insertData2()
         {
@@ -7153,7 +7138,7 @@ namespace SqlRepository
         {
             var record = (BondTransactionCreation)transaction;
             var bond = _db.Bonds.Where(b => b.Ticker == record.Ticker)
-                .Include(b => b.Prices)
+                //.Include(b => b.Prices)
                 .FirstOrDefault();
             if (account.BondTransactions == null)
             {
@@ -9082,9 +9067,9 @@ namespace SqlRepository
         }
 
 
-        public CashAccount GetCashAccountForAccount(string accountNumber) {
-            return _db.CashAccounts.Where(ca => ca.AccountNumber == accountNumber).SingleOrDefault();
-        }
+        //public CashAccount GetCashAccountForAccount(string accountNumber) {
+        //    return _db.CashAccounts.Where(ca => ca.AccountNumber == accountNumber).SingleOrDefault();
+        //}
 
 
         //public List<ReturnOfCapital> GetAllReturnOfCapitalRecord(string AdviserId) {
@@ -9437,5 +9422,68 @@ namespace SqlRepository
             }
             _db.SaveChanges();
         }
+
+        public List<Bond> GetAllBonds() {
+            return _db.Bonds.ToList();
+        }
+
+        public List<Property> GetAllProperties() {
+            return _db.Properties.ToList();
+        }
+
+        private Account GetAccountByAccountId(string AccountId) {
+            return _db.Accounts.Where(a => a.AccountId == AccountId).FirstOrDefault();
+        }
+
+        public void InsertCouponDividend(DevidendCreationModel model) {
+            var coupon = new CouponPaymentCreation();
+            coupon.AccountNumber = GetAccountByAccountId(model.Account.id).AccountNumber;
+            coupon.Amount = Convert.ToDouble(model.Amount);
+            coupon.PaymentOn = model.PaymentOn;
+            coupon.Ticker = model.Ticker;
+            RecordIncomeSync(coupon);
+            MakeCashTransactions(coupon.AccountNumber, coupon.Amount);
+        }
+
+        public void InsertRentalDividend(DevidendCreationModel model) {
+            var rental = new RentalPaymentCreation();
+            rental.Amount = Convert.ToDouble(model.Amount);
+            rental.PropertyId = _db.Properties.Where(p => p.GooglePlaceId == model.AddtionalInfo).FirstOrDefault().PropertyId;
+            rental.AccountNumber = GetAccountByAccountId(model.Account.id).AccountNumber;
+            rental.PaymentOn = model.PaymentOn;
+            RecordIncomeSync(rental);
+            MakeCashTransactions(rental.AccountNumber, rental.Amount);
+        }
+
+        public void InsertInterestDividend(DevidendCreationModel model) {
+            var interest = new InterestPaymentCreation();
+
+            var account = _db.Accounts.Where(a => a.AccountId == model.Account.id).FirstOrDefault();
+            var cashAccount = new CashAccount();
+            if (model.Account.accountCatagory == "ClientAccount") {
+                cashAccount = GetCashAccountByClientAccount(account);
+            }
+            if (model.Account.accountCatagory == "GroupAccount") {
+                cashAccount = GetCashAccountByGroupAccount(account);
+            }
+            interest.CashAccountId = cashAccount.Id;
+            interest.Amount = Convert.ToDouble(model.Amount);
+            interest.PaymentOn = model.PaymentOn;
+            interest.AccountNumber = account.AccountNumber;
+           
+            RecordIncomeSync(interest);
+            MakeCashTransactions(account.AccountNumber, interest.Amount);
+        }
+
+        public void InsertJustDividend(DevidendCreationModel model) {
+            var dividend = new DividendPaymentCreation();
+            dividend.AccountNumber = GetAccountByAccountId(model.Account.id).AccountNumber;
+            dividend.Amount = Convert.ToDouble(model.Amount);
+            dividend.PaymentOn = model.PaymentOn;
+            dividend.Ticker = model.Ticker;
+            RecordIncomeSync(dividend);
+            MakeCashTransactions(dividend.AccountNumber, dividend.Amount);
+        }
+
     }
 }

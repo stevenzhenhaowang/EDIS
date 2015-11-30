@@ -544,6 +544,7 @@
     <Compile Include="Models\ServiceModels\PortfolioModels\SummaryGeneralInfo.cs" />
     <Compile Include="Models\ServiceModels\PortfolioModels\SummaryGeneralInfoFCL.cs" />
     <Compile Include="Models\ServiceModels\PortfolioModels\TermDepositPriceChartModel.cs" />
+    <Compile Include="Models\ServiceModels\PropertyBriefModel.cs" />
     <Compile Include="Models\ServiceModels\RebalanceModels\AnticipatedCostModel.cs" />
     <Compile Include="Models\ServiceModels\RebalanceModels\BalanceSheetAgainstModel.cs" />
     <Compile Include="Models\ServiceModels\RebalanceModels\ComplianceData.cs" />
@@ -592,6 +593,7 @@
   <ItemGroup>
     <Content Include="Angular\Scripts\Adviser\adviserCorporateActionControllers.js" />
     <Content Include="Angular\Scripts\Adviser\adviserCreateClientControllers.js" />
+    <Content Include="Angular\Scripts\Adviser\insertDividends.js" />
     <Content Include="Angular\Scripts\Adviser\Services\makeTransactionsControllers.js" />
     <Content Include="Angular\Scripts\Client\clientCorporateActionViewController.js" />
     <Content Include="Angular\Scripts\Client\clientCorrespondenceViewControllers.js" />
@@ -631,6 +633,7 @@
     <Content Include="Angular\Templates\Adviser\adviserCreateClient.html" />
     <Content Include="Angular\Templates\Adviser\adviserEvaluateRiskLevel.html" />
     <Content Include="Angular\Templates\Adviser\adviserMakeEquityTransForClient.html" />
+    <Content Include="Angular\Templates\Adviser\insertDividends.html" />
     <Content Include="Angular\Templates\Adviser\InsertAssetsData.html" />
     <Content Include="Angular\Templates\Adviser\adviserCreateClientGroupAccount.html" />
     <Content Include="Angular\Templates\Adviser\adviserCreateClientAccount.html" />

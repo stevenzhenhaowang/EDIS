@@ -36,7 +36,7 @@
 
         $routeProvider.when("/insertAssetsData", { templateUrl: "/Angular/Templates/Adviser/InsertAssetsData.html" })
         $routeProvider.when("/Transactions", { templateUrl: "/Angular/Templates/Adviser/adviserMakeEquityTransForClient.html" })
-
+        $routeProvider.when("/insertDividends", { templateUrl: "/Angular/Templates/Adviser/insertDividends.html" })
         $routeProvider.otherwise({ templateUrl: "/Angular/Templates/Adviser/home.html" });
     });
     app.config(function (uiGmapGoogleMapApiProvider) {

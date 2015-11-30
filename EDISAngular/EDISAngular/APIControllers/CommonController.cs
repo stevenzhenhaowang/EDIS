@@ -12,6 +12,7 @@ using Shared;
 using EDISAngular.Models;
 using System.Reflection;
 using System.ComponentModel;
+using Domain.Portfolio.TransactionModels;
 
 namespace EDISAngular.APIControllers
 {
@@ -21,6 +22,9 @@ namespace EDISAngular.APIControllers
         {
             //comRepo = new CommonReferenceDataRepository();
         }
+
+
+
 
         [HttpGet, Route("api/common/assetClasses")]
         public List<AssetTypeView> getAssetTypes()
@@ -60,6 +64,39 @@ namespace EDISAngular.APIControllers
             }
 
             return result;
+        }
+
+
+        [HttpGet, Route("api/Adviser/Transaction/policyTypes")]
+        public List<ClientView> GetAllPolicyTypes()
+        {
+            List<ClientView> views = new List<ClientView>();
+
+            foreach (var type in Enum.GetValues(typeof(PolicyType)))
+            {
+                views.Add(new ClientView
+                {
+                    id = ((int)type).ToString(),
+                    name = type.ToString()
+                });
+            }
+            return views;
+        }
+
+        [HttpGet, Route("api/Adviser/Transaction/insuranceTypes")]
+        public List<ClientView> GetAllInsuranceTypes()
+        {
+            List<ClientView> views = new List<ClientView>();
+
+            foreach (var type in Enum.GetValues(typeof(InsuranceType)))
+            {
+                views.Add(new ClientView
+                {
+                    id = ((int)type).ToString(),
+                    name = type.ToString()
+                });
+            }
+            return views;
         }
 
         private static string GetEnumDescription(Enum value)
