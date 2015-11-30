@@ -58,7 +58,14 @@
             backdrop: true
         });
         modalInstance.result.then(function (result) {
-            $scope.selectModel(result.reason);
+
+            $scope.existingReturnOfCapitals = [];
+            service.existingReturnOfCapitals().query(function (data) {
+                $scope.existingReturnOfCapitals = data;
+            })
+
+
+            //$scope.selectModel(result.reason);
         });
     }
 
@@ -95,7 +102,10 @@
         });
 
         modalInstance.result.then(function (result) {
-            $scope.selectModel(result.reason);
+            $scope.existingReinvestments = [];
+            service.exsistingReinvestment().query(function (data) {
+                $scope.existingReinvestments = data;
+            })
         });
     }
     //
@@ -106,7 +116,10 @@
             backdrop:true
         });
         modalInstance.result.then(function (result) {
-            $scope.selectModel(result.reason);
+            $scope.existingStockSplits = [];
+            service.existingStockSplit().query(function (data) {
+                $scope.existingStockSplits = data;
+            })
         });
 
 
@@ -119,7 +132,10 @@
             backdrop: true
         });
         modalInstance.result.then(function (result) {
-            $scope.selectModel(result.reason);
+            $scope.existingBonuses = [];
+            service.existingBonusIssues().query(function (data) {
+                $scope.existingBonuses = data;
+            })
         });
 
             
@@ -133,7 +149,11 @@
             backdrop: true
         });
         modalInstance.result.then(function (result) {
-            $scope.selectModel(result.reason);
+            $scope.existingBuyBackProgram = [];
+
+            service.existingBuyBackProgram().query(function (data) {
+                $scope.existingBuyBackProgram = data;
+            })
         });
 
     }
@@ -145,7 +165,13 @@
             backdrop: true
         });
         modalInstance.result.then(function (result) {
-            $scope.selectModel(result.reason);
+            $scope.existingRightsIssues = [];
+
+            service.existingRightsIssues().query(function (data) {
+                $scope.existingRightsIssues = data;
+            })
+
+         
         });
 
     }
@@ -306,11 +332,8 @@
 
 
   .controller("newReturnOfCapitalActionController",
-["$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", "AppStrings", "$http", function ($scope, service, $modalInstance, dateParser, adviserGetId, AppStrings, $http) {
-    //service.allCompanies().query(function (data) {
-    //    $scope.allCompanies = data;
-    //})
-
+["$scope", "corporateActionServices", "$modalInstance", "dateParser", "adviserGetId", "AppStrings", "$http",  function ($scope, service, $modalInstance, dateParser, adviserGetId, AppStrings, $http) {
+   
     var adviserId = "";
     adviserGetId().then(function (data) {
         adviserId = data;
@@ -347,31 +370,28 @@
         //this corperate action is mandatory all clients should participate which needs to be implemented
 
         for (var i = 0; i < $scope.allAccounts.length; i++) {
-            //if ($scope.allClients[i].selected) {
+           
             var client = $scope.allAccounts[i];
             data.ParticipantsInfo.push({
                    accountNumber: client.edisAccountNumber,
                     returnAmount: client.returnAmount
                 });
-            //}
+           
         }
-        //var allClients = service.allClients().query(function (data) {
-        //    data.participants = data;
+ 
+
+        //service.newReturnOfCapital(data, function () {
+        //    $modalInstance.close({ reason: "success" });
+        //    $scope.formUpdated();
         //})
 
-
-        //for (var i = 0; i < $scope.allClients.length; i++) {
-        //    if ($scope.allClients[i].selected) {
-        //        data.participants.push($scope.allClients[i])
-        //    }
-
-        //}
-
-        service.newReturnOfCapital(data, function () {
-            $modalInstance.close({ reason: "success" });
-        })
-
-       // $http.post(AppStrings.EDIS_IP)
+        $http.post(AppStrings.EDIS_IP + "api/Adviser/CorprateAction/newReturnCapital", data).success(function () {
+                    alert("success");
+                    $modalInstance.close({ reason: "success" });
+                    
+                }).error(function (data) {
+                    alert("failed:" + data);
+                })
 
 
 
@@ -448,14 +468,20 @@
            // }
         }
 
-        //service.addnewReinvestmentAction().save(data, function () {
-        //    $modalInstance.close({ reason: "success" });
 
+
+
+        //service.addnewReinvestmentAction(data, function () {
+        //    $modalInstance.close({ reason: "success" });
         //})
 
 
-        service.addnewReinvestmentAction(data, function () {
+        $http.post(AppStrings.EDIS_IP + "api/Adviser/CorprateAction/newReinvestment", data).success(function () {
+            alert("success");
             $modalInstance.close({ reason: "success" });
+           
+        }).error(function (data) {
+            alert("failed:" + data);
         })
 
     }
@@ -514,8 +540,12 @@
            });
         }
 
-        service.newStockSplitAction(data, function () {
+        $http.post(AppStrings.EDIS_IP + "api/Adviser/CorprateAction/newStockSplit", data).success(function () {
+            alert("success");
             $modalInstance.close({ reason: "success" });
+           
+        }).error(function (data) {
+            alert("failed:" + data);
         })
 
         /*service.addnewReinvestmentAction(data, function () {
@@ -585,9 +615,11 @@
            });
         }
 
-        service.newBonusIssueAction(data, function () {
-            $modalInstance.close({ reason: "success" });
-
+        $http.post(AppStrings.EDIS_IP + "api/Adviser/CorprateAction/newBonusIssue", data).success(function () {
+            alert("Success!");
+            $modalInstance.close({ reason: data });
+        }).error(function (data) {
+            alert("failed:" + data);
         })
 
 
@@ -649,11 +681,16 @@
            });
         }
 
-        service.newBuyBackProgramAction(data, function () {
-            $modalInstance.close({ reason: "success" });
+        //service.newBuyBackProgramAction(data, function () {
+        //    $modalInstance.close({ reason: "success" });
 
+        //})
+        $http.post(AppStrings.EDIS_IP + "api/Adviser/CorprateAction/newBuyBackProgram", data).success(function () {
+            alert("success");
+            $modalInstance.close({ reason: data });
+        }).error(function (data) {
+            alert("failed:" + data);
         })
-
 
 
     }
@@ -714,11 +751,16 @@
            });
         }
 
-        service.newRightsIssueAction(data, function () {
-            $modalInstance.close({ reason: "success" });
+        //service.newRightsIssueAction(data, function () {
+        //    $modalInstance.close({ reason: "success" });
 
+        //})
+        $http.post(AppStrings.EDIS_IP + "api/Adviser/CorprateAction/newRightsIssue", data).success(function () {
+            alert("success");
+            $modalInstance.close({ reason: data });
+        }).error(function (data) {
+            alert("failed:" + data);
         })
-
 
 
     }

@@ -31,7 +31,8 @@
         //newReturnOfCapital: function () { return $resource(AppStrings.EDIS_IP + "api/Adviser/CorprateAction/newReturnCapital"); },
         newReturnOfCapital: function (data) {      
             $http.post(AppStrings.EDIS_IP + "api/Adviser/CorprateAction/newReturnCapital", data).success(function () {              
-                    alert("success");
+                alert("success");
+
                 }).error(function (data) {
                     alert("failed:" + data);
                 })

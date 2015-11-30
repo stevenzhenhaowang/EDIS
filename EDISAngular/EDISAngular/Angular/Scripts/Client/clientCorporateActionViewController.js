@@ -19,6 +19,13 @@
             $http.post(AppStrings.EDIS_IP + "api/client/corporateAction/acceptactions", { actionId: pass })
               .success(function () {
                   alert("success");
+                  $scope.allPendingActions = [];
+                  $http.get(AppStrings.EDIS_IP + "api/Client/CorperateAction/AllPendingActions")
+              .success(function (data) {
+                  $scope.allPendingActions = data;
+              }).error(function (data) {
+                  alert("Bad request");
+              });
               }).error(function () {
                   alert("Bad request");
               });
@@ -29,6 +36,13 @@
             $http.post(AppStrings.EDIS_IP + "api/client/corporateAction/rejectactions", { actionId: (data.ActionId) })
               .success(function () {
                   alert("success");
+                  $scope.allPendingActions = [];
+                  $http.get(AppStrings.EDIS_IP + "api/Client/CorperateAction/AllPendingActions")
+              .success(function (data) {
+                  $scope.allPendingActions = data;
+              }).error(function (data) {
+                  alert("Bad request");
+              });
               }).error(function () {
                   alert("Bad request");
               });

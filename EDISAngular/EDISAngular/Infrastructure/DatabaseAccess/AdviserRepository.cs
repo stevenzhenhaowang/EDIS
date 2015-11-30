@@ -12,6 +12,9 @@ using EDISAngular.Models.ServiceModels.AdviserProfile;
 using EDISAngular.Models.ViewModels;
 using EDISAngular.Models.ServiceModels.CorporateActions;
 using EDISAngular.Infrastructure.DbFirst;
+using Domain.Portfolio.AggregateRoots.Accounts;
+
+using Microsoft.AspNet.Identity;
 
 namespace EDISAngular.Infrastructure.DatabaseAccess
 {
@@ -20,6 +23,7 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
 
         private CommonReferenceDataRepository comRepo;
         private Random rdm = new Random();
+        private SqlRepository.EdisRepository repo;
 
         #region completed implementation
         public AdviserRepository(edisDbEntities database)
@@ -28,7 +32,8 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
         }
         public AdviserRepository():base()
         {
-
+            repo = new SqlRepository.EdisRepository();
+           
         }
         //public void InsertOrUpdateAdviserProfile_Complete(AdviserRegistrationBindingModel model)
         //{
@@ -330,6 +335,9 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
                 total = randomMoney()
             };
         }
+
+        //change this to not random 
+        
         public BusinessPortfolioOverviewBriefModel GetDebtInstrumentsData(string adviserUserId)
         {
             return new BusinessPortfolioOverviewBriefModel
@@ -344,6 +352,81 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
             },
                 total = randomMoney()
             };
+
+
+
+
+
+
+            /*
+             List<GroupAccount> groupAccounts = edisRepo.getAllClientGroupAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
+            List<ClientAccount> clientAccounts = edisRepo.getAllClientAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
+
+            List<ProfileInsuranceStatisticsGroup> InsuranceGroup = new List<ProfileInsuranceStatisticsGroup>();
+            InsuranceGroup.Add(new ProfileInsuranceStatisticsGroup
+            {
+                name = "Asset Insurance",
+                stat = new List<DataNameAmountPair>()
+            });
+            InsuranceGroup.Add(new ProfileInsuranceStatisticsGroup
+            {
+                name = "Persoanl Insurance",
+                stat = new List<DataNameAmountPair>()
+            });
+            InsuranceGroup.Add(new ProfileInsuranceStatisticsGroup
+            {
+                name = "Liability Insurance",
+                stat = new List<DataNameAmountPair>()
+            });
+            InsuranceGroup.Add(new ProfileInsuranceStatisticsGroup
+            {
+                name = "Miscellaneous Insurance",
+                stat = new List<DataNameAmountPair>()
+            });
+
+            ProfileInsuranceStatisticsModel model = new ProfileInsuranceStatisticsModel
+            {
+                data = new List<DataNameAmountPair>(),
+                group = InsuranceGroup,
+            };
+
+
+            List<LiabilityBase> liabilities = new List<LiabilityBase>();
+            foreach (var account in groupAccounts)
+            {
+                liabilities.AddRange(account.GetLiabilitiesSync());
+            }
+            foreach (var account in clientAccounts)
+            {
+                liabilities.AddRange(account.GetLiabilitiesSync());
+            }
+
+            var insurancesGroups = liabilities.OfType<Insurance>().GroupBy(i => i.InsuranceType);
+            foreach (var insuranceMetaGroup in insurancesGroups)
+            {
+                var insurance = insuranceMetaGroup.FirstOrDefault();
+
+                switch (insuranceMetaGroup.Key)
+                {
+                    case InsuranceType.LiabilityInsurance:
+                        model.group.SingleOrDefault(i => i.name == "Liability Insurance").stat.Add(new DataNameAmountPair { name = insurance.PolicyType.ToString(), amount = insurance.AmountInsured });
+                        break;
+                    case InsuranceType.AssetInsurance:
+                        model.group.SingleOrDefault(i => i.name == "Asset Insurance").stat.Add(new DataNameAmountPair { name = insurance.PolicyType.ToString(), amount = insurance.AmountInsured });
+                        break;
+                    case InsuranceType.MiscellaneousInsurance:
+                        model.group.SingleOrDefault(i => i.name == "Miscellaneous Insurance").stat.Add(new DataNameAmountPair { name = insurance.PolicyType.ToString(), amount = insurance.AmountInsured });
+                        break;
+                    case InsuranceType.PersoanlInsurance:
+                        model.group.SingleOrDefault(i => i.name == "Persoanl Insurance").stat.Add(new DataNameAmountPair { name = insurance.PolicyType.ToString(), amount = insurance.AmountInsured });
+                        break;
+                }
+                model.data.Add(new DataNameAmountPair { name = insurance.PolicyType.ToString(), amount = insurance.AmountInsured });
+                model.total += insurance.AmountInsured;
+            }
+
+            return model;
+            */
         }
         public ProfileInsuranceStatisticsModel GetInsuranceStatisticsData(string adviserUserId)
         {

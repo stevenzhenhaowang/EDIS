@@ -34,11 +34,13 @@ namespace EDISAngular.APIControllers
     {
         private AdviserRepository advisorRepo;
         private EdisRepository edisRepo;
+        private Random rdm = new Random();
 
         public AdviserController()
         {
             edisRepo = new EdisRepository();
             advisorRepo = new AdviserRepository();
+            //randomMoney = new Random();
         }
         [HttpGet, Route("api/adviser/accountNumber")]
         public string getAdviserAccountNumber()
@@ -386,7 +388,61 @@ namespace EDISAngular.APIControllers
         [HttpGet, Route("api/adviser/debtInstruments")]
         public BusinessPortfolioOverviewBriefModel GetInstrumentsData()
         {
-            return advisorRepo.GetDebtInstrumentsData(User.Identity.GetUserId());
+            //List<GroupAccount> groupAccounts = edisRepo.getAllClientGroupAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
+            //List<ClientAccount> clientAccounts = edisRepo.getAllClientAccountsForAdviser(User.Identity.GetUserId(), DateTime.Now);
+
+
+
+            //List<LiabilityBase> liabilities = new List<LiabilityBase>();
+            //foreach (var account in groupAccounts)
+            //{
+            //    liabilities.AddRange(account.GetLiabilitiesSync());
+            //}
+            //foreach (var account in clientAccounts)
+            //{
+            //    liabilities.AddRange(account.GetLiabilitiesSync());
+            //}
+            //var insurancesGroups = liabilities.OfType<Insurance>().GroupBy(i => i.InsuranceType);
+            //var mortgages = liabilities.OfType<MortgageAndHomeLiability>().GroupBy(m => m.CurrencyType);
+            //var lanings = liabilities.OfType<MarginLending>().GroupBy(l => l.Asset);
+            //double sumInsure = 0;
+            //double sumMortgage = 0;
+            //double sumLanding = 0;
+            //foreach (var insurancesGroup in insurancesGroups) {
+            //    var insure = insurancesGroup.FirstOrDefault();
+            //    sumInsure += insure.AmountInsured;
+            //}
+            //foreach (var mortgage in mortgages) {
+            //    var mor = mortgage.FirstOrDefault();
+            //    sumMortgage += mor.CurrentBalance;
+            //}
+            //foreach (var landing in lanings) {
+            //    var land = landing.FirstOrDefault();
+            //}
+
+            //var model = new BusinessPortfolioOverviewBriefModel
+            //{
+            //    data = new List<DataNameAmountPair>
+            // {
+            //     new DataNameAmountPair{name="Mortgage & Investment Home Loans", amount=randomMoney()},
+            //     new DataNameAmountPair{name="Commercial Loans", amount=randomMoney()},
+            //     new DataNameAmountPair{name="Margin Lending Loans", amount=randomMoney()},
+            //     new DataNameAmountPair{name="Personal & Credit Card Loans", amount=randomMoney()},
+            //     new DataNameAmountPair{name="Lending & Debt Statistics", amount=randomMoney()},
+            // },
+
+            //};
+            //return model;
+            var con = new PortfolioOverviewController();
+            var model = con.GenerateSummary(con.getAssetsAndLiabilitiesForAdviser(null));
+
+            var result = new BusinessPortfolioOverviewBriefModel
+            {
+                data = model.liability.data,
+                total = model.liability.total
+               
+            };
+            return result;
         }
         [HttpGet, Route("api/adviser/insuranceStatistics")]
         public ProfileInsuranceStatisticsModel GetInsuranceStatistics()
