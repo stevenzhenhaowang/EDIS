@@ -545,7 +545,7 @@ namespace EDISAngular.APIControllers
             EquityLocationDetailsModel model = new EquityLocationDetailsModel { data = new List<EquityDetails>()};
 
             assets.OfType<Equity>().ToList().ForEach(e => {
-                var country = edisRepo.GetStringResearchValueForEquitySync("Country", e.Ticker);
+                var country = edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.Country, e.Ticker);
                 var countryCode = edisRepo.GetCountryCodeByName(country);
                 model.data.Add(new EquityDetails { 
                     Ticker = e.Ticker,
@@ -557,6 +557,9 @@ namespace EDISAngular.APIControllers
                 });
 
                 if(countryCode != null){
+                    if(countryCode == "HK" || countryCode == "TW"){
+                        countryCode = "CN";
+                    }
                     model.countryCodes += "'" + countryCode + "',";
                 }
             });

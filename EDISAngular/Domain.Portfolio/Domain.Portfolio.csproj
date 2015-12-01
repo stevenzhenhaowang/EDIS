@@ -84,6 +84,11 @@
     <Compile Include="Correspondence\Correspondence.cs" />
     <Compile Include="Correspondence\CorrespondenceFollowup.cs" />
     <Compile Include="Correspondence\Message.cs" />
+    <Compile Include="DataFeed\AssetPriceFeed.cs" />
+    <Compile Include="DataFeed\BondFeed.cs" />
+    <Compile Include="DataFeed\EquityFeed.cs" />
+    <Compile Include="DataFeed\ResearchValueFeed.cs" />
+    <Compile Include="DataFeed\ReturnModel.cs" />
     <Compile Include="EdisDatabase\RiskProfile.cs" />
     <Compile Include="EdisDatabase\Sector.cs" />
     <Compile Include="Entities\Activity\ActivityBase.cs" />

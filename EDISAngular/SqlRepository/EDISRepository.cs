@@ -51,6 +51,7 @@ using System.ComponentModel;
 using Domain.Portfolio.CorporateActions;
 using Domain.Portfolio.TransactionModels;
 using Edis.Db.CorperateActions;
+using Domain.Portfolio.DataFeed;
 
 namespace SqlRepository
 {
@@ -1380,7 +1381,8 @@ namespace SqlRepository
                 ProfileCannotBefound(accountId, DateTime.Now, "Account");
             }
             var result = new List<ActivityBase>();
-            CollectEquityTransactions(to, account, result);
+            var asset = _db.Equities.FirstOrDefault(e => e.Ticker == ticker);
+            CollectEquityTransactions(to, account, result, asset.AssetId);
             CollectEquityDividends(to, account, result);
             return result;
         }
@@ -1399,7 +1401,8 @@ namespace SqlRepository
                 ProfileCannotBefound(accountId, DateTime.Now, "Account");
             }
             var result = new List<ActivityBase>();
-            CollectEquityTransactions(to, account, result);
+            var asset = _db.Equities.FirstOrDefault(e => e.Ticker == ticker);
+            CollectEquityTransactions(to, account, result, asset.AssetId);
             CollectEquityDividends(to, account, result);
             return result;
         }
@@ -6298,11 +6301,11 @@ namespace SqlRepository
             }
         }
 
-        private void CollectEquityTransactions(DateTime to, Account account, List<ActivityBase> result)
+        private void CollectEquityTransactions(DateTime to, Account account, List<ActivityBase> result, string equityId)
         {
             foreach (
                 var transaction in
-                    account.EquityTransactions.Where(t => t.TransactionDate.HasValue && t.TransactionDate.Value <= to))
+                    account.EquityTransactions.Where(t => t.TransactionDate.HasValue && t.TransactionDate.Value <= to && t.EquityId==equityId))
             {
                 var activity = new FinancialActivity
                 {
@@ -9410,6 +9413,170 @@ namespace SqlRepository
                     });
                 }
             }
+            _db.SaveChanges();
+        }
+
+
+        public List<ReturnModel> GetAllProperties() {
+            return _db.Properties.ToList().OrderBy(p => p.City).Select(p => new ReturnModel {
+                id = p.GooglePlaceId,
+                value = p.StreetAddress + ", " + p.City + ", " + p.State + ", " + p.Country + ", " + p.Postcode 
+            }).ToList();
+        }
+
+        public List<Domain.Portfolio.AggregateRoots.Asset.Equity> GetEquityTickersByType(EquityTypes type) {
+            List<Domain.Portfolio.AggregateRoots.Asset.Equity> equities = new List<Domain.Portfolio.AggregateRoots.Asset.Equity>();
+
+            var allEquities = _db.Equities.Where(e => e.EquityType == type).ToList();
+
+            foreach (var equity in allEquities) {
+                Domain.Portfolio.AggregateRoots.Asset.Equity subEquity = null;
+                switch (equity.EquityType) {
+                    case EquityTypes.AustralianEquity:
+                        subEquity = new AustralianEquity(this);
+                        break;
+                    case EquityTypes.InternationalEquity:
+                        subEquity = new InternationalEquity(this);
+                        break;
+                    case EquityTypes.ManagedInvestments:
+                        subEquity = new ManagedInvestment(this);
+                        break;
+                }
+                subEquity.Id = equity.AssetId;
+                subEquity.Ticker = equity.Ticker;
+                subEquity.Name = equity.Name;
+                subEquity.Sector = equity.Sector;
+                subEquity.EquityType = equity.EquityType;
+
+                equities.Add(subEquity);
+            }
+            return equities;
+        }
+
+        public List<BondFeed> GetBondTickers() {
+            return _db.Bonds.Select(b => new BondFeed { 
+                Ticker = b.Ticker,
+                CompanyName = b.Name
+            }).OrderBy(b => b.Ticker).ToList();
+        }
+
+        public void FeedDataForEquities(EquityFeed equity) {
+            _db.Equities.Add(new Equity {
+                AssetId = Guid.NewGuid().ToString(),
+                EquityType = (EquityTypes)Enum.Parse(typeof(EquityTypes), equity.EquityType),
+                Sector = equity.Sector,
+                Name = equity.CompanyName,
+                Ticker = equity.Ticker
+            });
+            _db.SaveChanges();
+        }
+
+        public void FeedDataForBonds(BondFeed bond) {
+            _db.Bonds.Add(new Bond { 
+                BondId = Guid.NewGuid().ToString(),
+                BondType = _db.BondTypes.FirstOrDefault(b => b.TypeName == bond.BondType).Id,
+                Issuer = bond.Issuer,
+                Name = bond.CompanyName,
+                Frequency = (Frequency)Int32.Parse(bond.Frequency),
+                Ticker = bond.Ticker
+            });
+            _db.SaveChanges();
+
+        }
+
+        public void FeedDataForAssetPrices(AssetPriceFeed assetPrice, AssetTypes type) { 
+            switch(type){
+                case AssetTypes.AustralianEquity:
+                case AssetTypes.InternationalEquity:
+                case AssetTypes.ManagedInvestments:
+                    var equity = _db.Equities.FirstOrDefault(e => e.Ticker == assetPrice.Ticker);
+                    equity.Prices.Add(new AssetPrice { 
+                        Id = Guid.NewGuid().ToString(),
+                        AssetType = type,
+                        CreatedOn = assetPrice.TransactionDate,
+                        Price = assetPrice.AssetPrice,
+                        CorrespondingAssetKey = equity.AssetId
+                    }); 
+                    break;
+                case AssetTypes.FixedIncomeInvestments:
+                    var bond = _db.Bonds.FirstOrDefault(b => b.Ticker == assetPrice.Ticker);
+                    bond.Prices.Add(new AssetPrice {
+                        Id = Guid.NewGuid().ToString(),
+                        AssetType = type,
+                        CreatedOn = assetPrice.TransactionDate,
+                        Price = assetPrice.AssetPrice,
+                        CorrespondingAssetKey = bond.BondId
+                    });
+                    break;
+                case AssetTypes.DirectAndListedProperty:
+                    var property = _db.Properties.FirstOrDefault(p => p.GooglePlaceId == assetPrice.Address);
+                    property.Prices.Add(new AssetPrice { 
+                        Id = Guid.NewGuid().ToString(),
+                        AssetType = type,
+                        CreatedOn = assetPrice.TransactionDate,
+                        Price = assetPrice.AssetPrice,
+                        CorrespondingAssetKey = property.PropertyId
+                    });
+                    break;
+            }
+            _db.SaveChanges();
+        }
+
+
+        public void FeedDataForResearchValues(ResearchValueFeed value, AssetTypes type) {
+            switch (type) {
+                case AssetTypes.AustralianEquity:
+                case AssetTypes.InternationalEquity:
+                case AssetTypes.ManagedInvestments:
+                    var equity = _db.Equities.FirstOrDefault(e => e.Ticker == value.Ticker);
+                    equity.ResearchValues.Add(new ResearchValue { 
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedOn = value.CreateDate,
+                        Issuer = value.Issuer,
+                        Key = value.Key,
+                        StringValue = value.StringValue,
+                        Value = value.Value
+                    });
+                    break;
+                case AssetTypes.FixedIncomeInvestments:
+                    var bond = _db.Bonds.FirstOrDefault(b => b.Ticker == value.Ticker);
+                    bond.ResearchValues.Add(new ResearchValue {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedOn = value.CreateDate,
+                        Issuer = value.Issuer,
+                        Key = value.Key,
+                        StringValue = value.StringValue,
+                        Value = value.Value
+                    });
+                    break;
+                case AssetTypes.DirectAndListedProperty:
+                    var property = _db.Properties.FirstOrDefault(p => p.GooglePlaceId == value.Address);
+                    property.ResearchValues.Add(new ResearchValue {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedOn = value.CreateDate,
+                        Issuer = value.Issuer,
+                        Key = value.Key,
+                        StringValue = value.StringValue,
+                        Value = value.Value
+                    });
+                    break;
+            }
+            _db.SaveChanges();
+        }
+
+        public void FeedDataForBondTypes(string typeName) {
+            _db.BondTypes.Add(new BondType { 
+                Id = Guid.NewGuid().ToString(),
+                TypeName = typeName
+            });
+            _db.SaveChanges();
+        }
+
+        public void FeedDataForSectors(string sectorName) {
+            _db.Sectors.Add(new Sector{
+                Id = Guid.NewGuid().ToString(),
+                SectorName = sectorName
+            });
             _db.SaveChanges();
         }
     }
