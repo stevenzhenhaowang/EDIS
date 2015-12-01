@@ -231,7 +231,7 @@ namespace EDISAngular.APIControllers
                 marketValue = totalMarketValue,
                 pl = totalMarketValue - totalCost,
                 plp = totalCost == 0 ? 0 : (totalMarketValue - totalCost) / totalCost * 100,
-                aveCoupon = assets.OfType<FixedIncome>().Sum(i => i.CouponRate == null? 0 : (double)i.CouponRate)
+                aveCoupon = assets.Count() == 0? 0 : assets.OfType<FixedIncome>().Average(i => i.CouponRate == null ? 0 : (double)i.CouponRate)
             };
             return summary;
         }

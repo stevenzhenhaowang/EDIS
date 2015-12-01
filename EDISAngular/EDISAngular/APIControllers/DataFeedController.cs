@@ -57,7 +57,19 @@ namespace EDISAngular.APIControllers {
             return Ok();
         }
 
+        [HttpGet, Route("api/Admin/DataFeed/GetMarginLenderDetails")]
+        public List<ClientView> getAllMarginLenders() {
 
+            var lenders = edisRepo.GetAllMarginLenders();
+            List<ClientView> lenderView = new List<ClientView>();
+            foreach (var lender in lenders) {
+                lenderView.Add(new ClientView {
+                    id = lender.LenderId,
+                    name = lender.LenderName
+                });
+            }
+            return lenderView;
+        }
 
         [HttpGet, Route("api/Admin/DataFeed/GetBondTypes")]
         public List<ListView> GetBondTypes() {
@@ -212,6 +224,26 @@ namespace EDISAngular.APIControllers {
             return Ok();
         }
 
+        [HttpPost, Route("api/Admin/DataFeed/InsertMarginLender")]
+        public IHttpActionResult InsertMarinLender(OneValueModel model) {
+            edisRepo.FeedDataForMarginLenders(model.Value);
+            return Ok();
+        }
+
+        [HttpPost, Route("api/Admin/DataFeed/InsertLoanValueRatio")]
+        public IHttpActionResult InsertLoanValueRatio(LoanValueRatioModel model) {
+            AssetTypes type = (AssetTypes)Int32.Parse(model.AssetType);
+
+            edisRepo.FeedDataForLoanValueRatios(new LoanValueRatioFeed {
+                AssetType = type,
+                CreateOn = model.CreateOn,
+                Lender = model.Lender,
+                Ratio = model.Ratio,
+                Ticker = model.Ticker
+            });
+
+            return Ok();
+        }
 
         [HttpPost, Route("api/Admin/DataFeed/UploadDataFile")]
         public IHttpActionResult UploadDataFile(string dataType) {

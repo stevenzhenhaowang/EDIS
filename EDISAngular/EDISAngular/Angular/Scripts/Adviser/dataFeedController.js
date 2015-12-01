@@ -119,6 +119,33 @@ angular.module("EDIS")
             console.log("Error.....");
         });
     }
+
+    $scope.loadValueRatiosData = function () {
+        $http.get(AppStrings.EDIS_IP + "api/Admin/DataFeed/GetEquityTypesDetails")
+            .success(function (data) {
+                $scope.assetTypes = data;
+            }).error(function (data) {
+                console.log("Error.....");
+            });
+
+        $http.get(AppStrings.EDIS_IP + "api/Admin/DataFeed/GetMarginLenderDetails")
+            .success(function (data) {
+                $scope.marginLenders = data;
+            }).error(function (data) {
+                console.log("Error.....");
+            });
+    }
+
+    $scope.loadTickerByAssetTypeRatios = function () {
+        var assetType = $scope.collection.marginLender.assetType;
+
+        $http.get(AppStrings.EDIS_IP + "api/Admin/DataFeed/GetEquityTickersByType?assetType=" + assetType)
+        .success(function (data) {
+            $scope.tickers = data;
+        }).error(function (data) {
+            console.log("Error.....");
+        });
+    }
     
 
     $scope.save = function () {
@@ -196,19 +223,31 @@ angular.module("EDIS")
             }).error(function (data) {
                 alert("failed:" + data);
             })
-        } else if($scope.collection.transactionType === "UploadData"){
+        } else if($scope.collection.transactionType === "MarginLender"){
             data = {
-                id: $scope.collection.uploadData.dataType,
-                name: $scope.options.async.saveUrl
+                Value: $scope.collection.marginLender.lenderName
             }
 
-
-            $http.post(AppStrings.EDIS_IP + "api/Admin/DataFeed/UploadDataFile", data).success(function () {
+            $http.post(AppStrings.EDIS_IP + "api/Admin/DataFeed/InsertMarginLender", data).success(function () {
                 alert("Successs");
             }).error(function (data) {
                 alert("failed:" + data);
             })
-        }
+        } else if($scope.collection.transactionType === "ValueRatios"){
+            data = {
+                Lender: $scope.collection.marginLender.marginLender,
+                AssetType:  $scope.collection.marginLender.assetType,
+                Ticker:  $scope.collection.marginLender.ticker.id,
+                Ratio:  $scope.collection.marginLender.ratio,
+                CreateOn: dateParser($scope.collection.marginLender.createDate)
+            }
+
+            $http.post(AppStrings.EDIS_IP + "api/Admin/DataFeed/InsertLoanValueRatio", data).success(function () {
+                alert("Successs");
+            }).error(function (data) {
+                alert("failed:" + data);
+            })
+        }   
     }
 
 

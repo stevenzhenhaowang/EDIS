@@ -157,7 +157,7 @@
                 <div class="row">
                     <div class="col-sm-12">
 
-                        <div class="widget" ng-controller="clientPortfolioPremiumStatsController">
+                        <!--<div class="widget" ng-controller="clientPortfolioPremiumStatsController">
                             <div class="widget-header">
                                 <h3><i class="fa fa-bar-chart-o"></i>Quick Statistics</h3>
                             </div>
@@ -182,7 +182,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="widget" ng-controller="clientPortfolioPremiumInsuranceMonthlyCashflowController">
                             <div class="widget-header">
                                 <h3><i class="fa fa-bar-chart-o"></i>Monthly Cash Flow Summary</h3>
@@ -198,7 +198,7 @@
                                     </thead>
                                     <tbody>
                                         <tr ng-repeat="item in data">
-                                            <td>{{item.month | date : 'MMMM'}}</td>
+                                            <td>{{item.month}}</td>
                                             <td>{{item.expense | currency}}</td>
                                         </tr>
                                         <tr class="summary-table-row">

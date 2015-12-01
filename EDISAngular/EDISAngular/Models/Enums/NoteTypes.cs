@@ -14,7 +14,7 @@ namespace EDIS_DOMAIN.Enum.Enums
         Email=2,
         [Description("AccountNote")]
         AccountNote=3,
-        [Description("Voice")]
-        Voice=4
+        //[Description("Voice")]
+        //Voice=4
     }
 }
