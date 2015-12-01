@@ -15,6 +15,7 @@ namespace Domain.Portfolio.TransactionModels
         public string Sector { get; set; }
         public string Ticker { get; set; }
         public double LoanAmount { get; set; }
+        public string TransactionFee { get; set; }
         public DateTime TransactionDate { get; set; }
         public EquityAccountView Account { get; set; }
     }

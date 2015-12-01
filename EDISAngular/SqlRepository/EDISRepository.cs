@@ -113,15 +113,15 @@ namespace SqlRepository
             var equity = getEquityByTicker(model.Ticker);
 
             accountToMakeTrans.MakeTransactionSync(new EquityTransactionCreation() {
-                //FeesRecords = new List<TransactionFeeRecordCreation>() {
-                //     new TransactionFeeRecordCreation()
-                //    {
-                //        Amount = 100,
-                //        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
-                //    }
-                //},
+                FeesRecords = new List<TransactionFeeRecordCreation>() {
+                     new TransactionFeeRecordCreation()
+                    {
+                        Amount = Convert.ToDouble( model.TransactionFee),
+                        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
+                    }
+                },
                 EquityType = equity.EquityType,
-                FeesRecords = new List<TransactionFeeRecordCreation>(),
+                //FeesRecords = new List<TransactionFeeRecordCreation>(),
                 Name = equity.Name,
                 NumberOfUnits = model.NumberOfUnits,
                 Price = model.Price,
@@ -166,8 +166,13 @@ namespace SqlRepository
                 NumberOfUnits = model.NumberOfUnits,
                 TransactionDate = model.TransactionDate,
                 UnitPrice = model.Price,
-                //TransactionFeeRecords
-
+                TransactionFeeRecords = new List<TransactionFeeRecordCreation>() {
+                     new TransactionFeeRecordCreation()
+                    {
+                        Amount = Convert.ToDouble( model.TransactionFee),
+                        TransactionExpenseType = TransactionExpenseType.AdviserTransactionFee
+                    }
+                },
             });
             MakeCashTransactions(account.AccountNumber, -(model.NumberOfUnits * model.Price - model.LoanAmount));
             _db.SaveChanges();
@@ -9017,9 +9022,9 @@ namespace SqlRepository
             };
 
             cashAccount.FaceValue += amount;
-            //cashAccount.CashTransactions.Add(cashTrans);
-            //account.CashTransactions.Add(cashTrans);
-            //_db.CashTransactions.Add(cashTrans);
+            cashAccount.CashTransactions.Add(cashTrans);
+            account.CashTransactions.Add(cashTrans);
+            _db.CashTransactions.Add(cashTrans);
             _db.SaveChanges();
         }
 
