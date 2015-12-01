@@ -533,7 +533,7 @@ namespace EDISAngular.APIControllers
 
         [HttpGet, Route("api/adviser/allProperties")]
         public List<PropertyBriefModel> GetAllProperties() {
-            var properties = edisRepo.GetAllProperties();
+            var properties = edisRepo.GetAllPropertyForApi();
             var result = new List<PropertyBriefModel>();
             foreach (var property in properties) {
                 result.Add(new PropertyBriefModel { FullAddress = property.FullAddress, id = property.GooglePlaceId});

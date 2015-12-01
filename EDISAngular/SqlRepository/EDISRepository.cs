@@ -9594,7 +9594,7 @@ namespace SqlRepository
             return _db.Bonds.ToList();
         }
 
-        public List<Property> GetAllProperties() {
+        public List<Property> GetAllPropertyForApi() {
             return _db.Properties.ToList();
         }
 
