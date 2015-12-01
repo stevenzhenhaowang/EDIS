@@ -9014,9 +9014,9 @@ namespace SqlRepository
             };
 
             cashAccount.FaceValue += amount;
-            cashAccount.CashTransactions.Add(cashTrans);
-            account.CashTransactions.Add(cashTrans);
-            _db.CashTransactions.Add(cashTrans);
+            //cashAccount.CashTransactions.Add(cashTrans);
+            //account.CashTransactions.Add(cashTrans);
+            //_db.CashTransactions.Add(cashTrans);
             _db.SaveChanges();
         }
 
