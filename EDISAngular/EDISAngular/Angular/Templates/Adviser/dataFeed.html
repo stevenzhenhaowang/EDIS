@@ -1,0 +1,296 @@
+﻿
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+            <li>Data Input</li>
+            <li class="active">Data Feed</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="main-header">
+        <h2>Data Feed</h2>
+
+    </div>
+    <div class="main-content">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="widget">
+                    <div class="widget-header"><h3><i class="fa fa-edit"></i> Data Feed Form</h3></div>
+                    <div class="widget-content">
+                        <form novalidate name="form" ng-controller="dataFeedController">
+                            <div class="row">
+                                <div class="col-sm-12 form-group">
+                                    <label class="font-bold">Data Type</label>
+                                    <div class="row">
+                                        <div class="col-md-4 form-group">
+                                            <label class="lable-margin">
+                                                <input type="radio" ng-model="collection.transactionType" ng-change="loadEquityData()" value="Equity" ng-required="!collection.transactionType" />
+                                                Equity Info
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label class="lable-margin">
+                                                <input type="radio" ng-model="collection.transactionType" ng-change="loadBondData()" value="Bond" ng-required="!collection.transactionType" />
+                                                Bond Info
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label class="lable-margin">
+                                                <input type="radio" ng-model="collection.transactionType" ng-change="loadAssetPriceData()" value="AssetPrice" ng-required="!collection.transactionType" />
+                                                Asset Price
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 form-group">
+                                            <label class="lable-margin">
+                                                <input type="radio" ng-model="collection.transactionType" ng-change="loadResearchValueData()" value="ResearchValue" ng-required="!collection.transactionType" />
+                                                Research Value
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label class="lable-margin">
+                                                <input type="radio" ng-model="collection.transactionType" value="BondType" ng-required="!collection.transactionType" />
+                                                Bond Type
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label class="lable-margin">
+                                                <input type="radio" ng-model="collection.transactionType" value="Sector" ng-required="!collection.transactionType" />
+                                                Sector
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label class="lable-margin">
+                                                <input type="radio" ng-model="collection.transactionType" ng-change="loadUploadDataTypes()" value="UploadData" ng-required="!collection.transactionType" />
+                                                Upload Data From Excel
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <div class="row">
+                                        <div ng-if="collection.transactionType==='Equity'" class="col-md-6 form-group">
+                                            <label class="font-bold">Insert Equity General Info</label>
+
+                                            <label class="lable-margin">Ticker</label>
+                                            <input type="text" ng-model="collection.equity.ticker" name="ticker" class="form-control" required />
+                                            <div class="error" ng-show="form.ticker.$error.required&&form.ticker.$touched">Please enter a Ticker</div>
+
+                                            <label class="lable-margin">Company Name</label>
+                                            <input type="text" ng-model="collection.equity.companyName" name="companyName" class="form-control" required />
+                                            <div class="error" ng-show="form.companyName.$error.required&&form.companyName.$touched">Please enter a Company Name</div>
+
+                                            <label class="lable-margin">Sector</label>
+                                            <select class="form-control" ng-model="collection.equity.sector" name="sector" required ng-options="item.name as item.name for item in sectors" />
+                                            <div class="error" ng-show="form.sector.$error.required&&form.sector.$touched">Please select a Sector</div>
+
+                                            <label class="lable-margin">Equity Type</label>
+                                            <select class="form-control" ng-model="collection.equity.equityType" name="equityType" required ng-options="item.id as item.name for item in equityTypes" />
+                                            <div class="error" ng-show="form.equityType.$error.required&&form.equityType.$touched">Please select a Equity Type</div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div ng-if="collection.transactionType==='Bond'" class="col-md-6 form-group">
+                                            <label class="font-bold">Insert Bond General Info</label>
+
+
+                                            <label class="lable-margin">Ticker</label>
+                                            <input type="text" ng-model="collection.bond.ticker" name="ticker" class="form-control" required />
+                                            <div class="error" ng-show="form.ticker.$error.required&&form.ticker.$touched">Please enter a Ticker</div>
+
+                                            <label class="lable-margin">Company Name</label>
+                                            <input type="text" ng-model="collection.bond.companyName" name="companyName" class="form-control" required />
+                                            <div class="error" ng-show="form.companyName.$error.required&&form.companyName.$touched">Please enter a Company Name</div>
+
+                                            <label class="lable-margin">Frequency</label>
+                                            <select class="form-control" ng-model="collection.bond.frequency" name="frequency" required ng-options="item.id as item.name for item in frequencies" />
+                                            <div class="error" ng-show="form.frequency.$error.required&&form.frequency.$touched">Please select a Frequency</div>
+
+                                            <label class="lable-margin">Bond Type</label>
+                                            <select class="form-control" ng-model="collection.bond.bondType" name="bondType" required ng-options="item.name as item.name for item in bondTypes" />
+                                            <div class="error" ng-show="form.bondType.$error.required&&form.bondType.$touched">Please select a Bond Type</div>
+
+                                            <label class="lable-margin">Issuer</label>
+                                            <input type="text" ng-model="collection.bond.issuer" name="issuer" class="form-control" required />
+                                            <div class="error" ng-show="form.issuer.$error.required&&form.issuer.$touched">Please enter a Issuer</div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div ng-if="collection.transactionType==='AssetPrice'" class="col-md-12 form-group">
+                                            <label class="font-bold">Insert a Asset Price</label>
+
+                                            <div class="row">
+                                                <div class="col-md-5 form-group">
+                                                    <label class="lable-margin">Asset Type</label>
+                                                    <select class="form-control" ng-model="collection.assetPrice.assetType" name="assetType" ng-change="loadTickerByAssetType()" ng-options="item.id as item.name for item in assetTypes" required />
+                                                    <div class="error" ng-show="form.assetType.$error.required&&form.assetType.$touched">Please select a Company Name</div>
+                                                </div>
+                                            </div>
+                                            <div class="row" ng-if="collection.assetPrice.assetType !== '4'">
+                                                <div class="col-md-5 form-group">
+                                                    <label class="lable-margin">Ticker</label>
+                                                    <select class="form-control" ng-model="collection.assetPrice.ticker" name="ticker" ng-required="collection.assetType !== '4'" ng-options="item as item.id for item in tickers" />
+                                                    <div class="error" ng-show="form.ticker.$error.required&&form.ticker.$touched">Please select a Ticker</div>
+                                                </div>
+
+                                                <div class="col-md-5 form-group">
+                                                    <label class="lable-margin">Company Name</label>
+                                                    <select class="form-control" ng-model="collection.assetPrice.ticker" name="companyName" ng-required="collection.assetType !== '4'" ng-options="item as item.name for item in tickers" />
+                                                    <div class="error" ng-show="form.companyName.$error.required&&form.companyName.$touched">Please select a Company Name</div>
+                                                </div>
+                                            </div>
+                                            <div class="row" ng-if="collection.assetPrice.assetType ==='4'">
+                                                <div class="col-md-10 form-group">
+                                                    <label class="lable-margin">Address</label>
+                                                    <select class="form-control" ng-model="collection.assetPrice.address" name="address" ng-required="collection.assetType === '4'" ng-options="item.id as item.name for item in addresses" />
+                                                    <div class="error" ng-show="form.address.$error.required&&form.address.$touched">Please select a Address</div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-5 form-group">
+                                                    <label class="lable-margin">Asset Price</label>
+                                                    <input type="number" ng-model="collection.assetPrice.price" name="price" class="form-control" required />
+                                                    <div class="error" ng-show="form.price.$error.required&&form.price.$touched">Please enter a price</div>
+                                                </div>
+                                                <div class="col-md-5 form-group">
+                                                    <label class="lable-margin">Price Date</label>
+                                                    <input class="form-control" edis-datepicker ng-model="collection.assetPrice.transactionDate" name="transactionDate" required />
+                                                    <div class="error" ng-show="form.transactionDate.$error.required&&form.transactionDate.$touched">Please select a transaction date</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div ng-if="collection.transactionType==='ResearchValue'" class="col-md-12 form-group">
+                                            <label class="font-bold">Insert a Research Value</label>
+
+                                            <div class="row">
+                                                <div class="col-md-5 form-group">
+                                                    <label class="lable-margin">Asset Type</label>
+                                                    <select class="form-control" ng-model="collection.researchValue.assetType" name="assetType" ng-change="loadTickerByAssetTypeForRV()" ng-options="item.id as item.name for item in assetTypes" required />
+                                                    <div class="error" ng-show="form.assetType.$error.required&&form.assetType.$touched">Please select a Asset Type</div>
+                                                </div>
+                                            </div>
+                                            <div class="row" ng-if="collection.researchValue.assetType !== '4'">
+                                                <div class="col-md-5 form-group">
+                                                    <label class="lable-margin">Ticker</label>
+                                                    <select class="form-control" ng-model="collection.researchValue.ticker" name="ticker" ng-required="collection.researchValue !== '4'" ng-options="item as item.id for item in tickers" />
+                                                    <div class="error" ng-show="form.ticker.$error.required&&form.ticker.$touched">Please select a Ticker</div>
+                                                </div>
+                                                <div class="col-md-5 form-group">
+                                                    <label class="lable-margin">Company Name</label>
+                                                    <select class="form-control" ng-model="collection.researchValue.ticker" name="companyName" ng-required="collection.researchValue !== '4'" ng-options="item as item.name for item in tickers" />
+                                                    <div class="error" ng-show="form.companyName.$error.required&&form.companyName.$touched">Please select a Company Name</div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row" ng-if="collection.researchValue.assetType ==='4'">
+                                                <div class="col-md-10 form-group">
+                                                    <label class="lable-margin">Address</label>
+                                                    <select class="form-control" ng-model="collection.researchValue.address" name="address" ng-required="collection.researchValue === '4'" ng-options="item.id as item.name for item in addresses" />
+                                                    <div class="error" ng-show="form.address.$error.required&&form.address.$touched">Please select a Address</div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-5 form-group">
+                                                    <label class="lable-margin">Value Name</label>
+                                                    <select class="form-control" ng-model="collection.researchValue.key" name="key" ng-options="item.name as item.name for item in keys" />
+                                                    <div class="error" ng-show="form.key.$error.required&&form.key.$touched">Please select a Value Name</div>
+                                                </div>
+                                                <div class="col-md-5 form-group">
+                                                    <label class="lable-margin">Value Type</label>
+                                                    <select class="form-control" ng-model="collection.researchValue.valueType" name="valueType">
+                                                        <option value="numberValue">Number Value</option>
+                                                        <option value="textValue">Text Value</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row" ng-if="collection.researchValue.valueType ==='numberValue'">
+                                                <div class="col-md-5 form-group">
+
+                                                    <label class="lable-margin">Number Value</label>
+                                                    <input type="number" ng-model="collection.researchValue.value" name="value" ng-required="!collection.researchValue.stringValue" class="form-control" />
+                                                    <div class="error" ng-show="form.value.$error.required&&form.value.$touched">Please either enter a Number Value</div>
+                                                </div>
+                                            </div>
+                                            <div class="row" ng-if="collection.researchValue.valueType ==='textValue'">
+                                                <div class="col-md-10 form-group">
+                                                    <label class="lable-margin">Text Value</label>
+                                                    <textarea ng-model="collection.researchValue.stringValue" name="stringValue" ng-required="!collection.researchValue.value" class="form-control" />
+                                                    <div class="error" ng-show="form.stringValue.$error.required&&form.stringValue.$touched">Please either enter a Text Value</div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-5 form-group">
+                                                    <label class="lable-margin">Issuer (optional)</label>
+                                                    <input type="text" ng-model="collection.researchValue.issuer" name="issuer" class="form-control" />
+                                                </div>
+                                                <div class="col-md-5 form-group">
+                                                    <label class="lable-margin">Create Date</label>
+                                                    <input class="form-control" edis-datepicker ng-model="collection.researchValue.createDate" name="createDate" required />
+                                                    <div class="error" ng-show="form.createDate.$error.required&&form.createDate.$touched">Please select a create date</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div ng-if="collection.transactionType==='BondType'" class="col-md-6 form-group">
+                                            <label class="font-bold">Insert a Bond Type</label>
+
+                                            <label class="lable-margin">Type Name</label>
+                                            <input type="text" ng-model="collection.bondType.typeName" name="typeName" class="form-control" required />
+                                            <div class="error" ng-show="form.typeName.$error.required&&form.typeName.$touched">Please enter a Type Name</div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div ng-if="collection.transactionType==='Sector'" class="col-md-6 form-group">
+                                            <label class="font-bold">Insert a Sector</label>
+
+                                            <label class="lable-margin">Sector Name</label>
+                                            <input type="text" ng-model="collection.sector.sectorName" name="sectorName" class="form-control" required />
+                                            <div class="error" ng-show="form.sectorName.$error.required&&form.sectorName.$touched">Please enter a Sector Name</div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div ng-if="collection.transactionType==='UploadData'" class="col-md-6 form-group">
+                                            <div class="row">
+                                                <div class="col-md-6 form-group">
+                                                    <label class="lable-margin">Choose a Data Type</label>
+                                                    <select class="form-control" ng-model="collection.uploadData.dataType" name="dataType" ng-change="uploadFile()" ng-options="item.id as item.name for item in dataTypes" required/>
+                                                    <div class="error" ng-show="form.dataType.$error.required&&form.dataType.$touched">Please select a Data Type</div>
+                                                </div>
+
+                                                <div class="col-md-10 form-group" ng-if="collection.uploadData.dataType">
+                                                    <label class="lable-margin">Choose a File</label>
+                                                    <input ng-disabled="cannotUpload" name="files"
+                                                           type="file"
+                                                           kendo-upload k-options="options" k-rebind="options" />
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-4 form-group button-transaction">
+                                    <button class="btn btn-default" ng-disabled="!form.$valid" ng-hide="collection.transactionType==='UploadData'" ng-click="save()">Create</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

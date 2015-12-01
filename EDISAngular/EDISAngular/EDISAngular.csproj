@@ -200,6 +200,7 @@
     <Compile Include="APIControllers\CorrespondenceController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="APIControllers\DataFeedController.cs" />
     <Compile Include="APIControllers\EducationLevelController.cs" />
     <Compile Include="APIControllers\EntityClientController.cs" />
     <Compile Include="APIControllers\ImportExcelData.cs" />
@@ -501,8 +502,14 @@
     <Compile Include="Models\ServiceModels\CorporateActions\RightsIssueData.cs" />
     <Compile Include="Models\ServiceModels\CorporateActions\StockSplitActionCreationModel.cs" />
     <Compile Include="Models\ServiceModels\CorporateActions\StockSplitData.cs" />
+    <Compile Include="Models\ServiceModels\DataFeedModels\AssetPriceModel.cs" />
+    <Compile Include="Models\ServiceModels\DataFeedModels\BondBasicModel.cs" />
+    <Compile Include="Models\ServiceModels\DataFeedModels\EquityBasicModel.cs" />
+    <Compile Include="Models\ServiceModels\DataFeedModels\OneValueModel.cs" />
+    <Compile Include="Models\ServiceModels\DataFeedModels\ResearchValueModel.cs" />
     <Compile Include="Models\ServiceModels\DataNameAmountPair.cs" />
     <Compile Include="Models\ServiceModels\FixedIncomePriceChartModel.cs" />
+    <Compile Include="Models\ServiceModels\ListView.cs" />
     <Compile Include="Models\ServiceModels\PortfolioModels\AssetPerformanceModel.cs" />
     <Compile Include="Models\ServiceModels\PortfolioModels\AustralianEquityCashflowDetailedModel.cs" />
     <Compile Include="Models\ServiceModels\PortfolioModels\AustralianEquityCompanyProfileModel.cs" />
@@ -593,6 +600,7 @@
   <ItemGroup>
     <Content Include="Angular\Scripts\Adviser\adviserCorporateActionControllers.js" />
     <Content Include="Angular\Scripts\Adviser\adviserCreateClientControllers.js" />
+    <Content Include="Angular\Scripts\Adviser\dataFeedController.js" />
     <Content Include="Angular\Scripts\Adviser\insertDividends.js" />
     <Content Include="Angular\Scripts\Adviser\Services\makeTransactionsControllers.js" />
     <Content Include="Angular\Scripts\Client\clientCorporateActionViewController.js" />
@@ -633,6 +641,7 @@
     <Content Include="Angular\Templates\Adviser\adviserCreateClient.html" />
     <Content Include="Angular\Templates\Adviser\adviserEvaluateRiskLevel.html" />
     <Content Include="Angular\Templates\Adviser\adviserMakeEquityTransForClient.html" />
+    <Content Include="Angular\Templates\Adviser\dataFeed.html" />
     <Content Include="Angular\Templates\Adviser\insertDividends.html" />
     <Content Include="Angular\Templates\Adviser\InsertAssetsData.html" />
     <Content Include="Angular\Templates\Adviser\adviserCreateClientGroupAccount.html" />

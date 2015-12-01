@@ -282,9 +282,8 @@ namespace EDISAngular.APIControllers
             List<EquityCompanyProfileItemModel> itemList = new List<EquityCompanyProfileItemModel>();
 
             foreach (var asset in assets.OfType<AustralianEquity>()) {
-                var itemIndex = itemList.FindIndex(i => i.asx == asset.Ticker);
 
-                if (itemIndex < 0) {
+                if (itemList.All(i => i.asx != asset.Ticker)) {
                     itemList.Add(new EquityCompanyProfileItemModel {
                         asx = asset.Ticker,
                         beta = asset.F0Ratios.Beta,
@@ -309,9 +308,9 @@ namespace EDISAngular.APIControllers
                         companySuitabilityToInvestor = asset.GetRating().TotalScore
                     });
                 } else {
-                    itemList[itemIndex].marketValue += asset.GetTotalMarketValue();
-                    itemList[itemIndex].totalCostValue += asset.GetCost().Total;
-                    itemList[itemIndex].costValue += asset.GetCost().AssetCost;
+                    itemList.SingleOrDefault(i => i.asx == asset.Ticker).marketValue += asset.GetTotalMarketValue();
+                    itemList.SingleOrDefault(i => i.asx == asset.Ticker).totalCostValue += asset.GetCost().Total;
+                    itemList.SingleOrDefault(i => i.asx == asset.Ticker).costValue += asset.GetCost().AssetCost;
                 }
             }
 
