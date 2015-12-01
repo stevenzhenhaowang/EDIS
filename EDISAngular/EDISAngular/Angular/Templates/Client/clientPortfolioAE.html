@@ -162,12 +162,12 @@
                                                                     <td>Cost Value</td>
                                                                     <td>Brokerage</td>
                                                                     <td>Total Cost Value</td>
-                                                                    <td>Total Cost Value Weighting</td>
-                                                                    <td>Total Cost Value Asset Allocation Weighting</td>
+                                                                    <!--<td>Total Cost Value Weighting</td>-->
+                                                                    <!--<td>Total Cost Value Asset Allocation Weighting</td>-->
                                                                     <td>Market Price</td>
                                                                     <td>Market Value</td>
-                                                                    <td>Market Value Weighting</td>
-                                                                    <td>Market Value Asset Allocation Weighting</td>
+                                                                    <!--<td>Market Value Weighting</td>-->
+                                                                    <!--<td>Market Value Asset Allocation Weighting</td>-->
                                                                     <td>Company Suittability to Investor Profile</td>
                                                                 </tr>
                                                             </thead>
@@ -178,12 +178,12 @@
                                                                     <td>{{item.costValue | currency}}</td>
                                                                     <td>{{item.brokerage | currency}}</td>
                                                                     <td>{{item.totalCostValue | currency}}</td>
-                                                                    <td>{{item.totalCostValueWeighting | number : 0}}%</td>
-                                                                    <td>{{item.marketValueAssetAllocationWeighting | number : 0}}%</td>
+                                                                    <!--<td>{{item.totalCostValueWeighting | number : 0}}%</td>-->
+                                                                    <!--<td>{{item.marketValueAssetAllocationWeighting | number : 0}}%</td>-->
                                                                     <td>{{item.marketPrice | currency}}</td>
                                                                     <td>{{item.marketValue | currency}}</td>
-                                                                    <td>{{item.marketValueWeighting | number : 0}}%</td>
-                                                                    <td>{{item.marketValueAssetAllocationWeighting | number : 0}}%</td>
+                                                                    <!--<td>{{item.marketValueWeighting | number : 0}}%</td>-->
+                                                                    <td><!--{{item.marketValueAssetAllocationWeighting | number : 0}}%--></td>
                                                                     <td>{{item.companySuitabilityToInvestor | number : 0}}</td>
 
                                                                 </tr>
@@ -208,21 +208,21 @@
                                                                     <td>ASX Code</td>
                                                                     <td>Company</td>
                                                                     <td>Earnings Per Share</td>
-                                                                    <td>Earnings Per Share Weighting</td>
+                                                                    <!--<td>Earnings Per Share Weighting</td>-->
                                                                     <td>Earnings Per Share Growth</td>
-                                                                    <td>Earnings Per Share Growth Weighting</td>
+                                                                    <!--<td>Earnings Per Share Growth Weighting</td>-->
                                                                     <td>Dividend</td>
-                                                                    <td>Dividend Weighting</td>
+                                                                    <!--<td>Dividend Weighting</td>-->
                                                                     <td>Franking</td>
-                                                                    <td>Franking Weighting</td>
+                                                                    <!--<td>Franking Weighting</td>-->
                                                                     <td>Dividend Yield</td>
-                                                                    <td>Dividend Yield Weighting</td>
+                                                                    <!--<td>Dividend Yield Weighting</td>-->
                                                                     <td>Price Earnings Ratio</td>
-                                                                    <td>Price Earnings Ratio Weighting</td>
+                                                                    <!--<td>Price Earnings Ratio Weighting</td>-->
                                                                     <td>Return on Asset</td>
-                                                                    <td>Return on Asset Weighting</td>
+                                                                    <!--<td>Return on Asset Weighting</td>-->
                                                                     <td>Return on Equity</td>
-                                                                    <td>Return on Equity Weighting</td>
+                                                                    <!--<td>Return on Equity Weighting</td>-->
 
                                                                 </tr>
                                                             </thead>
@@ -231,21 +231,21 @@
                                                                     <td>{{item.asx}}</td>
                                                                     <td>{{item.company}}</td>
                                                                     <td>{{item.earningsPerShare | currency}}</td>
-                                                                    <td>{{item.earningsPerShareWeighting | number : 0}}%</td>
+                                                                    <!--<td>{{item.earningsPerShareWeighting | number : 0}}%</td>-->
                                                                     <td>{{item.earningsPerShareGrowth | number : 0}}%</td>
-                                                                    <td>{{item.earningsPerShareGrowthWeighting | number : 0}}%</td>
+                                                                    <!--<td>{{item.earningsPerShareGrowthWeighting | number : 0}}%</td>-->
                                                                     <td>{{item.dividend | currency }}</td>
-                                                                    <td>{{item.dividendWeighting | number : 0}}%</td>
+                                                                    <!--<td>{{item.dividendWeighting | number : 0}}%</td>-->
                                                                     <td>{{item.franking | currency}}</td>
-                                                                    <td>{{item.frankingWeighting | number : 0}}%</td>
+                                                                    <!--<td>{{item.frankingWeighting | number : 0}}%</td>-->
                                                                     <td>{{item.dividendYield | currency}}</td>
-                                                                    <td>{{item.dividendYieldWeighting | number : 0}}</td>
+                                                                    <!--<td>{{item.dividendYieldWeighting | number : 0}}</td>-->
                                                                     <td>{{item.priceEarningsRatio | currency}}</td>
-                                                                    <td>{{item.priceEarningsRatioWeighting | number : 0}}</td>
+                                                                    <!--<td>{{item.priceEarningsRatioWeighting | number : 0}}</td>-->
                                                                     <td>{{item.returnOnAsset | currency }}</td>
-                                                                    <td>{{item.returnOnAssetWeighting | number : 0}}%</td>
+                                                                    <!--<td>{{item.returnOnAssetWeighting | number : 0}}%</td>-->
                                                                     <td>{{item.returnOnEquity | currency}}</td>
-                                                                    <td>{{item.returnOnEquityWeighting | number : 0}}</td>
+                                                                    <!--<td>{{item.returnOnEquityWeighting | number : 0}}</td>-->
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -268,25 +268,25 @@
                                                                     <td>ASX Code</td>
                                                                     <td>Company</td>
                                                                     <td>1 Year Return</td>
-                                                                    <td>1 Year Return Weighting</td>
+                                                                    <!--<td>1 Year Return Weighting</td>-->
                                                                     <td>3 Year Return</td>
-                                                                    <td>3 Year Return Weighting</td>
+                                                                    <!--<td>3 Year Return Weighting</td>-->
                                                                     <td>5 Year Return</td>
-                                                                    <td>5 Year Return Weighting</td>
+                                                                    <!--<td>5 Year Return Weighting</td>-->
                                                                     <td>Beta</td>
-                                                                    <td>Beta Weighting</td>
+                                                                    <!--<td>Beta Weighting</td>-->
                                                                     <td>Current Ratio</td>
-                                                                    <td>Current Ratio Weighting</td>
+                                                                    <!--<td>Current Ratio Weighting</td>-->
                                                                     <td>Quick Ratio</td>
-                                                                    <td>Quick Ratio Weighting</td>
+                                                                    <!--<td>Quick Ratio Weighting</td>-->
                                                                     <td>Debt/Equity Ratio</td>
-                                                                    <td>Debt/Equity Ratio Weighting</td>
+                                                                    <!--<td>Debt/Equity Ratio Weighting</td>-->
                                                                     <td>Interest Cover</td>
-                                                                    <td>Interest Cover Weighting</td>
+                                                                    <!--<td>Interest Cover Weighting</td>-->
                                                                     <td>Payout Ratio</td>
-                                                                    <td>Payout Ratio Weighting</td>
+                                                                    <!--<td>Payout Ratio Weighting</td>-->
                                                                     <td>Earnings Stability</td>
-                                                                    <td>Earnings Stability Weighting</td>
+                                                                    <!--<td>Earnings Stability Weighting</td>-->
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -294,25 +294,25 @@
                                                                     <td>{{item.asx}}</td>
                                                                     <td>{{item.company}}</td>
                                                                     <td>{{item.oneYearReturn | number : 0}}%</td>
-                                                                    <td>{{item.oneYearReturnWeighting | number : 0}}%</td>
+                                                                    <!--<td>{{item.oneYearReturnWeighting | number : 0}}%</td>-->
                                                                     <td>{{item.threeYearReturn | number : 0}}%</td>
-                                                                    <td>{{item.threeYearReturnWeighting | number : 0}}%</td>
+                                                                    <!--<td>{{item.threeYearReturnWeighting | number : 0}}%</td>-->
                                                                     <td>{{item.fiveYearReturn | number : 0}}%</td>
-                                                                    <td>{{item.fiveYearReturnWeighting | number : 0}}%</td>
+                                                                    <!--<td>{{item.fiveYearReturnWeighting | number : 0}}%</td>-->
                                                                     <td>{{item.beta | number : 0}}%</td>
-                                                                    <td>{{item.betaWeighting | number : 0}}%</td>
+                                                                    <!--<td>{{item.betaWeighting | number : 0}}%</td>-->
                                                                     <td>{{item.currentRatio | number : 0}}%</td>
-                                                                    <td>{{item.currentRatioWeighting | number : 0}}%</td>
+                                                                    <!--<td>{{item.currentRatioWeighting | number : 0}}%</td>-->
                                                                     <td>{{item.quickRatio | number : 0}}%</td>
-                                                                    <td>{{item.quickRatioWeighting | number : 0}}%</td>
+                                                                    <!--<td>{{item.quickRatioWeighting | number : 0}}%</td>-->
                                                                     <td>{{item.debtEquityRatio | number : 0}}%</td>
-                                                                    <td>{{item.debtEquityRatioWeighting | number : 0}}%</td>
+                                                                    <!--<td>{{item.debtEquityRatioWeighting | number : 0}}%</td>-->
                                                                     <td>{{item.interestCover | number : 0}}%</td>
-                                                                    <td>{{item.interestCoverWeighting | number : 0}}%</td>
+                                                                    <!--<td>{{item.interestCoverWeighting | number : 0}}%</td>-->
                                                                     <td>{{item.payoutRatio | number : 0}}%</td>
-                                                                    <td>{{item.payoutRatioWeighting | number : 0}}%</td>
+                                                                    <!--<td>{{item.payoutRatioWeighting | number : 0}}%</td>-->
                                                                     <td>{{item.earningsStability | number : 0}}%</td>
-                                                                    <td>{{item.earningsStabilityWeighting | number : 0}}%</td>
+                                                                    <!--<td>{{item.earningsStabilityWeighting | number : 0}}%</td>-->
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -502,7 +502,7 @@
             <div class="col-md-4">
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="widget" ng-controller="clientPortfolioAEQuickStatsController">
+                        <!--<div class="widget" ng-controller="clientPortfolioAEQuickStatsController">
                             <div class="widget-header">
                                 <h3><i class="fa fa-bar-chart-o"></i>Quick Statistics</h3>
 
@@ -522,7 +522,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="widget" ng-controller="clientPortfolioAERatingController">
                             <div class="widget-header">
                                 <h3><i class="fa fa-bar-chart-o"></i>Portfolio Rating</h3>

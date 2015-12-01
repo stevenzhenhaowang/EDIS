@@ -64,6 +64,18 @@
                                         </div>
                                         <div class="col-md-4 form-group">
                                             <label class="lable-margin">
+                                                <input type="radio" ng-model="collection.transactionType" value="MarginLender" ng-required="!collection.transactionType" />
+                                                Margin Lender
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label class="lable-margin">
+                                                <input type="radio" ng-model="collection.transactionType" ng-change="loadValueRatiosData()" value="ValueRatios" ng-required="!collection.transactionType" />
+                                                Loan Value Ratios
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label class="lable-margin">
                                                 <input type="radio" ng-model="collection.transactionType" ng-change="loadUploadDataTypes()" value="UploadData" ng-required="!collection.transactionType" />
                                                 Upload Data From Excel
                                             </label>
@@ -258,6 +270,59 @@
                                         </div>
                                     </div>
 
+                                    <div class="row">
+                                        <div ng-if="collection.transactionType==='MarginLender'" class="col-md-6 form-group">
+                                            <label class="font-bold">Insert a MarginLender</label>
+
+                                            <label class="lable-margin">Lender Name</label>
+                                            <input type="text" ng-model="collection.marginLender.lenderName" name="lenderName" class="form-control" required />
+                                            <div class="error" ng-show="form.lenderName.$error.required&&form.lenderName.$touched">Please enter a Lender Name</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div ng-if="collection.transactionType==='ValueRatios'" class="col-md-12 form-group">
+                                            <label class="font-bold">Insert Loan Value Ratio</label>
+
+                                            <div class="row">
+                                                <div class="col-md-5 form-group">
+                                                    <label class ="lable-margin">Margin Lender</label>
+                                                    <select required class="form-control" name="marginLender" ng-model="collection.marginLender.marginLender" ng-options="item.id as item.name for item in marginLenders"></select>
+                                                    <div class="error" ng-show="form.marginLender.$error.required && form.marginLender.$touched">Please select margin lender.</div>
+                                                </div>
+
+                                                <div class="col-md-5 form-group">
+                                                    <label class="lable-margin">Asset Type</label>
+                                                    <select class="form-control" ng-model="collection.marginLender.assetType" name="assetType" ng-change="loadTickerByAssetTypeRatios()" ng-options="item.id as item.name for item in assetTypes" required />
+                                                    <div class="error" ng-show="form.assetType.$error.required&&form.assetType.$touched">Please select a Asset Type</div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-5 form-group">
+                                                    <label class="lable-margin">Ticker</label>
+                                                    <select class="form-control" ng-model="collection.marginLender.ticker" name="ticker" ng-options="item as item.id for item in tickers" required/>
+                                                    <div class="error" ng-show="form.ticker.$error.required&&form.ticker.$touched">Please select a Ticker</div>
+                                                </div>
+                                                <div class="col-md-5 form-group">
+                                                    <label class="lable-margin">Company Name</label>
+                                                    <select class="form-control" ng-model="collection.marginLender.ticker" name="companyName" ng-options="item as item.name for item in tickers" required />
+                                                    <div class="error" ng-show="form.companyName.$error.required&&form.companyName.$touched">Please select a Company Name</div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-5 form-group">
+                                                    <label class="lable-margin">Max Ratio</label>
+                                                    <input type="text" ng-model="collection.marginLender.ratio" name="ratio" class="form-control" required />
+                                                    <div class="error" ng-show="form.ratio.$error.required&&form.ratio.$touched">Please enter a ratio</div>
+                                                </div>
+                                                <div class="col-md-5 form-group">
+                                                    <label class="lable-margin">Create Date</label>
+                                                    <input class="form-control" edis-datepicker ng-model="collection.marginLender.createDate" name="createDate" required />
+                                                    <div class="error" ng-show="form.createDate.$error.required&&form.createDate.$touched">Please select a create date</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="row">
                                         <div ng-if="collection.transactionType==='UploadData'" class="col-md-6 form-group">

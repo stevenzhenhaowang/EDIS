@@ -505,6 +505,7 @@
     <Compile Include="Models\ServiceModels\DataFeedModels\AssetPriceModel.cs" />
     <Compile Include="Models\ServiceModels\DataFeedModels\BondBasicModel.cs" />
     <Compile Include="Models\ServiceModels\DataFeedModels\EquityBasicModel.cs" />
+    <Compile Include="Models\ServiceModels\DataFeedModels\LoanValueRatioModel.cs" />
     <Compile Include="Models\ServiceModels\DataFeedModels\OneValueModel.cs" />
     <Compile Include="Models\ServiceModels\DataFeedModels\ResearchValueModel.cs" />
     <Compile Include="Models\ServiceModels\DataNameAmountPair.cs" />

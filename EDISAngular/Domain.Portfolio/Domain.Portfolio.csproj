@@ -87,6 +87,7 @@
     <Compile Include="DataFeed\AssetPriceFeed.cs" />
     <Compile Include="DataFeed\BondFeed.cs" />
     <Compile Include="DataFeed\EquityFeed.cs" />
+    <Compile Include="DataFeed\LoanValueRatioFeed.cs" />
     <Compile Include="DataFeed\ResearchValueFeed.cs" />
     <Compile Include="DataFeed\ReturnModel.cs" />
     <Compile Include="EdisDatabase\RiskProfile.cs" />

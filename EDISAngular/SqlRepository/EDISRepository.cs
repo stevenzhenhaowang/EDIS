@@ -8353,7 +8353,11 @@ namespace SqlRepository
         public Domain.Portfolio.AggregateRoots.Asset.Equity getEquityById(string equityId) {
             Equity equity = _db.Equities.SingleOrDefault(e => e.AssetId == equityId);
 
-            var latestPrice = equity.Prices.OrderByDescending(p => p.CreatedOn).FirstOrDefault().Price.GetValueOrDefault();
+            var prices = equity.Prices.OrderByDescending(p => p.CreatedOn);
+            var latestPrice = 0.0;
+            if (prices.Count() != 0) {
+                latestPrice = prices.FirstOrDefault().Price.GetValueOrDefault();
+            }
 
             if(equity.EquityType == EquityTypes.AustralianEquity){
                 return new Domain.Portfolio.AggregateRoots.Asset.AustralianEquity(this)
@@ -9532,6 +9536,20 @@ namespace SqlRepository
             _db.SaveChanges();
         }
 
+        public void FeedDataForLoanValueRatios(LoanValueRatioFeed value) {
+            var marginLender = _db.MarginLenders.FirstOrDefault(m => m.LenderId == value.Lender);
+
+            marginLender.Ratios.Add(new LoanValueRatio { 
+                Id = Guid.NewGuid().ToString(),
+                Ticker = value.Ticker,
+                AssetTypes = value.AssetType,
+                CreatedOn = value.CreateOn,
+                MaxRatio = value.Ratio,
+                ActiveDate = value.CreateOn
+            });
+
+            _db.SaveChanges();
+        }
 
         public void FeedDataForResearchValues(ResearchValueFeed value, AssetTypes type) {
             switch (type) {
@@ -9586,6 +9604,14 @@ namespace SqlRepository
             _db.Sectors.Add(new Sector{
                 Id = Guid.NewGuid().ToString(),
                 SectorName = sectorName
+            });
+            _db.SaveChanges();
+        }
+
+        public void FeedDataForMarginLenders(string lenderName) {
+            _db.MarginLenders.Add(new MarginLender {
+                LenderId = Guid.NewGuid().ToString(),
+                LenderName = lenderName
             });
             _db.SaveChanges();
         }
