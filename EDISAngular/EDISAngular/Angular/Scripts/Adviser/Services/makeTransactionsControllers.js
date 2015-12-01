@@ -118,7 +118,7 @@ angular.module("EDIS")
                 LoanAmount: $scope.collection.equityTrans.LoanAmount,
                 TransactionDate: dateParser($scope.collection.equityTrans.TransactionDate),
                 Name: $scope.collection.equityTrans.Ticker.tickerName,
-             
+                TransactionFee : $scope.collection.equityTrans.transactionFee,
                 Account: $scope.collection.selectedAccount
             };
             $http.post(AppStrings.EDIS_IP + "api/adviser/makeEquityTransactions", data).success(function () {
@@ -135,6 +135,7 @@ angular.module("EDIS")
                 //LoanAmount: $scope.collection.equityTrans.LoanAmount,
                 TransactionDate: dateParser($scope.collection.bondTrans.TransactionDate),
                 Account: $scope.collection.selectedAccount,
+                TransactionFee: $scope.collection.bondTrans.transactionFee,
             };
             $http.post(AppStrings.EDIS_IP + "api/adviser/makeBondTransactions", data).success(function () {
                 alert("Successs");

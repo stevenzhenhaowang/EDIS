@@ -100,6 +100,10 @@
                                 <label class="label-transaction lable-margin">Loan Amount</label>
                                 <input type="text" ng-model="collection.equityTrans.LoanAmount" class="form-control" required name="LoanAmount" />
                                 <div class="error" ng-show="form.LoanAmount.$error.required&&form.LoanAmount.$touched">Please Loan Amount</div>
+
+                                <label class="label-transaction lable-margin">Transaction fee</label>
+                                <input type="text" ng-model="collection.equityTrans.transactionFee" class="form-control" required name="transactionFee" />
+                                <div class="error" ng-show="form.transactionFee.$error.required&&form.transactionFee.$touched">Please Enter Transaction Fee</div>
                             </div>
                             <div class="row">
                                 <label class="lable-margin">Transaction Date</label>
@@ -134,6 +138,10 @@
                             </div>
 
                             <div class="row">
+                                <label class="label-transaction lable-margin">Transaction fee</label>
+                                <input type="text" ng-model="collection.bondTrans.transactionFee" class="form-control" required name="transactionFee" />
+                                <div class="error" ng-show="form.transactionFee.$error.required&&form.transactionFee.$touched">Please Enter Transaction Fee</div>
+
                                     <label class="lable-margin">Transaction Date</label>
                                     <input class="form-control" edis-datepicker ng-model="collection.bondTrans.TransactionDate" required name="TransactionDate" />
                                     <div class="error" ng-show="form.TransactionDate.$error.required&&form.TransactionDate.$touched">Please select a transaction date</div>
