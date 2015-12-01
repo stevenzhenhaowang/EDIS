@@ -8,6 +8,6 @@ namespace Domain.Portfolio.Entities.CreationModels.Income
 {
     public abstract class IncomeCreationBase
     {
-        public string AccountNumber { get; internal set; }
+        public string AccountNumber { get; set; }
     }
 }

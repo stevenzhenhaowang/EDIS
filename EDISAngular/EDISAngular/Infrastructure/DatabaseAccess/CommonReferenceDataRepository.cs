@@ -240,6 +240,19 @@ namespace EDISAngular.Infrastructure.DatabaseAccess
             return result;
         }
 
+
+
+        public List<TickerBriefModel> GetAllBondTickers()
+        {
+            var bonds = repo.GetAllBonds();
+            var result = new List<TickerBriefModel>();
+            foreach (var bond in bonds)
+            {
+                result.Add(new TickerBriefModel { tickerName = bond.Ticker, tickerNumber = bond.Ticker });
+            }
+            return result;
+        }
+
         #endregion
 
         #region helper

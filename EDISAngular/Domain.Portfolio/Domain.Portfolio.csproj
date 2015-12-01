@@ -169,7 +169,9 @@
     <Compile Include="SuitabilityLookupTables\Tables\ParameterModel\MIForecastParameter.cs" />
     <Compile Include="SuitabilityLookupTables\Tables\ParameterModel\PParameter.cs" />
     <Compile Include="SuitabilityLookupTables\Tables\PropertySuitabilityParameters.cs" />
+    <Compile Include="TransactionModels\DevidendCreationModel.cs" />
     <Compile Include="TransactionModels\EquityTransactionModel.cs" />
+    <Compile Include="TransactionModels\InsuranceTransactionModel.cs" />
     <Compile Include="Values\AssetSuitability.cs" />
     <Compile Include="Values\BondDetails.cs" />
     <Compile Include="Values\Cashflow\EquityCashflow.cs" />

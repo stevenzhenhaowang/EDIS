@@ -1,0 +1,214 @@
+﻿<div class="row">
+<div class="col-md-4 ">
+    <ul class="breadcrumb">
+        <li><i class="fa fa-home"></i><a href="#">Home</a></li>
+        <li>Input Data</li>
+        <li class="active">Input Dividends</li>
+    </ul>
+</div>
+</div>
+<div class="content">
+    <div class="main-header">
+        <h2>Input Dividends</h2>
+
+    </div>
+    <div class="main-content">
+
+        <div class="row">
+            <div class="col-md-4">
+                <form novalidate name="form" ng-controller="insertDividendsViewController">
+
+                    <div class="row">
+                        <div class="col-sm-12 form-group">
+                            <label>Select Client Group</label>
+                            <select required class="form-control" name="clientGroup" ng-change="loadAccounts()" ng-model="clientGroup" ng-options="group.id as group.name for group in groups"></select>
+                            <span class="error" ng-show="form.clientGroup.$error.required && form.clientGroup.$touched">Please select a client group.</span>
+                        </div>
+                    </div>
+
+                    <!--loadClients
+        <div class="row">
+            <div class="col-sm-12 form-group">
+                <label>Select Client</label>
+                <select required class="form-control" name="clientName" ng-model="collection.selectedClient" ng-options="client.id as client.name for client in clients"></select>
+                <span class="error" ng-show="form.clientGroup.$error.required && form.clientGroup.$touched">Please select client group.</span>
+            </div>
+        </div>
+            -->
+                    <div class="row">
+                        <div class="col-sm-12 form-group">
+                            <label>Select Account</label>
+                            <select required class="form-control" name="accountName" ng-model="collection.selectedAccount" ng-options="account as account.name for account in accounts"></select>
+                            <span class="error" ng-show="form.accountName.$error.required && form.accountName.$touched">Please select which account to record income.</span>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-md-3 form-group">
+
+                            <label class="label-transaction">Income Type</label>
+
+                            <div class="garage-title">
+                                <label class="label-transaction">
+                                    <input type="radio" ng-model="collection.incomeType" value="Coupon" ng-required="!collection.incomeType" />
+                                    Coupon
+                                </label>
+                                <label class="label-transaction">
+                                    <input type="radio" ng-model="collection.incomeType" value="Dividend" ng-required="!collection.incomeType" />
+                                    Dividend
+                                </label>
+                                <label class="label-transaction">
+                                    <input type="radio" ng-model="collection.incomeType" value="Interest" ng-required="!collection.incomeType" />
+                                    Interest
+                                </label>
+                                <label class="label-transaction">
+                                    <input type="radio" ng-model="collection.incomeType" value="Rental" ng-required="!collection.incomeType" />
+                                    Rental
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div ng-if="collection.incomeType==='Coupon'">
+                        <div class="row">
+                            <label>Coupon Income</label>
+                        </div>
+                        <div class="row">
+
+                            <label class="lable-margin">Bond Ticker</label>
+                            <select class="form-control" ng-model="collection.coupon.Ticker" name="ticker" required ng-options="item as item.tickerNumber for item in bondTickers" />
+                            <div class="error" ng-show="form.ticker.$error.required&&form.ticker.$touched">Please select ticker</div>
+                        </div>
+                        <div class="row">
+                            <label class="label-transaction lable-margin">Amount</label>
+                            <input type="number" ng-model="collection.coupon.Amount" class="form-control" required name="Amount" />
+                            <div class="error" ng-show="form.Amount.$error.required&&form.Amount.$touched">Please Enter Amount</div>
+                        </div>
+                        <div class="row">
+                            <label class="lable-margin">Payment on</label>
+                            <input class="form-control" edis-datepicker ng-model="collection.coupon.Paymenton" required name="Paymenton" />
+                            <div class="error" ng-show="form.Paymenton.$error.required&&form.Paymenton.$touched">Please select a  date</div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <div ng-if="collection.incomeType==='Dividend'">
+                        <div class="row">
+                            <label>Dividend Income</label>
+                        </div>
+                        <div class="row">
+                            <label class="lable-margin">Equity Ticker</label>
+                            <select class="form-control" ng-model="collection.dividend.Ticker" name="ticker" required ng-options="item as item.tickerNumber for item in allTickers" />
+                            <div class="error" ng-show="form.ticker.$error.required&&form.ticker.$touched">Please select ticker</div>
+                        </div>
+                        <!--May implement bond information when it got selected-->
+
+
+                        <div class="row">
+                            <label class="label-transaction lable-margin">Amount</label>
+                            <input type="number" ng-model="collection.dividend.Amount" class="form-control" required name="Amount" />
+                            <div class="error" ng-show="form.Amount.$error.required&&form.Amount.$touched">Please Enter Amount</div>
+                        </div>
+
+                        <div class="row">
+                            <label class="label-transaction lable-margin">Franking Credit</label>
+                            <input type="number" ng-model="collection.dividend.Franking" class="form-control" required name="Franking" />
+                            <div class="error" ng-show="form.Franking.$error.required&&form.Franking.$touched">Please Enter Franking</div>
+                        </div>
+
+
+                        <div class="row">
+                            <label class="lable-margin">Payment on</label>
+                            <input class="form-control" edis-datepicker ng-model="collection.dividend.Paymenton" required name="Paymenton" />
+                            <div class="error" ng-show="form.Paymenton.$error.required&&form.Paymenton.$touched">Please select a date</div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+                    <div ng-if="collection.incomeType==='Interest'">
+
+                        <div class="row">
+                            <label>Interest Income</label>
+                        </div>
+                        <div class="row">
+                            <label class="label-transaction lable-margin">Amount</label>
+                            <input type="number" ng-model="collection.interest.Amount" class="form-control" required name="Amount" />
+                            <div class="error" ng-show="form.Amount.$error.required&&form.Amount.$touched">Please Enter Amount</div>
+                        </div>
+
+                        <div class="row">
+                            <label class="lable-margin">Payment on</label>
+                            <input class="form-control" edis-datepicker ng-model="collection.interest.Paymenton" required name="Paymenton" />
+                            <div class="error" ng-show="form.Paymenton.$error.required&&form.Paymenton.$touched">Please select a date</div>
+                        </div>
+
+
+                    </div>
+
+                    <div ng-if="collection.incomeType==='Rental'">
+                        <div class="row">
+                            <label>Rental Income</label>
+                        </div>
+
+                        <div class="row">
+                            <label class="label-transaction lable-margin">Property</label>
+                            <select class="form-control" ng-model="collection.rental.property" name="Property" required ng-options="item.id as item.FullAddress for item in properties"></select>
+                            <span class="error" ng-show="form.Property.$error.required && form.Property.$touched">Please select a Property.</span>
+                        </div>
+
+                        <div class="row">
+                            <label class="label-transaction lable-margin">Amount</label>
+                            <input type="number" ng-model="collection.rental.Amount" class="form-control" required name="Amount" />
+                            <div class="error" ng-show="form.Amount.$error.required&&form.Amount.$touched">Please Enter Amount</div>
+                        </div>
+
+
+                        <div class="row">
+                            <label class="lable-margin">Payment on</label>
+                            <input class="form-control" edis-datepicker ng-model="collection.rental.Paymenton" required name="Paymenton" />
+                            <div class="error" ng-show="form.Paymenton.$error.required&&form.Paymenton.$touched">Please select a date</div>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="row button-transaction">
+                        <button class="btn btn-default" ng-disabled="!form.$valid" ng-click="save()">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+               
