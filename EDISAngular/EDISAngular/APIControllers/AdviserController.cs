@@ -666,7 +666,7 @@ namespace EDISAngular.APIControllers
                 changeAmount = edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.changeAmount, equity.Ticker) == null ? 0 : (double)edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.changeAmount, equity.Ticker),
                 changeRatePercentage = edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.changeRatePercentage, equity.Ticker) == null ? 0 : (double)edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.changeRatePercentage, equity.Ticker),
                 weeksDifferenceAmount = (double)edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.fivtyTwoWkHighPrice, equity.Ticker),
-                weeksDifferenceRatePercentage = (double)(edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.fivtyTwoWkLowPrice, equity.Ticker) / edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.fivtyTwoWkHighPrice, equity.Ticker) == null ? 1 : edisRepo.GetResearchValueForEquitySync("52WkHighPrice", equity.Ticker)),
+                weeksDifferenceRatePercentage = (double)(edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.fivtyTwoWkLowPrice, equity.Ticker) / edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.fivtyTwoWkHighPrice, equity.Ticker) == null ? 1 : edisRepo.GetResearchValueForEquitySync(ResearchValueKeys.fivtyTwoWkHighPrice, equity.Ticker)),
                 suitabilityScore = equity.GetRating().TotalScore,
                 suitsTypeOfClients = edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.suitsTypeOfClients, equity.Ticker),
                 country = edisRepo.GetStringResearchValueForEquitySync(ResearchValueKeys.Country, equity.Ticker),
