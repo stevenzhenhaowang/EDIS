@@ -22,35 +22,52 @@ namespace EDISAngular.Services
     public class DirectToFileMailService : IIdentityMessageService
     {
 
-        public System.Threading.Tasks.Task SendAsync(IdentityMessage message)
-        {
-            using (var smtpClient = new SmtpClient())
-            {
-                smtpClient.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
-                smtpClient.PickupDirectoryLocation = @"c:\Emails";
+        public System.Threading.Tasks.Task SendAsync(IdentityMessage message) {
+            using (var smtpClient = new SmtpClient()) {
+                //smtpClient.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
+                //smtpClient.PickupDirectoryLocation = @"c:\Emails";
 
 
+                var fromAddress = new MailAddress("adviser1@ediservices.com.au", "EDIS Management Team");
 
-                //smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-                //smtpClient.Host = "smtp.gmail.com";
-                //smtpClient.Port = 587;
-                //smtpClient.Credentials = new NetworkCredential("address@mail.com", "Test");
-                //smtpClient.EnableSsl = true;
+                const string fromPassword = "bXmV9a?N";
 
+                var smtp = new SmtpClient {
+                    //Host = "smtp.gmail.com",
+                    //Port = 587,
+                    Host = "smtpout.asia.secureserver.net",
+                    Port = 80,
+                    EnableSsl = false,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                };
 
-                MailMessage email = new MailMessage()
-                {
+                using (MailMessage email = new MailMessage(fromAddress, new MailAddress(message.Destination)) {
                     Subject = message.Subject,
                     Body = message.Body,
                     IsBodyHtml = true
+                }) {
+                    smtp.Send(email);
                 };
-
-                email.From = new MailAddress("address@mail.com", "Test");
-
-                email.To.Add(new MailAddress(message.Destination));
-
-                smtpClient.Send(email);
                 return Task.FromResult(0);
+
+                //using (var message2 = new MailMessage(fromAddress, toAddress)
+                //{
+                //    Subject = subject,
+                //    Body = body
+                //})
+                //{
+                //    smtp.Send(message2);
+                //}
+                //return Task.FromResult(0);
+
+                //email.From = new MailAddress("address@mail.com", "Test");
+
+                //email.To.Add(new MailAddress(message.Destination));
+
+                //smtpClient.Send(email);
+                //return Task.FromResult(0);
             }
         }
     }

@@ -26,6 +26,7 @@ namespace Edis.Db
         public AccountType AccountType { get; set; }
         public string AccountInfo { get; set; }
         public string MarginLenderId { get; set; }
+        
 
         public virtual ICollection<MarginLendingTransaction> MarginLendings  { get; set; }
         public virtual ICollection<MortgageHomeLoanTransaction> MortgageHomeLoans { get; set; }

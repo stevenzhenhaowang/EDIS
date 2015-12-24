@@ -21,7 +21,7 @@ using EDISAngular.Models.Enums;
 
 namespace EDISAngular.Controllers
 {
-    //[Authorize(Roles = AuthorizationRoles.Role_Administrator)]
+    [Authorize]
     public class AdminController : Controller
     {
 
@@ -50,10 +50,10 @@ namespace EDISAngular.Controllers
             }
         }
 
-        [Route("Admin/Pending/{page:int?}")]
+        //[Route("Admin/Pending/{page:int?}")]
+        [Authorize(Roles = AuthorizationRoles.Role_Administrator)]
         public ActionResult PendingProfiles(int page = 0)
         {
-
             List<AdviserBriefListView> models = new List<AdviserBriefListView>();
             db.Advisers.Where(a => a.VerifiedId == BusinessLayerParameters.verificationStatus_NotVerified).ToList()
                 .ForEach(item =>
@@ -76,6 +76,7 @@ namespace EDISAngular.Controllers
         }
 
         [Route("Admin/Adviser/{id}")]
+        [Authorize(Roles = AuthorizationRoles.Role_Administrator)]
         public ActionResult AdviserDetails(string id)
         {
 
@@ -278,7 +279,6 @@ namespace EDISAngular.Controllers
 
         public ActionResult AdviserBlock(string id)
         {
-
             var adviser = db.Advisers.SingleOrDefault(s => s.AdviserNumber == id);
             adviser.VerifiedId = BusinessLayerParameters.verificationStatus_Block;
             db.SaveChanges();
@@ -286,6 +286,6 @@ namespace EDISAngular.Controllers
             return RedirectToAction("PendingProfiles");
 
         }
-
+        
     }
 }

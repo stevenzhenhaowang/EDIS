@@ -1990,6 +1990,7 @@
     <Content Include="Images\declined_requests.png" />
     <Content Include="Images\declined_requests_clients.png" />
     <Content Include="Images\EDIS_logo.jpg" />
+    <Content Include="Images\EDIS_logo_main.jpg" />
     <Content Include="Images\favicon.ico" />
     <Content Include="Images\favicon.png" />
     <Content Include="Images\fofalogo.png" />
@@ -3482,6 +3483,8 @@
     <Content Include="Views\Client\UpdateImage.cshtml" />
     <Content Include="Views\Adviser\UpdateImage.cshtml" />
     <Content Include="Views\Adviser\AdviserProfile.cshtml" />
+    <Content Include="Views\Home\IndexList.cshtml" />
+    <Content Include="Views\Home\IndexLogin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

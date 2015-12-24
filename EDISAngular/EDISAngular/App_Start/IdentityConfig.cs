@@ -31,7 +31,7 @@ namespace EDISAngular
         public override async Task<ClaimsIdentity> CreateIdentityAsync(ApplicationUser user, string authenticationType)
         {
             var identity = await base.CreateIdentityAsync(user, authenticationType);
-            identity.AddClaims(AdministrationClaimsProvider.GetClaims(identity));
+            //identity.AddClaims(AdministrationClaimsProvider.GetClaims(identity));
             identity.AddClaims(AdviserVerificationClaimProvider.GetClaims(identity));
 
             return identity;

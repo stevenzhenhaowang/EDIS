@@ -101,7 +101,7 @@
 
     });
     app.constant('AppStrings', {
-        EDIS_IP: 'http://localhost:63381/'
+        EDIS_IP: 'http://ediservices.com.au/'
     });
     app.directive("easyPieChart", function () {
         return {

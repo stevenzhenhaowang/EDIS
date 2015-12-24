@@ -31,7 +31,7 @@ namespace EDISAngular.Infrastructure.Authorization
         public const string Role_Adviser = "advisor";
         public const string Role_Preclient = "preclient";
         public const string Role_Client = "client";
-        public const string Role_Administrator = "administrator";
+        public const string Role_Administrator = "admin";
         public const string Role_GroupLeader = "groupLeader";
 
     }

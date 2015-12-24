@@ -1,1 +1,1 @@
-﻿var EDIS_IP = "http://localhost:55987/";
+﻿var EDIS_IP = "http://23.229.177.180/";

@@ -69,7 +69,7 @@ namespace EDISAngular.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
-
+            ViewBag.ReturnURL = returnUrl;
             string usr = returnUrl;
             if (!ModelState.IsValid)
             {
@@ -104,6 +104,31 @@ namespace EDISAngular.Controllers
                 return RedirectToLocal(returnUrl);
             }
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult IndexLogin(LoginViewModel model, string returnUrl)
+        {
+
+            string usr = returnUrl;
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            // This doesn't count login failures towards account lockout
+            // To enable password failures to trigger account lockout, change to shouldLockout: true
+
+            if (model.Email == "peter.truong@ediservices.com.au" && model.Password == "edis098EDIS")
+            {
+                return View("~/Views/Home/IndexList.cshtml");
+            }
+            else {
+                return View("~/Views/Home/IndexLogin.cshtml");
+            }
+        }
+
+
         // GET: /Account/VerifyCode
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
@@ -177,7 +202,6 @@ namespace EDISAngular.Controllers
                     addRoleResult = await UserManager.AddToRoleAsync(user.Id, AuthorizationRoles.Role_Preadviser);
 
                     await UserManager.AddClaimAsync(user.Id, new Claim(AuthorizationClaims.ClaimType_VerificationStatus, AuthorizationClaims.ClaimValue_VerificationStatus_Pending));
-
 
                     //var addRoleResult = await UserManager.AddToRoleAsync(user.Id, "advisor");
                     if (addRoleResult.Succeeded)
@@ -474,7 +498,7 @@ namespace EDISAngular.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
+            return View("~/Views/Home/IndexList.cshtml");
         }
 
         //
